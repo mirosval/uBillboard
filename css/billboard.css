@@ -1,0 +1,161 @@
+#uds-billboard-wrapper {
+	background: #efefef;
+	position: relative;
+	width: 940px;
+	height: 380px;
+	padding: 10px 10px;
+	overflow: hidden;
+	margin-bottom: 36px;
+}
+
+#uds-loader {
+	background: url(../images/load.gif) -160px 0px no-repeat;
+	width: 160px;
+	height: 20px;
+	left: 390px;
+	top: 180px;
+	border: 1px solid #666;
+	overflow: hidden;
+	position: absolute;
+	z-index: 1;
+}
+
+#uds-billboard, #uds-next-slide {
+	width: 940px;
+	height: 380px;
+	position: relative;
+	z-index: 2;
+	overflow: hidden;
+}
+
+#uds-billboard {
+	z-index: 1;
+	top: -380px;
+	left: 0px;
+}
+
+#uds-next-slide div {
+	position: absolute;
+	background-repeat: no-repeat;
+}
+
+#uds-billboard-controls {
+	position: absolute;
+	width: 940px;
+	height: 380px;
+	top: 10px;
+	left: 10px;
+	z-index: 3;
+	overflow: hidden;
+}
+
+#uds-billboard-paginator {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	padding: 7px 2px 7px 7px;
+	z-index: 5;
+}
+
+#uds-billboard-paginator a {
+	background: url(../images/slide.png) no-repeat;
+	display: block;
+	width: 10px;
+	height: 10px;
+	float: left;
+	margin-right: 5px;
+}
+
+#uds-billboard-paginator a.current, #uds-billboard-paginator a:hover {
+	background: url(../images/slide-current.png) no-repeat;
+}
+
+#uds-billboard-description {
+	position: absolute;
+	z-index: 4;
+}
+
+#uds-billboard-controls .none {
+	display: none;
+}
+
+#uds-billboard-controls .stripe-bottom, #uds-billboard-controls .stripe-bottom.alt {
+	background: url(../../images/rgba.php?r=0&g=0&b=0&a=50) repeat;
+	background: rgba(0, 0, 0, 0.5);
+	color: white;
+	bottom: 0px;
+	width: 820px;
+	padding: 20px 100px 20px 20px;
+}
+
+
+#uds-billboard-controls .stripe-left, #uds-billboard-controls .stripe-left.alt {
+	background: url(../../images/rgba.php?r=0&g=0&b=0&a=50) repeat;
+	background: rgba(0, 0, 0, 0.5);
+	color: white;
+	top: 0px;
+	left: 0px;
+	width: 290px;
+	height: 321px;
+	padding: 30px;
+}
+
+#uds-billboard-controls .stripe-right, #uds-billboard-controls .stripe-right.alt {
+	background: url(../../images/rgba.php?r=0&g=0&b=0&a=50) repeat;
+	background: rgba(0, 0, 0, 0.5);
+	color: white;
+	top: 0px;
+	left: 650px;
+	width: 290px;
+	height: 321px;
+	padding: 30px;
+}
+
+#uds-billboard-controls .stripe-left.alt,
+#uds-billboard-controls .stripe-right.alt,
+#uds-billboard-controls .stripe-bottom.alt {
+	background: url(../../images/rgba.php?r=255&g=255&b=255&a=50) repeat;
+	background: rgba(255, 255, 255, 0.5);
+	color: #333;
+	text-shadow: 1px 1px 1px #eee;
+}
+
+#uds-billboard-controls .stripe-left.alt a.read-more,
+#uds-billboard-controls .stripe-right.alt a.read-more,
+#uds-billboard-controls .stripe-bottom.alt a.read-more {
+	text-shadow: none;
+}
+
+.uds-slide {
+	display: none;
+}
+
+.uds-descr h2 {
+	color: #fafafa;
+	text-shadow: black 1px 1px;
+	font-weight: bold;
+	line-height: 30px;
+	font-family: 'Colaborate-ThinRegular';
+	font-size: 24px;	
+	margin-bottom: 10px;
+}
+.uds-descr p {
+	text-shadow: black 1px 1px;
+	margin-top: 19px;
+	color: #ccc;
+	margin-bottom: 10px;
+}
+
+body .uds-descr a.read-more {
+	padding: 3px;
+	background: #e6212e;
+	color: white;
+	text-decoration: none;
+	display: block;
+	width: 65px;
+	margin-top: 10px;
+}
+
+body .uds-descr a.read-more:hover {
+	text-decoration: underline;
+}
