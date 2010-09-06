@@ -16,7 +16,7 @@ jQuery(function($){
 	width = 940;
 	height = 380;
 	
-	d = function(a){ try {console.log(a);} catch(e){ $.noop(); }};
+	//d = function(a){ try {console.log(a);} catch(e){ $.noop(); }};
 	
 	// parse incoming data structures
 	$('.uds-slide', $bb).each(function(i, el){
@@ -33,7 +33,7 @@ jQuery(function($){
 		$(this).remove();
 		
 		$bb.hide();
-		$controls.hide();
+		$controls.hide();	
 		
 		// preloader
 		$('<img>').load(function(){
@@ -62,7 +62,7 @@ jQuery(function($){
 		}).attr('src', slide.image);
 	});
 	
-	resetToSlide = function(index) {
+	function resetToSlide(index) {
 		$bb.css('background-image', 'url('+slides[index].image+')');
 			$('div', $next).add($next).css('background-image', '');
 			resetSquares(0, 0);
@@ -77,7 +77,7 @@ jQuery(function($){
 	};
 	
 	// main data juggling, switch images in billboard and next slide divs, dispatch transition
-	showSlide = function(index){
+	function showSlide(index){
 		clearTimeout(timeout);
 		prevSlideIndex = currentSlideIndex;
 		currentSlideIndex = index;
@@ -101,7 +101,7 @@ jQuery(function($){
 	};
 	
 	// creates and displays paginator
-	showPaginator = function(current) {		
+	function showPaginator(current) {
 		$controls.append($("<div id='uds-billboard-paginator'></div>"));
 		for(var i = 0; i < totalImages; i++){
 			var $bullet = $("<a class='"+(i == current ? 'current' : '')+"'></a>");
@@ -116,7 +116,7 @@ jQuery(function($){
 	};
 	
 	// shows description, create it if necessary
-	showDescription = function(current) {
+	function showDescription(current) {
 		$descr = $("#uds-billboard-description");
 		if($descr.size() === 0){
 			$controls.append($("<div id='uds-billboard-description' class=''></div>"));
@@ -159,7 +159,7 @@ jQuery(function($){
 	};
 	
 	// hide description
-	hideDescription = function() {
+	function hideDescription() {
 		$descr = $("#uds-billboard-description");
 		if($descr.hasClass('stripe-left')){
 			$descr.stop().animate({
@@ -188,7 +188,7 @@ jQuery(function($){
 		}
 	};
 	
-	setupSquares = function(){
+	function setupSquares(){
 		if(squareSize < 30) {
 			squareSize = 30;
 		}
@@ -210,7 +210,7 @@ jQuery(function($){
 		});
 	};
 	
-	resetSquares = function(offsetX, offsetY) {
+	function resetSquares(offsetX, offsetY) {
 		var rows = Math.ceil(height / squareSize);
 		var cols = Math.ceil(width / squareSize);
 		var n = 0;
@@ -225,8 +225,8 @@ jQuery(function($){
 			}
 		}
 	};
-	
-	setupColumns = function() {
+
+	function setupColumns() {
 		var cols = Math.ceil(width / columnWidth);
 		for(var i = 0; i < cols; i++) {
 			var current = document.createElement('div');
@@ -243,7 +243,7 @@ jQuery(function($){
 		});
 	};
 	
-	resetColumns = function() {
+	function resetColumns() {
 		var cols = Math.ceil(width / columnWidth);
 		for(var i = 0; i < cols; i++){
 			$('#column'+i).css({
@@ -256,7 +256,7 @@ jQuery(function($){
 	};
 	
 	// picks transition function
-	getTransitionFunction = function(transition) {
+	function getTransitionFunction(transition) {
 		switch(transition){
 			case 'scaleTop': return animationScaleTop;
 			case 'scaleCenter': return animationScaleCenter;
@@ -319,7 +319,7 @@ jQuery(function($){
 			easing: 'easeOutExpo'
 		});
 	};
-	
+
 	animationScaleTop = function(currentIndex, destinationIndex, callback){
 		$next.css({
 			"background-image": 'url('+slides[destinationIndex].image+')',

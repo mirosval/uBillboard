@@ -99,6 +99,7 @@ function uds_billboard_init()
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
 	} else {
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
+		wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'));	
 		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery', 'easing'));	
 	}
 }
