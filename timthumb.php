@@ -30,7 +30,7 @@ define ('CACHE_CLEAR', 5);					// maximum number of files to delete on each cach
 define ('CACHE_USE', FALSE);				// use the cache files? (mostly for testing)
 define ('VERSION', '1.15');					// version number (to force a cache refresh)
 define ('DIRECTORY_CACHE', './cache');		// cache directory
-define ('DIRECTORY_TEMP', './temp');		// temp directory
+define ('DIRECTORY_TEMP', './cache');		// temp directory
 
 // 	external domains that are allowed to be displayed on your website
 $allowedSites = array (

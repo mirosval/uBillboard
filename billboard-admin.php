@@ -20,6 +20,9 @@ $billboard_items[] = uds_billboard_default_billboard();
 ?>
 <div class="wrap">
 	<h2>uBillboard</h2>
+	<?php if(get_option(UDS_BILLBOARD_OPTION_USE_TIMTHUMB) == 'on' && !is_writable(UDS_BILLBOARD_PATH.'cache')): ?>
+		<div class="updated uds-warn"><strong>Warning!</strong> Directory <?php echo UDS_BILLBOARD_PATH ?>cache is not writable!</div>
+	<?php endif; ?>
 	<form action="" method="post" class="uds-billboard-form">
 		<input type="hidden" name="nonce" value="<?php echo wp_create_nonce('uds-billboard') ?>" />
 		<div class="uds-billboard-options">
@@ -28,6 +31,7 @@ $billboard_items[] = uds_billboard_default_billboard();
 			<input type="submit" value="Update"  class="submit button-primary" />
 			<div class="inside">
 				<?php uds_billboard_admin_options() ?>
+				<div class="clear"></div>
 			</div>
 		</div>
 		<table id="uds-billboard-table">

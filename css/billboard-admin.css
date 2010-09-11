@@ -1,6 +1,11 @@
 /* @override 
 	http://meosoft/code/plugins/wp-content/plugins/uBillboard/css/billboard-admin.css?ver=3.0.1 */
 
+.wrap .updated.uds-warn {
+	padding: 10px 15px;
+	width: 790px;
+}
+
 .billboard-add, .billboard-move, .billboard-delete {
 	background: url(../images/add.png) no-repeat;
 	display: block;
@@ -59,6 +64,17 @@
 	border-bottom: none;
 }
 
+.uds-billboard-options .inside div {
+	clear: both;
+	margin-bottom: 10px;
+	height: 20px;
+}
+
+.uds-billboard-options .inside div.clear {
+	height: 0px;
+	margin-bottom: 0px;
+}
+
 .uds-billboard-options .submit {
 	margin-right: 10px;
 	position: relative;
@@ -92,7 +108,7 @@
 .uds-billboard-options label {
 	display: block;
 	float: left;
-	width: 200px;
+	width: 250px;
 }
 
 .uds-billboard-form {
