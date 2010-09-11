@@ -464,11 +464,11 @@ function get_uds_billboard()
 							<div class="uds-descr-wrapper">
 								<div class="uds-descr">';
 									if(stripslashes($b->title) != ''):
-										$out .= '<h2>'. htmlspecialchars(stripslashes($b->title)) .'</h2>';
+										$out .= '<h2>'. stripslashes($b->title) .'</h2>';
 									endif;
-									$out .= htmlspecialchars(stripslashes($b->text));
+									$out .= stripslashes($b->text);
 									if(stripslashes($b->link) != ''):
-										$out .= '<br /><a href="'. htmlspecialchars(stripslashes($b->link)) .'" class="read-more">Read more</a>';
+										$out .= '<br /><a href="'. urlencode(stripslashes($b->link)) .'" class="read-more">Read more</a>';
 									endif;
 									$out .= '
 								</div>
