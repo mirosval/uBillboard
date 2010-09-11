@@ -136,11 +136,11 @@ function uds_billboard_options_javascript()
 {
 	?>
 	<script type="text/javascript">
-		var uds_billboard_width = <?php echo get_option(UDS_BILLBOARD_OPTION_WIDTH) ?>;
-		var uds_billboard_height = <?php echo get_option(UDS_BILLBOARD_OPTION_HEIGHT) ?>;
-		var uds_billboard_square_size = <?php echo get_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE) ?>;
-		var uds_billboard_column_width = <?php echo get_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH) ?>;
-		var uds_billboard_show_paginator = <?php echo get_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR) == 'on' ? 'true' : 'false' ?>;
+		var uds_billboard_width = <?php echo apply_filters('uds-billboard-option-width', get_option(UDS_BILLBOARD_OPTION_WIDTH)) ?>;
+		var uds_billboard_height = <?php echo apply_filters('uds-billboard-option-height', get_option(UDS_BILLBOARD_OPTION_HEIGHT)) ?>;
+		var uds_billboard_square_size = <?php echo apply_filters('uds-billboard-option-square-size', get_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE)) ?>;
+		var uds_billboard_column_width = <?php echo apply_filters('uds-billboard-option-column-width', get_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH)) ?>;
+		var uds_billboard_show_paginator = <?php echo apply_filters('uds-billboard-option-show-paginator', get_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR) == 'on' ? 'true' : 'false') ?>;
 	</script>
 	<?php
 }
@@ -465,18 +465,18 @@ function get_uds_billboard()
 						}
 						$out .= '
 						<div class="uds-slide">
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-delay" value="'. $b->delay .'" />
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-transition" value="'. $b->transition .'" />
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-layout" value="'. $b->layout .'" />
-							<img src="' . $url . '" alt="" />
+							<input type="hidden" class="uds-billboard-option" name="uds-billboard-delay" value="'. apply_filters('uds-billboard-delay', $b->delay) .'" />
+							<input type="hidden" class="uds-billboard-option" name="uds-billboard-transition" value="'. apply_filters('uds-billboard-transition', $b->transition) .'" />
+							<input type="hidden" class="uds-billboard-option" name="uds-billboard-layout" value="'. apply_filters('uds-billboard-layout', $b->layout) .'" />
+							<img src="' . apply_filters('uds-billboard-image', $url) . '" alt="" />
 							<div class="uds-descr-wrapper">
 								<div class="uds-descr">';
 									if(stripslashes($b->title) != ''):
-										$out .= '<h2>'. stripslashes($b->title) .'</h2>';
+										$out .= '<h2>'. apply_filters('uds-billboard-title', stripslashes($b->title)) .'</h2>';
 									endif;
-									$out .= stripslashes($b->text);
+									$out .= apply_filters('uds-billboard-description', stripslashes($b->text));
 									if(stripslashes($b->link) != ''):
-										$out .= '<br /><a href="'. urlencode(stripslashes($b->link)) .'" class="read-more">Read more</a>';
+										$out .= '<br /><a href="'. apply_filters('uds-billboard-link', urlencode(stripslashes($b->link))) .'" class="read-more">Read more</a>';
 									endif;
 									$out .= '
 								</div>
@@ -489,7 +489,7 @@ function get_uds_billboard()
 			<div id="uds-billboard-controls"></div>
 		</div>';
 	
-	return $out;
+	return apply_filters('uds-billboard-output', $out);
 }
 
 function the_uds_billboard()
