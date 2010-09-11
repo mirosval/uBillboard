@@ -86,7 +86,7 @@
 	color: white;
 	top: 0px;
 	left: 0px;
-	width: 290px;
+	width: 30%;
 	height: 100%;
 	padding: 30px;
 }
@@ -96,8 +96,7 @@
 	background: rgba(0, 0, 0, 0.5);
 	color: white;
 	top: 0px;
-	left: 650px;
-	width: 290px;
+	width: 30%;
 	height: 100%;
 	padding: 30px;
 }
