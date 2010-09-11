@@ -9,8 +9,12 @@ Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
 */
 
+// General Options
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
+define('UDS_BILLBOARD_USE_COMPRESSION', true);
+
+// User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard');
 define('UDS_BILLBOARD_OPTION_WIDTH', 'uds-billboard-width');
 define('UDS_BILLBOARD_OPTION_HEIGHT', 'uds-billboard-height');
@@ -118,8 +122,12 @@ function uds_billboard_init()
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
 	} else {
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
-		wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'));	
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'));	
+		wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'));
+		if(UDS_BILLBOARD_USE_COMPRESSION){
+			wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'));
+		} else {
+			wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery', 'easing'));
+		}
 	}
 }
 

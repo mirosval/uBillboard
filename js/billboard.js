@@ -15,6 +15,7 @@ jQuery(function($){
 	columnWidth = parseInt(uds_billboard_column_width);
 	width = parseInt(uds_billboard_width);
 	height = parseInt(uds_billboard_height);
+	transitionConstant = 300;
 	
 	d = function(a){ try {console.log(a);} catch(e){ $.noop(); }};
 	
@@ -59,7 +60,9 @@ jQuery(function($){
 			});
 			if(totalImages == totalImagesLoaded){
 				$bb.css('background-image', 'url('+slides[0].image+')');
-				showPaginator(0);
+				if(uds_billboard_show_paginator == true){
+					showPaginator(0);
+				}
 				showDescription(0);
 				setupSquares();
 				setupColumns();
@@ -489,7 +492,7 @@ jQuery(function($){
 			});
 		});
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, 500 + 600 + transitionConstant);
 	};
 	
 	animationSquaresRows = function(currentIndex, destinationIndex, callback){
@@ -498,6 +501,8 @@ jQuery(function($){
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			'opacity': 0
 		});
+		
+		var rows = Math.ceil(height / squareSize);
 		
 		$squares.each(function(i){
 			var square = this;
@@ -508,7 +513,7 @@ jQuery(function($){
 			});
 		});
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, 60 * rows + 1000 + transitionConstant);
 	};
 	
 	animationSquaresCols = function(currentIndex, destinationIndex, callback){
@@ -529,7 +534,7 @@ jQuery(function($){
 			});
 		});
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, 100 * cols + 600 + transitionConstant);
 	};
 	
 	animationSquaresMoveOut = function(currentIndex, destinationIndex, callback){
@@ -554,7 +559,7 @@ jQuery(function($){
 			}
 		}
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, 100 * (cols+rows) + 400 + transitionConstant);
 	};
 	
 	animationSquaresMoveIn = function(currentIndex, destinationIndex, callback){
@@ -580,7 +585,7 @@ jQuery(function($){
 			}
 		}
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, 100 * (rows+cols) + 400 + transitionConstant);
 	};
 	
 	animationColumnWave = function(currentIndex, destinationIndex, callback){
@@ -605,7 +610,7 @@ jQuery(function($){
 			});
 		}
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, cols * 30 + 1000 + transitionConstant);
 	};
 	
 	animationCurtainRight = function(currentIndex, destinationIndex, callback){
@@ -630,7 +635,7 @@ jQuery(function($){
 			});
 		}
 		
-		setTimeout(callback, 1350);
+		setTimeout(callback, cols * 50 + 300 + transitionConstant);
 	};
 	
 	animationCurtainLeft = function(currentIndex, destinationIndex, callback){
@@ -655,7 +660,7 @@ jQuery(function($){
 			});
 		}
 		
-		setTimeout(callback, 1350);
+		setTimeout(callback, cols * 50 + 300 + transitionConstant);
 	};
 	
 	animationCurtainRotateRight = function(currentIndex, destinationIndex, callback){
@@ -680,7 +685,7 @@ jQuery(function($){
 			});
 		}
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, cols * 50 + 300 + transitionConstant);
 	};
 	
 	animationCurtainRotateLeft = function(currentIndex, destinationIndex, callback){
@@ -705,7 +710,7 @@ jQuery(function($){
 			});
 		}
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, cols * 50 + 300 + transitionConstant);
 	};
 	
 	animationInterweaveLeft = function(currentIndex, destinationIndex, callback){
@@ -732,7 +737,7 @@ jQuery(function($){
 			});
 		}
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, cols * 50 + 300 + transitionConstant);
 	};
 	
 	animationInterweaveRight = function(currentIndex, destinationIndex, callback){
@@ -759,6 +764,6 @@ jQuery(function($){
 			});
 		}
 		
-		setTimeout(callback, 1550);
+		setTimeout(callback, cols * 50 + 300 + transitionConstant);
 	};
 });
