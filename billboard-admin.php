@@ -22,7 +22,14 @@ $billboard_items[] = uds_billboard_default_billboard();
 	<h2>uBillboard</h2>
 	<form action="" method="post" class="uds-billboard-form">
 		<input type="hidden" name="nonce" value="<?php echo wp_create_nonce('uds-billboard') ?>" />
-		<input type="submit" value="Update"  class="submit button-primary" />
+		<div class="uds-billboard-options">
+			<div class="close"></div>
+			<h3>General Options</h3>
+			<input type="submit" value="Update"  class="submit button-primary" />
+			<div class="inside">
+				<?php uds_billboard_admin_options() ?>
+			</div>
+		</div>
 		<table id="uds-billboard-table">
 			<?php foreach($billboard_items as $key => $item): ?>
 			<tr>

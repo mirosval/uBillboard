@@ -8,8 +8,13 @@ Author: uDesign
 Author URI: http://udesignstudios.net
 */
 
-define('UDS_BILLBOARD_OPTION', 'uds-billboard');
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
+define('UDS_BILLBOARD_OPTION', 'uds-billboard');
+define('UDS_BILLBOARD_OPTION_WIDTH', 'uds-billboard-width');
+define('UDS_BILLBOARD_OPTION_HEIGHT', 'uds-billboard-height');
+define('UDS_BILLBOARD_OPTION_SQUARE_SIZE', 'uds-billboard-square-size');
+define('UDS_BILLBOARD_OPTION_COLUMN_WIDTH', 'uds-billboard-column-width');
+define('UDS_BILLBOARD_OPTION_SHOW_PAGINATOR', 'uds-billboard-show-paginator');
 
 add_option(UDS_BILLBOARD_OPTION, array());
 
@@ -95,6 +100,7 @@ function uds_billboard_init()
 		add_thickbox();
 		wp_enqueue_script("jquery-ui-sortable");
 		wp_enqueue_script("jquery-ui-draggable");
+		wp_enqueue_script('uds-cookie', $dir."js/jquery_cookie.js");
 		wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js");
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
 	} else {
@@ -104,10 +110,29 @@ function uds_billboard_init()
 	}
 }
 
+add_action('wp_head', 'uds_billboard_options_javascript', 1);
+function uds_billboard_options_javascript()
+{
+	?>
+	<script type="text/javascript">
+		var uds_billboard_width = <?php echo get_option(UDS_BILLBOARD_OPTION_WIDTH) ?>;
+		var uds_billboard_height = <?php echo get_option(UDS_BILLBOARD_OPTION_HEIGHT) ?>;
+		var uds_billboard_square_size = <?php echo get_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE) ?>;
+		var uds_billboard_column_width = <?php echo get_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH) ?>;
+		var uds_billboard_show_paginator = <?php echo get_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR) == 'on' ? 'true' : 'false' ?>;
+	</script>
+	<?php
+}
+
 register_activation_hook(__FILE__, 'uds_billboard_activation_hook');
 function uds_billboard_activation_hook()
 {
 	add_option(UDS_BILLBOARD_OPTION, array());
+	add_option(UDS_BILLBOARD_OPTION_WIDTH, 940);
+	add_option(UDS_BILLBOARD_OPTION_HEIGHT, 380);
+	add_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE, 100);
+	add_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH, 50);
+	add_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR, 'on');
 }
 
 register_activation_hook(__FILE__, 'uds_billboard_deactivation_hook');
@@ -116,8 +141,8 @@ function uds_billboard_deactivation_hook()
 	delete_option(UDS_BILLBOARD_OPTION);
 }
 
-add_action('admin_menu', 'uds_menu');
-function uds_menu()
+add_action('admin_menu', 'uds_billboard_menu');
+function uds_billboard_menu()
 {	
 	$icon = UDS_BILLBOARD_URL . 'images/menu-icon.png';
 	add_menu_page("uBillboard", "uBillboard", 'manage_options', 'uds_billboard_admin', 'uds_billboard_admin', $icon, 61);
@@ -171,6 +196,11 @@ function uds_billboard_proces_updates()
 	}
 	
 	update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
+	update_option(UDS_BILLBOARD_OPTION_WIDTH, (int)$_POST[UDS_BILLBOARD_OPTION_WIDTH]);
+	update_option(UDS_BILLBOARD_OPTION_HEIGHT, (int)$_POST[UDS_BILLBOARD_OPTION_HEIGHT]);
+	update_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE, (int)$_POST[UDS_BILLBOARD_OPTION_SQUARE_SIZE]);
+	update_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH, (int)$_POST[UDS_BILLBOARD_OPTION_COLUMN_WIDTH]);
+	update_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR, $_POST[UDS_BILLBOARD_OPTION_SHOW_PAGINATOR] == '' ? '' : 'on');
 	//delete_option(UDS_BILLBOARD_OPTION);
 }
 
@@ -314,6 +344,32 @@ function uds_billboard_render_js_support()
 		set_receiver(this);
 	});
 	</script>
+	<?php
+}
+
+function uds_billboard_admin_options() 
+{
+	?>
+	<div class="uds-billboard-width">
+		<label for="uds-billboard-width">Billboard Width</label>
+		<input type="text" id="uds-billboard-width" name="<?php echo UDS_BILLBOARD_OPTION_WIDTH ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_WIDTH) ?>" />
+	</div>
+	<div class="uds-billboard-height">
+		<label for="uds-billboard-height">Billboard Height</label>
+		<input type="text" id="uds-billboard-height" name="<?php echo UDS_BILLBOARD_OPTION_HEIGHT ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_HEIGHT) ?>" />
+	</div>
+	<div class="uds-billboard-square-size">
+		<label for="uds-billboard-square-size">Square Size</label>
+		<input type="text" id="uds-billboard-square-size" name="<?php echo UDS_BILLBOARD_OPTION_SQUARE_SIZE ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE) ?>" />
+	</div>
+	<div class="uds-billboard-column-width">
+		<label for="uds-billboard-column-width">Column Width</label>
+		<input type="text" id="uds-billboard-column-width" name="<?php echo UDS_BILLBOARD_OPTION_COLUMN_WIDTH ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH) ?>" />
+	</div>
+	<div class="uds-billboard-show-paginator">
+		<label for="uds-billboard-show-paginator">Show Paginator</label>
+		<input type="checkbox" id="uds-billboard-show-paginator" name="<?php echo UDS_BILLBOARD_OPTION_SHOW_PAGINATOR ?>" <?php echo get_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR) == 'on' ? 'checked="checked"' : '' ?> />
+	</div>
 	<?php
 }
 

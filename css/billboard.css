@@ -1,9 +1,7 @@
 #uds-billboard-wrapper {
 	background: #efefef;
 	position: relative;
-	width: 940px;
-	height: 380px;
-	padding: 10px 10px;
+	padding: 0px;
 	overflow: hidden;
 	margin-bottom: 36px;
 }
@@ -12,8 +10,6 @@
 	background: url(../images/load.gif) -160px 0px no-repeat;
 	width: 160px;
 	height: 20px;
-	left: 390px;
-	top: 180px;
 	border: 1px solid #666;
 	overflow: hidden;
 	position: absolute;
@@ -21,8 +17,6 @@
 }
 
 #uds-billboard, #uds-next-slide {
-	width: 940px;
-	height: 380px;
 	position: relative;
 	z-index: 2;
 	overflow: hidden;
@@ -30,7 +24,6 @@
 
 #uds-billboard {
 	z-index: 1;
-	top: -380px;
 	left: 0px;
 }
 
@@ -41,18 +34,16 @@
 
 #uds-billboard-controls {
 	position: absolute;
-	width: 940px;
-	height: 380px;
-	top: 10px;
-	left: 10px;
+	top: 0px;
+	left: 0px;
 	z-index: 3;
 	overflow: hidden;
 }
 
 #uds-billboard-paginator {
 	position: absolute;
-	bottom: 10px;
-	right: 10px;
+	bottom: 20px;
+	right: 20px;
 	padding: 7px 2px 7px 7px;
 	z-index: 5;
 }
@@ -84,8 +75,8 @@
 	background: rgba(0, 0, 0, 0.5);
 	color: white;
 	bottom: 0px;
-	width: 820px;
 	padding: 20px 100px 20px 20px;
+	width: 100%;
 }
 
 
@@ -96,7 +87,7 @@
 	top: 0px;
 	left: 0px;
 	width: 290px;
-	height: 321px;
+	height: 100%;
 	padding: 30px;
 }
 
@@ -107,7 +98,7 @@
 	top: 0px;
 	left: 650px;
 	width: 290px;
-	height: 321px;
+	height: 100%;
 	padding: 30px;
 }
 

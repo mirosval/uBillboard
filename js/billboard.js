@@ -11,13 +11,26 @@ jQuery(function($){
 	totalImages = $('.uds-slide', $bb).length;
 	totalImagesLoaded = 0;
 	timeout = null;
-	squareSize = 100;
-	columnWidth = 50;
-	width = 940;
-	height = 380;
+	squareSize = parseInt(uds_billboard_square_size);
+	columnWidth = parseInt(uds_billboard_column_width);
+	width = parseInt(uds_billboard_width);
+	height = parseInt(uds_billboard_height);
 	
-	//d = function(a){ try {console.log(a);} catch(e){ $.noop(); }};
+	d = function(a){ try {console.log(a);} catch(e){ $.noop(); }};
 	
+	// initial styling based on variables
+	$('#uds-billboard-wrapper,#uds-billboard,#uds-next-slide,#uds-billboard-controls').css({
+		width: width+'px',
+		height: height+'px'
+	});
+	
+	$('#uds-billboard').css('top', -height+'px');
+	
+	$('#uds-loader').css({
+		left: width / 2 - 80 + 'px',
+		top: height / 2 - 10 + 'px'
+	});
+
 	// parse incoming data structures
 	$('.uds-slide', $bb).each(function(i, el){
 		var slide = {
