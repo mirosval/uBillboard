@@ -6,6 +6,7 @@ Description: uBillboard is a slider plugin by uDesignStudios that allows you to 
 Version: 1.0.0
 Author: uDesign
 Author URI: http://udesignstudios.net
+Tags: billboard, slider, jquery, javascript, effects, udesign
 */
 
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
@@ -118,7 +119,7 @@ function uds_billboard_init()
 	} else {
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
 		wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'));	
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery', 'easing'));	
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'));	
 	}
 }
 
