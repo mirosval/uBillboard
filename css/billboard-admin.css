@@ -68,6 +68,7 @@
 	clear: both;
 	margin-bottom: 10px;
 	height: 20px;
+	position: relative;
 }
 
 .uds-billboard-options .inside div.clear {
@@ -109,6 +110,55 @@
 	display: block;
 	float: left;
 	width: 250px;
+}
+
+.uds-billboard-options input {
+	float: left;
+}
+
+.uds-billboard-options input[type=checkbox] {
+	margin-top: 6px;
+}
+
+.uds-billboard-options .unit {
+	float: left;
+	display: block;
+	padding: 2px 0px 0px 3px;
+}
+
+.uds-billboard-options .tooltip {
+	background: url(../images/tooltip.png) no-repeat;
+	text-indent: -100px;
+	overflow: hidden;
+	display: block;
+	float: left;
+	width: 20px;
+	height: 20px;
+	margin: 2px 0px 0px 10px;
+}
+
+.uds-billboard-options .inside .tooltip-content {
+	display: none;
+	position: absolute;
+	width: 250px;
+	height: auto;
+	background: #222;
+	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#222));
+	background: -moz-linear-gradient(270deg, #444, #222);
+	color: #eee;
+	z-index: 9;
+	padding: 10px 15px;
+	border: 1px solid white;
+	-webkit-background-clip: padding-box;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.uds-billboard-options .inside .tooltip-content img {
+	display: block;
+	clear: both;
+	margin: 10px 0px 5px 0px;
 }
 
 .uds-billboard-form {

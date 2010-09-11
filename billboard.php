@@ -380,38 +380,54 @@ function uds_billboard_admin_options()
 		<label for="uds-billboard-width">Billboard Width</label>
 		<input type="text" id="uds-billboard-width" name="<?php echo UDS_BILLBOARD_OPTION_WIDTH ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_WIDTH) ?>" />
 		<span class="unit">pixels</span>
+		<span class="tooltip">?</span>
+		<div class="tooltip-content">Billboard Width in pixels</div>
 	</div>
 	<div class="uds-billboard-height">
 		<label for="uds-billboard-height">Billboard Height</label>
 		<input type="text" id="uds-billboard-height" name="<?php echo UDS_BILLBOARD_OPTION_HEIGHT ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_HEIGHT) ?>" />
 		<span class="unit">pixels</span>
+		<span class="tooltip">?</span>
+		<div class="tooltip-content">Billboard Height in pixels</div>
 	</div>
 	<div class="uds-billboard-square-size">
 		<label for="uds-billboard-square-size">Square Size</label>
 		<input type="text" id="uds-billboard-square-size" name="<?php echo UDS_BILLBOARD_OPTION_SQUARE_SIZE ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE) ?>" />
 		<span class="unit">pixels</span>
+		<span class="tooltip">?</span>
+		<div class="tooltip-content">Square dimension, applies only to transitions based on squares <img src="<?php echo UDS_BILLBOARD_URL ?>images/square_size.png" alt="" /></div>
 	</div>
 	<div class="uds-billboard-column-width">
 		<label for="uds-billboard-column-width">Column Width</label>
 		<input type="text" id="uds-billboard-column-width" name="<?php echo UDS_BILLBOARD_OPTION_COLUMN_WIDTH ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH) ?>" />
 		<span class="unit">pixels</span>
+		<span class="tooltip">?</span>
+		<div class="tooltip-content">Column width, applies only to column-based transitions <img src="<?php echo UDS_BILLBOARD_URL ?>images/column_width.png" alt="" /></div>
 	</div>
 	<div class="uds-billboard-show-paginator">
 		<label for="uds-billboard-show-paginator">Show Paginator</label>
 		<input type="checkbox" id="uds-billboard-show-paginator" name="<?php echo UDS_BILLBOARD_OPTION_SHOW_PAGINATOR ?>" <?php echo get_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR) == 'on' ? 'checked="checked"' : '' ?> />
+		<span class="tooltip">?</span>
+		<div class="tooltip-content">Check to show paginator in the bottom right corner <img src="<?php echo UDS_BILLBOARD_URL ?>images/paginator.png" alt="" /></div>
 	</div>
 	<div class="uds-billboard-use-timthumb">
 		<label for="uds-billboard-use-timthumb">Use Automatic Image Resizing</label>
 		<input type="checkbox" id="uds-billboard-use-timthumb" name="<?php echo UDS_BILLBOARD_OPTION_USE_TIMTHUMB ?>" <?php echo get_option(UDS_BILLBOARD_OPTION_USE_TIMTHUMB) == 'on' ? 'checked="checked"' : '' ?> />
+		<span class="tooltip">?</span>
+		<div class="tooltip-content">When checked, all your images will be resized and zoomed/stretched to fit the Billboard size</div>
 	</div>
 	<div class="uds-billboard-timthumb-zoom">
 		<label for="uds-billboard-timthumb-zoom">Zoom Disproportionate Images</label>
 		<input type="checkbox" id="uds-billboard-timthumb-zoom" name="<?php echo UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM ?>" <?php echo get_option(UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM) == 'on' ? 'checked="checked"' : '' ?> />
+		<span class="tooltip">?</span>
+		<div class="tooltip-content">When checked will crop images that don't have the same proportions as Billboard. Otherwise will stretch images to fit the Billboard</div>
 	</div>
 	<div class="uds-billboard-timthumb-quality">
 		<label for="uds-billboard-timthumb-quality">Image Quality (0-100)</label>
 		<input type="text" id="uds-billboard-timthumb-quality" name="<?php echo UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY) ?>" />
 		<span class="unit">%</span>
+		<span class="tooltip">?</span>
+		<div class="tooltip-content">Image compression - use lower values for faster page loads and lower traffic, use high values to increase image quality. Optimal values are 60-80 </div>
 	</div>
 	<?php
 }
