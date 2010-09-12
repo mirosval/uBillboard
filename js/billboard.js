@@ -11,10 +11,10 @@ jQuery(function($){
 	totalImages = $('.uds-slide', $bb).length;
 	totalImagesLoaded = 0;
 	timeout = null;
-	squareSize = parseInt(uds_billboard_square_size);
-	columnWidth = parseInt(uds_billboard_column_width);
-	width = parseInt(uds_billboard_width);
-	height = parseInt(uds_billboard_height);
+	squareSize = parseInt(uds_billboard_square_size, 10);
+	columnWidth = parseInt(uds_billboard_column_width, 10);
+	width = parseInt(uds_billboard_width, 10);
+	height = parseInt(uds_billboard_height, 10);
 	transitionConstant = 300;
 	
 	d = function(a){ try {console.log(a);} catch(e){ $.noop(); }};
@@ -90,7 +90,7 @@ jQuery(function($){
 				opacity: 1
 			});
 			showDescription(index);
-	};
+	}
 	
 	// main data juggling, switch images in billboard and next slide divs, dispatch transition
 	function showSlide(index){
@@ -110,11 +110,13 @@ jQuery(function($){
 		$("#uds-billboard-paginator a").removeClass('current');
 		$("#uds-billboard-paginator a:eq("+currentSlideIndex+")").addClass('current');
 		
+		paginatorIEFix();
+		
 		hideDescription();
 		
 		var transition = getTransitionFunction(slides[currentSlideIndex].transition);
 		transition(prevSlideIndex, currentSlideIndex, callback);
-	};
+	}
 	
 	// creates and displays paginator
 	function showPaginator(current) {
@@ -129,7 +131,21 @@ jQuery(function($){
 		    clearInterval(timeout);
 		    showSlide($(this).index());
 		});
-	};
+		paginatorIEFix();
+	}
+	
+	function paginatorIEFix() {
+		if($.browser.msie && $.browser.version < 7) {
+			var slide = uds_billboard_url+"images/slide.png";
+			var filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+slide+"', sizingMethod='crop');";
+			$('#uds-billboard-paginator a:not(.current)').css('background-image', 'none').get(0).runtimeStyle.filter = filter;
+			var slideCurrent = uds_billboard_url+"images/slide-current.png";
+			var filterCurrent = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+slideCurrent+"', sizingMethod='crop');";
+			$('#uds-billboard-paginator a.current').css('background-image', 'none').each(function(){
+				$(this).get(0).runtimeStyle.filter = filterCurrent;
+			});
+		}
+	}
 	
 	// shows description, create it if necessary
 	function showDescription(current) {
@@ -139,6 +155,9 @@ jQuery(function($){
 			$descr = $("#uds-billboard-description");
 		}
 		$descr.attr('class', '').addClass(slides[current].layout).html(slides[current].description);
+		
+		descriptionIEFix();
+		
 		if($descr.hasClass('stripe-left')){
 			$descr.css({
 				left: -$descr.outerWidth() + 'px',
@@ -172,7 +191,7 @@ jQuery(function($){
 				easing: 'easeOutExpo'
 			});
 		}
-	};
+	}
 	
 	// hide description
 	function hideDescription() {
@@ -202,7 +221,19 @@ jQuery(function($){
 				easing: 'easeOutExpo'
 			});
 		}
-	};
+	}
+	
+	function descriptionIEFix() {
+		if($.browser.msie && $.browser.version < 7) {
+			if($('#uds-billboard-description').hasClass('alt')){
+				var desc = uds_billboard_url+"images/bg_light.png";
+			} else {
+				var desc = uds_billboard_url+"images/bg_dark.png";
+			}
+			var filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+desc+"', sizingMethod='scale');";
+			$('#uds-billboard-description').css('background-image', 'none').get(0).runtimeStyle.filter = filter;
+		}
+	}
 	
 	function setupSquares(){
 		if(squareSize < 30) {
@@ -224,7 +255,7 @@ jQuery(function($){
 			'width': squareSize+'px',
 			'height': squareSize+'px'
 		});
-	};
+	}
 	
 	function resetSquares(offsetX, offsetY) {
 		var rows = Math.ceil(height / squareSize);
@@ -240,7 +271,7 @@ jQuery(function($){
 				++n;
 			}
 		}
-	};
+	}
 
 	function setupColumns() {
 		var cols = Math.ceil(width / columnWidth);
@@ -257,7 +288,7 @@ jQuery(function($){
 			width: columnWidth + 'px',
 			height: height+'px'
 		});
-	};
+	}
 	
 	function resetColumns() {
 		var cols = Math.ceil(width / columnWidth);
@@ -269,7 +300,7 @@ jQuery(function($){
 				width: columnWidth + 'px'
 			});
 		}
-	};
+	}
 	
 	// picks transition function
 	function getTransitionFunction(transition) {
@@ -315,7 +346,7 @@ jQuery(function($){
 				return anim;
 			default: return animationFade;
 		}
-	};
+	}
 	
 ////////////////////////////////////////////////////////////////////////////////////////
 //
