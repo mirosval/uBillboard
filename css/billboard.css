@@ -106,8 +106,8 @@
 #uds-billboard-controls .stripe-bottom.alt {
 	background: url(../images/bg_light.png) repeat;
 	background: rgba(255, 255, 255, 0.5);
-	color: #333;
-	text-shadow: 1px 1px 1px #eee;
+	color: #eee;
+	text-shadow: 1px 1px 1px #222;
 }
 
 #uds-billboard-controls .stripe-left.alt a.read-more,
@@ -125,7 +125,6 @@
 	text-shadow: black 1px 1px;
 	font-weight: bold;
 	line-height: 30px;
-	font-family: 'Colaborate-ThinRegular';
 	font-size: 24px;	
 	margin-bottom: 10px;
 }
