@@ -126,10 +126,12 @@ jQuery(function($){
 			$('#uds-billboard-paginator').append($bullet);
 		}
 		$('#uds-billboard-paginator a').click(function(){
-			if($(this).index() == currentSlideIndex){ return; }
+			if($(this).index() == currentSlideIndex){ return false; }
 		    if($('div', $next).add($next).is(':animated')){ resetToSlide(currentSlideIndex); }
 		    clearInterval(timeout);
 		    showSlide($(this).index());
+		    
+		    return false;
 		});
 		paginatorIEFix();
 	}
