@@ -74,6 +74,7 @@
 	background: url(../images/bg_dark.png) repeat;
 	background: rgba(0, 0, 0, 0.5);
 	color: white;
+	text-shadow: 1px 1px 1px #222;
 	bottom: 0px;
 	padding: 20px 100px 20px 20px;
 	width: 100%;
@@ -84,6 +85,7 @@
 	background: url(../images/bg_dark.png) repeat;
 	background: rgba(0, 0, 0, 0.5);
 	color: white;
+	text-shadow: 1px 1px 1px #222;
 	top: 0px;
 	left: 0px;
 	width: 30%;
@@ -95,6 +97,7 @@
 	background: url(../images/bg_dark.png) repeat;
 	background: rgba(0, 0, 0, 0.5);
 	color: white;
+	text-shadow: 1px 1px 1px #222;
 	top: 0px;
 	width: 30%;
 	height: 100%;
@@ -106,8 +109,8 @@
 #uds-billboard-controls .stripe-bottom.alt {
 	background: url(../images/bg_light.png) repeat;
 	background: rgba(255, 255, 255, 0.5);
-	color: #eee;
-	text-shadow: 1px 1px 1px #222;
+	color: #222;
+	text-shadow: 1px 1px 1px #666;
 }
 
 #uds-billboard-controls .stripe-left.alt a.read-more,
@@ -121,24 +124,24 @@
 }
 
 .uds-descr h2 {
-	color: #fafafa;
-	text-shadow: black 1px 1px;
+	color: white;
+	text-shadow: 1px 1px 1px #222;
 	font-weight: bold;
 	line-height: 30px;
 	font-size: 24px;	
 	margin-bottom: 10px;
 }
+
 .uds-descr p {
-	text-shadow: black 1px 1px;
 	margin-top: 19px;
-	color: #ccc;
 	margin-bottom: 10px;
 }
 
 body .uds-descr a.read-more {
-	padding: 3px;
+	padding: 3px 0px 3px 6px;
 	background: #e6212e;
 	color: white;
+	text-shadow: none;
 	text-decoration: none;
 	display: block;
 	width: 65px;
@@ -147,4 +150,5 @@ body .uds-descr a.read-more {
 
 body .uds-descr a.read-more:hover {
 	text-decoration: underline;
+	text-shadow: 1px 1px 1px #222;
 }

@@ -460,7 +460,7 @@ function get_uds_billboard()
 							$height = (int)get_option(UDS_BILLBOARD_OPTION_HEIGHT, 380);
 							$zoom = get_option(UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM, 'on') == 'on' ? 1 : 0;
 							$quality = (int)get_option(UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY, 75);
-							$url = UDS_BILLBOARD_URL . "/timthumb.php?src=" . urlencode($b->image) . "&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
+							$url = UDS_BILLBOARD_URL . "timthumb.php?src=" . urlencode($b->image) . "&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
 						} else {
 							$url = $b->image;
 						}
@@ -477,7 +477,7 @@ function get_uds_billboard()
 									endif;
 									$out .= apply_filters('uds-billboard-description', stripslashes($b->text));
 									if(stripslashes($b->link) != ''):
-										$out .= '<br /><a href="'. apply_filters('uds-billboard-link', urlencode(stripslashes($b->link))) .'" class="read-more">Read more</a>';
+										$out .= '<br /><a href="'. apply_filters('uds-billboard-link', stripslashes($b->link)) .'" class="read-more">Read more</a>';
 									endif;
 									$out .= '
 								</div>
