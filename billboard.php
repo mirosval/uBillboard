@@ -122,6 +122,13 @@ function uds_billboard_init()
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
 	} else {
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
+		
+		// We need to override jQuery on WP < 3.0 because the default there is jQuery 1.3 and we need 1.4
+		if(version_compare($wp_version, '3.0.0', '<=')){
+			wp_deregister_script('jquery');
+			wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js');
+		}
+		
 		wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'));
 		if(UDS_BILLBOARD_USE_COMPRESSION){
 			wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'));
