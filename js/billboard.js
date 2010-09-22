@@ -1,22 +1,34 @@
 jQuery.noConflict();
 jQuery(function($){
+	// global shortcuts
 	$wrapper = $('#uds-billboard-wrapper');
 	$bb = $('#uds-billboard');
 	$loader = $('#uds-loader');
 	$controls = $('#uds-billboard-controls');
 	$next = $('#uds-next-slide');
+	// global slides array
 	slides = [];
+	// slide currently in $next
 	currentSlideIndex = 0;
+	// slide in billboard (background)
 	prevSlideIndex = 0;
+	// image count
 	totalImages = $('.uds-slide', $bb).length;
 	totalImagesLoaded = 0;
 	timeout = null;
+	// settings
 	squareSize = parseInt(uds_billboard_square_size, 10);
 	columnWidth = parseInt(uds_billboard_column_width, 10);
 	width = parseInt(uds_billboard_width, 10);
 	height = parseInt(uds_billboard_height, 10);
+	// a constant to be added to each transition duration
 	transitionConstant = 300;
+	// holds current timeout status
+	playing = false;
+	// are we currently animating?
+	animating = false;
 	
+	// debug facilitator
 	d = function(a){ try {console.log(a);} catch(e){ $.noop(); }};
 	
 	// initial styling based on variables
@@ -63,6 +75,7 @@ jQuery(function($){
 				if(uds_billboard_show_paginator == true){
 					showPaginator(0);
 				}
+				showPlaybackControls();
 				showDescription(0);
 				setupSquares();
 				setupColumns();
@@ -70,7 +83,7 @@ jQuery(function($){
 				$bb.fadeIn();
 				$controls.fadeIn();
 				
-				if(totalImages < 2){ return; }
+				if(totalImages < 2 || !playing){ return; }
 				timeout = setTimeout(function(){
 					showSlide(currentSlideIndex + 1);
 				}, slides[0].delay);
@@ -78,22 +91,24 @@ jQuery(function($){
 		}).attr('src', slide.image);
 	});
 	
+	// reset the billboard, making it ready to perform next transition
 	function resetToSlide(index) {
 		$bb.css('background-image', 'url('+slides[index].image+')');
-			$('div', $next).add($next).css('background-image', '');
-			resetSquares(0, 0);
-			resetColumns();
-			$next.css({
-				"-webkit-transform": "scale(1)",
-				"-moz-transform": "scale(1)",
-				"-o-transform": "scale(1)",
-				opacity: 1
-			});
-			showDescription(index);
+		$('div', $next).add($next).css('background-image', '');
+		resetSquares(0, 0);
+		resetColumns();
+		$next.css({
+			"-webkit-transform": "scale(1)",
+			"-moz-transform": "scale(1)",
+			"-o-transform": "scale(1)",
+			opacity: 1
+		});
+		showDescription(index);
 	}
 	
 	// main data juggling, switch images in billboard and next slide divs, dispatch transition
 	function showSlide(index){
+		animating = true;
 		clearTimeout(timeout);
 		prevSlideIndex = currentSlideIndex;
 		currentSlideIndex = index;
@@ -101,6 +116,8 @@ jQuery(function($){
 		
 		callback = function(){
 			resetToSlide(currentSlideIndex);
+			animating = false;
+			if(!playing) { return; }
 			timeout = setTimeout(function(){
 				var index = slides[currentSlideIndex + 1] == null ? 0 : currentSlideIndex + 1;
 				showSlide(index);
@@ -121,6 +138,7 @@ jQuery(function($){
 	// creates and displays paginator
 	function showPaginator(current) {
 		$controls.append($("<div id='uds-billboard-paginator'></div>"));
+		$paginator = $("#uds-billboard-paginator");
 		for(var i = 0; i < totalImages; i++){
 			var $bullet = $("<a class='"+(i == current ? 'current' : '')+"'></a>");
 			$('#uds-billboard-paginator').append($bullet);
@@ -134,6 +152,14 @@ jQuery(function($){
 		    return false;
 		});
 		paginatorIEFix();
+		
+		$paginator.hide();
+		
+		$controls.hover(function(){
+			$paginator.stop().fadeIn(300);
+		}, function(){
+			$paginator.stop().fadeOut(200);
+		});
 	}
 	
 	function paginatorIEFix() {
@@ -147,6 +173,64 @@ jQuery(function($){
 				$(this).get(0).runtimeStyle.filter = filterCurrent;
 			});
 		}
+	}
+	
+	// creates and displays controls (play/pause/next/prev)
+	function showPlaybackControls() {
+		$controls.append($("<div id='uds-billboard-playback'></div>"));		
+		$playback = $('#uds-billboard-playback');
+		
+		$playback.hide();
+		
+		$controls.hover(function(){
+			$playback.stop().fadeIn(300);
+		}, function(){
+			$playback.stop().fadeOut(200);
+		});
+		
+		$playback.append("<div id='uds-billboard-playback-prev'></div>");
+		$playback.append("<div id='uds-billboard-playback-playpause'></div>");
+		$playback.append("<div id='uds-billboard-playback-next'></div>");
+		
+		if(playing) {
+			$('#uds-billboard-playback-playpause').addClass('playing');
+		}
+		
+		$('#uds-billboard-playback-prev').click(function(){
+			if(animating) { return; }
+			
+			var index = currentSlideIndex - 1;
+			if(typeof slides[index] == 'undefined') {
+				index = totalImages - 1;
+			}
+			
+			showSlide(index);
+		});
+		
+		$('#uds-billboard-playback-playpause').click(function(){
+			$pp = $("#uds-billboard-playback-playpause");
+			if(playing) {
+				$pp.removeClass('playing');
+				clearTimeout(timeout);
+				playing = false;
+			} else {
+				$pp.addClass('playing');
+				var index = slides[currentSlideIndex + 1] == null ? 0 : currentSlideIndex + 1;
+				showSlide(index);
+				playing = true;
+			}
+		});
+		
+		$('#uds-billboard-playback-next').click(function(){
+			if(animating) { return; }
+			
+			var index = currentSlideIndex + 1;
+			if(typeof slides[index] == 'undefined') {
+				index = 0;
+			}
+			
+			showSlide(index);
+		});
 	}
 	
 	// shows description, create it if necessary

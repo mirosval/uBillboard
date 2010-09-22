@@ -70,6 +70,41 @@
 	display: none;
 }
 
+#uds-billboard-playback {
+	position: absolute;
+	z-index: 5;
+	bottom: 20px;
+	left: 20px;
+	width: 96px;
+	height: 32px;
+}
+
+#uds-billboard-playback-prev,
+#uds-billboard-playback-playpause,
+#uds-billboard-playback-next {
+	float: left;
+	width: 32px;
+	height: 32px;
+	background-image: url(../images/playback.png);
+	overflow: hidden;
+}
+
+#uds-billboard-playback-prev {
+	background-position: 64px 0px;	
+}
+
+#uds-billboard-playback-playpause {
+	background-position: 0px 0px;
+}
+
+#uds-billboard-playback-playpause.playing {
+	background-position: 32px 0px;
+}
+
+#uds-billboard-playback-next {
+	background-position: 92px 0px;
+}
+
 #uds-billboard-controls .stripe-bottom, #uds-billboard-controls .stripe-bottom.alt {
 	background: url(../images/bg_dark.png) repeat;
 	background: rgba(0, 0, 0, 0.5);
