@@ -23,14 +23,14 @@ jQuery(function($){
 	height = parseInt(uds_billboard_height, 10);
 	// a constant to be added to each transition duration
 	transitionConstant = 300;
-	// holds current timeout status
-	playing = false;
+	// holds current play/pause status
+	playing = typeof uds_billboard_autoplay == 'boolean' ? uds_billboard_autoplay : true;
 	// are we currently animating?
 	animating = false;
 	
 	// debug facilitator
 	d = function(a){ try {console.log(a);} catch(e){ $.noop(); }};
-	
+
 	// initial styling based on variables
 	$('#uds-billboard-wrapper,#uds-billboard,#uds-next-slide,#uds-billboard-controls').css({
 		width: width+'px',
@@ -177,6 +177,8 @@ jQuery(function($){
 	
 	// creates and displays controls (play/pause/next/prev)
 	function showPlaybackControls() {
+		if(!uds_billboard_show_controls) { return; }
+		
 		$controls.append($("<div id='uds-billboard-playback'></div>"));		
 		$playback = $('#uds-billboard-playback');
 		
