@@ -6,12 +6,12 @@
 	width: 790px;
 }
 
-.billboard-add, .billboard-move, .billboard-delete {
+.billboard-add, .billboard-move, .billboard-delete, .billboard-edit {
 	background: url(../images/add.png) no-repeat;
 	display: block;
 	width: 24px;
 	height: 24px;
-	margin-bottom: 5px;
+	margin: 0px auto 5px;
 	text-indent: -5000px;
 }
 
@@ -22,6 +22,10 @@
 
 .billboard-delete {
 	background: url(../images/delete.png) no-repeat;
+}
+
+.billboard-edit {
+	background: url(../images/edit.png) no-repeat;
 }
 
 .image-wrapper {
@@ -161,7 +165,7 @@
 	margin: 10px 0px 5px 0px;
 }
 
-.uds-billboard-form {
+.uds-billboard-form{
 	max-width: 820px;
 }
 
@@ -208,4 +212,26 @@
 .uds-billboard-form .submit {
 	float: right;
 	padding: 5px 20px;
+}
+
+.uds-billboard-admin-table {
+	width: 820px;
+	border-collapse: collapse;
+}
+
+.uds-billboard-admin-table td,
+.uds-billboard-admin-table th {
+	border: solid 1px #ccc;
+	padding: 10px;
+}
+
+.uds-billboard-admin-table th {
+	background: #eee;
+}
+
+.uds-billboard-admin-table td.id,
+.uds-billboard-admin-table td.edit,
+.uds-billboard-admin-table td.delete {
+	width: 25px;
+	text-align: center;
 }

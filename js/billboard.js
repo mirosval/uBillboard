@@ -17,19 +17,26 @@ jQuery(function($){
 	totalImagesLoaded = 0;
 	timeout = null;
 	// settings
-	squareSize = parseInt(uds_billboard_square_size, 10);
-	columnWidth = parseInt(uds_billboard_column_width, 10);
-	width = parseInt(uds_billboard_width, 10);
-	height = parseInt(uds_billboard_height, 10);
+	squareSize = parseInt($('#uds-billboard-square-size').text(), 10);
+	columnWidth = parseInt($('#uds-billboard-column-width').text(), 10);
+	width = parseInt($('#uds-billboard-width').text(), 10);
+	height = parseInt($('#uds-billboard-height').text(), 10);
 	// a constant to be added to each transition duration
 	transitionConstant = 300;
 	// holds current play/pause status
-	playing = typeof uds_billboard_autoplay == 'boolean' ? uds_billboard_autoplay : true;
+	playing = $('#uds-billboard-autoplay').text() == 'true' ? true : false;
+	// show paginator option
+	showPaginatorOption = $('#uds-billboard-show-paginator').text() == 'true' ? true : false;
+	// show controls option
+	showControlsOption = $('#uds-billboard-show-controls').text() == 'true' ? true : false;
 	// are we currently animating?
 	animating = false;
 	
 	// debug facilitator
 	d = function(a){ try {console.log(a);} catch(e){ $.noop(); }};
+
+	// clean up the settings
+	$('#uds-billboard-settings').remove();
 
 	// initial styling based on variables
 	$('#uds-billboard-wrapper,#uds-billboard,#uds-next-slide,#uds-billboard-controls').css({
@@ -72,7 +79,7 @@ jQuery(function($){
 			});
 			if(totalImages == totalImagesLoaded){
 				$bb.css('background-image', 'url('+slides[0].image+')');
-				if(uds_billboard_show_paginator == true){
+				if(showPaginatorOption == true){
 					showPaginator(0);
 				}
 				showPlaybackControls();
@@ -177,7 +184,7 @@ jQuery(function($){
 	
 	// creates and displays controls (play/pause/next/prev)
 	function showPlaybackControls() {
-		if(!uds_billboard_show_controls) { return; }
+		if(!showControlsOption) { return; }
 		
 		$controls.append($("<div id='uds-billboard-playback'></div>"));		
 		$playback = $('#uds-billboard-playback');

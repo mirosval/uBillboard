@@ -3,41 +3,103 @@
 Plugin Name: uBillboard
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
 Description: uBillboard is a slider plugin by uDesignStudios that allows you to create an eye-catching presentation for your web. (Admin menu icon: http://p.yusukekamiyamane.com/)
-Version: 1.0.2
+Version: 2.0.0
 Author: uDesign
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
 */
 
 // General Options
+define('UDS_BILLBOARD_VERSION', '2.0.0');
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
 define('UDS_BILLBOARD_USE_COMPRESSION', false);
 
 // User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard');
-define('UDS_BILLBOARD_OPTION_WIDTH', 'uds-billboard-width');
-define('UDS_BILLBOARD_OPTION_HEIGHT', 'uds-billboard-height');
-define('UDS_BILLBOARD_OPTION_SQUARE_SIZE', 'uds-billboard-square-size');
-define('UDS_BILLBOARD_OPTION_COLUMN_WIDTH', 'uds-billboard-column-width');
-define('UDS_BILLBOARD_OPTION_SHOW_PAGINATOR', 'uds-billboard-show-paginator');
-define('UDS_BILLBOARD_OPTION_SHOW_CONTROLS', 'uds-billboard-show-controls');
-define('UDS_BILLBOARD_OPTION_AUTOPLAY', 'uds-billboard-autoplay');
-define('UDS_BILLBOARD_OPTION_USE_TIMTHUMB', 'uds-billboard-use-timthumb');
-define('UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM', 'uds-billboard-timthumb-zoom');
-define('UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY', 'uds-billboard-timthumb-quality');
 
 add_option(UDS_BILLBOARD_OPTION, array());
-add_option(UDS_BILLBOARD_OPTION_WIDTH, 940);
-add_option(UDS_BILLBOARD_OPTION_HEIGHT, 380);
-add_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE, 100);
-add_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH, 50);
-add_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR, 'on');
-add_option(UDS_BILLBOARD_OPTION_SHOW_CONTROLS, '');
-add_option(UDS_BILLBOARD_OPTION_AUTOPLAY, 'on');
-add_option(UDS_BILLBOARD_OPTION_USE_TIMTHUMB, '');
-add_option(UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM, 'on');
-add_option(UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY, 75);
+
+// define general options for billboard
+$uds_billboard_general_options = array(
+	'name' => array(
+		'type' => 'text',
+		'label' => 'Billboard Name',
+		'unit' => '',
+		'tooltip' => 'Enter a name for this Billboard. You will use this name to create the Billboard on your site.',
+		'default' => 'billboard'
+	),
+	'width' => array(
+		'type' => 'text',
+		'label' => 'Billboard Width',
+		'unit' => 'pixels',
+		'tooltip' => 'Billboard Width in pixels',
+		'default' => 940
+	),
+	'height' => array(
+		'type' => 'text',
+		'label' => 'Billboard Height',
+		'unit' => 'pixels',
+		'tooltip' => 'Billboard Height in pixels',
+		'default' => 380
+	),
+	'square-size' => array(
+		'type' => 'text',
+		'label' => 'Square Size',
+		'unit' => 'pixels',
+		'tooltip' => 'Square dimension, applies only to transitions based on squares <img src="<?php echo UDS_BILLBOARD_URL ?>images/square_size.png" alt="" />',
+		'default' => 100
+	),
+	'column-width' => array(
+		'type' => 'text',
+		'label' => 'Column Width',
+		'unit' => 'pixels',
+		'tooltip' => 'Column width, applies only to column-based transitions <img src="<?php echo UDS_BILLBOARD_URL ?>images/column_width.png" alt="" />',
+		'default' => 50
+	),
+	'show-paginator' => array(
+		'type' => 'checkbox',
+		'label' => 'Show Paginator',
+		'unit' => '',
+		'tooltip' => 'Check to show paginator in the bottom right corner <img src="<?php echo UDS_BILLBOARD_URL ?>images/paginator.png" alt="" />',
+		'default' => 'on'
+	),
+	'show-controls' => array(
+		'type' => 'checkbox',
+		'label' => 'Show Controls',
+		'unit' => '',
+		'tooltip' => 'Check to show playback controls in the bottom left corner <img src="<?php echo UDS_BILLBOARD_URL ?>images/show_controls.png" alt="" />',
+		'default' => ''
+	),
+	'autoplay' => array(
+		'type' => 'checkbox',
+		'label' => 'Autoplay',
+		'unit' => '',
+		'tooltip' => 'Automatically start playing slides, makes sense to turn this off only if Show Controls is enabled.',
+		'default' => 'on'
+	),
+	'use-timthumb' => array(
+		'type' => 'checkbox',
+		'label' => 'Use Automatic Image Resizing',
+		'unit' => '',
+		'tooltip' => 'When checked, all your images will be resized and zoomed/stretched to fit the Billboard size',
+		'default' => ''
+	),
+	'timthumb-zoom' => array(
+		'type' => 'checkbox',
+		'label' => 'Zoom Disproportionate Images',
+		'unit' => '',
+		'tooltip' => 'When checked will crop images that don\'t have the same proportions as Billboard. Otherwise will stretch images to fit the Billboard',
+		'default' => ''
+	),
+	'timthumb-quality' => array(
+		'type' => 'text',
+		'label' => 'Image Quality',
+		'unit' => 'pixels',
+		'tooltip' => 'Image compression - use lower values for faster page loads and lower traffic, use high values to increase image quality. Optimal values are 60-80',
+		'default' => 80
+	)
+);
 
 // define data structure for billboard
 $uds_billboard_attributes = array(
@@ -112,10 +174,34 @@ $uds_billboard_attributes = array(
 	)
 );
 
+global $uds_billboard_errors;
+
+if(!function_exists('d')) {
+	function d($var) {
+		echo "<pre>";
+		var_dump($var);
+		echo "</pre>";
+	}
+}
+
 // initialize billboard
 add_action('init', 'uds_billboard_init');
 function uds_billboard_init()
 {
+	global $uds_billboard_general_options;
+	// Fix older uBillboards
+	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	if(! empty($billboards[0])) {
+		$new_billboards = array();
+		foreach($uds_billboard_general_options as $key => $option) {
+			$new_billboards['billboard'][$key] = $option['default'];
+		}
+		$new_billboards['billboard']['slides'] = $billboards;
+		$billboards = $new_billboards;
+		update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
+	}
+	
+	// Basic init
 	$dir = UDS_BILLBOARD_URL;
 	if(is_admin()){
 		add_thickbox();
@@ -124,6 +210,23 @@ function uds_billboard_init()
 		wp_enqueue_script('uds-cookie', $dir."js/jquery_cookie.js");
 		wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js");
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
+		
+		// process updates
+		if(!empty($_POST['nonce']) && !wp_verify_nonce($_POST['nonce'], 'uds-billboard')){
+			die('Security check failed');
+		} else {
+			uds_billboard_proces_updates();
+		}
+		
+		// process imports/exports
+		if($_GET['page'] == 'uds_billboard_import_export') {
+			if(isset($_GET['download_export']) && wp_verify_nonce($_GET['download_export'], 'uds-billboard-export')) {
+				uds_billboard_export();
+			}
+			if(is_uploaded_file($_FILES['uds-billboard-import']['tmp_name'])) {
+				uds_billboard_import($_FILES['uds-billboard-import']['tmp_name']);
+			}
+		}
 	} else {
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
 		
@@ -142,60 +245,37 @@ function uds_billboard_init()
 	}
 }
 
-add_action('wp_head', 'uds_billboard_options_javascript', 1);
-function uds_billboard_options_javascript()
-{
-	?>
-	<script type="text/javascript">
-		var uds_billboard_url = '<?php echo UDS_BILLBOARD_URL ?>';
-		var uds_billboard_width = <?php echo apply_filters('uds-billboard-option-width', get_option(UDS_BILLBOARD_OPTION_WIDTH)) ?>;
-		var uds_billboard_height = <?php echo apply_filters('uds-billboard-option-height', get_option(UDS_BILLBOARD_OPTION_HEIGHT)) ?>;
-		var uds_billboard_square_size = <?php echo apply_filters('uds-billboard-option-square-size', get_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE)) ?>;
-		var uds_billboard_column_width = <?php echo apply_filters('uds-billboard-option-column-width', get_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH)) ?>;
-		var uds_billboard_show_paginator = <?php echo apply_filters('uds-billboard-option-show-paginator', get_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR) == 'on' ? 'true' : 'false') ?>;
-		var uds_billboard_show_controls = <?php echo apply_filters('uds-billboard-option-show-controls', get_option(UDS_BILLBOARD_OPTION_SHOW_CONTROLS) == 'on' ? 'true' : 'false') ?>;
-		var uds_billboard_autoplay = <?php echo apply_filters('uds-billboard-option-autoplay', get_option(UDS_BILLBOARD_OPTION_AUTOPLAY) == 'on' ? 'true' : 'false') ?>;
-	</script>
-	<?php
-}
+////////////////////////////////////////////////////////////////////////////////
+//
+//	Activation hooks
+//
+////////////////////////////////////////////////////////////////////////////////
 
 register_activation_hook(__FILE__, 'uds_billboard_activation_hook');
 function uds_billboard_activation_hook()
 {
 	add_option(UDS_BILLBOARD_OPTION, array());
-	add_option(UDS_BILLBOARD_OPTION_WIDTH, 940);
-	add_option(UDS_BILLBOARD_OPTION_HEIGHT, 380);
-	add_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE, 100);
-	add_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH, 50);
-	add_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR, 'on');
-	add_option(UDS_BILLBOARD_OPTION_SHOW_CONTROLS, '');
-	add_option(UDS_BILLBOARD_OPTION_AUTOPLAY, 'on');
-	add_option(UDS_BILLBOARD_OPTION_USE_TIMTHUMB, '');
-	add_option(UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM, 'on');
-	add_option(UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY, 75);
 }
 
 register_activation_hook(__FILE__, 'uds_billboard_deactivation_hook');
 function uds_billboard_deactivation_hook()
 {
 	delete_option(UDS_BILLBOARD_OPTION);
-	delete_option(UDS_BILLBOARD_OPTION_WIDTH);
-	delete_option(UDS_BILLBOARD_OPTION_HEIGHT);
-	delete_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE);
-	delete_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH);
-	delete_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR);
-	delete_option(UDS_BILLBOARD_OPTION_SHOW_CONTROLS);
-	delete_option(UDS_BILLBOARD_OPTION_AUTOPLAY);
-	delete_option(UDS_BILLBOARD_OPTION_USE_TIMTHUMB);
-	delete_option(UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM);
-	delete_option(UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//	Admin menus
+//
+////////////////////////////////////////////////////////////////////////////////
 
 add_action('admin_menu', 'uds_billboard_menu');
 function uds_billboard_menu()
 {	
 	$icon = UDS_BILLBOARD_URL . 'images/menu-icon.png';
 	add_menu_page("uBillboard", "uBillboard", 'manage_options', 'uds_billboard_admin', 'uds_billboard_admin', $icon, 61);
+	add_submenu_page('uds_billboard_admin', "Add Billboard", 'Add Billboard', 'manage_options', 'uds_billboard_add', 'uds_billboard_add');
+	add_submenu_page('uds_billboard_admin', "Import/Export", 'Import/Export', 'manage_options', 'uds_billboard_import_export', 'uds_billboard_import_export');
 }
 
 // Admin menu entry handling
@@ -204,10 +284,70 @@ function uds_billboard_admin()
 	include 'billboard-admin.php';
 }
 
+// Admin menu entry handling
+function uds_billboard_add()
+{
+	include 'billboard-add.php';
+}
+
+// Admin menu entry handling
+function uds_billboard_import_export()
+{
+	global $uds_billboard_errors;
+	include 'billboard-import-export.php';
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//	Importer and Exporter
+//
+////////////////////////////////////////////////////////////////////////////////
+
+function uds_billboard_import($file)
+{
+	global $uds_billboard_errors;
+	$import = @file_get_contents($file);
+	
+	if(empty($import)) {
+		$uds_billboard_errors[] = 'Import file is empty';
+		return;
+	}
+	
+	$import = maybe_unserialize($import);
+	
+	if(empty($import['data'])) {
+		$uds_billboard_errors[] = 'Import file is corrupted';
+		return;
+	}
+	
+	update_option(UDS_BILLBOARD_OPTION, $import['data']);
+	
+	wp_redirect('admin.php?page=uds_billboard_admin');
+}
+
+function uds_billboard_export()
+{
+	$export = array();
+	$export['version'] = UDS_BILLBOARD_VERSION;
+	$export['data'] = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
+	
+	$export = serialize($export);
+	
+	header('Content-type: text/plain');
+	header('Content-Disposition: attachment; filename="uBillboard.txt"');
+	die($export);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//	Update logic
+//
+////////////////////////////////////////////////////////////////////////////////
+
 // check for POST data and update billboard accordingly
 function uds_billboard_proces_updates()
 {
-	global $uds_billboard_attributes;
+	global $uds_billboard_attributes, $uds_billboard_general_options;
 
 	$post = $_POST['uds_billboard'];
 	//d($post);
@@ -216,23 +356,23 @@ function uds_billboard_proces_updates()
 	if(!is_admin()) return;
 	
 	// update billboard array
-	$billboards = array();
+	$slides = array();
 	foreach($uds_billboard_attributes as $attrib => $options){
 		foreach($post[$attrib] as $key => $item){
-			if($billboards[$key] == null){
-				$billboard = uds_billboard_default_billboard();
+			if($slides[$key] == null){
+				$slide = uds_billboard_default_billboard();
 			} else {
-				$billboard = $billboards[$key];
+				$slide = $slides[$key];
 			}
 			
-			$billboard->$attrib = $item;
-			$billboards[$key] = $billboard;
+			$slide->$attrib = $item;
+			$slides[$key] = $slide;
 		}
 	}
 	
 	// delete empty billboards
 	$bb_default = uds_billboard_default_billboard();
-	foreach($billboards as $key => $bb){
+	foreach($slides as $key => $bb){
 		$delete = true;
 		foreach($uds_billboard_attributes as $attrib => $options){
 			if($bb->$attrib != $bb_default->$attrib){
@@ -241,22 +381,39 @@ function uds_billboard_proces_updates()
 		}
 		
 		if($delete){
-			unset($billboards[$key]);
+			unset($slides[$key]);
 		}
 	}
 	
-	update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
-	update_option(UDS_BILLBOARD_OPTION_WIDTH, (int)$_POST[UDS_BILLBOARD_OPTION_WIDTH]);
-	update_option(UDS_BILLBOARD_OPTION_HEIGHT, (int)$_POST[UDS_BILLBOARD_OPTION_HEIGHT]);
-	update_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE, (int)$_POST[UDS_BILLBOARD_OPTION_SQUARE_SIZE]);
-	update_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH, (int)$_POST[UDS_BILLBOARD_OPTION_COLUMN_WIDTH]);
-	update_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR, $_POST[UDS_BILLBOARD_OPTION_SHOW_PAGINATOR] == '' ? '' : 'on');
-	update_option(UDS_BILLBOARD_OPTION_SHOW_CONTROLS, $_POST[UDS_BILLBOARD_OPTION_SHOW_CONTROLS] == '' ? '' : 'on');
-	update_option(UDS_BILLBOARD_OPTION_AUTOPLAY, $_POST[UDS_BILLBOARD_OPTION_AUTOPLAY] == '' ? '' : 'on');
-	update_option(UDS_BILLBOARD_OPTION_USE_TIMTHUMB, $_POST[UDS_BILLBOARD_OPTION_USE_TIMTHUMB] == '' ? '' : 'on');
-	update_option(UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM, $_POST[UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM] == '' ? '' : 'on');
-	update_option(UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY, (int)$_POST[UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY]);
+	// update general options
+	$billboard = array();
+	$billboard['slides'] = $slides;
+	foreach($uds_billboard_general_options as $key => $option) {
+		$billboard[$key] = empty($_POST['uds-billboard-'.$key]) ? '' : $_POST['uds-billboard-'.$key];
+	}
+	
+	// process name changes and save by name
+	$billboard_saved = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
+	$name_orig = $_POST['original_name'];
+	$name = $_name = $_POST['uds-billboard-name'];
+	if($name_orig != $name) {
+		$n = 1;
+		while(isset($billboard_saved[$name])) {
+			$name = $_name . '-' . $n;
+			$n++;
+		}
+	}
+	
+	$billboard_saved[$name] = $billboard;
+	
+	//d($billboard_saved);
+	
+	update_option(UDS_BILLBOARD_OPTION, serialize($billboard_saved));
 	//delete_option(UDS_BILLBOARD_OPTION);
+	
+	if($name_orig == '') {
+		wp_redirect('admin.php?page=uds_billboard_add&uds-billboard-edit='.$name);
+	}
 }
 
 // Initialize empty billboard instance
@@ -282,7 +439,8 @@ function uds_billboard_default_billboard()
 ////////////////////////////////////////////////////////////////////////////////
 
 // Render a single input field
-function uds_billboard_render_field($item, $attrib, $unique_key){
+function uds_billboard_render_field($item, $attrib, $unique_key)
+{
 	global $uds_billboard_attributes;
 
 	$attrib_full = $uds_billboard_attributes[$attrib];
@@ -402,95 +560,85 @@ function uds_billboard_render_js_support()
 	<?php
 }
 
-function uds_billboard_admin_options() 
+// Functions to render single fields in general options for each billboard
+function uds_billboard_render_general_text($option, $field, $value)
 {
 	?>
-	<div class="uds-billboard-width">
-		<label for="uds-billboard-width">Billboard Width</label>
-		<input type="text" id="uds-billboard-width" name="<?php echo UDS_BILLBOARD_OPTION_WIDTH ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_WIDTH) ?>" />
-		<span class="unit">pixels</span>
+	<div class="uds-billboard-<?php echo $option ?>">
+		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+		<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" value="<?php echo empty($value) ? $field['default'] : $value ?>" />
+		<span class="unit"><?php echo $field['unit'] ?></span>
 		<span class="tooltip">?</span>
-		<div class="tooltip-content">Billboard Width in pixels</div>
-	</div>
-	<div class="uds-billboard-height">
-		<label for="uds-billboard-height">Billboard Height</label>
-		<input type="text" id="uds-billboard-height" name="<?php echo UDS_BILLBOARD_OPTION_HEIGHT ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_HEIGHT) ?>" />
-		<span class="unit">pixels</span>
-		<span class="tooltip">?</span>
-		<div class="tooltip-content">Billboard Height in pixels</div>
-	</div>
-	<div class="uds-billboard-square-size">
-		<label for="uds-billboard-square-size">Square Size</label>
-		<input type="text" id="uds-billboard-square-size" name="<?php echo UDS_BILLBOARD_OPTION_SQUARE_SIZE ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_SQUARE_SIZE) ?>" />
-		<span class="unit">pixels</span>
-		<span class="tooltip">?</span>
-		<div class="tooltip-content">Square dimension, applies only to transitions based on squares <img src="<?php echo UDS_BILLBOARD_URL ?>images/square_size.png" alt="" /></div>
-	</div>
-	<div class="uds-billboard-column-width">
-		<label for="uds-billboard-column-width">Column Width</label>
-		<input type="text" id="uds-billboard-column-width" name="<?php echo UDS_BILLBOARD_OPTION_COLUMN_WIDTH ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_COLUMN_WIDTH) ?>" />
-		<span class="unit">pixels</span>
-		<span class="tooltip">?</span>
-		<div class="tooltip-content">Column width, applies only to column-based transitions <img src="<?php echo UDS_BILLBOARD_URL ?>images/column_width.png" alt="" /></div>
-	</div>
-	<div class="uds-billboard-show-paginator">
-		<label for="uds-billboard-show-paginator">Show Paginator</label>
-		<input type="checkbox" id="uds-billboard-show-paginator" name="<?php echo UDS_BILLBOARD_OPTION_SHOW_PAGINATOR ?>" <?php echo get_option(UDS_BILLBOARD_OPTION_SHOW_PAGINATOR) == 'on' ? 'checked="checked"' : '' ?> />
-		<span class="tooltip">?</span>
-		<div class="tooltip-content">Check to show paginator in the bottom right corner <img src="<?php echo UDS_BILLBOARD_URL ?>images/paginator.png" alt="" /></div>
-	</div>
-	<div class="uds-billboard-show-controls">
-		<label for="uds-billboard-show-controls">Show Playback Controls</label>
-		<input type="checkbox" id="uds-billboard-show-controls" name="<?php echo UDS_BILLBOARD_OPTION_SHOW_CONTROLS ?>" <?php echo get_option(UDS_BILLBOARD_OPTION_SHOW_CONTROLS) == 'on' ? 'checked="checked"' : '' ?> />
-		<span class="tooltip">?</span>
-		<div class="tooltip-content">Check to show playback controls in the bottom left corner <img src="<?php echo UDS_BILLBOARD_URL ?>images/show_controls.png" alt="" /></div>
-	</div>
-	<div class="uds-billboard-autoplay">
-		<label for="uds-billboard-autoplay">Autoplay</label>
-		<input type="checkbox" id="uds-billboard-autoplay" name="<?php echo UDS_BILLBOARD_OPTION_AUTOPLAY ?>" <?php echo get_option(UDS_BILLBOARD_OPTION_AUTOPLAY) == 'on' ? 'checked="checked"' : '' ?> />
-		<span class="tooltip">?</span>
-		<div class="tooltip-content">Automatically start playing slides, makes sense to turn this off only if Show Controls is enabled.</div>
-	</div>
-	<div class="uds-billboard-use-timthumb">
-		<label for="uds-billboard-use-timthumb">Use Automatic Image Resizing</label>
-		<input type="checkbox" id="uds-billboard-use-timthumb" name="<?php echo UDS_BILLBOARD_OPTION_USE_TIMTHUMB ?>" <?php echo get_option(UDS_BILLBOARD_OPTION_USE_TIMTHUMB) == 'on' ? 'checked="checked"' : '' ?> />
-		<span class="tooltip">?</span>
-		<div class="tooltip-content">When checked, all your images will be resized and zoomed/stretched to fit the Billboard size</div>
-	</div>
-	<div class="uds-billboard-timthumb-zoom">
-		<label for="uds-billboard-timthumb-zoom">Zoom Disproportionate Images</label>
-		<input type="checkbox" id="uds-billboard-timthumb-zoom" name="<?php echo UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM ?>" <?php echo get_option(UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM) == 'on' ? 'checked="checked"' : '' ?> />
-		<span class="tooltip">?</span>
-		<div class="tooltip-content">When checked will crop images that don't have the same proportions as Billboard. Otherwise will stretch images to fit the Billboard</div>
-	</div>
-	<div class="uds-billboard-timthumb-quality">
-		<label for="uds-billboard-timthumb-quality">Image Quality (0-100)</label>
-		<input type="text" id="uds-billboard-timthumb-quality" name="<?php echo UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY ?>" value="<?php echo get_option(UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY) ?>" />
-		<span class="unit">%</span>
-		<span class="tooltip">?</span>
-		<div class="tooltip-content">Image compression - use lower values for faster page loads and lower traffic, use high values to increase image quality. Optimal values are 60-80 </div>
+		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
 	</div>
 	<?php
 }
 
-function get_uds_billboard()
+function uds_billboard_render_general_checkbox($option, $field, $value)
 {
+	$checked = ( empty($value) ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
+	?>
+	<div class="uds-billboard-<?php echo $option ?>">
+		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+		<input type="checkbox" id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" <?php echo $checked ?> />
+		<span class="unit"><?php echo $field['unit'] ?></span>
+		<span class="tooltip">?</span>
+		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
+	</div>
+	<?php
+}
+
+function uds_billboard_admin_options($billboard, $name)
+{
+	global $uds_billboard_general_options;
+	
+	foreach($uds_billboard_general_options as $key => $option) {
+		switch($option['type']){
+			case 'checkbox':
+				uds_billboard_render_general_checkbox($key, $option, $billboard[$key]);
+				break;
+			case 'text':
+			default:
+				uds_billboard_render_general_text($key, $option, $key == 'name' ? $name : $billboard[$key]);
+		}
+	}
+}
+
+
+function get_uds_billboard($name = 'billboard')
+{
+	static $has_run = false;
+	
+	if($has_run) return;
+	else $has_run = true;
+	
 	$bb = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	
+	$bb = $bb[$name];
 	
 	if(empty($bb)) return "";
 	
 	$out = '
 		<div id="uds-billboard-wrapper">
+			<div id="uds-billboard-settings">
+				<span id="uds-billboard-width">'.(int)$bb['width'].'</span>
+				<span id="uds-billboard-height">'.(int)$bb['height'].'</span>
+				<span id="uds-billboard-square-size">'.(int)$bb['square-size'].'</span>
+				<span id="uds-billboard-column-width">'.(int)$bb['column-width'].'</span>
+				<span id="uds-billboard-show-paginator">'.($bb['show-paginator'] == on ? 'true' : 'false') .'</span>
+				<span id="uds-billboard-show-controls">'. ($bb['show-controls'] == on ? 'true' : 'false') .'</span>
+				<span id="uds-billboard-autoplay">'. ($bb['autoplay'] == on ? 'true' : 'false') .'</span>
+			</div>
 			<div id="uds-loader"><div id="uds-progress"></div></div>
 			<div id="uds-next-slide"></div>
 			<div id="uds-billboard">';
-				foreach($bb as $b):
+				foreach($bb['slides'] as $b):
 					if($b->image != ''):
-						if(get_option(UDS_BILLBOARD_OPTION_USE_TIMTHUMB, '') == 'on'){
-							$width = (int)get_option(UDS_BILLBOARD_OPTION_WIDTH, 940);
-							$height = (int)get_option(UDS_BILLBOARD_OPTION_HEIGHT, 380);
-							$zoom = get_option(UDS_BILLBOARD_OPTION_TIMTHUMB_ZOOM, 'on') == 'on' ? 1 : 0;
-							$quality = (int)get_option(UDS_BILLBOARD_OPTION_TIMTHUMB_QUALITY, 75);
+						if($bb['use-timthumb'] == 'on'){
+							$width = (int)$bb['width'];
+							$height = (int)$bb['height'];
+							$zoom = $bb['timthumb-zoom'] == 'on' ? 1 : 0;
+							$quality = (int)$bb['timthumb-quality'];
 							$url = UDS_BILLBOARD_URL . "timthumb.php?src=" . urlencode($b->image) . "&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
 						} else {
 							$url = $b->image;
@@ -524,15 +672,18 @@ function get_uds_billboard()
 	return apply_filters('uds-billboard-output', $out);
 }
 
-function the_uds_billboard()
+function the_uds_billboard($name = 'billboard')
 {
-	echo get_uds_billboard();
+	echo get_uds_billboard($name);
 }
 
 add_shortcode('uds-billboard', 'uds_billboard_shortcode');
 function uds_billboard_shortcode($atts, $content = null)
 {	
-	return get_uds_billboard();
+	extract(shortcode_atts(array(
+		'name' => 'billboard'
+	), $atts));
+	return get_uds_billboard($name);
 }
 
 ?>

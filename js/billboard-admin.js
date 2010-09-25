@@ -1,4 +1,9 @@
 jQuery(function($){
+	// admin billboard delete
+	$('.uds-billboard-admin-table .billboard-delete').click(function(){
+		return confirm("Really delete? This is not undoable");
+	});
+	
 	$("#uds-billboard-table").sortable({
 		axis: 'y',
 		containment: 'parent',
@@ -7,7 +12,7 @@ jQuery(function($){
 		cursor: 'crosshair'
 	});
 	
-	$('.billboard-delete').click(function(){
+	$('#uds-billboard-table .billboard-delete').click(function(){
 		if(confirm("Do you really want to delete this entry?")){
 			$(this).parents('tr').fadeOut(400, function(){
 				$(this).remove();
