@@ -24,7 +24,7 @@ $billboard['slides'][] = uds_billboard_default_billboard();
 	<?php else: ?>
 		<h2>Edit uBillboard</h2>
 	<?php endif; ?>
-	<?php if(get_option(UDS_BILLBOARD_OPTION_USE_TIMTHUMB) == 'on' && !is_writable(UDS_BILLBOARD_PATH.'cache')): ?>
+	<?php if(!is_writable(UDS_BILLBOARD_PATH.'cache')): ?>
 		<div class="updated uds-warn"><strong>Warning!</strong> Directory <?php echo UDS_BILLBOARD_PATH ?>cache is not writable!</div>
 	<?php endif; ?>
 	<form action="" method="post" class="uds-billboard-form">
