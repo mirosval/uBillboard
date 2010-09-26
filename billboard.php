@@ -47,28 +47,28 @@ $uds_billboard_general_options = array(
 		'type' => 'text',
 		'label' => 'Square Size',
 		'unit' => 'pixels',
-		'tooltip' => 'Square dimension, applies only to transitions based on squares <img src="<?php echo UDS_BILLBOARD_URL ?>images/square_size.png" alt="" />',
+		'tooltip' => 'Square dimension, applies only to transitions based on squares <img src="'.UDS_BILLBOARD_URL .'images/square_size.png" alt="" />',
 		'default' => 100
 	),
 	'column-width' => array(
 		'type' => 'text',
 		'label' => 'Column Width',
 		'unit' => 'pixels',
-		'tooltip' => 'Column width, applies only to column-based transitions <img src="<?php echo UDS_BILLBOARD_URL ?>images/column_width.png" alt="" />',
+		'tooltip' => 'Column width, applies only to column-based transitions <img src="'.UDS_BILLBOARD_URL .'images/column_width.png" alt="" />',
 		'default' => 50
 	),
 	'show-paginator' => array(
 		'type' => 'checkbox',
 		'label' => 'Show Paginator',
 		'unit' => '',
-		'tooltip' => 'Check to show paginator in the bottom right corner <img src="<?php echo UDS_BILLBOARD_URL ?>images/paginator.png" alt="" />',
+		'tooltip' => 'Check to show paginator in the bottom right corner <img src="'.UDS_BILLBOARD_URL .'images/paginator.png" alt="" />',
 		'default' => 'on'
 	),
 	'show-controls' => array(
 		'type' => 'checkbox',
 		'label' => 'Show Controls',
 		'unit' => '',
-		'tooltip' => 'Check to show playback controls in the bottom left corner <img src="<?php echo UDS_BILLBOARD_URL ?>images/show_controls.png" alt="" />',
+		'tooltip' => 'Check to show playback controls in the bottom left corner <img src="'.UDS_BILLBOARD_URL .'images/show_controls.png" alt="" />',
 		'default' => ''
 	),
 	'autoplay' => array(
