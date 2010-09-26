@@ -110,13 +110,16 @@
 	background-position: 92px 0px;
 }
 
+#uds-billboard-controls .uds-descr {
+	margin: 20px;
+}
+
 #uds-billboard-controls .stripe-bottom, #uds-billboard-controls .stripe-bottom.alt {
 	background: url(../images/bg_dark.png) repeat;
 	background: rgba(0, 0, 0, 0.5);
 	color: white;
 	text-shadow: 1px 1px 1px #222;
 	bottom: 0px;
-	padding: 20px 100px 20px 20px;
 	width: 100%;
 }
 
