@@ -31,11 +31,11 @@ jQuery(function($){
 			$('.uds-billboard-options .inside').fadeIn(200);
 			$('.uds-billboard-options').animate({
 				height: $('.uds-billboard-options').data('original_height')
-			}, 200);
+			}, 300);
 			$('.uds-billboard-options .submit').animate({
-				top: '250px',
+				top: '335px',
 				left: '40px'
-			}, 200);
+			}, 300);
 			$(this).removeClass('closed');
 			if(no_cookie != true){
 				$.cookie('uds-billboard-general-options-collapsed', null);
@@ -43,11 +43,11 @@ jQuery(function($){
 		} else {
 			$('.uds-billboard-options').animate({
 				height: '30px'
-			}, 200);
+			}, 300);
 			$('.uds-billboard-options .submit').animate({
 				top: '-3px',
 				left: '0px'
-			}, 200);
+			}, 300);
 			$('.uds-billboard-options .inside').fadeOut(200);
 			$(this).addClass('closed');
 			if(no_cookie != true){

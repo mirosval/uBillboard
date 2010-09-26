@@ -12,9 +12,12 @@
 	<div class="uds-billboard-import">
 		<h3>Import</h3>
 		<form method="post" action="" enctype="multipart/form-data">
+			<label for="uds-billboard-import-attachments">
+				Import attachments: <input type="checkbox" name="import-attachments" id="uds-billboard-import-attachments" />
+			</label><br />
 			<input type="file" name="uds-billboard-import" value="Upload Exported uBillboard" />
 			<input type="submit" name="" value="Import" />
 		</form>
 	</div>
-	<p><em>Note:</em> This is only a simple importer, if you are importing from a blog with different URL uBillboard will keep loading images from that URL.</p>
+	<p><em>Note:</em> Importer will attempt to download all slide images that are not located on this host.</p>
 </div>

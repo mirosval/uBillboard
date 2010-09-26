@@ -46,6 +46,11 @@
 	right: 20px;
 	padding: 7px 2px 7px 7px;
 	z-index: 5;
+	background: url(../images/bg_dark.png) repeat;
+	background: rgba(0, 0, 0, 0.6);
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 
 #uds-billboard-paginator a {

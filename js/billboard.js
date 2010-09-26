@@ -86,6 +86,7 @@ jQuery(function($){
 				showDescription(0);
 				setupSquares();
 				setupColumns();
+				setupClickHandler();
 
 				$bb.fadeIn();
 				$controls.fadeIn();
@@ -107,7 +108,7 @@ jQuery(function($){
 		$next.css({
 			"-webkit-transform": "scale(1)",
 			"-moz-transform": "scale(1)",
-			"-o-transform": "scale(1)",
+			"transform": "scale(1)",
 			opacity: 1
 		});
 		showDescription(index);
@@ -160,12 +161,12 @@ jQuery(function($){
 		});
 		paginatorIEFix();
 		
-		$paginator.hide();
+		$paginator.css('opacity', 0);
 		
 		$controls.hover(function(){
-			$paginator.stop().fadeIn(300);
+			$paginator.stop().animate({opacity: 1}, 300);
 		}, function(){
-			$paginator.stop().fadeOut(200);
+			$paginator.stop().animate({opacity: 0}, 200);
 		});
 	}
 	
@@ -189,12 +190,12 @@ jQuery(function($){
 		$controls.append($("<div id='uds-billboard-playback'></div>"));		
 		$playback = $('#uds-billboard-playback');
 		
-		$playback.hide();
+		$playback.css('opacity', 0);
 		
 		$controls.hover(function(){
-			$playback.stop().fadeIn(300);
+			$playback.stop().animate({opacity: 1}, 300);
 		}, function(){
-			$playback.stop().fadeOut(200);
+			$playback.stop().animate({opacity: 0}, 200);
 		});
 		
 		$playback.append("<div id='uds-billboard-playback-prev'></div>");
@@ -214,6 +215,8 @@ jQuery(function($){
 			}
 			
 			showSlide(index);
+			
+			return false;
 		});
 		
 		$('#uds-billboard-playback-playpause').click(function(){
@@ -228,6 +231,8 @@ jQuery(function($){
 				showSlide(index);
 				playing = true;
 			}
+			
+			return false;
 		});
 		
 		$('#uds-billboard-playback-next').click(function(){
@@ -239,6 +244,8 @@ jQuery(function($){
 			}
 			
 			showSlide(index);
+			
+			return false;
 		});
 	}
 	
@@ -330,7 +337,20 @@ jQuery(function($){
 		}
 	}
 	
-	function setupSquares(){
+	function setupClickHandler() {
+		$controls.click(function(){
+			var description = slides[currentSlideIndex].description;
+			var url = $('a:last', description).attr('href');
+			
+			if(typeof url == 'string'){
+				window.location = url;
+			}
+			
+			return false;
+		});
+	}
+	
+	function setupSquares() {
 		if(squareSize < 30) {
 			squareSize = 30;
 		}
@@ -400,6 +420,10 @@ jQuery(function($){
 	// picks transition function
 	function getTransitionFunction(transition) {
 		switch(transition){
+			case 'slideLeft': return animationSlideLeft;
+			case 'slideTop': return animationSlideTop;
+			case 'slideRight': return animationSlideRight;
+			case 'slideBottom': return animationSlideBottom;
 			case 'scaleTop': return animationScaleTop;
 			case 'scaleCenter': return animationScaleCenter;
 			case 'scaleBottom': return animationScaleBottom;
@@ -410,6 +434,7 @@ jQuery(function($){
 			case 'squaresCols': return animationSquaresCols;
 			case 'squaresMoveIn': return animationSquaresMoveIn;
 			case 'squaresMoveOut': return animationSquaresMoveOut;
+			case 'columnsRandom': return animationColumnsRandom;
 			case 'columnWave': return animationColumnWave;
 			case 'curtainRight': return animationCurtainRight;
 			case 'curtainLeft': return animationCurtainLeft;
@@ -461,16 +486,68 @@ jQuery(function($){
 			easing: 'easeOutExpo'
 		});
 	};
+	
+	animationSlideLeft = function(currentIndex, destinationIndex, callback){
+		$next.css({
+			backgroundImage: 'url('+slides[destinationIndex].image+')',
+			left: -width+'px'
+		}).animate({
+			left: '0px'
+		}, {
+			duration: 1000,
+			complete: callback,
+			easing: 'easeOutExpo'
+		});
+	};
+	
+	animationSlideTop = function(currentIndex, destinationIndex, callback){
+		$next.css({
+			backgroundImage: 'url('+slides[destinationIndex].image+')',
+			top: -height+'px'
+		}).animate({
+			top: '0px'
+		}, {
+			duration: 1000,
+			complete: callback,
+			easing: 'easeOutExpo'
+		});
+	};
+	
+	animationSlideRight = function(currentIndex, destinationIndex, callback){
+		$next.css({
+			backgroundImage: 'url('+slides[destinationIndex].image+')',
+			left: width+'px'
+		}).animate({
+			left: '0px'
+		}, {
+			duration: 1000,
+			complete: callback,
+			easing: 'easeOutExpo'
+		});
+	};
+	
+	animationSlideBottom = function(currentIndex, destinationIndex, callback){
+		$next.css({
+			backgroundImage: 'url('+slides[destinationIndex].image+')',
+			top: height+'px'
+		}).animate({
+			top: '0px'
+		}, {
+			duration: 1000,
+			complete: callback,
+			easing: 'easeOutExpo'
+		});
+	};
 
 	animationScaleTop = function(currentIndex, destinationIndex, callback){
 		$next.css({
 			"background-image": 'url('+slides[destinationIndex].image+')',
 			"-webkit-transform": "scale(0)",
 			"-moz-transform": "scale(0)",
-			"-o-transform": "scale(0)",
+			"transform": "scale(0)",
 			"-webkit-transform-origin": "50% 0%",
 			"-moz-transform-origin": "50% 0%",
-			"-o-transform-origin": "50% 0%",
+			"transform-origin": "50% 0%",
 			"opacity": 0
 		}).animate({
 			"opacity": 1
@@ -482,7 +559,7 @@ jQuery(function($){
 				var scale = $.easing.swing(null, now - object.startTime, 0, 1, object.options.duration);
 				$(object.elem).css({
 					'opacity': scale,
-					'-o-transform': 'scale('+scale+')',
+					'transform': 'scale('+scale+')',
 					'-moz-transform': 'scale('+scale+')',
 					'-webkit-transform': 'scale('+scale+')'
 				});
@@ -495,10 +572,10 @@ jQuery(function($){
 			"background-image": 'url('+slides[destinationIndex].image+')',
 			"-webkit-transform": "scale(0)",
 			"-moz-transform": "scale(0)",
-			"-o-transform": "scale(0)",
+			"transform": "scale(0)",
 			"-webkit-transform-origin": "50% 50%",
 			"-moz-transform-origin": "50% 50%",
-			"-o-transform-origin": "50% 50%",
+			"transform-origin": "50% 50%",
 			"opacity": 0
 		}).animate({
 			"opacity": 1
@@ -510,7 +587,7 @@ jQuery(function($){
 				var scale = $.easing.swing(null, now - object.startTime, 0, 1, object.options.duration);
 				$(object.elem).css({
 					'opacity': scale,
-					'-o-transform': 'scale('+scale+')',
+					'transform': 'scale('+scale+')',
 					'-moz-transform': 'scale('+scale+')',
 					'-webkit-transform': 'scale('+scale+')'
 				});
@@ -523,10 +600,10 @@ jQuery(function($){
 			"background-image": 'url('+slides[destinationIndex].image+')',
 			"-webkit-transform": "scale(0)",
 			"-moz-transform": "scale(0)",
-			"-o-transform": "scale(0)",
+			"transform": "scale(0)",
 			"-webkit-transform-origin": "50% 100%",
 			"-moz-transform-origin": "50% 100%",
-			"-o-transform-origin": "50% 100%",
+			"transform-origin": "50% 100%",
 			"opacity": 0
 		}).animate({
 			"opacity": 1
@@ -538,7 +615,7 @@ jQuery(function($){
 				var scale = $.easing.swing(null, now - object.startTime, 0, 1, object.options.duration);
 				$(object.elem).css({
 					'opacity': scale,
-					'-o-transform': 'scale('+scale+')',
+					'transform': 'scale('+scale+')',
 					'-moz-transform': 'scale('+scale+')',
 					'-webkit-transform': 'scale('+scale+')'
 				});
@@ -551,10 +628,10 @@ jQuery(function($){
 			"background-image": 'url('+slides[destinationIndex].image+')',
 			"-webkit-transform": "scaleX(0)",
 			"-moz-transform": "scaleX(0)",
-			"-o-transform": "scaleX(0)",
+			"transform": "scaleX(0)",
 			"-webkit-transform-origin": "100% 50%",
 			"-moz-transform-origin": "100% 50%",
-			"-o-transform-origin": "100% 50%",
+			"transform-origin": "100% 50%",
 			"opacity": 0
 		}).animate({
 			"opacity": 1
@@ -566,7 +643,7 @@ jQuery(function($){
 				var scale = $.easing.swing(null, now - object.startTime, 0, 1, object.options.duration);
 				$(object.elem).css({
 					'opacity': scale,
-					'-o-transform': 'scaleX('+scale+')',
+					'transform': 'scaleX('+scale+')',
 					'-moz-transform': 'scaleX('+scale+')',
 					'-webkit-transform': 'scaleX('+scale+')'
 				});
@@ -579,10 +656,10 @@ jQuery(function($){
 			"background-image": 'url('+slides[destinationIndex].image+')',
 			"-webkit-transform": "scaleX(0)",
 			"-moz-transform": "scaleX(0)",
-			"-o-transform": "scaleX(0)",
+			"transform": "scaleX(0)",
 			"-webkit-transform-origin": "0% 50%",
 			"-moz-transform-origin": "0% 50%",
-			"-o-transform-origin": "0% 50%",
+			"transform-origin": "0% 50%",
 			"opacity": 0
 		}).animate({
 			"opacity": 1
@@ -594,7 +671,7 @@ jQuery(function($){
 				var scale = $.easing.swing(null, now - object.startTime, 0, 1, object.options.duration);
 				$(object.elem).css({
 					'opacity': scale,
-					'-o-transform': 'scaleX('+scale+')',
+					'transform': 'scaleX('+scale+')',
 					'-moz-transform': 'scaleX('+scale+')',
 					'-webkit-transform': 'scaleX('+scale+')'
 				});
@@ -712,6 +789,28 @@ jQuery(function($){
 		}
 		
 		setTimeout(callback, 100 * (rows+cols) + 400 + transitionConstant);
+	};
+	
+	animationColumnsRandom = function(currentIndex, destinationIndex, callback){
+		$columns = $('.column', $next);
+		$columns.css({
+			'background-image': 'url('+slides[destinationIndex].image+')',
+			opacity: 0
+		});
+		
+		var cols = Math.ceil(width / columnWidth);
+		for(i = 0; i < cols; i++){
+			$('#column'+i).stop().delay(Math.round(Math.random() * 1000)).animate({
+				opacity: 1
+			}, {
+				duration: 500,
+				specialEasing: {
+					opacity: 'linear'
+				}
+			});
+		}
+		
+		setTimeout(callback, 1500 + transitionConstant);
 	};
 	
 	animationColumnWave = function(currentIndex, destinationIndex, callback){

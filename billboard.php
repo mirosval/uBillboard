@@ -152,6 +152,10 @@ $uds_billboard_attributes = array(
 		'options' => array(
 			'random' => 'Random',
 			'fade' => 'Fade',
+			'slideLeft' => 'Slide from Left',
+			'slideTop' => 'Slide from Top',
+			'slideRight' => 'Slide from Right',
+			'slideBottom' => 'Slide from Bottom',
 			'scaleTop' => 'Scale from Top',
 			'scaleCenter' => 'Scale from Center',
 			'scaleBottom' => 'Scale from Bottom',
@@ -162,6 +166,7 @@ $uds_billboard_attributes = array(
 			'squaresCols' => 'Squares by Columns',
 			'squaresMoveIn' => 'Squares Fly in',
 			'squaresMoveOut' => 'Squares Fly out',
+			'columnsRandom' => 'Columns Random',
 			'columnWave' => 'Column Wave',
 			'curtainRight' => 'Curtain Right',
 			'curtainLeft' => 'Curtain Left',
@@ -320,9 +325,62 @@ function uds_billboard_import($file)
 		return;
 	}
 	
-	update_option(UDS_BILLBOARD_OPTION, $import['data']);
+	$billboards = $import['data'];
 	
-	wp_redirect('admin.php?page=uds_billboard_admin');
+	if($_POST['import-attachments'] == 'on') {
+		foreach($billboards as $bbname => $billboard) {
+			foreach($billboard['slides'] as $key => $slide) {
+				$urlinfo = parse_url($slide->image);
+				$localurl = parse_url(get_option('siteurl'));
+				//if($urlinfo['hostname'] == $localurl['hostname']) continue;
+				
+				//echo "Downloading attachment";
+				$image = @file_get_contents($slide->image);
+				if(!empty($image)) {
+					$uploads = wp_upload_dir();
+					if(false === $uploads['error']) {
+						$filename = pathinfo($urlinfo['path']);
+						$path = trailingslashit($uploads['path']) . wp_unique_filename($uploads['path'], $filename['basename']);
+						if(! (false === @file_put_contents($path, $image)) ) {
+							$filename = pathinfo($path);
+							$billboards[$bbname]['slides'][$key]->image = $uploads['url'] . '/' . $filename['basename'];
+							
+							$wp_filetype = wp_check_filetype(basename($path), null );
+							$attachment = array(
+								'post_mime_type' => $wp_filetype['type'],
+								'post_title' => preg_replace('/\.[^.]+$/', '', basename($path)),
+								'post_content' => '',
+								'post_status' => 'inherit'
+							);
+							$attach_id = wp_insert_attachment( $attachment, $path );
+							// you must first include the image.php file
+							// for the function wp_generate_attachment_metadata() to work
+							require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+							$attach_data = wp_generate_attachment_metadata( $attach_id, $path );
+							wp_update_attachment_metadata( $attach_id,  $attach_data );
+							//echo "Attachment saved in ".$billboards[$bbname]['slides'][$key]->image;
+						} else {
+							$uds_billboard_errors[] = "Failed to save image to ".$path;
+							break;
+						}
+					} else {
+						$uds_billboard_errors[] = "Uploads dir is not writable";
+						break;
+					}
+				} else {
+					$uds_billboard_errors[] = "Failed to download image";
+					break;
+				}
+			}
+			
+			if(!empty($uds_billboards_errors)) break;
+		}
+	}
+	
+	update_option(UDS_BILLBOARD_OPTION, $billboards);
+	
+	if(empty($uds_billboards_errors))
+		wp_redirect('admin.php?page=uds_billboard_admin');
 }
 
 function uds_billboard_export()
@@ -402,6 +460,7 @@ function uds_billboard_proces_updates()
 			$name = $_name . '-' . $n;
 			$n++;
 		}
+		unset($billboard_saved[$name_orig]);
 	}
 	
 	$billboard_saved[$name] = $billboard;
@@ -411,7 +470,7 @@ function uds_billboard_proces_updates()
 	update_option(UDS_BILLBOARD_OPTION, serialize($billboard_saved));
 	//delete_option(UDS_BILLBOARD_OPTION);
 	
-	if($name_orig == '') {
+	if($name_orig == '' || $name_orig != $name) {
 		wp_redirect('admin.php?page=uds_billboard_add&uds-billboard-edit='.$name);
 	}
 }
