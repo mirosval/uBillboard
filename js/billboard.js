@@ -218,11 +218,11 @@ jQuery(function($){
 		}
 		
 		$('#uds-billboard-playback-playpause,#uds-billboard-playback-prev,#uds-billboard-playback-next').css({
-			top: height/2 - 32 + 'px'
+			top: height/2 - 25 + 'px'
 		});
 		
 		$('#uds-billboard-playback-playpause').css({
-			left: width/2 - 32+ 'px'
+			left: width/2 - 25+ 'px'
 		});
 		
 		playbackIEFix();
