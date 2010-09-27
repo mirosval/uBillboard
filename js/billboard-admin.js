@@ -33,7 +33,7 @@ jQuery(function($){
 				height: $('.uds-billboard-options').data('original_height')
 			}, 300);
 			$('.uds-billboard-options .submit').animate({
-				top: '335px',
+				top: '365px',
 				left: '40px'
 			}, 300);
 			$(this).removeClass('closed');

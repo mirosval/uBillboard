@@ -29,6 +29,8 @@ jQuery(function($){
 	showPaginatorOption = $('#uds-billboard-show-paginator').text() == 'true' ? true : false;
 	// show controls option
 	showControlsOption = $('#uds-billboard-show-controls').text() == 'true' ? true : false;
+	// show pause button
+	showPause = $('#uds-billboard-show-pause').text() == 'true' ? true : false;
 	// are we currently animating?
 	animating = false;
 	
@@ -87,14 +89,13 @@ jQuery(function($){
 				setupSquares();
 				setupColumns();
 				setupClickHandler();
+				setupHoverHandler();
 
 				$bb.fadeIn();
 				$controls.fadeIn();
 				
 				if(totalImages < 2 || !playing){ return; }
-				timeout = setTimeout(function(){
-					showSlide(currentSlideIndex + 1);
-				}, slides[0].delay);
+				setupTimeout();
 			}
 		}).attr('src', slide.image);
 	});
@@ -126,10 +127,7 @@ jQuery(function($){
 			resetToSlide(currentSlideIndex);
 			animating = false;
 			if(!playing) { return; }
-			timeout = setTimeout(function(){
-				var index = slides[currentSlideIndex + 1] == null ? 0 : currentSlideIndex + 1;
-				showSlide(index);
-			}, slides[currentSlideIndex].delay);
+			setupTimeout();
 		};
 		
 		$("#uds-billboard-paginator a").removeClass('current');
@@ -141,6 +139,13 @@ jQuery(function($){
 		
 		var transition = getTransitionFunction(slides[currentSlideIndex].transition);
 		transition(prevSlideIndex, currentSlideIndex, callback);
+	}
+	
+	function setupTimeout() {
+		timeout = setTimeout(function(){
+			var index = slides[currentSlideIndex + 1] == null ? 0 : currentSlideIndex + 1;
+			showSlide(index);
+		}, slides[currentSlideIndex].delay);
 	}
 	
 	// creates and displays paginator
@@ -203,12 +208,22 @@ jQuery(function($){
 		});
 		
 		$playback.append("<div id='uds-billboard-playback-prev'></div>");
-		$playback.append("<div id='uds-billboard-playback-playpause'></div>");
+		if(showPause){
+			$playback.append("<div id='uds-billboard-playback-playpause'></div>");
+		}
 		$playback.append("<div id='uds-billboard-playback-next'></div>");
 		
 		if(playing) {
 			$('#uds-billboard-playback-playpause').addClass('playing');
 		}
+		
+		$('#uds-billboard-playback-playpause,#uds-billboard-playback-prev,#uds-billboard-playback-next').css({
+			top: height/2 - 32 + 'px'
+		});
+		
+		$('#uds-billboard-playback-playpause').css({
+			left: width/2 - 32+ 'px'
+		});
 		
 		playbackIEFix();
 		
@@ -233,8 +248,7 @@ jQuery(function($){
 				playing = false;
 			} else {
 				$pp.addClass('playing');
-				var index = slides[currentSlideIndex + 1] == null ? 0 : currentSlideIndex + 1;
-				showSlide(index);
+				setupTimeout();
 				playing = true;
 			}
 			
@@ -375,6 +389,15 @@ jQuery(function($){
 			}
 			
 			return false;
+		});
+	}
+	
+	function setupHoverHandler() {
+		if(showPause) { return; }
+		$controls.hover(function(){
+			clearInterval(timeout);
+		}, function(){
+			setupTimeout();
 		});
 	}
 	

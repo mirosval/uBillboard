@@ -73,6 +73,7 @@
 	margin-bottom: 10px;
 	height: 20px;
 	position: relative;
+	width:  690px;
 }
 
 .uds-billboard-options .inside div.clear {
@@ -83,7 +84,7 @@
 .uds-billboard-options .submit {
 	margin-right: 10px;
 	position: relative;
-	top: 205px;
+	top: 365px;
 	left: 40px;
 }
 

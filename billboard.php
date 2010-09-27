@@ -71,6 +71,13 @@ $uds_billboard_general_options = array(
 		'tooltip' => 'Check to show playback controls in the bottom left corner <img src="'.UDS_BILLBOARD_URL .'images/show_controls.png" alt="" />',
 		'default' => ''
 	),
+	'show-pause' => array(
+		'type' => 'checkbox',
+		'label' => 'Show Play/Pause button',
+		'unit' => '',
+		'tooltip' => 'Unchecked will pause on hover, otherwise will show Play/Pause button',
+		'default' => ''
+	),
 	'autoplay' => array(
 		'type' => 'checkbox',
 		'label' => 'Autoplay',
@@ -715,6 +722,7 @@ function get_uds_billboard($name = 'billboard')
 				<span id="uds-billboard-column-width">'.(int)$bb['column-width'].'</span>
 				<span id="uds-billboard-show-paginator">'.($bb['show-paginator'] == on ? 'true' : 'false') .'</span>
 				<span id="uds-billboard-show-controls">'. ($bb['show-controls'] == on ? 'true' : 'false') .'</span>
+				<span id="uds-billboard-show-pause">'. ($bb['show-pause'] == on ? 'true' : 'false') .'</span>
 				<span id="uds-billboard-autoplay">'. ($bb['autoplay'] == on ? 'true' : 'false') .'</span>
 			</div>
 			<div id="uds-loader"><div id="uds-progress"></div></div>
