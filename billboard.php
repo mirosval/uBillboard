@@ -13,7 +13,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 define('UDS_BILLBOARD_VERSION', '2.0.0');
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
-define('UDS_BILLBOARD_USE_COMPRESSION', false);
+define('UDS_BILLBOARD_USE_COMPRESSION', true);
 
 // User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard');
@@ -75,7 +75,7 @@ $uds_billboard_general_options = array(
 		'type' => 'checkbox',
 		'label' => 'Show Play/Pause button',
 		'unit' => '',
-		'tooltip' => 'Unchecked will pause on hover, otherwise will show Play/Pause button',
+		'tooltip' => 'Unchecked will pause on hover, otherwise will show Play/Pause button <img src="'.UDS_BILLBOARD_URL .'images/show-playpause.png" alt="" />',
 		'default' => ''
 	),
 	'autoplay' => array(
@@ -716,14 +716,14 @@ function get_uds_billboard($name = 'billboard')
 	$out = '
 		<div id="uds-billboard-wrapper">
 			<div id="uds-billboard-settings">
-				<span id="uds-billboard-width">'.(int)$bb['width'].'</span>
-				<span id="uds-billboard-height">'.(int)$bb['height'].'</span>
-				<span id="uds-billboard-square-size">'.(int)$bb['square-size'].'</span>
-				<span id="uds-billboard-column-width">'.(int)$bb['column-width'].'</span>
-				<span id="uds-billboard-show-paginator">'.($bb['show-paginator'] == on ? 'true' : 'false') .'</span>
-				<span id="uds-billboard-show-controls">'. ($bb['show-controls'] == on ? 'true' : 'false') .'</span>
-				<span id="uds-billboard-show-pause">'. ($bb['show-pause'] == on ? 'true' : 'false') .'</span>
-				<span id="uds-billboard-autoplay">'. ($bb['autoplay'] == on ? 'true' : 'false') .'</span>
+				<span id="uds-billboard-width">'.(int)apply_filters('uds-billboard-width', $bb['width'], $bb).'</span>
+				<span id="uds-billboard-height">'.(int)apply_filters('uds-billboard-height', $bb['height'], $bb).'</span>
+				<span id="uds-billboard-square-size">'.(int)apply_filters('uds-billboard-square-size', $bb['square-size'], $bb).'</span>
+				<span id="uds-billboard-column-width">'.(int)apply_filters('uds-billboard-column-width', $bb['column-width'], $bb).'</span>
+				<span id="uds-billboard-show-paginator">'.(apply_filters('uds-billboard-show-paginator', $bb['show-paginator'], $bb) == 'on' ? 'true' : 'false') .'</span>
+				<span id="uds-billboard-show-controls">'. (apply_filters('uds-billboard-show-controls', $bb['show-controls'], $bb) == 'on' ? 'true' : 'false') .'</span>
+				<span id="uds-billboard-show-pause">'. (apply_filters('uds-billboard-show-pause', $bb['show-pause'], $bb) == 'on' ? 'true' : 'false') .'</span>
+				<span id="uds-billboard-autoplay">'. (apply_filters('uds-billboard-autoplay', $bb['autoplay'], $bb) == 'on' ? 'true' : 'false') .'</span>
 			</div>
 			<div id="uds-loader"><div id="uds-progress"></div></div>
 			<div id="uds-next-slide"></div>
@@ -741,18 +741,18 @@ function get_uds_billboard($name = 'billboard')
 						}
 						$out .= '
 						<div class="uds-slide">
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-delay" value="'. apply_filters('uds-billboard-delay', $b->delay) .'" />
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-transition" value="'. apply_filters('uds-billboard-transition', $b->transition) .'" />
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-layout" value="'. apply_filters('uds-billboard-layout', $b->layout) .'" />
-							<img src="' . apply_filters('uds-billboard-image', $url) . '" alt="" />
+							<input type="hidden" class="uds-billboard-option" name="uds-billboard-delay" value="'. apply_filters('uds-billboard-delay', $b->delay, $bb) .'" />
+							<input type="hidden" class="uds-billboard-option" name="uds-billboard-transition" value="'. apply_filters('uds-billboard-transition', $b->transition, $bb) .'" />
+							<input type="hidden" class="uds-billboard-option" name="uds-billboard-layout" value="'. apply_filters('uds-billboard-layout', $b->layout, $bb) .'" />
+							<img src="' . apply_filters('uds-billboard-image', $url, $bb) . '" alt="" />
 							<div class="uds-descr-wrapper">
 								<div class="uds-descr">';
 									if(stripslashes($b->title) != ''):
-										$out .= '<h2>'. apply_filters('uds-billboard-title', stripslashes($b->title)) .'</h2>';
+										$out .= '<h2>'. apply_filters('uds-billboard-title', stripslashes($b->title), $bb) .'</h2>';
 									endif;
-									$out .= apply_filters('uds-billboard-description', stripslashes($b->text));
+									$out .= apply_filters('uds-billboard-description', stripslashes($b->text), $bb);
 									if(stripslashes($b->link) != ''):
-										$out .= '<br /><a href="'. apply_filters('uds-billboard-link', stripslashes($b->link)) .'" class="read-more">Read more</a>';
+										$out .= '<br /><a href="'. apply_filters('uds-billboard-link', stripslashes($b->link), $bb) .'" class="read-more">Read more</a>';
 									endif;
 									$out .= '
 								</div>
@@ -765,7 +765,7 @@ function get_uds_billboard($name = 'billboard')
 			<div id="uds-billboard-controls"></div>
 		</div>';
 	
-	return apply_filters('uds-billboard-output', $out);
+	return apply_filters('uds-billboard-output', $out, $bb);
 }
 
 function the_uds_billboard($name = 'billboard')
