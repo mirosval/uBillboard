@@ -181,6 +181,10 @@ jQuery(function($){
 				$(this).get(0).runtimeStyle.filter = filterCurrent;
 			});
 		}
+		
+		if($.browser.msie && $.browser.version < 9) {
+			$("#uds-billboard-paginator").css('background-image', 'none');
+		}
 	}
 	
 	// creates and displays controls (play/pause/next/prev)
@@ -205,6 +209,8 @@ jQuery(function($){
 		if(playing) {
 			$('#uds-billboard-playback-playpause').addClass('playing');
 		}
+		
+		playbackIEFix();
 		
 		$('#uds-billboard-playback-prev').click(function(){
 			if(animating) { return; }
@@ -232,6 +238,8 @@ jQuery(function($){
 				playing = true;
 			}
 			
+			playbackIEFix();
+			
 			return false;
 		});
 		
@@ -247,6 +255,26 @@ jQuery(function($){
 			
 			return false;
 		});
+	}
+	
+	function playbackIEFix() {
+		if($.browser.msie && $.browser.version < 7) {
+			var play = uds_billboard_url+"images/playback-play.png";
+			var pause = uds_billboard_url+"images/playback-pause.png";
+			var next = uds_billboard_url+"images/playback-next.png";
+			var prev = uds_billboard_url+"images/playback-prev.png";
+			var filterPlay = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+play+"', sizingMethod='crop');";
+			var filterPause = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+pause+"', sizingMethod='crop');";
+			var filterNext = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+next+"', sizingMethod='crop');";
+			var filterPrev = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+prev+"', sizingMethod='crop');";
+			$('#uds-billboard-playback-prev').css('background-image', 'none').get(0).runtimeStyle.filter = filterPrev;
+			if(playing) {
+				$('#uds-billboard-playback-playpause').css('background-image', 'none').get(0).runtimeStyle.filter = filterPause;
+			} else {
+				$('#uds-billboard-playback-playpause').css('background-image', 'none').get(0).runtimeStyle.filter = filterPlay;
+			}
+			$('#uds-billboard-playback-next').css('background-image', 'none').get(0).runtimeStyle.filter = filterNext;
+		}
 	}
 	
 	// shows description, create it if necessary

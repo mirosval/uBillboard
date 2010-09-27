@@ -151,7 +151,7 @@
 	background: url(../images/bg_light.png) repeat;
 	background: rgba(255, 255, 255, 0.5);
 	color: #222;
-	text-shadow: 1px 1px 1px #666;
+	text-shadow: none;
 }
 
 #uds-billboard-controls .stripe-left.alt a.read-more,
