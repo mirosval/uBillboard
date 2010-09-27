@@ -88,8 +88,8 @@
 #uds-billboard-playback-playpause,
 #uds-billboard-playback-next {
 	position: absolute;
-	width: 64px;
-	height: 64px;
+	width: 50px;
+	height: 50px;
 	overflow: hidden;
 	top: 50%;
 }
@@ -110,11 +110,11 @@
 
 #uds-billboard-playback-next {
 	background-image: url(../images/playback-next.png);
-	right:  0px;
+	right:  20px;
 }
 
 #uds-billboard-controls .uds-descr {
-	margin: 20px;
+	margin: 0px;
 }
 
 #uds-billboard-controls .stripe-bottom, #uds-billboard-controls .stripe-bottom.alt {
