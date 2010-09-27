@@ -96,7 +96,7 @@
 
 #uds-billboard-playback-prev {
 	background-image: url(../images/playback-prev.png);
-	left: 0px;
+	left: 20px;
 }
 
 #uds-billboard-playback-playpause {
@@ -110,7 +110,7 @@
 
 #uds-billboard-playback-next {
 	background-image: url(../images/playback-next.png);
-	right:  0px;
+	right: 20px;
 }
 
 #uds-billboard-controls .uds-descr {
