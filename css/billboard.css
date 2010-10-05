@@ -6,6 +6,10 @@
 	margin-bottom: 36px;
 }
 
+#uds-billboard-settings {
+	display: none;
+}
+
 #uds-loader {
 	background: url(../images/load.gif) -160px 0px no-repeat;
 	width: 160px;

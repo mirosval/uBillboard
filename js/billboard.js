@@ -410,13 +410,13 @@ jQuery(function($){
 		
 		for(i = 0; i < sq; i++){
 			var current = document.createElement('div');
-			$(current).attr('id', 'square'+i).addClass('square');
+			$(current).attr('id', 'uds-square'+i).addClass('uds-square');
 			$next.append(current);
 		}
 		
 		resetSquares(0, 0);
 		
-		$('.square', $next).css({
+		$('.uds-square', $next).css({
 			'opacity': '0',
 			'width': squareSize+'px',
 			'height': squareSize+'px'
@@ -429,7 +429,7 @@ jQuery(function($){
 		var n = 0;
 		for(y = 0; y < rows; y++){
 			for(x = 0; x < cols; x++){
-				$('#square'+n).css({
+				$('#uds-square'+n).css({
 					'background-position': -x*squareSize+'px '+(-y*squareSize)+'px',
 					'left': (x*squareSize + offsetX) +'px',
 					'top': (y*squareSize + offsetY) +'px'
@@ -443,13 +443,13 @@ jQuery(function($){
 		var cols = Math.ceil(width / columnWidth);
 		for(var i = 0; i < cols; i++) {
 			var current = document.createElement('div');
-			$(current).attr('id', 'column' + i).addClass('column');
+			$(current).attr('id', 'uds-column' + i).addClass('uds-column');
 			$next.append(current);
 		}
 		
 		resetColumns();
 		
-		$('.column', $next).css({
+		$('.uds-column', $next).css({
 			opacity: 0,
 			width: columnWidth + 'px',
 			height: height+'px'
@@ -459,7 +459,7 @@ jQuery(function($){
 	function resetColumns() {
 		var cols = Math.ceil(width / columnWidth);
 		for(var i = 0; i < cols; i++){
-			$('#column'+i).css({
+			$('#uds-column'+i).css({
 				'background-position': -i*columnWidth+'px 0px',
 				left: (i*columnWidth)+'px',
 				top: '0px',
@@ -731,7 +731,7 @@ jQuery(function($){
 	};
 	
 	animationSquaresRandom = function(currentIndex, destinationIndex, callback){
-		$squares = $('.square', $next);
+		$squares = $('.uds-square', $next);
 		$squares.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			'opacity': 0
@@ -750,7 +750,7 @@ jQuery(function($){
 	};
 	
 	animationSquaresRows = function(currentIndex, destinationIndex, callback){
-		$squares = $('.square', $next);
+		$squares = $('.uds-square', $next);
 		$squares.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			'opacity': 0
@@ -771,7 +771,7 @@ jQuery(function($){
 	};
 	
 	animationSquaresCols = function(currentIndex, destinationIndex, callback){
-		$squares = $('.square', $next);
+		$squares = $('.uds-square', $next);
 		$squares.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			'opacity': 0
@@ -792,7 +792,7 @@ jQuery(function($){
 	};
 	
 	animationSquaresMoveOut = function(currentIndex, destinationIndex, callback){
-		$squares = $('.square', $next);
+		$squares = $('.uds-square', $next);
 		$next.css('background-image', 'url('+slides[destinationIndex].image+')');
 		$squares.css({
 			'background-image': 'url('+slides[currentIndex].image+')',
@@ -804,7 +804,7 @@ jQuery(function($){
 		var n = 0;
 		for(y = 0; y < rows; y++){
 			for(x = 0; x < cols; x++){
-				$('#square'+n).stop().delay(100 * (x+y)).animate({
+				$('#uds-square'+n).stop().delay(100 * (x+y)).animate({
 					'opacity': 0,
 					'left': (x*squareSize - 20) +'px',
 					'top': (y*squareSize - 20) +'px'
@@ -817,7 +817,7 @@ jQuery(function($){
 	};
 	
 	animationSquaresMoveIn = function(currentIndex, destinationIndex, callback){
-		$squares = $('.square', $next);
+		$squares = $('.uds-square', $next);
 		$squares.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			'opacity': 0
@@ -830,7 +830,7 @@ jQuery(function($){
 		var n = 0;
 		for(y = 0; y < rows; y++){
 			for(x = 0; x < cols; x++){
-				$('#square'+n).stop().delay(100 * (rows - y + cols - x)).animate({
+				$('#uds-square'+n).stop().delay(100 * (rows - y + cols - x)).animate({
 					'opacity': 1,
 					'left': (x*squareSize) +'px',
 					'top': (y*squareSize) +'px'
@@ -843,7 +843,7 @@ jQuery(function($){
 	};
 	
 	animationColumnsRandom = function(currentIndex, destinationIndex, callback){
-		$columns = $('.column', $next);
+		$columns = $('.uds-column', $next);
 		$columns.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			opacity: 0
@@ -851,7 +851,7 @@ jQuery(function($){
 		
 		var cols = Math.ceil(width / columnWidth);
 		for(i = 0; i < cols; i++){
-			$('#column'+i).stop().delay(Math.round(Math.random() * 1000)).animate({
+			$('#uds-column'+i).stop().delay(Math.round(Math.random() * 1000)).animate({
 				opacity: 1
 			}, {
 				duration: 500,
@@ -865,7 +865,7 @@ jQuery(function($){
 	};
 	
 	animationColumnWave = function(currentIndex, destinationIndex, callback){
-		$columns = $('.column', $next);
+		$columns = $('.uds-column', $next);
 		$columns.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			opacity: 0,
@@ -874,7 +874,7 @@ jQuery(function($){
 		
 		var cols = Math.ceil(width / columnWidth);
 		for(i = 0; i < cols; i++){
-			$('#column'+i).stop().delay(30 * i).animate({
+			$('#uds-column'+i).stop().delay(30 * i).animate({
 				opacity: 1,
 				top: '0px'
 			}, {
@@ -890,7 +890,7 @@ jQuery(function($){
 	};
 	
 	animationCurtainRight = function(currentIndex, destinationIndex, callback){
-		$columns = $('.column', $next);
+		$columns = $('.uds-column', $next);
 		$columns.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			opacity: 0,
@@ -899,7 +899,7 @@ jQuery(function($){
 		
 		var cols = Math.ceil(width / columnWidth);
 		for(i = 0; i < cols; i++){
-			$('#column'+i).stop().delay(50 * i).animate({
+			$('#uds-column'+i).stop().delay(50 * i).animate({
 				opacity: 1,
 				height: height+'px'
 			}, {
@@ -915,7 +915,7 @@ jQuery(function($){
 	};
 	
 	animationCurtainLeft = function(currentIndex, destinationIndex, callback){
-		$columns = $('.column', $next);
+		$columns = $('.uds-column', $next);
 		$columns.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			opacity: 0,
@@ -924,7 +924,7 @@ jQuery(function($){
 		
 		var cols = Math.ceil(width / columnWidth);
 		for(i = 0; i < cols; i++){
-			$('#column'+i).stop().delay(50 * (cols - i)).animate({
+			$('#uds-column'+i).stop().delay(50 * (cols - i)).animate({
 				opacity: 1,
 				height: height+'px'
 			}, {
@@ -940,7 +940,7 @@ jQuery(function($){
 	};
 	
 	animationCurtainRotateRight = function(currentIndex, destinationIndex, callback){
-		$columns = $('.column', $next);
+		$columns = $('.uds-column', $next);
 		$columns.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			opacity: 0,
@@ -949,7 +949,7 @@ jQuery(function($){
 		
 		var cols = Math.ceil(width / columnWidth);
 		for(i = 0; i < cols; i++){
-			$('#column'+i).stop().delay(50 * i).animate({
+			$('#uds-column'+i).stop().delay(50 * i).animate({
 				opacity: 1,
 				width: columnWidth+'px'
 			}, {
@@ -965,7 +965,7 @@ jQuery(function($){
 	};
 	
 	animationCurtainRotateLeft = function(currentIndex, destinationIndex, callback){
-		$columns = $('.column', $next);
+		$columns = $('.uds-column', $next);
 		$columns.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			opacity: 0,
@@ -974,7 +974,7 @@ jQuery(function($){
 		
 		var cols = Math.ceil(width / columnWidth);
 		for(i = 0; i < cols; i++){
-			$('#column'+i).stop().delay(50 * (cols - i)).animate({
+			$('#uds-column'+i).stop().delay(50 * (cols - i)).animate({
 				opacity: 1,
 				width: columnWidth+'px'
 			}, {
@@ -990,18 +990,18 @@ jQuery(function($){
 	};
 	
 	animationInterweaveLeft = function(currentIndex, destinationIndex, callback){
-		$columns = $('.column', $next);
+		$columns = $('.uds-column', $next);
 		$columns.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			opacity: 0
 		});
 		
-		$('.column:even', $next).css('top', -height+'px');
-		$('.column:odd', $next).css('top', height+'px');
+		$('.uds-column:even', $next).css('top', -height+'px');
+		$('.uds-column:odd', $next).css('top', height+'px');
 		
 		var cols = Math.ceil(width / columnWidth);
 		for(var i = 0; i < cols; i++){
-			$('#column'+i).stop().delay(50 * (cols - i)).animate({
+			$('#uds-column'+i).stop().delay(50 * (cols - i)).animate({
 				opacity: 1,
 				top: '0px'
 			}, {
@@ -1017,18 +1017,18 @@ jQuery(function($){
 	};
 	
 	animationInterweaveRight = function(currentIndex, destinationIndex, callback){
-		$columns = $('.column', $next);
+		$columns = $('.uds-column', $next);
 		$columns.css({
 			'background-image': 'url('+slides[destinationIndex].image+')',
 			opacity: 0
 		});
 		
-		$('.column:even', $next).css('top', -height+'px');
-		$('.column:odd', $next).css('top', height+'px');
+		$('.uds-column:even', $next).css('top', -height+'px');
+		$('.uds-column:odd', $next).css('top', height+'px');
 		
 		var cols = Math.ceil(width / columnWidth);
 		for(var i = 0; i < cols; i++){
-			$('#column'+i).stop().delay(50 * i).animate({
+			$('#uds-column'+i).stop().delay(50 * i).animate({
 				opacity: 1,
 				top: '0px'
 			}, {
