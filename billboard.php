@@ -10,7 +10,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 */
 
 // General Options
-define('UDS_BILLBOARD_VERSION', '2.0.0');
+define('UDS_BILLBOARD_VERSION', '2.1.0');
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
 define('UDS_BILLBOARD_USE_COMPRESSION', true);
@@ -200,16 +200,36 @@ if(!function_exists('d')) {
 add_action('init', 'uds_billboard_init');
 function uds_billboard_init()
 {
-	global $uds_billboard_general_options;
+	global $uds_billboard_general_options, $uds_billboard_attributes;
 	// Fix older uBillboards
-	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
-	if(! empty($billboards[0])) {
-		$new_billboards = array();
-		foreach($uds_billboard_general_options as $key => $option) {
-			$new_billboards['billboard'][$key] = $option['default'];
+	if(version_compare(UDS_BILLBOARD_VERSION, '2.0.0', '<')) {
+		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+		if(! empty($billboards[0])) {
+			$new_billboards = array();
+			foreach($uds_billboard_general_options as $key => $option) {
+				$new_billboards['billboard'][$key] = $option['default'];
+			}
+			$new_billboards['billboard']['slides'] = $billboards;
+			$billboards = $new_billboards;
+			update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
 		}
-		$new_billboards['billboard']['slides'] = $billboards;
-		$billboards = $new_billboards;
+	}
+
+	if(version_compare(UDS_BILLBOARD_VERSION, '2.1.0', '<')) {
+		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+		foreach($billboards as $bbkey => $billboard) {
+			foreach($billboard['slides'] as $slidekey => $slide) {
+				if(!is_array($slide)) {
+					$slide_original = $slide;
+					unset($billboards[$bbkey]['slides'][$slidekey]);
+					$billboards[$bbkey]['slides'][$slidekey] = array();
+					foreach($uds_billboard_attributes as $attrib => $options) {
+						$billboards[$bbkey]['slides'][$slidekey][$attrib] = $slide_original->$attrib;
+					}
+				}
+			}
+		}
+
 		update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
 	}
 	
@@ -331,7 +351,7 @@ function uds_billboard_import_export()
 
 function uds_billboard_import($file)
 {
-	global $uds_billboard_errors;
+	global $uds_billboard_errors, $uds_billboard_attributes;
 	$import = @file_get_contents($file);
 	
 	if(empty($import)) {
@@ -351,12 +371,12 @@ function uds_billboard_import($file)
 	if($_POST['import-attachments'] == 'on') {
 		foreach($billboards as $bbname => $billboard) {
 			foreach($billboard['slides'] as $key => $slide) {
-				$urlinfo = parse_url($slide->image);
+				$urlinfo = parse_url($slide['image']);
 				$localurl = parse_url(get_option('siteurl'));
 				//if($urlinfo['hostname'] == $localurl['hostname']) continue;
 				
 				//echo "Downloading attachment";
-				$image = @file_get_contents($slide->image);
+				$image = @file_get_contents($slide['image']);
 				if(!empty($image)) {
 					$uploads = wp_upload_dir();
 					if(false === $uploads['error']) {
@@ -364,7 +384,7 @@ function uds_billboard_import($file)
 						$path = trailingslashit($uploads['path']) . wp_unique_filename($uploads['path'], $filename['basename']);
 						if(! (false === @file_put_contents($path, $image)) ) {
 							$filename = pathinfo($path);
-							$billboards[$bbname]['slides'][$key]->image = $uploads['url'] . '/' . $filename['basename'];
+							$billboards[$bbname]['slides'][$key]['image'] = $uploads['url'] . '/' . $filename['basename'];
 							
 							$wp_filetype = wp_check_filetype(basename($path), null );
 							$attachment = array(
@@ -444,7 +464,7 @@ function uds_billboard_proces_updates()
 				$slide = $slides[$key];
 			}
 			
-			$slide->$attrib = $item;
+			$slide[$attrib] = $item;
 			$slides[$key] = $slide;
 		}
 	}
@@ -454,7 +474,7 @@ function uds_billboard_proces_updates()
 	foreach($slides as $key => $bb){
 		$delete = true;
 		foreach($uds_billboard_attributes as $attrib => $options){
-			if($bb->$attrib != $bb_default->$attrib){
+			if($bb[$attrib] != $bb_default[$attrib]){
 				$delete = false;
 			}
 		}
@@ -501,12 +521,12 @@ function uds_billboard_default_billboard()
 {
 	global $uds_billboard_attributes;
 
-	$bb = new StdClass();
+	$bb = array();
 	foreach($uds_billboard_attributes as $att => $options){
 		if(isset($options['default'])){
-			$bb->$att = $options['default'];
+			$bb[$att] = $options['default'];
 		} else {
-			$bb->$att = '';
+			$bb[$att] = '';
 		}
 	}
 	return $bb;
@@ -549,7 +569,7 @@ function uds_billboard_render_text($item, $attrib, $unique_id)
 	$attrib_full = $uds_billboard_attributes[$attrib];
 	echo '<div class="'. $attrib .'-wrapper">';
 	echo '<label for="billboard-'. $attrib .'-'. $unique_id .'">'. $attrib_full['label'] .'</label>';
-	echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($item->$attrib)) . '" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
+	echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($item[$attrib])) . '" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
 	echo '</div>';
 }
 
@@ -560,7 +580,7 @@ function uds_billboard_render_textarea($item, $attrib, $unique_id)
 	$attrib_full = $uds_billboard_attributes[$attrib];
 	echo '<div class="'. $attrib .'-wrapper">';
 	echo '<label for="billboard-'. $attrib .'-'. $unique_id .'">'. $attrib_full['label'] .'</label>';
-	echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">'. htmlspecialchars(stripslashes($item->$attrib)) .'</textarea>';
+	echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">'. htmlspecialchars(stripslashes($item[$attrib])) .'</textarea>';
 	echo '</div>';
 }
 
@@ -578,7 +598,7 @@ function uds_billboard_render_select($item, $attrib, $unique_id)
 	if(is_array($attrib_full['options'])){
 		foreach($attrib_full['options'] as $key => $option){
 			$selected = '';
-			if($item->$attrib == $key){
+			if($item[$attrib] == $key){
 				$selected = 'selected="selected"';
 			}
 			echo '<option value="'. $key .'" '. $selected .'>'. $option .'</option>';
@@ -593,13 +613,13 @@ function uds_billboard_render_image($item, $attrib, $unique_id)
 {
 	echo '<div class="'. $attrib .'-wrapper">';
 	echo '<a class="thickbox" title="Add an Image" href="media-upload.php?type=image&TB_iframe=true&width=640&height=345">';
-	if(!empty($item->image)){
-		echo '<img alt="Add an Image" src="'. $item->$attrib .'" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib  .'" />';
+	if(!empty($item['image'])){
+		echo '<img alt="Add an Image" src="'. $item[$attrib] .'" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib  .'" />';
 	} else {
 		echo '<img alt="Add an Image" src="'. UDS_BILLBOARD_URL .'images/noimg385x180.jpg" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
 	}
 	echo '</a>';
-	echo '<input type="hidden" name="uds_billboard['. $attrib .'][]" value="'. $item->$attrib .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
+	echo '<input type="hidden" name="uds_billboard['. $attrib .'][]" value="'. $item[$attrib] .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
 	echo '</div>';
 }
 
@@ -729,30 +749,30 @@ function get_uds_billboard($name = 'billboard')
 			<div id="uds-next-slide"></div>
 			<div id="uds-billboard">';
 				foreach($bb['slides'] as $b):
-					if($b->image != ''):
+					if($b['image'] != ''):
 						if($bb['use-timthumb'] == 'on'){
 							$width = (int)$bb['width'];
 							$height = (int)$bb['height'];
 							$zoom = $bb['timthumb-zoom'] == 'on' ? 1 : 0;
 							$quality = (int)$bb['timthumb-quality'];
-							$url = UDS_BILLBOARD_URL . "timthumb.php?src=" . urlencode($b->image) . "&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
+							$url = UDS_BILLBOARD_URL . "timthumb.php?src=" . urlencode($b['image']) . "&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
 						} else {
-							$url = $b->image;
+							$url = $b['image'];
 						}
 						$out .= '
 						<div class="uds-slide">
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-delay" value="'. apply_filters('uds-billboard-delay', $b->delay, $bb) .'" />
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-transition" value="'. apply_filters('uds-billboard-transition', $b->transition, $bb) .'" />
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-layout" value="'. apply_filters('uds-billboard-layout', $b->layout, $bb) .'" />
+							<input type="hidden" class="uds-billboard-option" name="uds-billboard-delay" value="'. apply_filters('uds-billboard-delay', $b['delay'], $bb) .'" />
+							<input type="hidden" class="uds-billboard-option" name="uds-billboard-transition" value="'. apply_filters('uds-billboard-transition', $b['transition'], $bb) .'" />
+							<input type="hidden" class="uds-billboard-option" name="uds-billboard-layout" value="'. apply_filters('uds-billboard-layout', $b['layout'], $bb) .'" />
 							<img src="' . apply_filters('uds-billboard-image', $url, $bb) . '" alt="" />
 							<div class="uds-descr-wrapper">
 								<div class="uds-descr">';
-									if(stripslashes($b->title) != ''):
-										$out .= '<h2>'. apply_filters('uds-billboard-title', stripslashes($b->title), $bb) .'</h2>';
+									if(stripslashes($b['title']) != ''):
+										$out .= '<h2>'. apply_filters('uds-billboard-title', stripslashes($b['title']), $bb) .'</h2>';
 									endif;
-									$out .= apply_filters('uds-billboard-description', stripslashes($b->text), $bb);
-									if(stripslashes($b->link) != ''):
-										$out .= '<br /><a href="'. apply_filters('uds-billboard-link', stripslashes($b->link), $bb) .'" class="read-more">Read more</a>';
+									$out .= apply_filters('uds-billboard-description', stripslashes($b['text']), $bb);
+									if(stripslashes($b['link']) != ''):
+										$out .= '<br /><a href="'. apply_filters('uds-billboard-link', stripslashes($b['link']), $bb) .'" class="read-more">Read more</a>';
 									endif;
 									$out .= '
 								</div>
