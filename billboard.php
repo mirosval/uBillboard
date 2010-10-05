@@ -215,8 +215,9 @@ function uds_billboard_init()
 		}
 	}
 
-	if(version_compare(UDS_BILLBOARD_VERSION, '2.1.0', '<')) {
-		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	$billboard = current($billboards);
+	if(!empty($billboard['slides'][0]) && !is_array($billboard['slides'][0])) {
 		foreach($billboards as $bbkey => $billboard) {
 			foreach($billboard['slides'] as $slidekey => $slide) {
 				if(!is_array($slide)) {
