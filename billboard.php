@@ -217,7 +217,7 @@ function uds_billboard_init()
 
 	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
 	$billboard = current($billboards);
-	if(true || (!empty($billboard['slides'][0]) && !is_array($billboard['slides'][0]))) {
+	if(!empty($billboard['slides'][0]) && !is_array($billboard['slides'][0])) {
 		foreach($billboards as $bbkey => $billboard) {
 			foreach($billboard['slides'] as $slidekey => $slide) {
 				if(!is_array($slide)) {
