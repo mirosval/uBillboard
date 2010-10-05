@@ -656,7 +656,7 @@ function uds_billboard_render_general_text($option, $field, $value)
 
 function uds_billboard_render_general_checkbox($option, $field, $value)
 {
-	$checked = ( empty($value) ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
+	$checked = ( $value === null ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
 	?>
 	<div class="uds-billboard-<?php echo $option ?>">
 		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>

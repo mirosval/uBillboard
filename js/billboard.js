@@ -314,7 +314,7 @@ jQuery(function($){
 			});
 		} else if ($descr.hasClass('stripe-right')) {
 			// ?? weird JS bug outerWidth is 0 the first time description is shown so we just set it manually...
-			var descrWidth = $descr.outerWidth() !== 0 ? $descr.outerWidth() : 0.3 * width + 60;
+			var descrWidth = $descr.outerWidth() !== 0 ? $descr.outerWidth() : 0.3 * width;
 			$descr.css({
 				left: width + 'px',
 				bottom: '0px'
