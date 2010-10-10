@@ -3,7 +3,7 @@
 Plugin Name: uBillboard
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
 Description: uBillboard is a slider plugin by uDesignStudios that allows you to create an eye-catching presentation for your web. (Admin menu icon: http://p.yusukekamiyamane.com/)
-Version: 2.0.0
+Version: 2.1.0
 Author: uDesign
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
@@ -13,7 +13,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 define('UDS_BILLBOARD_VERSION', '2.1.0');
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
-define('UDS_BILLBOARD_USE_COMPRESSION', true);
+define('UDS_BILLBOARD_USE_COMPRESSION', false);
 
 // User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard');
@@ -202,20 +202,17 @@ function uds_billboard_init()
 {
 	global $uds_billboard_general_options, $uds_billboard_attributes;
 	// Fix older uBillboards
-	if(version_compare(UDS_BILLBOARD_VERSION, '2.0.0', '<')) {
-		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
-		if(! empty($billboards[0])) {
-			$new_billboards = array();
-			foreach($uds_billboard_general_options as $key => $option) {
-				$new_billboards['billboard'][$key] = $option['default'];
-			}
-			$new_billboards['billboard']['slides'] = $billboards;
-			$billboards = $new_billboards;
-			update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
+	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	if(! empty($billboards[0])) {
+		$new_billboards = array();
+		foreach($uds_billboard_general_options as $key => $option) {
+			$new_billboards['billboard'][$key] = $option['default'];
 		}
+		$new_billboards['billboard']['slides'] = $billboards;
+		$billboards = $new_billboards;
+		update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
 	}
 
-	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
 	$billboard = current($billboards);
 	if(!empty($billboard['slides'][0]) && !is_array($billboard['slides'][0])) {
 		foreach($billboards as $bbkey => $billboard) {

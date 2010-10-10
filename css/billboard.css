@@ -42,6 +42,8 @@
 	left: 0px;
 	z-index: 3;
 	overflow: hidden;
+	zoom: 1;
+	background-color: transparent;
 }
 
 #uds-billboard-paginator {
@@ -64,6 +66,7 @@
 	height: 10px;
 	float: left;
 	margin-right: 5px;
+	cursor: pointer;
 }
 
 #uds-billboard-paginator a.current, #uds-billboard-paginator a:hover {
@@ -86,6 +89,7 @@
 	left: 0px;
 	width: 100%;
 	height: 100%;
+	cursor: pointer;
 }
 
 #uds-billboard-playback-prev,
@@ -96,6 +100,7 @@
 	height: 50px;
 	overflow: hidden;
 	top: 50%;
+	cursor: pointer;
 }
 
 #uds-billboard-playback-prev {
