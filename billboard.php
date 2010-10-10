@@ -13,7 +13,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 define('UDS_BILLBOARD_VERSION', '2.1.0');
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
-define('UDS_BILLBOARD_USE_COMPRESSION', false);
+define('UDS_BILLBOARD_USE_COMPRESSION', true);
 
 // User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard');
