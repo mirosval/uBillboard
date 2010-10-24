@@ -3,14 +3,14 @@
 Plugin Name: uBillboard
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
 Description: uBillboard is a slider plugin by uDesignStudios that allows you to create an eye-catching presentation for your web. (Admin menu icon: http://p.yusukekamiyamane.com/)
-Version: 2.1.0
+Version: 2.1.1
 Author: uDesign
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
 */
 
 // General Options
-define('UDS_BILLBOARD_VERSION', '2.1.0');
+define('UDS_BILLBOARD_VERSION', '2.1.1');
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
 define('UDS_BILLBOARD_USE_COMPRESSION', true);
@@ -519,8 +519,10 @@ function uds_billboard_default_billboard()
 {
 	global $uds_billboard_attributes;
 
+	$attribs = $uds_billboard_attributes;
+
 	$bb = array();
-	foreach($uds_billboard_attributes as $att => $options){
+	foreach($attribs as $att => $options){
 		if(isset($options['default'])){
 			$bb[$att] = $options['default'];
 		} else {
