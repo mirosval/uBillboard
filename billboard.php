@@ -316,6 +316,9 @@ function uds_billboard_deactivation_hook()
 add_action('admin_menu', 'uds_billboard_menu');
 function uds_billboard_menu()
 {	
+	$position = 61;
+	if(!empty($menu[$position])) $position = null;
+	
 	$icon = UDS_BILLBOARD_URL . 'images/menu-icon.png';
 	add_menu_page("uBillboard", "uBillboard", 'manage_options', 'uds_billboard_admin', 'uds_billboard_admin', $icon, 61);
 	add_submenu_page('uds_billboard_admin', "Add Billboard", 'Add Billboard', 'manage_options', 'uds_billboard_add', 'uds_billboard_add');
