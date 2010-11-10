@@ -10,7 +10,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 */
 
 // General Options
-define('UDS_BILLBOARD_VERSION', '2.1.1');
+define('UDS_BILLBOARD_VERSION', '2.1.2');
 define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
 define('UDS_BILLBOARD_USE_COMPRESSION', true);
@@ -758,7 +758,8 @@ function get_uds_billboard($name = 'billboard')
 							$height = (int)$bb['height'];
 							$zoom = $bb['timthumb-zoom'] == 'on' ? 1 : 0;
 							$quality = (int)$bb['timthumb-quality'];
-							$url = UDS_BILLBOARD_URL . "timthumb.php?src=" . urlencode($b['image']) . "&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
+							$image = str_replace(get_bloginfo('siteurl') . '/wp-content/', '', $b['image']);
+							$url = UDS_BILLBOARD_URL . "timthumb.php?src=" . urlencode($image) . "&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
 						} else {
 							$url = $b['image'];
 						}

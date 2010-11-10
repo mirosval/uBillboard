@@ -75,7 +75,7 @@ jQuery(function($){
 			++totalImagesLoaded;
 			var pos = - 160 + 160 * (totalImagesLoaded/totalImages);
 			$loader.animate({
-				'background-position': pos+'px 0px'
+				'background-position-x': pos+'px'
 			}, {
 				duration: 100
 			});
