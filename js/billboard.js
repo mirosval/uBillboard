@@ -81,11 +81,11 @@ jQuery(function($){
 			});
 			if(totalImages == totalImagesLoaded){
 				$bb.css('background-image', 'url('+slides[0].image+')');
-				if(showPaginatorOption == true){
+				if(showPaginatorOption === true){
 					showPaginator(0);
 				}
 				showPlaybackControls();
-				showDescription(0);
+				showDescription(0, true);
 				setupSquares();
 				setupColumns();
 				setupClickHandler();
@@ -143,7 +143,7 @@ jQuery(function($){
 	
 	function setupTimeout() {
 		timeout = setTimeout(function(){
-			var index = slides[currentSlideIndex + 1] == null ? 0 : currentSlideIndex + 1;
+			var index = typeof slides[currentSlideIndex + 1] == 'undefined' ? 0 : currentSlideIndex + 1;
 			showSlide(index);
 		}, slides[currentSlideIndex].delay);
 	}
@@ -294,7 +294,7 @@ jQuery(function($){
 	}
 	
 	// shows description, create it if necessary
-	function showDescription(current) {
+	function showDescription(current, firstRun) {
 		$descr = $("#uds-billboard-description");
 		if($descr.size() === 0){
 			$controls.append($("<div id='uds-billboard-description' class=''></div>"));
@@ -316,9 +316,14 @@ jQuery(function($){
 			});
 		} else if ($descr.hasClass('stripe-right')) {
 			// ?? weird JS bug outerWidth is 0 the first time description is shown so we just set it manually...
+			if(firstRun === true) {
+				$descr.width('auto');
+			}
 			var descrWidth = $descr.outerWidth() !== 0 ? $descr.outerWidth() : 0.3 * width;
+
 			$descr.css({
 				left: width + 'px',
+				width: '',
 				bottom: '0px'
 			}).stop().animate({
 				left: width - descrWidth + 'px'
@@ -371,10 +376,11 @@ jQuery(function($){
 	
 	function descriptionIEFix() {
 		if($.browser.msie && $.browser.version < 7) {
+			var desc = '';
 			if($('#uds-billboard-description').hasClass('alt')){
-				var desc = uds_billboard_url+"images/bg_light.png";
+				desc = uds_billboard_url+"images/bg_light.png";
 			} else {
-				var desc = uds_billboard_url+"images/bg_dark.png";
+				desc = uds_billboard_url+"images/bg_dark.png";
 			}
 			var filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+desc+"', sizingMethod='scale');";
 			$('#uds-billboard-description').css('background-image', 'none').get(0).runtimeStyle.filter = filter;
@@ -399,7 +405,9 @@ jQuery(function($){
 		$controls.hover(function(){
 			clearInterval(timeout);
 		}, function(){
-			setupTimeout();
+			if(playing) {
+				setupTimeout();
+			}
 		});
 	}
 	
