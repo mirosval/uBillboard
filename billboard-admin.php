@@ -24,7 +24,7 @@ if(! is_array($billboards)) {
 ?>
 <div class="wrap">
 	<h2>Add/Edit uBillboards</h2>
-	<?php if(!is_writable(UDS_BILLBOARD_PATH.'cache')): ?>
+	<?php if(!uds_billboard_cache_is_writable()): ?>
 		<div class="updated uds-warn"><strong>Warning!</strong> Directory <?php echo UDS_BILLBOARD_PATH ?>cache is not writable!</div>
 	<?php endif; ?>
 	<?php if(!empty($billboards)): ?>

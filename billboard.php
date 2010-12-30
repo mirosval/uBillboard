@@ -11,9 +11,20 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 
 // General Options
 define('UDS_BILLBOARD_VERSION', '2.1.4');
-define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
-define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
 define('UDS_BILLBOARD_USE_COMPRESSION', true);
+define('UDS_BILLBOARD_USE_RELATIVE_PATH', false);
+
+// WARNING!!!
+// set this to true only if you are calling uBillboard via shortcodes only!!!
+define('UDS_BILLBOARD_ENABLE_SHORTCODE_OPTIMIZATION', false); 
+
+if(uds_billboard_is_plugin()) {
+	define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
+	define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
+} else {
+	define('UDS_BILLBOARD_URL', trailingslashit(get_template_directory_uri() . '/uBillboard'));
+	define('UDS_BILLBOARD_PATH', trailingslashit(get_template_directory() . '/uBillboard'));
+}
 
 // User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard');
@@ -196,6 +207,36 @@ if(!function_exists('d')) {
 	}
 }
 
+// returns true if used as a standalone plugin, false when it's used as part of a theme
+function uds_billboard_is_plugin()
+{
+	$plugins = get_option('active_plugins');
+	return in_array('uBillboard/billboard.php', $plugins);
+}
+
+function uds_billboard_cache_is_writable()
+{
+	if(uds_billboard_is_plugin()) {
+		return is_writable(UDS_BILLBOARD_PATH . 'cache');
+	} else {
+		return is_writable(get_template_directory() . '/cache');
+	}
+}
+
+function uds_billboard_is_active()
+{
+	if(true == UDS_BILLBOARD_ENABLE_SHORTCODE_OPTIMIZATION) {
+		if(function_exists('uds_active_shortcodes')) {
+			$active_shortcodes = uds_active_shortcodes();
+			if( ! in_array('uds-billboard', $active_shortcodes)) {
+				return false;
+			}
+		}
+	}
+	
+	return true;
+}
+
 // initialize billboard
 add_action('init', 'uds_billboard_init');
 function uds_billboard_init()
@@ -235,11 +276,6 @@ function uds_billboard_init()
 	$dir = UDS_BILLBOARD_URL;
 	if(is_admin()){
 		add_thickbox();
-		wp_enqueue_script("jquery-ui-sortable");
-		wp_enqueue_script("jquery-ui-draggable");
-		wp_enqueue_script('uds-cookie', $dir."js/jquery_cookie.js");
-		wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js");
-		wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
 		
 		// process updates
 		if(!empty($_POST['nonce']) && !wp_verify_nonce($_POST['nonce'], 'uds-billboard')){
@@ -249,7 +285,7 @@ function uds_billboard_init()
 		}
 		
 		// process imports/exports
-		if($_GET['page'] == 'uds_billboard_import_export') {
+		if(isset($_GET['page']) && $_GET['page'] == 'uds_billboard_import_export') {
 			if(isset($_GET['download_export']) && wp_verify_nonce($_GET['download_export'], 'uds-billboard-export')) {
 				uds_billboard_export();
 			}
@@ -257,22 +293,38 @@ function uds_billboard_init()
 				uds_billboard_import($_FILES['uds-billboard-import']['tmp_name']);
 			}
 		}
-	} else {
-		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
-		
-		// We need to override jQuery on WP < 3.0 because the default there is jQuery 1.3 and we need 1.4
-		if(version_compare($wp_version, '3.0.0', '<=')){
-			wp_deregister_script('jquery');
-			wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js');
-		}
-		
-		wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'));
-		if(UDS_BILLBOARD_USE_COMPRESSION){
-			wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'));
-		} else {
-			wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery', 'easing'));
-		}
 	}
+}
+
+add_action('wp_print_scripts', 'uds_billboard_scripts');
+function uds_billboard_scripts()
+{
+	global $wp_version;
+	if(!uds_billboard_is_active()) return;
+	
+	$dir = UDS_BILLBOARD_URL;
+	
+	// We need to override jQuery on WP < 3.0 because the default there is jQuery 1.3 and we need 1.4
+	if(version_compare($wp_version, '3.0.0', '<=')){
+		wp_deregister_script('jquery');
+		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js');
+	}
+	
+	wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'));
+	if(UDS_BILLBOARD_USE_COMPRESSION){
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'));
+	} else {
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery', 'easing'));
+	}
+}
+
+add_action('wp_print_styles', 'uds_billboard_styles');
+function uds_billboard_styles()
+{
+	if(!uds_billboard_is_active()) return;
+	
+	$dir = UDS_BILLBOARD_URL;
+	wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -295,13 +347,16 @@ function uds_billboard_init()
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-register_activation_hook(__FILE__, 'uds_billboard_activation_hook');
+if(uds_billboard_is_plugin()) {
+	register_activation_hook(__FILE__, 'uds_billboard_activation_hook');
+	register_activation_hook(__FILE__, 'uds_billboard_deactivation_hook');
+}
+
 function uds_billboard_activation_hook()
 {
 	add_option(UDS_BILLBOARD_OPTION, array());
 }
 
-register_activation_hook(__FILE__, 'uds_billboard_deactivation_hook');
 function uds_billboard_deactivation_hook()
 {
 	//delete_option(UDS_BILLBOARD_OPTION);
@@ -315,14 +370,23 @@ function uds_billboard_deactivation_hook()
 
 add_action('admin_menu', 'uds_billboard_menu');
 function uds_billboard_menu()
-{	
+{
+	global $menu;
 	$position = 61;
 	if(!empty($menu[$position])) $position = null;
 	
 	$icon = UDS_BILLBOARD_URL . 'images/menu-icon.png';
-	add_menu_page("uBillboard", "uBillboard", 'manage_options', 'uds_billboard_admin', 'uds_billboard_admin', $icon, 61);
-	add_submenu_page('uds_billboard_admin', "Add Billboard", 'Add Billboard', 'manage_options', 'uds_billboard_add', 'uds_billboard_add');
-	add_submenu_page('uds_billboard_admin', "Import/Export", 'Import/Export', 'manage_options', 'uds_billboard_import_export', 'uds_billboard_import_export');
+	$ubillboard = add_menu_page("uBillboard", "uBillboard", 'manage_options', 'uds_billboard_admin', 'uds_billboard_admin', $icon, $position);
+	$ubillboard_add = add_submenu_page('uds_billboard_admin', "Add Billboard", 'Add Billboard', 'manage_options', 'uds_billboard_add', 'uds_billboard_add');
+	$ubillboard_importexport = add_submenu_page('uds_billboard_admin', "Import/Export", 'Import/Export', 'manage_options', 'uds_billboard_import_export', 'uds_billboard_import_export');
+	
+	add_action("admin_print_styles-$ubillboard", 'uds_billboard_enqueue_admin_styles');
+	add_action("admin_print_styles-$ubillboard_add", 'uds_billboard_enqueue_admin_styles');
+	add_action("admin_print_styles-$ubillboard_importexport", 'uds_billboard_enqueue_admin_styles');
+	
+	add_action("admin_print_scripts-$ubillboard", 'uds_billboard_enqueue_admin_scripts');
+	add_action("admin_print_scripts-$ubillboard_add", 'uds_billboard_enqueue_admin_scripts');
+	add_action("admin_print_scripts-$ubillboard_importexport", 'uds_billboard_enqueue_admin_scripts');
 }
 
 // Admin menu entry handling
@@ -342,6 +406,21 @@ function uds_billboard_import_export()
 {
 	global $uds_billboard_errors;
 	include 'billboard-import-export.php';
+}
+
+function uds_billboard_enqueue_admin_styles()
+{
+	$dir = UDS_BILLBOARD_URL;
+	wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
+}
+
+function uds_billboard_enqueue_admin_scripts()
+{
+	$dir = UDS_BILLBOARD_URL;
+	wp_enqueue_script("jquery-ui-sortable");
+	wp_enqueue_script("jquery-ui-draggable");
+	wp_enqueue_script('uds-cookie', $dir."js/jquery_cookie.js");
+	wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -449,7 +528,7 @@ function uds_billboard_proces_updates()
 {
 	global $uds_billboard_attributes, $uds_billboard_general_options;
 
-	$post = $_POST['uds_billboard'];
+	$post = isset($_POST['uds_billboard']) ? $_POST['uds_billboard'] : array();
 	//d($post);
 	if(empty($post)) return;
 	
@@ -713,7 +792,7 @@ function uds_billboard_admin_options($billboard, $name)
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-add_action('wp_head', 'uds_billboard_options_javascript', 1);
+add_action('wp_print_scripts', 'uds_billboard_options_javascript');
 function uds_billboard_options_javascript()
 {
     ?>
@@ -758,8 +837,18 @@ function get_uds_billboard($name = 'billboard')
 							$height = (int)$bb['height'];
 							$zoom = $bb['timthumb-zoom'] == 'on' ? 1 : 0;
 							$quality = (int)$bb['timthumb-quality'];
-							$image = str_replace(get_bloginfo('siteurl') . '/wp-content/', '', $b['image']);
-							$url = UDS_BILLBOARD_URL . "timthumb.php?src=" . urlencode($image) . "&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
+							
+							if(UDS_BILLBOARD_USE_RELATIVE_PATH) {
+								$image = urlencode(str_replace(get_bloginfo('siteurl') . '/wp-content/', '', $b['image']));
+							} else {
+								$image = urlencode($b['image']);
+							}
+							
+							if(uds_billboard_is_plugin()) {
+								$url = UDS_BILLBOARD_URL . "timthumb.php?src=$image&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
+							} else {
+								$url = get_template_directory_uri() . "/timthumb.php?src=$image&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
+							}
 						} else {
 							$url = $b['image'];
 						}

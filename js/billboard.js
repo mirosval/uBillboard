@@ -184,7 +184,7 @@ jQuery(function($){
 			});
 			var slideCurrent = uds_billboard_url+"images/slide-current.png";
 			var filterCurrent = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+slideCurrent+"', sizingMethod='crop');";
-			$('#uds-billboard-paginator a.current').css('background-image', 'none').css('background-color', 'red').each(function(){
+			$('#uds-billboard-paginator a.current').css('background-image', 'none').each(function(){
 				$(this).get(0).runtimeStyle.filter = filterCurrent;
 			});
 		}
