@@ -210,7 +210,7 @@ if(!function_exists('d')) {
 // returns true if used as a standalone plugin, false when it's used as part of a theme
 function uds_billboard_is_plugin()
 {
-	$plugins = get_option('active_plugins');
+	$plugins = get_option('active_plugins', array());
 	return in_array('uBillboard/billboard.php', $plugins);
 }
 
