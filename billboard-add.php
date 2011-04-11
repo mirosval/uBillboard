@@ -2,7 +2,7 @@
 
 global $uds_billboard_attributes;
 
-$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
 
 if(!empty($_GET['uds-billboard-edit']) && !empty($billboards[$_GET['uds-billboard-edit']])) {
 	$billboard = $billboards[$_GET['uds-billboard-edit']];
@@ -13,7 +13,9 @@ if(! is_array($billboard)) {
 	$billboard = array();
 }
 
-$name = array_search($billboard, $billboards);
+if(!empty($billboards)) {
+	$name = array_search($billboard, $billboards);
+}
 
 $billboard['slides'][] = uds_billboard_default_billboard();
 

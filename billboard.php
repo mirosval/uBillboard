@@ -3,14 +3,14 @@
 Plugin Name: uBillboard
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
 Description: uBillboard is a slider plugin by uDesignStudios that allows you to create an eye-catching presentation for your web. (Admin menu icon: http://p.yusukekamiyamane.com/)
-Version: 2.1.4
+Version: 2.1.5
 Author: uDesign
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
 */
 
 // General Options
-define('UDS_BILLBOARD_VERSION', '2.1.4');
+define('UDS_BILLBOARD_VERSION', '2.1.5');
 define('UDS_BILLBOARD_USE_COMPRESSION', true);
 define('UDS_BILLBOARD_USE_RELATIVE_PATH', false);
 
@@ -95,6 +95,13 @@ $uds_billboard_general_options = array(
 		'unit' => '',
 		'tooltip' => 'Automatically start playing slides, makes sense to turn this off only if Show Controls is enabled.',
 		'default' => 'on'
+	),
+	'randomize' => array(
+		'type' => 'checkbox',
+		'label' => 'Shuffle Slides',
+		'unit' => '',
+		'tooltip' => 'Shuffle slides each time the slider is loaded',
+		'default' => ''
 	),
 	'use-timthumb' => array(
 		'type' => 'checkbox',
@@ -814,6 +821,12 @@ function get_uds_billboard($name = 'billboard')
 	$bb = $bb[$name];
 	
 	if(empty($bb)) return "";
+	
+	$bb = apply_filters('uds-billboard-array', $bb);
+	
+	if(isset($bb['randomize']) && $bb['randomize'] == 'on') {
+		shuffle($bb['slides']);
+	}
 	
 	$out = '
 		<div id="uds-billboard-wrapper">
