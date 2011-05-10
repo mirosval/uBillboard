@@ -11,7 +11,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 
 // General Options
 define('UDS_BILLBOARD_VERSION', '2.1.5');
-define('UDS_BILLBOARD_USE_COMPRESSION', true);
+define('UDS_BILLBOARD_USE_COMPRESSION', false);
 define('UDS_BILLBOARD_USE_RELATIVE_PATH', false);
 
 // WARNING!!!
@@ -30,6 +30,8 @@ if(uds_billboard_is_plugin()) {
 define('UDS_BILLBOARD_OPTION', 'uds-billboard');
 
 add_option(UDS_BILLBOARD_OPTION, array());
+
+require_once 'lib/uBillboard.class.php';
 
 // define general options for billboard
 $uds_billboard_general_options = array(
@@ -399,13 +401,15 @@ function uds_billboard_menu()
 // Admin menu entry handling
 function uds_billboard_admin()
 {
-	include 'billboard-admin.php';
+	//include 'billboard-admin.php';
+	include 'admin/billboard-list.php';
 }
 
 // Admin menu entry handling
 function uds_billboard_add()
 {
-	include 'billboard-add.php';
+	//include 'billboard-add.php';
+	include 'admin/billboard-edit.php';
 }
 
 // Admin menu entry handling
