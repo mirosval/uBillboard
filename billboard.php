@@ -44,15 +44,15 @@ $uds_billboard_general_options = array(
 	),
 	'width' => array(
 		'type' => 'text',
-		'label' => 'Billboard Width',
-		'unit' => 'pixels',
+		'label' => 'Width',
+		'unit' => 'px',
 		'tooltip' => 'Billboard Width in pixels',
 		'default' => 940
 	),
 	'height' => array(
 		'type' => 'text',
-		'label' => 'Billboard Height',
-		'unit' => 'pixels',
+		'label' => 'Height',
+		'unit' => 'px',
 		'tooltip' => 'Billboard Height in pixels',
 		'default' => 380
 	),
@@ -70,18 +70,18 @@ $uds_billboard_general_options = array(
 		'tooltip' => 'Column width, applies only to column-based transitions <img src="'.UDS_BILLBOARD_URL .'images/column_width.png" alt="" />',
 		'default' => 50
 	),
-	'show-paginator' => array(
-		'type' => 'checkbox',
-		'label' => 'Show Paginator',
+	'controls-position' => array(
+		'type' => 'select',
+		'label' => 'Position',
 		'unit' => '',
-		'tooltip' => 'Check to show paginator in the bottom right corner <img src="'.UDS_BILLBOARD_URL .'images/paginator.png" alt="" />',
-		'default' => 'on'
-	),
-	'show-controls' => array(
-		'type' => 'checkbox',
-		'label' => 'Show Controls',
-		'unit' => '',
-		'tooltip' => 'Check to show playback controls in the bottom left corner <img src="'.UDS_BILLBOARD_URL .'images/show_controls.png" alt="" />',
+		'tooltip' => '',
+		'options' => array(
+			'' => 'Don\'t show any controls',
+			'inside-spread' => 'Inside Spread',
+			'inside-clumped' => 'Inside Clumped',
+			'outside-spread' => 'Outside Spread',
+			'outside-clumped' => 'Outside Clumped',
+		),
 		'default' => ''
 	),
 	'show-pause' => array(
@@ -90,6 +90,13 @@ $uds_billboard_general_options = array(
 		'unit' => '',
 		'tooltip' => 'Unchecked will pause on hover, otherwise will show Play/Pause button <img src="'.UDS_BILLBOARD_URL .'images/show-playpause.png" alt="" />',
 		'default' => ''
+	),
+	'show-paginator' => array(
+		'type' => 'checkbox',
+		'label' => 'Show Paginator',
+		'unit' => '',
+		'tooltip' => 'Check to show paginator in the bottom right corner <img src="'.UDS_BILLBOARD_URL .'images/paginator.png" alt="" />',
+		'default' => 'on'
 	),
 	'autoplay' => array(
 		'type' => 'checkbox',
@@ -107,14 +114,14 @@ $uds_billboard_general_options = array(
 	),
 	'use-timthumb' => array(
 		'type' => 'checkbox',
-		'label' => 'Use Automatic Image Resizing',
+		'label' => 'Enable',
 		'unit' => '',
 		'tooltip' => 'When checked, all your images will be resized and zoomed/stretched to fit the Billboard size',
 		'default' => ''
 	),
 	'timthumb-zoom' => array(
 		'type' => 'checkbox',
-		'label' => 'Zoom Disproportionate Images',
+		'label' => 'Crop if doesn\'t fit',
 		'unit' => '',
 		'tooltip' => 'When checked will crop images that don\'t have the same proportions as Billboard. Otherwise will stretch images to fit the Billboard',
 		'default' => ''
@@ -122,7 +129,7 @@ $uds_billboard_general_options = array(
 	'timthumb-quality' => array(
 		'type' => 'text',
 		'label' => 'Image Quality',
-		'unit' => 'pixels',
+		'unit' => 'px',
 		'tooltip' => 'Image compression - use lower values for faster page loads and lower traffic, use high values to increase image quality. Optimal values are 60-80',
 		'default' => 80
 	)
@@ -134,17 +141,9 @@ $uds_billboard_attributes = array(
 		'type' => 'image',
 		'label' => 'Image'
 	),
-	'title' => array(
-		'type' => 'text',
-		'label' => 'Title'
-	),
 	'link' => array(
 		'type' => 'text',
 		'label' => 'Link URL'
-	),
-	'text' => array(
-		'type' => 'textarea',
-		'label' => 'Text'
 	),
 	'delay' => array(
 		'type' => 'select',
@@ -203,6 +202,10 @@ $uds_billboard_attributes = array(
 			'interweaveRight' => 'Interweave Right'
 		),
 		'default' => 'fade'
+	),
+	'text' => array(
+		'type' => 'textarea',
+		'label' => 'Text'
 	)
 );
 
@@ -688,6 +691,7 @@ function uds_billboard_render_select($item, $attrib, $unique_id)
 	echo '<div class="'. $attrib .'-wrapper">';
 	echo '<label for="billboard-'. $attrib .'-'. $unique_id .'">'. $attrib_full['label'] .'</label>';
 	echo '<select name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">';
+	echo '<option disabled="disabled">'. $attrib_full['label'] .'</option>';
 	if(is_array($attrib_full['options'])){
 		foreach($attrib_full['options'] as $key => $option){
 			$selected = '';
@@ -704,15 +708,12 @@ function uds_billboard_render_select($item, $attrib, $unique_id)
 // Render Image input
 function uds_billboard_render_image($item, $attrib, $unique_id)
 {
-	echo '<div class="'. $attrib .'-wrapper">';
-	echo '<a class="thickbox" title="Add an Image" href="media-upload.php?type=image&TB_iframe=true&width=640&height=345">';
-	if(!empty($item['image'])){
-		echo '<img alt="Add an Image" src="'. $item[$attrib] .'" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib  .'" />';
-	} else {
-		echo '<img alt="Add an Image" src="'. UDS_BILLBOARD_URL .'images/noimg385x180.jpg" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
-	}
-	echo '</a>';
-	echo '<input type="hidden" name="uds_billboard['. $attrib .'][]" value="'. $item[$attrib] .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
+	echo '<div class="'. $attrib .'-url-wrapper">';
+	echo '	<label for="billboard-'. $attrib .'-'. $unique_id .'-hidden">Image URL</label>';
+	echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $item[$attrib] .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
+	echo '	<a class="thickbox" title="Add an Image" href="media-upload.php?type=image&TB_iframe=true&width=640&height=345">';
+	echo '		<img alt="Add an Image" src="'. admin_url() . 'images/media-button-image.gif" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
+	echo '	</a>';
 	echo '</div>';
 }
 
@@ -757,12 +758,13 @@ function uds_billboard_render_js_support()
 function uds_billboard_render_general_text($option, $field, $value)
 {
 	?>
-	<div class="uds-billboard-<?php echo $option ?>">
+	<div class="uds-billboard-<?php echo $option ?> option-container">
 		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
-		<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" value="<?php echo empty($value) ? $field['default'] : $value ?>" />
+		<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" value="<?php echo empty($value) ? $field['default'] : $value ?>" class="text" />
 		<span class="unit"><?php echo $field['unit'] ?></span>
 		<span class="tooltip">?</span>
 		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
+		<div class="clear"></div>
 	</div>
 	<?php
 }
@@ -771,30 +773,34 @@ function uds_billboard_render_general_checkbox($option, $field, $value)
 {
 	$checked = ( $value === null ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
 	?>
-	<div class="uds-billboard-<?php echo $option ?>">
+	<div class="uds-billboard-<?php echo $option ?> option-container">
 		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
-		<input type="checkbox" id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" <?php echo $checked ?> />
+		<input type="checkbox" id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" <?php echo $checked ?> class="checkbox" />
 		<span class="unit"><?php echo $field['unit'] ?></span>
 		<span class="tooltip">?</span>
 		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
+		<div class="clear"></div>
 	</div>
 	<?php
 }
 
-function uds_billboard_admin_options($billboard, $name)
+function uds_billboard_render_general_select($option, $field, $value)
 {
-	global $uds_billboard_general_options;
-	
-	foreach($uds_billboard_general_options as $key => $option) {
-		switch($option['type']){
-			case 'checkbox':
-				uds_billboard_render_general_checkbox($key, $option, $billboard[$key]);
-				break;
-			case 'text':
-			default:
-				uds_billboard_render_general_text($key, $option, $key == 'name' ? $name : $billboard[$key]);
-		}
-	}
+	$checked = ( $value === null ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
+	?>
+	<div class="uds-billboard-<?php echo $option ?> option-container">
+		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+		<select id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" class="select">
+			<?php foreach($field['options'] as $key => $label): ?>
+				<option value="<?php echo $key ?>" <?php echo $field['options'][$key] == $value ? 'selected="selected"' : '' ?>><?php echo $label ?></option>
+			<?php endforeach; ?>
+		</select>
+		<span class="unit"><?php echo $field['unit'] ?></span>
+		<span class="tooltip">?</span>
+		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
+		<div class="clear"></div>
+	</div>
+	<?php
 }
 
 ////////////////////////////////////////////////////////////////////////////////

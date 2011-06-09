@@ -22,43 +22,43 @@ jQuery(function($){
 	});
 	
 	
-	$('#uds-billboard-table tr:last').addClass('new').find('.billboard-delete').hide();
-	
-	// General Options collapsing
-	$('.uds-billboard-options').data('original_height', $('.uds-billboard-options').css('height'));
-	$('.uds-billboard-options .close').click(function(e, no_cookie){
-		if($(this).hasClass('closed')){
-			$('.uds-billboard-options .inside').fadeIn(200);
-			$('.uds-billboard-options').animate({
-				height: $('.uds-billboard-options').data('original_height')
-			}, 300);
-			$('.uds-billboard-options .submit').animate({
-				top: '365px',
-				left: '40px'
-			}, 300);
-			$(this).removeClass('closed');
-			if(no_cookie != true){
-				$.cookie('uds-billboard-general-options-collapsed', null);
-			}
-		} else {
-			$('.uds-billboard-options').animate({
-				height: '30px'
-			}, 300);
-			$('.uds-billboard-options .submit').animate({
-				top: '-3px',
-				left: '0px'
-			}, 300);
-			$('.uds-billboard-options .inside').fadeOut(200);
-			$(this).addClass('closed');
-			if(no_cookie != true){
-				$.cookie('uds-billboard-general-options-collapsed', 'yes');
-			}
-		}
-	}).trigger('click', true);
-	
-	if($.cookie('uds-billboard-general-options-collapsed') != 'yes') {
-		$('.uds-billboard-options .close').trigger('click', true);
-	}
+	// Billboard image collapsing
+	$('<div id="image-preview">').appendTo('body');
+	$('.image-wrapper').each(function(){
+		var $input = $(this).parents('.inside').find('.image-url-wrapper input');
+		var preview = this;
+		$(this).css({
+			'background-image': 'url('+$input.val()+')',
+			height: $(this).parent().height() + 'px'
+		});
+		
+		$input.change(function(){
+			$(preview).css({
+				'background-image': 'url('+$input.val()+')'
+			});
+		});
+		
+		$(this).hover(function(e){
+			$('#image-preview').show().css({
+				'background-image': 'url('+$input.val()+')',
+				width: $('#uds-billboard-width').val()+'px',
+				height: $('#uds-billboard-height').val()+'px',
+				top: $(preview).offset().top,
+				left: $(preview).offset().left,
+				position: 'absolute',
+				opacity: 0
+			}).stop().animate({opacity: 1}, 300);
+		}, function(){
+			$('#image-preview').css({
+				opacity: 1
+			}).stop().animate({opacity: 0}, {
+				duration: 300,
+				complete: function() {
+					$(this).hide();
+				}
+			});
+		});
+	});
 	
 	// Timthumb options fading
 	var timthumbHandler = function(){
@@ -79,7 +79,7 @@ jQuery(function($){
 		$tt.stop().css({
 			display: 'block',
 			top: $(this).position().top,
-			left: $(this).position().left + 40 + 'px',
+			left: $(this).position().left - $tt.width() - 25 + 'px',
 			opacity: 0
 		}).animate({
 			opacity: 1
