@@ -34,6 +34,9 @@ $billboard['slides'][] = uds_billboard_default_billboard();
 						<?php uds_billboard_render_general_text('height', $uds_billboard_general_options['height'], $billboard['height']); ?>
 						<?php uds_billboard_render_general_checkbox('randomize', $uds_billboard_general_options['randomize'], $billboard['randomize']); ?>
 						<?php uds_billboard_render_general_checkbox('autoplay', $uds_billboard_general_options['autoplay'], $billboard['autoplay']); ?>
+						<?php uds_billboard_render_general_text('square-size', $uds_billboard_general_options['square-size'], $billboard['square-size']); ?>
+						<?php uds_billboard_render_general_text('column-width', $uds_billboard_general_options['column-width'], $billboard['column-width']); ?>
+						<?php uds_billboard_render_general_select('style', $uds_billboard_general_options['style'], $billboard['style']); ?>
 						<div id="major-publishing-actions" class="submitbox">
 							<div id="publishing-action">
 								<input class="button-primary" type="submit" style="float:right" value="Save uBillboard" />
@@ -46,8 +49,17 @@ $billboard['slides'][] = uds_billboard_default_billboard();
 					<div class="handlediv" title="Click to toggle"><br /></div>
 					<h3 class="hndle"><span>Controls</span></h3>
 					<div class="inside">
+						<?php uds_billboard_render_general_checkbox('show-controls', $uds_billboard_general_options['show-controls'], $billboard['show-controls']); ?>
 						<?php uds_billboard_render_general_select('controls-position', $uds_billboard_general_options['controls-position'], $billboard['controls-position']); ?>
 						<?php uds_billboard_render_general_checkbox('show-pause', $uds_billboard_general_options['show-pause'], $billboard['show-pause']); ?>
+					</div>
+				</div>
+				<div class="postbox">
+					<div class="handlediv" title="Click to toggle"><br /></div>
+					<h3 class="hndle"><span>Paginator</span></h3>
+					<div class="inside">
+						<?php uds_billboard_render_general_checkbox('show-paginator', $uds_billboard_general_options['show-paginator'], $billboard['show-paginator']); ?>
+						<?php uds_billboard_render_general_select('paginator-position', $uds_billboard_general_options['paginator-position'], $billboard['paginator-position']); ?>
 					</div>
 				</div>
 				<div class="postbox">

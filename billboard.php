@@ -32,6 +32,7 @@ define('UDS_BILLBOARD_OPTION', 'uds-billboard');
 add_option(UDS_BILLBOARD_OPTION, array());
 
 require_once 'lib/uBillboard.class.php';
+require_once 'lib/uBillboardSlide.class.php';
 
 // define general options for billboard
 $uds_billboard_general_options = array(
@@ -56,6 +57,20 @@ $uds_billboard_general_options = array(
 		'tooltip' => 'Billboard Height in pixels',
 		'default' => 380
 	),
+	'autoplay' => array(
+		'type' => 'checkbox',
+		'label' => 'Autoplay',
+		'unit' => '',
+		'tooltip' => 'Automatically start playing slides, makes sense to turn this off only if Show Controls is enabled.',
+		'default' => 'on'
+	),
+	'randomize' => array(
+		'type' => 'checkbox',
+		'label' => 'Shuffle Slides',
+		'unit' => '',
+		'tooltip' => 'Shuffle slides each time the slider is loaded',
+		'default' => ''
+	),
 	'square-size' => array(
 		'type' => 'text',
 		'label' => 'Square Size',
@@ -70,23 +85,39 @@ $uds_billboard_general_options = array(
 		'tooltip' => 'Column width, applies only to column-based transitions <img src="'.UDS_BILLBOARD_URL .'images/column_width.png" alt="" />',
 		'default' => 50
 	),
+	'style' => array(
+		'type' => 'select',
+		'label' => 'Style',
+		'unit' => '',
+		'tooltip' => '',
+		'options' => array(
+			'dark' => 'Dark',
+			'bright' => 'Bright'
+		),
+		'default' => ''
+	),
+	'show-controls' => array(
+		'type' => 'checkbox',
+		'label' => 'Show Controls',
+		'unit' => '',
+		'tooltip' => 'Controls enable you to switch between slides',
+		'default' => ''
+	),
 	'controls-position' => array(
 		'type' => 'select',
 		'label' => 'Position',
 		'unit' => '',
 		'tooltip' => '',
 		'options' => array(
-			'' => 'Don\'t show any controls',
-			'inside-spread' => 'Inside Spread',
-			'inside-clumped' => 'Inside Clumped',
-			'outside-spread' => 'Outside Spread',
-			'outside-clumped' => 'Outside Clumped',
+			'inside' => 'Inside',
+			'outside' => 'Outside',
+			'below' => 'Below'
 		),
 		'default' => ''
 	),
 	'show-pause' => array(
 		'type' => 'checkbox',
-		'label' => 'Show Play/Pause button',
+		'label' => 'Show Play/Pause',
 		'unit' => '',
 		'tooltip' => 'Unchecked will pause on hover, otherwise will show Play/Pause button <img src="'.UDS_BILLBOARD_URL .'images/show-playpause.png" alt="" />',
 		'default' => ''
@@ -98,18 +129,16 @@ $uds_billboard_general_options = array(
 		'tooltip' => 'Check to show paginator in the bottom right corner <img src="'.UDS_BILLBOARD_URL .'images/paginator.png" alt="" />',
 		'default' => 'on'
 	),
-	'autoplay' => array(
-		'type' => 'checkbox',
-		'label' => 'Autoplay',
+	'paginator-position' => array(
+		'type' => 'select',
+		'label' => 'Position',
 		'unit' => '',
-		'tooltip' => 'Automatically start playing slides, makes sense to turn this off only if Show Controls is enabled.',
-		'default' => 'on'
-	),
-	'randomize' => array(
-		'type' => 'checkbox',
-		'label' => 'Shuffle Slides',
-		'unit' => '',
-		'tooltip' => 'Shuffle slides each time the slider is loaded',
+		'tooltip' => '',
+		'options' => array(
+			'inside' => 'Inside',
+			'outside' => 'Outside',
+			'thumbs' => 'Thumbs'
+		),
 		'default' => ''
 	),
 	'use-timthumb' => array(
@@ -165,10 +194,7 @@ $uds_billboard_attributes = array(
 			'none' => 'No Description',
 			'stripe-left' => 'Stripe Left',
 			'stripe-right' => 'Stripe Right',
-			'stripe-bottom' => 'Stripe Bottom',
-			'stripe-left alt' => 'Alternate Stripe Left',
-			'stripe-right alt' => 'Alternate Stripe Right',
-			'stripe-bottom alt' => 'Alternate Stripe Bottom',
+			'stripe-bottom' => 'Stripe Bottom'
 		),
 		'default' => 'none'
 	),
@@ -544,6 +570,13 @@ function uds_billboard_proces_updates()
 
 	$post = isset($_POST['uds_billboard']) ? $_POST['uds_billboard'] : array();
 	//d($post);
+	
+	$billboard = new uBillboard($post);
+	
+	//d($billboard);
+	//d($billboard->showPaginator);
+	
+	return;
 	if(empty($post)) return;
 	
 	if(!is_admin()) return;
@@ -760,7 +793,7 @@ function uds_billboard_render_general_text($option, $field, $value)
 	?>
 	<div class="uds-billboard-<?php echo $option ?> option-container">
 		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
-		<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" value="<?php echo empty($value) ? $field['default'] : $value ?>" class="text" />
+		<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" value="<?php echo empty($value) ? $field['default'] : $value ?>" class="text" />
 		<span class="unit"><?php echo $field['unit'] ?></span>
 		<span class="tooltip">?</span>
 		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
@@ -775,7 +808,7 @@ function uds_billboard_render_general_checkbox($option, $field, $value)
 	?>
 	<div class="uds-billboard-<?php echo $option ?> option-container">
 		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
-		<input type="checkbox" id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" <?php echo $checked ?> class="checkbox" />
+		<input type="checkbox" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" <?php echo $checked ?> class="checkbox" />
 		<span class="unit"><?php echo $field['unit'] ?></span>
 		<span class="tooltip">?</span>
 		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
@@ -788,9 +821,10 @@ function uds_billboard_render_general_select($option, $field, $value)
 {
 	$checked = ( $value === null ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
 	?>
-	<div class="uds-billboard-<?php echo $option ?> option-container">
+	<div class="uds-billboard-<?php echo $option ?> option-container select">
 		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
-		<select id="uds-billboard-<?php echo $option ?>" name="uds-billboard-<?php echo $option ?>" class="select">
+		<select id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" class="select">
+			<option value="" disabled="disabled"><?php echo $field['label'] ?></option>
 			<?php foreach($field['options'] as $key => $label): ?>
 				<option value="<?php echo $key ?>" <?php echo $field['options'][$key] == $value ? 'selected="selected"' : '' ?>><?php echo $label ?></option>
 			<?php endforeach; ?>

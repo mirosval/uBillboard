@@ -251,6 +251,10 @@
 	width: 150px;
 }
 
+.option-container.select label {
+	display: none;
+}
+
 .option-container input.text {
 	width: 50px;
 	float: left;
@@ -261,6 +265,12 @@
 	width: auto;
 	float: left;
 	margin: 5px 0px 0px 5px;
+}
+
+.option-container select {
+	width: 173px;
+	float: left;
+	margin: 1px 0px 0px 5px;
 }
 
 .option-container {
