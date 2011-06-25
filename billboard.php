@@ -285,7 +285,7 @@ function uds_billboard_init()
 		add_thickbox();
 		
 		// process updates
-		if(!empty($_POST['nonce']) && !wp_verify_nonce($_POST['nonce'], 'uds-billboard')){
+		if(isset($_POST['uds_billboard']) && !empty($_POST['nonce']) && !wp_verify_nonce($_POST['nonce'], 'uds-billboard')){
 			die('Security check failed');
 		} else {
 			uds_billboard_proces_updates();
