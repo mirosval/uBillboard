@@ -19,6 +19,14 @@ class uBillboard {
 		}
 		
 		$this->slides = uBillboardSlide::getSlides($options);
+		
+		if(!empty($this->slides)) {
+			foreach($this->slides as $key => $slide) {
+				if(!$slide->isValid()) {
+					unset($this->slides[$key]);
+				}
+			}
+		}
 	}
 	
 	public function __destruct()
@@ -30,6 +38,16 @@ class uBillboard {
 	{
 		$key = $this->camelize($key);
 		return $this->{$key};
+	}
+	
+	public function isValid()
+	{
+		return !empty($this->slides);
+	}
+	
+	public function addEmptySlide()
+	{
+		$this->slides[] = new uBillboardSlide();
 	}
 	
 	private function sanitizeOption($key, $option)

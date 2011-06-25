@@ -10,7 +10,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 */
 
 // General Options
-define('UDS_BILLBOARD_VERSION', '2.1.5');
+define('UDS_BILLBOARD_VERSION', '3.0.0');
 define('UDS_BILLBOARD_USE_COMPRESSION', false);
 define('UDS_BILLBOARD_USE_RELATIVE_PATH', false);
 
@@ -280,35 +280,6 @@ add_action('init', 'uds_billboard_init');
 function uds_billboard_init()
 {
 	global $uds_billboard_general_options, $uds_billboard_attributes;
-	// Fix older uBillboards
-	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
-	if(! empty($billboards[0])) {
-		$new_billboards = array();
-		foreach($uds_billboard_general_options as $key => $option) {
-			$new_billboards['billboard'][$key] = $option['default'];
-		}
-		$new_billboards['billboard']['slides'] = $billboards;
-		$billboards = $new_billboards;
-		update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
-	}
-
-	$billboard = current($billboards);
-	if(!empty($billboard['slides'][0]) && !is_array($billboard['slides'][0])) {
-		foreach($billboards as $bbkey => $billboard) {
-			foreach($billboard['slides'] as $slidekey => $slide) {
-				if(!is_array($slide)) {
-					$slide_original = $slide;
-					unset($billboards[$bbkey]['slides'][$slidekey]);
-					$billboards[$bbkey]['slides'][$slidekey] = array();
-					foreach($uds_billboard_attributes as $attrib => $options) {
-						$billboards[$bbkey]['slides'][$slidekey][$attrib] = $slide_original->$attrib;
-					}
-				}
-			}
-		}
-
-		update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
-	}
 	
 	// Basic init
 	$dir = UDS_BILLBOARD_URL;
@@ -573,8 +544,19 @@ function uds_billboard_proces_updates()
 	
 	$billboard = new uBillboard($post);
 	
-	//d($billboard);
+	d($billboard);
 	//d($billboard->showPaginator);
+	
+	if($billboard->isValid()){
+	
+		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
+	
+		d($billboards);
+	
+		$billboards[$billboard->name] = $billboard;
+	
+		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
+	}
 	
 	return;
 	if(empty($post)) return;
@@ -698,7 +680,7 @@ function uds_billboard_render_text($item, $attrib, $unique_id)
 	$attrib_full = $uds_billboard_attributes[$attrib];
 	echo '<div class="'. $attrib .'-wrapper">';
 	echo '<label for="billboard-'. $attrib .'-'. $unique_id .'">'. $attrib_full['label'] .'</label>';
-	echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($item[$attrib])) . '" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
+	echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($item->{$attrib})) . '" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
 	echo '</div>';
 }
 
@@ -709,7 +691,7 @@ function uds_billboard_render_textarea($item, $attrib, $unique_id)
 	$attrib_full = $uds_billboard_attributes[$attrib];
 	echo '<div class="'. $attrib .'-wrapper">';
 	echo '<label for="billboard-'. $attrib .'-'. $unique_id .'">'. $attrib_full['label'] .'</label>';
-	echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">'. htmlspecialchars(stripslashes($item[$attrib])) .'</textarea>';
+	echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">'. htmlspecialchars(stripslashes($item->{$attrib})) .'</textarea>';
 	echo '</div>';
 }
 
@@ -728,7 +710,7 @@ function uds_billboard_render_select($item, $attrib, $unique_id)
 	if(is_array($attrib_full['options'])){
 		foreach($attrib_full['options'] as $key => $option){
 			$selected = '';
-			if($item[$attrib] == $key){
+			if($item->{$attrib} == $key){
 				$selected = 'selected="selected"';
 			}
 			echo '<option value="'. $key .'" '. $selected .'>'. $option .'</option>';
@@ -743,7 +725,7 @@ function uds_billboard_render_image($item, $attrib, $unique_id)
 {
 	echo '<div class="'. $attrib .'-url-wrapper">';
 	echo '	<label for="billboard-'. $attrib .'-'. $unique_id .'-hidden">Image URL</label>';
-	echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $item[$attrib] .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
+	echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $item->{$attrib} .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
 	echo '	<a class="thickbox" title="Add an Image" href="media-upload.php?type=image&TB_iframe=true&width=640&height=345">';
 	echo '		<img alt="Add an Image" src="'. admin_url() . 'images/media-button-image.gif" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
 	echo '	</a>';

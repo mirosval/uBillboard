@@ -30,12 +30,14 @@ if(! is_array($billboards)) {
 				<tr>
 					<th id="cb" class="manage-column column-cb check-column" scope="col"><input type="checkbox" /></th>
 					<th id="title">Billboard Name</th>
+					<th>Shortcode</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
 					<th id="cb" class="manage-column column-cb check-column" scope="col"><input type="checkbox" /></th>
 					<th id="title">Billboard Name</th>
+					<th>Shortcode</th>
 				</tr>
 			</tfoot>
 			<tbody id="the-list">
@@ -59,6 +61,9 @@ if(! is_array($billboards)) {
 									<a href="admin.php?page=uds_billboard_add&uds-billboard-delete=<?php echo $key ?>">Trash</a>
 								</span>
 							</div>
+						</td>
+						<td>
+							<?php echo "[uds-billboard name=\"{$billboard['name']}\"]"?>
 						</td>
 					</tr>
 					<?php $n++; ?>

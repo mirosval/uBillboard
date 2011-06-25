@@ -33,9 +33,17 @@ class uBillboardSlide {
 		return $slides;
 	}
 	
-	public function __construct($options)
+	public function __construct($options = false)
 	{
 		global $uds_billboard_attributes;
+
+		if($options === false) {
+			foreach($uds_billboard_attributes as $key => $option) {
+				$this->{$key} = $option['default'];
+			}
+			
+			return;
+		}
 
 		if(empty($options['image'])){
 			return null;
@@ -43,6 +51,20 @@ class uBillboardSlide {
 
 		foreach($uds_billboard_attributes as $key => $option) {
 			$this->{$key} = $options[$key];
+		}
+	}
+	
+	public function isValid()
+	{
+		return !empty($this->image);
+	}
+	
+	public function renderAdmin()
+	{
+		global $uds_billboard_attributes;
+
+		foreach($uds_billboard_attributes as $attrib => $options) {
+			uds_billboard_render_field($this, $attrib, $key);
 		}
 	}
 }
