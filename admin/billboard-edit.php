@@ -10,7 +10,7 @@ if(!empty($_GET['uds-billboard-edit']) && !empty($billboards[$_GET['uds-billboar
 }
 
 // safety check
-d(is_a($billboard, 'uBillboard'));
+//d(is_a($billboard, 'uBillboard'));
 if(!is_a($billboard, 'uBillboard')) {
 	$billboard = new uBillboard();
 }
@@ -74,11 +74,11 @@ $billboard->addEmptySlide();
 				<div class="editor-body">
 					<div id="titlediv">
 						<div id="titlewrap">
-							<input type="text" name="name" id="title" value="<?php echo $billboard->name ?>" maxlength="255" size="40" />
+							<input type="text" name="uds_billboard[name]" id="title" value="<?php echo $billboard->name ?>" maxlength="255" size="40" />
 						</div>
 					</div>
 					<div class="slides">
-						<?php foreach($billboard->slides as $key => $item): d($item); ?>
+						<?php foreach($billboard->slides as $key => $item): ?>
 							<div class="postbox slide">
 								<div class="handlediv" title="Click to toggle">&nbsp;</div>
 								<h3 class="hndle"><span><?php echo sprintf("Slide %u", $key + 1); ?></span></h3>
@@ -95,3 +95,4 @@ $billboard->addEmptySlide();
 		</div> <!-- END metabox holder -->
 	</form> <!-- END billboard update form -->
 </div> <!-- END Wrap -->
+<?php uds_billboard_render_js_support() ?>

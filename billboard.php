@@ -3,7 +3,7 @@
 Plugin Name: uBillboard
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
 Description: uBillboard is a slider plugin by uDesignStudios that allows you to create an eye-catching presentation for your web. (Admin menu icon: http://p.yusukekamiyamane.com/)
-Version: 2.1.5
+Version: 3.0.0
 Author: uDesign
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
@@ -294,7 +294,7 @@ function uds_billboard_init()
 		}
 		
 		// process imports/exports
-		if(isset($_GET['page']) && $_GET['page'] == 'uds_billboard_import_export') {
+		if(isset($_POST['uds-billboard']) && isset($_GET['page']) && $_GET['page'] == 'uds_billboard_import_export') {
 			if(isset($_GET['download_export']) && wp_verify_nonce($_GET['download_export'], 'uds-billboard-export')) {
 				uds_billboard_export();
 			}
@@ -540,89 +540,20 @@ function uds_billboard_proces_updates()
 	global $uds_billboard_attributes, $uds_billboard_general_options;
 
 	$post = isset($_POST['uds_billboard']) ? $_POST['uds_billboard'] : array();
-	//d($post);
+	
+	if(empty($post) || !is_admin()) return;
 	
 	$billboard = new uBillboard($post);
 	
-	d($billboard);
-	//d($billboard->showPaginator);
-	
 	if($billboard->isValid()){
 	
-		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
-	
-		d($billboards);
-	
+		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));	
 		$billboards[$billboard->name] = $billboard;
 	
 		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
 	}
 	
-	return;
-	if(empty($post)) return;
-	
-	if(!is_admin()) return;
-	
-	// update billboard array
-	$slides = array();
-	foreach($uds_billboard_attributes as $attrib => $options){
-		foreach($post[$attrib] as $key => $item){
-			if($slides[$key] == null){
-				$slide = uds_billboard_default_billboard();
-			} else {
-				$slide = $slides[$key];
-			}
-			
-			$slide[$attrib] = $item;
-			$slides[$key] = $slide;
-		}
-	}
-	
-	// delete empty billboards
-	$bb_default = uds_billboard_default_billboard();
-	foreach($slides as $key => $bb){
-		$delete = true;
-		foreach($uds_billboard_attributes as $attrib => $options){
-			if($bb[$attrib] != $bb_default[$attrib]){
-				$delete = false;
-			}
-		}
-		
-		if($delete){
-			unset($slides[$key]);
-		}
-	}
-	
-	// update general options
-	$billboard = array();
-	$billboard['slides'] = $slides;
-	foreach($uds_billboard_general_options as $key => $option) {
-		$billboard[$key] = empty($_POST['uds-billboard-'.$key]) ? '' : $_POST['uds-billboard-'.$key];
-	}
-	
-	// process name changes and save by name
-	$billboard_saved = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
-	$name_orig = $_POST['original_name'];
-	$name = $_name = $_POST['uds-billboard-name'];
-	if($name_orig != $name) {
-		$n = 1;
-		while(isset($billboard_saved[$name])) {
-			$name = $_name . '-' . $n;
-			$n++;
-		}
-		unset($billboard_saved[$name_orig]);
-	}
-	
-	$billboard_saved[$name] = $billboard;
-	
-	//d($billboard_saved);
-	
-	update_option(UDS_BILLBOARD_OPTION, serialize($billboard_saved));
-	//delete_option(UDS_BILLBOARD_OPTION);
-	
-	if($name_orig == '' || $name_orig != $name) {
-		wp_redirect('admin.php?page=uds_billboard_add&uds-billboard-edit='.$name);
-	}
+	wp_redirect('admin.php?page=uds_billboard_add&uds-billboard-edit='.$billboard->name);
 }
 
 // Initialize empty billboard instance
@@ -723,6 +654,8 @@ function uds_billboard_render_select($item, $attrib, $unique_id)
 // Render Image input
 function uds_billboard_render_image($item, $attrib, $unique_id)
 {
+	static $unique_id = 0;
+	
 	echo '<div class="'. $attrib .'-url-wrapper">';
 	echo '	<label for="billboard-'. $attrib .'-'. $unique_id .'-hidden">Image URL</label>';
 	echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $item->{$attrib} .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
@@ -730,6 +663,8 @@ function uds_billboard_render_image($item, $attrib, $unique_id)
 	echo '		<img alt="Add an Image" src="'. admin_url() . 'images/media-button-image.gif" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
 	echo '	</a>';
 	echo '</div>';
+	
+	$unique_id++;
 }
 
 // render JS support for image input
@@ -759,8 +694,8 @@ function uds_billboard_render_js_support()
 	 
 		//console.log(window.receiver);
 		//console.log(src);
-		jQuery('#'+window.receiver).attr('src', src);
-		jQuery("#"+window.receiver_hidden).val(src);
+		//jQuery('#'+window.receiver).attr('src', src);
+		jQuery("#"+window.receiver_hidden).val(src).change();
 	}
 	jQuery('<?php echo $selector; ?>').click(function(){
 		set_receiver(this);

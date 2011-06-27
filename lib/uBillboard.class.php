@@ -14,8 +14,10 @@ class uBillboard {
 		
 		foreach($uds_billboard_general_options as $key => $option) {
 			$camelized = $this->camelize($key);
-			$this->{$camelized} = $this->sanitizeOption($key, $options[$key]);
-			unset($options[$key]);
+			if(isset($options[$key])) {
+				$this->{$camelized} = $this->sanitizeOption($key, $options[$key]);
+				unset($options[$key]);
+			}
 		}
 		
 		$this->slides = uBillboardSlide::getSlides($options);

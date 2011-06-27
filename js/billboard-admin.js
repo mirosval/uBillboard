@@ -33,6 +33,7 @@ jQuery(function($){
 		});
 		
 		$input.change(function(){
+			console.log($input.val());
 			$(preview).css({
 				'background-image': 'url('+$input.val()+')'
 			});

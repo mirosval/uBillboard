@@ -50,7 +50,7 @@ if(! is_array($billboards)) {
 						<td>
 							<strong>
 								<a href="admin.php?page=uds_billboard_add&uds-billboard-edit=<?php echo $key ?>">
-									<?php echo $billboard['name'] ?>
+									<?php echo $billboard->name ?>
 								</a>
 							</strong>
 							<div class="row-actions">
@@ -63,7 +63,7 @@ if(! is_array($billboards)) {
 							</div>
 						</td>
 						<td>
-							<?php echo "[uds-billboard name=\"{$billboard['name']}\"]"?>
+							<?php echo "[uds-billboard name=\"{$billboard->name}\"]"?>
 						</td>
 					</tr>
 					<?php $n++; ?>
