@@ -770,89 +770,35 @@ function uds_billboard_options_javascript()
     <?php
 }
 
-function get_uds_billboard($name = 'billboard')
+function get_uds_billboard($name = 'billboard', $options = array())
 {
-	static $has_run = false;
+	$bbs = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
 	
-	if($has_run) return;
-	else $has_run = true;
-	
-	$bb = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
-	
-	$bb = $bb[$name];
-	
-	if(empty($bb)) return "";
-	
-	$bb = apply_filters('uds-billboard-array', $bb);
-	
-	if(isset($bb['randomize']) && $bb['randomize'] == 'on') {
-		shuffle($bb['slides']);
+	if(!isset($bbs[$name])) {
+		return "Billboard named &quot;$name&quot; does not exist";
 	}
 	
-	$out = '
-		<div id="uds-billboard-wrapper">
-			<div id="uds-billboard-settings">
-				<span id="uds-billboard-width">'.(int)apply_filters('uds-billboard-width', $bb['width'], $bb).'</span>
-				<span id="uds-billboard-height">'.(int)apply_filters('uds-billboard-height', $bb['height'], $bb).'</span>
-				<span id="uds-billboard-square-size">'.(int)apply_filters('uds-billboard-square-size', $bb['square-size'], $bb).'</span>
-				<span id="uds-billboard-column-width">'.(int)apply_filters('uds-billboard-column-width', $bb['column-width'], $bb).'</span>
-				<span id="uds-billboard-show-paginator">'.(apply_filters('uds-billboard-show-paginator', $bb['show-paginator'], $bb) == 'on' ? 'true' : 'false') .'</span>
-				<span id="uds-billboard-show-controls">'. (apply_filters('uds-billboard-show-controls', $bb['show-controls'], $bb) == 'on' ? 'true' : 'false') .'</span>
-				<span id="uds-billboard-show-pause">'. (apply_filters('uds-billboard-show-pause', $bb['show-pause'], $bb) == 'on' ? 'true' : 'false') .'</span>
-				<span id="uds-billboard-autoplay">'. (apply_filters('uds-billboard-autoplay', $bb['autoplay'], $bb) == 'on' ? 'true' : 'false') .'</span>
-			</div>
-			<div id="uds-loader"><div id="uds-progress"></div></div>
-			<div id="uds-next-slide"></div>
-			<div id="uds-billboard">';
-				foreach($bb['slides'] as $b):
-					if($b['image'] != ''):
-						if($bb['use-timthumb'] == 'on'){
-							$width = (int)$bb['width'];
-							$height = (int)$bb['height'];
-							$zoom = $bb['timthumb-zoom'] == 'on' ? 1 : 0;
-							$quality = (int)$bb['timthumb-quality'];
-							
-							if(UDS_BILLBOARD_USE_RELATIVE_PATH) {
-								$image = urlencode(str_replace(get_bloginfo('siteurl') . '/wp-content/', '', $b['image']));
-							} else {
-								$image = urlencode($b['image']);
-							}
-							
-							if(uds_billboard_is_plugin()) {
-								$url = UDS_BILLBOARD_URL . "timthumb.php?src=$image&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
-							} else {
-								$url = get_template_directory_uri() . "/timthumb.php?src=$image&amp;w=$width&amp;h=$height&amp;zc=$zoom&amp;q=$quality";
-							}
-						} else {
-							$url = $b['image'];
-						}
-						$out .= '
-						<div class="uds-slide">
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-delay" value="'. apply_filters('uds-billboard-delay', $b['delay'], $bb) .'" />
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-transition" value="'. apply_filters('uds-billboard-transition', $b['transition'], $bb) .'" />
-							<input type="hidden" class="uds-billboard-option" name="uds-billboard-layout" value="'. apply_filters('uds-billboard-layout', $b['layout'], $bb) .'" />
-							<img src="' . apply_filters('uds-billboard-image', $url, $bb) . '" alt="" />
-							<div class="uds-descr-wrapper">
-								<div class="uds-descr">';
-									if(stripslashes($b['title']) != ''):
-										$out .= '<h2>'. apply_filters('uds-billboard-title', stripslashes($b['title']), $bb) .'</h2>';
-									endif;
-									$out .= apply_filters('uds-billboard-description', stripslashes($b['text']), $bb);
-									if(stripslashes($b['link']) != ''):
-										$out .= '<br /><a href="'. apply_filters('uds-billboard-link', stripslashes($b['link']), $bb) .'" class="read-more">Read more</a>';
-									endif;
-									$out .= '
-								</div>
-							</div>
-						</div>';
-					endif;
-				endforeach;
-			$out .= '
-			</div>
-			<div id="uds-billboard-controls"></div>
-		</div>';
+	$bb = $bbs[$name];
 	
-	return apply_filters('uds-billboard-output', $out, $bb);
+	if(!$bb->isValid()) {
+		return "Billboard is invalid";
+	}
+	
+	$out = "<div class='uds-bb'>";
+		$out .= "<div class='uds-bb-slides'>";
+			foreach($bb->slides as $slide) {
+				$out .= "<div class='uds-bb-slide'>";
+					$out .= "<img src='{$slide->image}' alt='' class='uds-bb-bg-image' />";
+					$out .= $slide->text;
+				$out .= "</div>";
+			}
+		$out .= "</div>";
+		$out .= "<div class='uds-bb-controls'>";
+			
+		$out .= "</div>";
+	$out .= "</div>";
+	
+	return $out;
 }
 
 function the_uds_billboard($name = 'billboard')
