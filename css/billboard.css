@@ -1,0 +1,34 @@
+.uds-bb {
+	border: 1px solid black;
+}
+
+.uds-bb-slides {
+	position: relative;
+}
+
+.uds-bb-slide {
+
+}
+
+.uds-stage {
+	position: absolute;
+	z-index: 1;
+	top: 0px;
+	left: 0px;
+}
+
+.uds-next {
+	position: absolute;
+	z-index: 2;
+	top: 0px;
+	left: 0px;
+}
+
+.uds-square {
+	position: absolute;
+	overflow: hidden;
+}
+
+.uds-square-inside {
+	position: absolute;
+}

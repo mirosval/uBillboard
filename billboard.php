@@ -319,11 +319,11 @@ function uds_billboard_scripts()
 		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js');
 	}
 	
-	wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'));
+	wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'), '1.3', true);
 	if(UDS_BILLBOARD_USE_COMPRESSION){
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'));
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'), '3.0', true);
 	} else {
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery', 'easing'));
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery', 'easing'), '3.0', true);
 	}
 }
 
@@ -760,18 +760,24 @@ function uds_billboard_render_general_select($option, $field, $value)
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-add_action('wp_print_scripts', 'uds_billboard_options_javascript');
-function uds_billboard_options_javascript()
+add_action('wp_footer', 'uds_billboard_footer_scripts');
+function uds_billboard_footer_scripts()
 {
-    ?>
-    <script type="text/javascript">
-        var uds_billboard_url = '<?php echo UDS_BILLBOARD_URL ?>';
-    </script>
-    <?php
+	global $uds_billboard_footer_scripts;
+	
+	echo "
+	<script language='JavaScript' type='text/javascript'>
+		jQuery(document).ready(function($){
+			$uds_billboard_footer_scripts
+		});
+	</script>";
 }
 
 function get_uds_billboard($name = 'billboard', $options = array())
 {
+	global $uds_billboard_footer_scripts;
+	static $id = 0;
+	
 	$bbs = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
 	
 	if(!isset($bbs[$name])) {
@@ -784,7 +790,7 @@ function get_uds_billboard($name = 'billboard', $options = array())
 		return "Billboard is invalid";
 	}
 	
-	$out = "<div class='uds-bb'>";
+	$out = "<div class='uds-bb' id='uds-bb-$id'>";
 		$out .= "<div class='uds-bb-slides'>";
 			foreach($bb->slides as $slide) {
 				$out .= "<div class='uds-bb-slide'>";
@@ -797,6 +803,18 @@ function get_uds_billboard($name = 'billboard', $options = array())
 			
 		$out .= "</div>";
 	$out .= "</div>";
+	
+	$scripts = "
+		$('#uds-bb-$id').uBillboard({
+			width: '{$bb->width}px',
+			height: '{$bb->height}px',
+			squareSize: '{$bb->squareSize}px'
+		});
+	";
+	
+	$uds_billboard_footer_scripts .= $scripts;
+	
+	$id++;
 	
 	return $out;
 }
