@@ -58,6 +58,31 @@ class uBillboardSlide {
 		}
 	}
 	
+	public function update($options)
+	{
+		global $uds_billboard_attributes;
+
+		if($options === false) {
+			foreach($uds_billboard_attributes as $key => $option) {
+				if(isset($option['default'])) {
+					$this->{$key} = $option['default'];
+				} else {
+					$this->{$key} = '';
+				}
+			}
+			
+			return;
+		}
+
+		if(empty($options['image'])){
+			return null;
+		}
+
+		foreach($uds_billboard_attributes as $key => $option) {
+			$this->{$key} = $options[$key];
+		}
+	}
+	
 	public function isValid()
 	{
 		return !empty($this->image);
@@ -70,6 +95,22 @@ class uBillboardSlide {
 		foreach($uds_billboard_attributes as $attrib => $options) {
 			uds_billboard_render_field($this, $attrib);
 		}
+	}
+	
+	public function render()
+	{
+		$out = "<div class='uds-bb-slide'>";
+			if(empty($this->link)) {
+				$this->link = '#';
+			}
+			$out .= "<a href='{$this->link}' class='uds-bb-link'>";
+			$out .= "<img src='{$this->image}' alt='' class='uds-bb-bg-image' />";
+			$out .= "</a>";
+			$out .= "<span style='display:none' class='uds-delay'>{$this->delay}</span>";
+			$out .= "<span style='display:none' class='uds-transition'>{$this->transition}</span>";
+			$out .= $this->text;
+		$out .= "</div>";
+		return $out;
 	}
 }
 

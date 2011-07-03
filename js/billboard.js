@@ -90,13 +90,18 @@
 				}
 			});
 			
-			_public.start();
+			if(options.autoplay === true) {
+				d('Autoplay Initiated');
+				_public.play();
+			}
 		},
 		
 		/**
 		 *	Main backbone animation function. Animates slideId according to its definition
 		 */
 		'animateSlide': function(slideId) {
+			//d('Will Animate Slide: '+slideId);
+			
 			if(slides[slideId] === null) {
 				$.error('Slide ID ' + slideId + ' does not exist');
 				return;
@@ -171,14 +176,15 @@
 		/**
 		 *	Starts Playback
 		 */
-		'start': function() {
+		'play': function() {
 			if(typeof currentSlideId !== 'number' || currentSlideId === null) {
 				currentSlideId = 0;
 			}
 			
 			timers = $.extend(timers, {
-				nextSlideAnimation: setInterval(function(){
+				nextSlideAnimation: setTimeout(function(){
 					_public.next();
+					_public.play();
 				}, slides[currentSlideId].delay)
 			});
 		},
@@ -188,7 +194,7 @@
 		 */
 		'stop': function() {
 			if(timers.nextSlideAnimation !== null) {
-				clearInterval(timers.nextSlideAnimation);
+				clearTimeout(timers.nextSlideAnimation);
 			}
 		}
 	};
@@ -205,8 +211,8 @@
 			slides = [];
 			$('.uds-bb-slide', $bb).each(function(i, el){
 				var slide = {
-					delay: 3000,
-					transition: 'fadeSquaresRandom',
+					delay: parseInt($('.uds-delay', el).remove().text(), 10),
+					transition: $('.uds-transition', el).remove().text(),
 					bg: $('.uds-bb-bg-image', el).remove().attr('src'),
 					link: $('.uds-bb-link', el).remove().attr('href'),
 					html: $(el).remove().html()
@@ -399,6 +405,10 @@
 				$next.css('opacity', 1);
 			}
 		},
+		
+		/**
+		 *
+		 */
 		'fadeSquaresRandom': {
 			duration: 1100,
 			setup: function() {
@@ -430,8 +440,7 @@
 			width:		'960px',
 			height:		'400px',
 			squareSize:	'80px',
-			layout:		'vertical-tabs',
-			transition:	'slide'
+			autoplay:	true
 		};
 		
 		return this.each(function(){

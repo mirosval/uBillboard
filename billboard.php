@@ -197,6 +197,8 @@ $uds_billboard_attributes = array(
 		'options' => array(
 			'random' => 'Random',
 			'fade' => 'Fade',
+			'fadeSquaresRandom' => 'Fade Random Squares',
+			//////////////////////////////////////////////////
 			'slideLeft' => 'Slide from Left',
 			'slideTop' => 'Slide from Top',
 			'slideRight' => 'Slide from Right',
@@ -535,7 +537,8 @@ function uds_billboard_proces_updates()
 	
 	if(empty($post) || !is_admin()) return;
 
-	$billboard = new uBillboard($post);
+	$billboard = new uBillboard();
+	$billboard->update($post);
 
 	if($billboard->isValid()){
 	
@@ -782,34 +785,9 @@ function get_uds_billboard($name = 'billboard', $options = array())
 		return "Billboard is invalid";
 	}
 	
-	$out = "<div class='uds-bb' id='uds-bb-$id'>";
-		$out .= "<div class='uds-bb-slides'>";
-			foreach($bb->slides as $slide) {
-				$out .= "<div class='uds-bb-slide'>";
-					if(empty($slide->link)) {
-						$slide->link = '#';
-					}
-					$out .= "<a href='{$slide->link}' class='uds-bb-link'>";
-					$out .= "<img src='{$slide->image}' alt='' class='uds-bb-bg-image' />";
-					$out .= "</a>";
-					$out .= $slide->text;
-				$out .= "</div>";
-			}
-		$out .= "</div>";
-		$out .= "<div class='uds-bb-controls'>";
-			
-		$out .= "</div>";
-	$out .= "</div>";
+	$out = $bb->render($id);
 	
-	$scripts = "
-		$('#uds-bb-$id').uBillboard({
-			width: '{$bb->width}px',
-			height: '{$bb->height}px',
-			squareSize: '{$bb->squareSize}px'
-		});
-	";
-	
-	$uds_billboard_footer_scripts .= $scripts;
+	$uds_billboard_footer_scripts .= $bb->renderJS($id);
 	
 	$id++;
 	

@@ -11,7 +11,7 @@ class uBillboard {
 	public function __construct($options = false)
 	{
 		global $uds_billboard_general_options;
-		
+
 		foreach($uds_billboard_general_options as $key => $option) {
 			$camelized = $this->camelize($key);
 			if(isset($options[$key])) {
@@ -22,15 +22,7 @@ class uBillboard {
 			}
 		}
 		
-		$this->slides = uBillboardSlide::getSlides($options);
-		
-		if(!empty($this->slides)) {
-			foreach($this->slides as $key => $slide) {
-				if(!$slide->isValid()) {
-					unset($this->slides[$key]);
-				}
-			}
-		}
+		$this->slides = new uBillboardSlide();
 	}
 	
 	public function __destruct()
@@ -56,6 +48,31 @@ class uBillboard {
 		}
 	}
 	
+	public function update($options)
+	{
+		global $uds_billboard_general_options;
+
+		foreach($uds_billboard_general_options as $key => $option) {
+			$camelized = $this->camelize($key);
+			if(isset($options[$key])) {
+				$this->{$camelized} = $this->sanitizeOption($key, $options[$key]);
+				unset($options[$key]);
+			} else {
+				$this->{$camelized} = '';
+			}
+		}
+		
+		$this->slides = uBillboardSlide::getSlides($options);
+		
+		if(!empty($this->slides)) {
+			foreach($this->slides as $key => $slide) {
+				if(!$slide->isValid()) {
+					unset($this->slides[$key]);
+				}
+			}
+		}
+	}
+	
 	public function isValid()
 	{
 		return !empty($this->slides);
@@ -64,6 +81,46 @@ class uBillboard {
 	public function addEmptySlide()
 	{
 		$this->slides[] = new uBillboardSlide();
+	}
+	
+	public function render($id = 0)
+	{		
+		$out = "<div class='uds-bb' id='uds-bb-$id'>";
+		$out .= "<div class='uds-bb-slides'>";
+		
+		$slides = $this->slides;
+		
+		if($this->randomize === "on") {
+			shuffle($slides);
+		}
+		
+		foreach($slides as $slide) {
+			$out .= $slide->render();
+		}
+		
+		$out .= "</div>";
+		$out .= "<div class='uds-bb-controls'>";
+			
+		$out .= "</div>";
+		$out .= "</div>";
+		
+		return $out;
+	}
+	
+	public function renderJS($id = 0)
+	{
+		$autoplay = $this->autoplay === 'on' ? 'true' : 'false';
+		
+		$scripts = "
+			$('#uds-bb-$id').uBillboard({
+				width: '{$this->width}px',
+				height: '{$this->height}px',
+				squareSize: '{$this->squareSize}px',
+				autoplay: $autoplay
+			});
+		";
+		
+		return $scripts;
 	}
 	
 	private function sanitizeOption($key, $option)
