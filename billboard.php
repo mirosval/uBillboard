@@ -786,7 +786,12 @@ function get_uds_billboard($name = 'billboard', $options = array())
 		$out .= "<div class='uds-bb-slides'>";
 			foreach($bb->slides as $slide) {
 				$out .= "<div class='uds-bb-slide'>";
+					if(empty($slide->link)) {
+						$slide->link = '#';
+					}
+					$out .= "<a href='{$slide->link}' class='uds-bb-link'>";
 					$out .= "<img src='{$slide->image}' alt='' class='uds-bb-bg-image' />";
+					$out .= "</a>";
 					$out .= $slide->text;
 				$out .= "</div>";
 			}

@@ -15,7 +15,7 @@ if(!isset($billboard) || !is_a($billboard, 'uBillboard')) {
 	$billboard = new uBillboard();
 }
 
-d($billboard);
+//d($billboard);
 
 $billboard->addEmptySlide();
 

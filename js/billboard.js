@@ -82,6 +82,14 @@
 				backgroundImage: 'url('+currentSlide.bg+')'
 			}).html(currentSlide.html);
 			
+			// Setup Click Event handling
+			$('.uds-bb-slides').live('click', function(){
+				var slide = slides[currentSlideId];
+				if(typeof slide.link === 'string' && slide.link !== '' && slide.link !== '#') {
+					window.location = slide.link;
+				}
+			});
+			
 			_public.start();
 		},
 		
@@ -98,6 +106,7 @@
 			
 			_private.prepareForAnimation(slideId);
 			
+			// Decide on transition
 			var transition = 'fade';
 			if(slide.transition !== null && typeof slide.transition === 'string') {
 				transition = slide.transition;
@@ -108,24 +117,30 @@
 				return;
 			}
 			
+			// Run Transition Setup function
 			if(animations[transition].setup !== null && typeof animations[transition].setup === 'function') {
 				animations[transition].setup();
 			}
 			
+			// Run Transition Perform function
 			if(animations[transition].perform !== null && typeof animations[transition].perform === 'function') {
 				animations[transition].perform();
 			}
 			
+			// Decide on transition duration
 			var duration = 1000;
 			if(animations[transition].duration !== null && typeof animations[transition].duration === 'number') {
 				duration = animations[transition].duration;
 			}
 			
+			// update current slide ID
+			currentSlideId = slideId;
+			
+			// Run Transition cleanup
 			setTimeout(function(){
 				if(animations[transition].cleanup !== null && typeof animations[transition].cleanup === 'function') {
 					animations[transition].cleanup();
 				}
-				currentSlideId = slideId;
 			}, duration);
 		},
 		
@@ -151,7 +166,7 @@
 		'random': function() {
 			var slideId = Math.floor(Math.random() * slides.length + 1);
 			_public.animateSlide(slideId);
-		}
+		},
 		
 		/**
 		 *	Starts Playback
@@ -193,6 +208,7 @@
 					delay: 3000,
 					transition: 'fadeSquaresRandom',
 					bg: $('.uds-bb-bg-image', el).remove().attr('src'),
+					link: $('.uds-bb-link', el).remove().attr('href'),
 					html: $(el).remove().html()
 				};
 				slides.push(slide);
