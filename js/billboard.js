@@ -8,41 +8,52 @@
 	}
 	
 	/**
-	 *
+	 *	$bb holds the jQuery object for this uBillboard
 	 */
 	var $bb;
+	
 	/**
-	 *
+	 *	$stage is a jQuery object that represents the current slide as it is being displayed
 	 */
 	var $stage;
+	
 	/**
-	 *
+	 *	$next is holder div for all the squares that animate to display the next slide
 	 */
 	var $next;
+	
 	/**
-	 *
+	 *	$nextInsides is jQuery object that references the animatable squares
 	 */
 	var $nextInsides;
+	
 	/**
-	 *
+	 *	Array of slides
 	 */
 	var slides;
+	
 	/**
-	 *
+	 *	Object, options for the current uBillboard
 	 */
 	var options;
+	
 	/**
-	 *
+	 *	Array of timers needed for animation
 	 */
 	var timers;
+	
 	/**
-	 *
+	 *	Int ID of the current slide in the slides array
 	 */
 	var currentSlideId;
 	
+	/**
+	 *	Public methods callable from the outside. Call like this:
+	 *	$('bb-id').uBillboard('next')
+	 */
 	var _public = {
 		/**
-		 *
+		 *	Initializes all necessary data structures
 		 */
 		'init': function(defaults, passedOptions){
 			d('Init');
@@ -75,31 +86,75 @@
 		},
 		
 		/**
-		 *
+		 *	Main backbone animation function. Animates slideId according to its definition
+		 */
+		'animateSlide': function(slideId) {
+			if(slides[slideId] === null) {
+				$.error('Slide ID ' + slideId + ' does not exist');
+				return;
+			}
+			
+			var slide = slides[slideId];
+			
+			_private.prepareForAnimation(slideId);
+			
+			var transition = 'fade';
+			if(slide.transition !== null && typeof slide.transition === 'string') {
+				transition = slide.transition;
+			}
+
+			if(animations[transition] === null || typeof animations[transition] !== 'object'){
+				$.error('Transition "' + transition + '" is not defined');
+				return;
+			}
+			
+			if(animations[transition].setup !== null && typeof animations[transition].setup === 'function') {
+				animations[transition].setup();
+			}
+			
+			if(animations[transition].perform !== null && typeof animations[transition].perform === 'function') {
+				animations[transition].perform();
+			}
+			
+			var duration = 1000;
+			if(animations[transition].duration !== null && typeof animations[transition].duration === 'number') {
+				duration = animations[transition].duration;
+			}
+			
+			setTimeout(function(){
+				if(animations[transition].cleanup !== null && typeof animations[transition].cleanup === 'function') {
+					animations[transition].cleanup();
+				}
+				currentSlideId = slideId;
+			}, duration);
+		},
+		
+		/**
+		 *	Animates the next slide in
 		 */
 		'next': function() {
 			var nextSlideId = _private.getNextSlideId();
-			_private.prepareForAnimation(nextSlideId);
-			
-			animations.fade.setup();
-			
-			animations.fade.perform();
-			
-			setTimeout(function(){
-				animations.fade.cleanup();
-				currentSlideId = nextSlideId;
-			}, animations.fade.duration);
+			_public.animateSlide(nextSlideId);
 		},
 		
 		/**
-		 *
+		 *	Animates the previous slide in
 		 */
 		'prev': function() {
-
+			var prevSlideId = _private.getPrevSlideId();
+			_public.animateSlide(prevSlideId);
 		},
 		
 		/**
-		 *
+		 *	Animates a random slide
+		 */
+		'random': function() {
+			var slideId = Math.floor(Math.random() * slides.length + 1);
+			_public.animateSlide(slideId);
+		}
+		
+		/**
+		 *	Starts Playback
 		 */
 		'start': function() {
 			if(typeof currentSlideId !== 'number' || currentSlideId === null) {
@@ -114,7 +169,7 @@
 		},
 		
 		/**
-		 *
+		 *	Stops Playback
 		 */
 		'stop': function() {
 			if(timers.nextSlideAnimation !== null) {
@@ -123,15 +178,20 @@
 		}
 	};
 	
+	/**
+	 *	Private Method to be called only from within uBillboard methods
+	 */
 	var _private = {
 		/**
-		 *
+		 *	Initializes the slides array by parsing the HTML markup
+		 *	Also removes the markup
 		 */
 		initSlides: function() {
 			slides = [];
 			$('.uds-bb-slide', $bb).each(function(i, el){
 				var slide = {
 					delay: 3000,
+					transition: 'fadeSquaresRandom',
 					bg: $('.uds-bb-bg-image', el).remove().attr('src'),
 					html: $(el).remove().html()
 				};
@@ -140,7 +200,7 @@
 		},
 		
 		/**
-		 *
+		 *	Runs the image preloader
 		 */
 		preloadImages: function() {
 			var progress = 0;
@@ -167,7 +227,7 @@
 		},
 		
 		/**
-		 *
+		 *	Creates square markup, should be run only once, at init time
 		 */
 		initAnimationMarkup: function() {
 			$('.uds-bb-slides', $bb)
@@ -205,7 +265,7 @@
 		},
 		
 		/**
-		 *
+		 *	Resets all animation squares and divs to the original position and size
 		 */
 		resetAnimation: function() {
 			var width = parseInt(options.width, 10);
@@ -233,7 +293,7 @@
 		},
 		
 		/**
-		 *
+		 *	Prepares slide slideId for animation
 		 */
 		prepareForAnimation: function(slideId) {
 			var currentSlide = slides[currentSlideId];
@@ -264,7 +324,7 @@
 		},
 		
 		/**
-		 *
+		 *	Figures out the next slide ID
 		 */
 		getNextSlideId: function() {
 			var nextSlideCandidateId = currentSlideId + 1;
@@ -275,7 +335,7 @@
 		},
 		
 		/**
-		 *
+		 *	Figures out the previous slide ID
 		 */
 		getPrevSlideId: function() {
 			var prevSlideCandidateId = currentSlideId - 1;
@@ -286,30 +346,33 @@
 		}
 	};
 	
-	// events
+	/**
+	 *	Binds Event handlers
+	 */
 	function bindEvents() {
 		/**
-		 *
+		 *	udsBillboardLoadingComplete, run when the loading completes
 		 */
 		$bb.bind('udsBillboardLoadingComplete', function(){
 			d('Loadin Complete!');
 		});
 	}
 	
+	/**
+	 *	
+	 */
 	var animations = {
 		/**
 		 *
 		 */
-		fade: {
+		'fade': {
 			duration: 500,
 			setup: function() {
-				d('Setup');
 				$next.show().css({
 					opacity: 0
 				});
 			},
 			perform: function() {
-				d('Perform');
 				$next.animate({
 					opacity: 1
 				}, {
@@ -317,11 +380,34 @@
 				});
 			},
 			cleanup: function() {
-				d('Cleanup');
+				$next.css('opacity', 1);
+			}
+		},
+		'fadeSquaresRandom': {
+			duration: 1100,
+			setup: function() {
+				$next.show();
+				$nextInsides.css('opacity', 0);
+			},
+			perform: function() {
+				$nextInsides.each(function(el, i){
+					$(this).delay(Math.random() * 700).animate({
+						opacity: 1
+					}, {
+						duration: 400,
+						easing: 'easeInOutQuad'
+					});
+				});
+			},
+			cleanup: function() {
+				$nextInsides.css('opacity', 1);
 			}
 		}
 	};
 	
+	/**
+	 *	Main jQuery plugin definition
+	 */
 	$.fn.uBillboard = function(options){
 		
 		var defaults = {

@@ -78,13 +78,6 @@ $uds_billboard_general_options = array(
 		'tooltip' => 'Square dimension, applies only to transitions based on squares <img src="'.UDS_BILLBOARD_URL .'images/square_size.png" alt="" />',
 		'default' => 100
 	),
-	'column-width' => array(
-		'type' => 'text',
-		'label' => 'Column Width',
-		'unit' => 'pixels',
-		'tooltip' => 'Column width, applies only to column-based transitions <img src="'.UDS_BILLBOARD_URL .'images/column_width.png" alt="" />',
-		'default' => 50
-	),
 	'style' => array(
 		'type' => 'select',
 		'label' => 'Style',
@@ -381,8 +374,7 @@ add_action('admin_menu', 'uds_billboard_menu');
 function uds_billboard_menu()
 {
 	global $menu;
-	$position = 61;
-	if(!empty($menu[$position])) $position = null;
+	$position = null;
 	
 	$icon = UDS_BILLBOARD_URL . 'images/menu-icon.png';
 	$ubillboard = add_menu_page("uBillboard", "uBillboard", 'manage_options', 'uds_billboard_admin', 'uds_billboard_admin', $icon, $position);
@@ -542,9 +534,9 @@ function uds_billboard_proces_updates()
 	$post = isset($_POST['uds_billboard']) ? $_POST['uds_billboard'] : array();
 	
 	if(empty($post) || !is_admin()) return;
-	
+
 	$billboard = new uBillboard($post);
-	
+
 	if($billboard->isValid()){
 	
 		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));	
@@ -581,7 +573,7 @@ function uds_billboard_default_billboard()
 ////////////////////////////////////////////////////////////////////////////////
 
 // Render a single input field
-function uds_billboard_render_field($item, $attrib, $unique_key)
+function uds_billboard_render_field($item, $attrib)
 {
 	global $uds_billboard_attributes;
 
@@ -589,45 +581,45 @@ function uds_billboard_render_field($item, $attrib, $unique_key)
 	switch($attrib_full['type']){
 		case 'input':
 		case 'text':
-			uds_billboard_render_text($item, $attrib, $unique_key);
+			uds_billboard_render_text($item, $attrib);
 			break;
 		case 'textarea':
-			uds_billboard_render_textarea($item, $attrib, $unique_key);
+			uds_billboard_render_textarea($item, $attrib);
 			break;
 		case 'select':
-			uds_billboard_render_select($item, $attrib, $unique_key);
+			uds_billboard_render_select($item, $attrib);
 			break;
 		case 'image':
-			uds_billboard_render_image($item, $attrib, $unique_key);
+			uds_billboard_render_image($item, $attrib);
 			break;
 		default:
 	}
 }
 
 // Render text field
-function uds_billboard_render_text($item, $attrib, $unique_id)
+function uds_billboard_render_text($item, $attrib)
 {
 	global $uds_billboard_attributes;
 	$attrib_full = $uds_billboard_attributes[$attrib];
 	echo '<div class="'. $attrib .'-wrapper">';
-	echo '<label for="billboard-'. $attrib .'-'. $unique_id .'">'. $attrib_full['label'] .'</label>';
-	echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($item->{$attrib})) . '" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
+	echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
+	echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($item->{$attrib})) . '" id="billboard-'. $attrib .'" class="billboard-'. $attrib .'" />';
 	echo '</div>';
 }
 
 // Render textarea
-function uds_billboard_render_textarea($item, $attrib, $unique_id)
+function uds_billboard_render_textarea($item, $attrib)
 {
 	global $uds_billboard_attributes;
 	$attrib_full = $uds_billboard_attributes[$attrib];
 	echo '<div class="'. $attrib .'-wrapper">';
-	echo '<label for="billboard-'. $attrib .'-'. $unique_id .'">'. $attrib_full['label'] .'</label>';
+	echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
 	echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">'. htmlspecialchars(stripslashes($item->{$attrib})) .'</textarea>';
 	echo '</div>';
 }
 
 // Render Select field
-function uds_billboard_render_select($item, $attrib, $unique_id)
+function uds_billboard_render_select($item, $attrib)
 {
 	global $uds_billboard_attributes;
 	$attrib_full = $uds_billboard_attributes[$attrib];
@@ -635,7 +627,7 @@ function uds_billboard_render_select($item, $attrib, $unique_id)
 	if($attrib_full['type'] != 'select') return;
 
 	echo '<div class="'. $attrib .'-wrapper">';
-	echo '<label for="billboard-'. $attrib .'-'. $unique_id .'">'. $attrib_full['label'] .'</label>';
+	echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
 	echo '<select name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">';
 	echo '<option disabled="disabled">'. $attrib_full['label'] .'</option>';
 	if(is_array($attrib_full['options'])){
@@ -652,7 +644,7 @@ function uds_billboard_render_select($item, $attrib, $unique_id)
 }
 
 // Render Image input
-function uds_billboard_render_image($item, $attrib, $unique_id)
+function uds_billboard_render_image($item, $attrib)
 {
 	static $unique_id = 0;
 	

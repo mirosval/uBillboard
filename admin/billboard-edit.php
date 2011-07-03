@@ -11,9 +11,11 @@ if(!empty($_GET['uds-billboard-edit']) && !empty($billboards[$_GET['uds-billboar
 
 // safety check
 //d(is_a($billboard, 'uBillboard'));
-if(!is_a($billboard, 'uBillboard')) {
+if(!isset($billboard) || !is_a($billboard, 'uBillboard')) {
 	$billboard = new uBillboard();
 }
+
+d($billboard);
 
 $billboard->addEmptySlide();
 
@@ -32,8 +34,7 @@ $billboard->addEmptySlide();
 						<?php uds_billboard_render_general_text('height', $uds_billboard_general_options['height'], $billboard->height); ?>
 						<?php uds_billboard_render_general_checkbox('randomize', $uds_billboard_general_options['randomize'], $billboard->randomize); ?>
 						<?php uds_billboard_render_general_checkbox('autoplay', $uds_billboard_general_options['autoplay'], $billboard->autoplay); ?>
-						<?php uds_billboard_render_general_text('square-size', $uds_billboard_general_options['square-size'], $billboard->square-size); ?>
-						<?php uds_billboard_render_general_text('column-width', $uds_billboard_general_options['column-width'], $billboard->column-width); ?>
+						<?php uds_billboard_render_general_text('square-size', $uds_billboard_general_options['square-size'], $billboard->squareSize); ?>
 						<?php uds_billboard_render_general_select('style', $uds_billboard_general_options['style'], $billboard->style); ?>
 						<div id="major-publishing-actions" class="submitbox">
 							<div id="publishing-action">
@@ -47,26 +48,26 @@ $billboard->addEmptySlide();
 					<div class="handlediv" title="Click to toggle"><br /></div>
 					<h3 class="hndle"><span>Controls</span></h3>
 					<div class="inside">
-						<?php uds_billboard_render_general_checkbox('show-controls', $uds_billboard_general_options['show-controls'], $billboard->show-controls); ?>
-						<?php uds_billboard_render_general_select('controls-position', $uds_billboard_general_options['controls-position'], $billboard->controls-position); ?>
-						<?php uds_billboard_render_general_checkbox('show-pause', $uds_billboard_general_options['show-pause'], $billboard->show-pause); ?>
+						<?php uds_billboard_render_general_checkbox('show-controls', $uds_billboard_general_options['show-controls'], $billboard->showControls); ?>
+						<?php uds_billboard_render_general_select('controls-position', $uds_billboard_general_options['controls-position'], $billboard->controlsPosition); ?>
+						<?php uds_billboard_render_general_checkbox('show-pause', $uds_billboard_general_options['show-pause'], $billboard->showPause); ?>
 					</div>
 				</div>
 				<div class="postbox">
 					<div class="handlediv" title="Click to toggle"><br /></div>
 					<h3 class="hndle"><span>Paginator</span></h3>
 					<div class="inside">
-						<?php uds_billboard_render_general_checkbox('show-paginator', $uds_billboard_general_options['show-paginator'], $billboard->show-paginator); ?>
-						<?php uds_billboard_render_general_select('paginator-position', $uds_billboard_general_options['paginator-position'], $billboard->paginator-position); ?>
+						<?php uds_billboard_render_general_checkbox('show-paginator', $uds_billboard_general_options['show-paginator'], $billboard->showPaginator); ?>
+						<?php uds_billboard_render_general_select('paginator-position', $uds_billboard_general_options['paginator-position'], $billboard->paginatorPosition); ?>
 					</div>
 				</div>
 				<div class="postbox">
 					<div class="handlediv" title="Click to toggle"><br /></div>
 					<h3 class="hndle"><span>Image Resizing Options</span></h3>
 					<div class="inside">
-						<?php uds_billboard_render_general_checkbox('use-timthumb', $uds_billboard_general_options['use-timthumb'], $billboard->use-timthumb); ?>
-						<?php uds_billboard_render_general_checkbox('timthumb-zoom', $uds_billboard_general_options['timthumb-zoom'], $billboard->timthumb-zoom); ?>
-						<?php uds_billboard_render_general_text('timthumb-quality', $uds_billboard_general_options['timthumb-quality'], $billboard->timthumb-quality); ?>
+						<?php uds_billboard_render_general_checkbox('use-timthumb', $uds_billboard_general_options['use-timthumb'], $billboard->useTimthumb); ?>
+						<?php uds_billboard_render_general_checkbox('timthumb-zoom', $uds_billboard_general_options['timthumb-zoom'], $billboard->timthumbZoom); ?>
+						<?php uds_billboard_render_general_text('timthumb-quality', $uds_billboard_general_options['timthumb-quality'], $billboard->timthumbQuality); ?>
 					</div>
 				</div>
 			</div>

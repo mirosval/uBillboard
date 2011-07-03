@@ -17,6 +17,8 @@ class uBillboard {
 			if(isset($options[$key])) {
 				$this->{$camelized} = $this->sanitizeOption($key, $options[$key]);
 				unset($options[$key]);
+			} else {
+				$this->{$camelized} = $option['default'];
 			}
 		}
 		
@@ -42,6 +44,18 @@ class uBillboard {
 		return $this->{$key};
 	}
 	
+	public function __wakeup()
+	{
+		global $uds_billboard_general_options;
+		
+		foreach($uds_billboard_general_options as $key => $option) {
+			$camelized = $this->camelize($key);
+			if(!isset($this->{$camelized})) {
+				$this->{$camelized} = $option['default'];
+			}
+		}
+	}
+	
 	public function isValid()
 	{
 		return !empty($this->slides);
@@ -60,9 +74,9 @@ class uBillboard {
 			return NULL;
 		}
 		
-		if(in_array($key, $uds_billboard_general_options)) {
-			if($uds_billboard_general_options['type'] == 'select') {
-				if(in_array($option, array_keys($uds_billboard_general_options['options']))) {
+		if(in_array($key, array_keys($uds_billboard_general_options))) {
+			if($uds_billboard_general_options[$key]['type'] == 'select') {
+				if(in_array($option, array_keys($uds_billboard_general_options[$key]['options']))) {
 					return $option;
 				} else {
 					return $uds_billboard_general_options[$key]['default'];

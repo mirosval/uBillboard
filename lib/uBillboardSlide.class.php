@@ -39,7 +39,11 @@ class uBillboardSlide {
 
 		if($options === false) {
 			foreach($uds_billboard_attributes as $key => $option) {
-				$this->{$key} = $option['default'];
+				if(isset($option['default'])) {
+					$this->{$key} = $option['default'];
+				} else {
+					$this->{$key} = '';
+				}
 			}
 			
 			return;
@@ -64,7 +68,7 @@ class uBillboardSlide {
 		global $uds_billboard_attributes;
 
 		foreach($uds_billboard_attributes as $attrib => $options) {
-			uds_billboard_render_field($this, $attrib, $key);
+			uds_billboard_render_field($this, $attrib);
 		}
 	}
 }
