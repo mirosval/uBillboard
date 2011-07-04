@@ -59,12 +59,12 @@
 	margin: 0px 10px 10px 60px;
 }
 
-.delay-wrapper, .layout-wrapper, .transition-wrapper {
+.delay-wrapper, .layout-wrapper, .transition-wrapper, .direction-wrapper {
 	float: left;
 	margin-right: 10px;
 }
 
-.delay-wrapper select, .layout-wrapper select, .transition-wrapper select {
+.delay-wrapper select, .layout-wrapper select, .transition-wrapper select, .direction-wrapper select {
 	width: 150px;
 }
 
@@ -210,7 +210,7 @@
 .uds-billboard-form label {
 	display: block;
 	text-align: left;
-	width: 100px;
+	width: 130px;
 	margin: 0px 5px 5px 5px;
 }
 

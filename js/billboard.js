@@ -23,7 +23,12 @@
 	var $next;
 	
 	/**
-	 *	$nextInsides is jQuery object that references the animatable squares
+	 *	$squares is jQuery object that references the animatable squares
+	 */
+	var $squares;
+	
+	/**
+	 *	$nextInsides is jQuery object that references the animatable square inside
 	 */
 	var $nextInsides;
 	
@@ -122,6 +127,10 @@
 				return;
 			}
 			
+			// Assign Direction
+			var defaultDirection = animations[transition].direction;
+			animations[transition].direction = slide.direction;
+			
 			// Run Transition Setup function
 			if(animations[transition].setup !== null && typeof animations[transition].setup === 'function') {
 				animations[transition].setup();
@@ -146,6 +155,7 @@
 				if(animations[transition].cleanup !== null && typeof animations[transition].cleanup === 'function') {
 					animations[transition].cleanup();
 				}
+				animations[transition].direction = defaultDirection;
 			}, duration);
 		},
 		
@@ -213,6 +223,7 @@
 				var slide = {
 					delay: parseInt($('.uds-delay', el).remove().text(), 10),
 					transition: $('.uds-transition', el).remove().text(),
+					direction: $('.uds-direction', el).remove().text(),
 					bg: $('.uds-bb-bg-image', el).remove().attr('src'),
 					link: $('.uds-bb-link', el).remove().attr('href'),
 					html: $(el).remove().html()
@@ -275,7 +286,7 @@
 					$('<div>', {
 						class: 'uds-square uds-column-'+x+' uds-row-'+y,
 						id: 'uds-square-'+(x+(cols*y))
-					}).append($('<div>',{
+					}).data('position', {x:x,y:y}).append($('<div>',{
 						class: 'uds-square-inside'
 					})).appendTo($next);
 				}
@@ -283,7 +294,8 @@
 			
 			_private.resetAnimation();
 			
-			$nextInsides = $('.uds-square-inside');
+			$squares = $('.uds-square', $bb);
+			$nextInsides = $('.uds-square-inside', $bb);
 		},
 		
 		/**
@@ -365,6 +377,20 @@
 				return slides.length;
 			}
 			return prevSlideCandidateId;
+		},
+		
+		/**
+		 *	Returns input value transformed to positive pixel value string
+		 */
+		pos: function(dim) {
+			return Math.abs(parseInt(dim, 10)) + 'px';
+		},
+		
+		/**
+		 *	Returns input value transformed to negative pixel value string
+		 */
+		neg: function(dim) {
+			return '-' + Math.abs(parseInt(dim, 10)) + 'px';
 		}
 	};
 	
@@ -389,6 +415,7 @@
 		 */
 		'fade': {
 			duration: 500,
+			direction: '',
 			setup: function() {
 				$next.show().css({
 					opacity: 0
@@ -411,6 +438,7 @@
 		 */
 		'fadeSquaresRandom': {
 			duration: 1100,
+			direction: '',
 			setup: function() {
 				$next.show();
 				$nextInsides.css('opacity', 0);
@@ -427,6 +455,231 @@
 			},
 			cleanup: function() {
 				$nextInsides.css('opacity', 1);
+			}
+		},
+		
+		'slide': {
+			duration: 500,
+			direction: 'right',
+			setup: function() {
+				$bb.css({
+					overflow: 'hidden'
+				});
+				$stage.css({
+					top: '0px',
+					left: '0px'
+				});
+				
+				if(this.direction === 'left') {
+					$next.show().css({
+						top: '0px',
+						left: _private.neg(options.width)
+					});
+				} else if(this.direction === 'top') {
+					$next.show().css({
+						top: _private.neg(options.height),
+						left: '0px'
+					});
+				} else if(this.direction === 'bottom') {
+					$next.show().css({
+						top: _private.pos(options.width),
+						left: '0px'
+					});
+				} else {
+					$next.show().css({
+						top: '0px',
+						left: _private.pos(options.width)
+					});
+				}
+			},
+			perform: function() {
+				var animOptions =  {
+					duration: 500,
+					easing: 'easeInOutQuad'
+				};
+				
+				if(this.direction === 'left') {
+					$stage.animate({
+						left: _private.pos(options.width)
+					}, animOptions);
+					$next.animate({
+						left: '0px'
+					}, animOptions);
+				} else if(this.direction === 'top') {
+					$stage.animate({
+						top: _private.pos(options.height)
+					}, animOptions);
+					$next.animate({
+						top: '0px'
+					}, animOptions);
+				} else if(this.direction === 'bottom') {
+					$stage.animate({
+						top: _private.neg(options.height)
+					}, animOptions);
+					$next.animate({
+						top: '0px'
+					}, animOptions);
+				} else {
+					$stage.animate({
+						left: _private.neg(options.width)
+					}, animOptions);
+					$next.animate({
+						left: '0px'
+					}, animOptions);
+				}
+			},
+			cleanup: function() {
+				$next.add($stage).css({
+					top: '0px',
+					left: '0px'
+				});
+			}
+		},
+		
+		/**
+		 *
+		 */
+		'scale': {
+			duration: 1100,
+			direction: '',
+			setup: function() {
+				var top, left;
+				if(this.direction === 'right') {
+					top = _private.pos(parseInt(options.height, 10) / 2);
+					left = _private.pos(options.width);
+				} else if(this.direction === 'left') {
+					top = _private.pos(parseInt(options.height, 10) / 2);
+					left = '0px';
+				} else if(this.direction === 'top') {
+					top = '0px';
+					left = _private.pos(parseInt(options.width, 10) / 2);
+				} else if(this.direction === 'bottom') {
+					top = _private.pos(options.height);
+					left = _private.pos(parseInt(options.width, 10) / 2);
+				} else {
+					top = _private.pos(parseInt(options.height, 10) / 2);
+					left = _private.pos(parseInt(options.width, 10) / 2);
+				}
+				
+				$next.show().css({
+					top: top,
+					left: left,
+					width: '1px',
+					height: '1px'
+				});
+			},
+			perform: function() {
+				$next.animate({
+					top: '0px',
+					left: '0px',
+					width: options.width,
+					height: options.height
+				}, {
+					duration: 1000,
+					easing: 'easeInOutQuad'
+				});
+			},
+			cleanup: function() {
+				$next.show().css({
+					top: '0px',
+					left: '0px',
+					width: options.width,
+					height: options.height
+				});
+			}
+		},
+		
+		'fadeSquaresRows': {
+			duration: 1100,
+			direction: '',
+			setup: function() {
+				$next.show();
+				$squares.css('opacity', 0);
+			},
+			perform: function() {
+				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
+				for(var i = 0; i < rows; i++) {
+					$('.uds-row-'+i, $bb).delay(i * 100).animate({
+						opacity: 1
+					}, {
+						duration: 400,
+						easing: 'easeInOutQuad'
+					});
+				}
+			},
+			cleanup: function() {
+				$squares.css('opacity', 1);
+			}
+		},
+		
+		'fadeSquaresCols': {
+			duration: 1000,
+			direction: '',
+			setup: function() {
+				$next.show();
+				$squares.css('opacity', 0);
+			},
+			perform: function() {
+				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+				for(var i = 0; i < cols; i++) {
+					$('.uds-column-'+i, $bb).delay(i * (600/cols)).animate({
+						opacity: 1
+					}, {
+						duration: 400,
+						easing: 'easeInOutQuad'
+					});
+				}
+			},
+			cleanup: function() {
+				$squares.css('opacity', 1);
+			}
+		},
+		
+		'fadeSquaresSpiralIn': {
+			duration: 1100,
+			direction: '',
+			setup: function() {
+				$next.show();
+				$squares.css('opacity', 0);
+			},
+			perform: function() {
+				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
+				
+				$squares.each(function(i, el){
+					var x = $(el).data('position').x - cols / 2 + 0.5;
+					var y = $(el).data('position').y - rows / 2 + 0.5;
+					$(el).delay((Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + Math.atan2(x, y)) * 100).animate({
+						opacity: 1
+					}, 500);
+				});
+			},
+			cleanup: function() {
+				$squares.css('opacity', 1);
+			}
+		},
+		
+		'fadeSquaresSpiralOut': {
+			duration: 1100,
+			direction: '',
+			setup: function() {
+				$next.show();
+				$squares.css('opacity', 0);
+			},
+			perform: function() {
+				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
+				
+				$squares.each(function(i, el){
+					var x = $(el).data('position').x - cols / 2 + 0.5;
+					var y = $(el).data('position').y - rows / 2 + 0.5;
+					$(el).delay((5 - Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + Math.atan2(x, y)) * 100).animate({
+						opacity: 1
+					}, 500);
+				});
+			},
+			cleanup: function() {
+				$squares.css('opacity', 1);
 			}
 		}
 	};

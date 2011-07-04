@@ -108,6 +108,12 @@ class uBillboardSlide {
 			$out .= "</a>";
 			$out .= "<span style='display:none' class='uds-delay'>{$this->delay}</span>";
 			$out .= "<span style='display:none' class='uds-transition'>{$this->transition}</span>";
+			$direction = $this->direction;
+			if($direction === 'random') {
+				$directions = array('left', 'right', 'top', 'bottom');
+				$direction = $directions[array_rand($directions)];
+			}
+			$out .= "<span style='display:none' class='uds-direction'>{$direction}</span>";
 			$out .= $this->text;
 		$out .= "</div>";
 		return $out;

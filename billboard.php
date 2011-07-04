@@ -198,6 +198,12 @@ $uds_billboard_attributes = array(
 			'random' => 'Random',
 			'fade' => 'Fade',
 			'fadeSquaresRandom' => 'Fade Random Squares',
+			'fadeSquaresRows' => 'Fade Squares by Rows',
+			'fadeSquaresCols' => 'Fade Squares by Columns',
+			'fadeSquaresSpiralIn' => 'Fade Squares Spiral In',
+			'fadeSquaresSpiralOut' => 'Fade Squares Spiral Out',
+			'slide' => 'Slide',
+			'scale' => 'Scale',
 			//////////////////////////////////////////////////
 			'slideLeft' => 'Slide from Left',
 			'slideTop' => 'Slide from Top',
@@ -223,6 +229,19 @@ $uds_billboard_attributes = array(
 			'interweaveRight' => 'Interweave Right'
 		),
 		'default' => 'fade'
+	),
+	'direction' => array(
+		'type' => 'select',
+		'label' => 'Transition Direction',
+		'options' => array(
+			'' => '--',
+			'random' => 'Random',
+			'left' => 'From Left',
+			'right' => 'From Right',
+			'top' => 'From Top',
+			'bottom' => 'From Bottom'
+		),
+		'default' => ''
 	),
 	'text' => array(
 		'type' => 'textarea',
@@ -311,7 +330,7 @@ function uds_billboard_scripts()
 	// We need to override jQuery on WP < 3.0 because the default there is jQuery 1.3 and we need 1.4
 	if(version_compare($wp_version, '3.0.0', '<=')){
 		wp_deregister_script('jquery');
-		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js');
+		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
 	}
 	
 	wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'), '1.3', true);
