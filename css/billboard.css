@@ -32,3 +32,21 @@
 .uds-square-inside {
 	position: absolute;
 }
+
+/* Controls */
+.uds-bb-controls {
+	position: relative;
+}
+
+.uds-bb-countdown {
+	float: right;
+	left: -100px;
+	position: relative;
+}
+
+.uds-bb-countdown canvas {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	z-index: 3;
+}

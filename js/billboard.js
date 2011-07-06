@@ -33,6 +33,16 @@
 	var $nextInsides;
 	
 	/**
+	 *	$controls is jQuery object that references all playback controls/pagination/slide countdown/etc
+	 */
+	var $controls;
+	
+	/**
+	 *	$countdown is jQuery referecne to the countdown canvas holder
+	 */
+	var $countdown;
+	
+	/**
 	 *	Array of slides
 	 */
 	var slides;
@@ -89,6 +99,9 @@
 			$stage.css({
 				backgroundImage: 'url('+currentSlide.bg+')'
 			}).html(currentSlide.html);
+			
+			// load countdown
+			_private.animateCountdown(currentSlide.delay);
 			
 			// Setup Click Event handling
 			$('.uds-bb-slides').live('click', function(){
@@ -152,6 +165,9 @@
 			
 			// update current slide ID
 			currentSlideId = slideId;
+			
+			// Run Countdown Animation
+			_private.animateCountdown(slides[currentSlideId].delay);
 			
 			// Run Transition cleanup
 			setTimeout(function(){
@@ -319,6 +335,7 @@
 			
 			$squares = $('.uds-square', $bb);
 			$nextInsides = $('.uds-square-inside', $bb);
+			$controls = $('.uds-bb-controls', $bb);
 		},
 		
 		/**
@@ -402,8 +419,58 @@
 			return prevSlideCandidateId;
 		},
 		
-		createSlideTransitionCountdown: function() {
+		animateCountdown: function(duration) {
+			var ctx, progress;
 			
+			if($countdown === false) {
+				return;
+			}
+			
+			if(typeof $countdown == 'undefined') {
+				$countdown = $('<div class="uds-bb-countdown"></div>').appendTo($controls);
+				canvas = $countdown.append('<canvas width="100" height="100">').find('canvas').get(0);
+				if(canvas.getContext) {
+					ctx = canvas.getContext('2d');
+					
+					// setup style					
+					ctx.lineWidth = 3;
+					ctx.strokeStyle = 'white';
+					ctx.shadowOffsetX = 0;
+					ctx.shadowOffsetY = 0;
+					ctx.shadowBlur = 2;
+					ctx.shadowColor = 'black';
+				} else {
+					$countdown.remove();
+					$countdown = false;
+					return;
+				}
+				
+				$countdown.data('context', ctx);
+			} else {
+				ctx = $countdown.data('context');
+			}
+			
+			if(duration !== false) {
+				var start = new Date().getTime();
+				$countdown.data('start', start);
+				$countdown.data('duration', duration);
+				clearInterval(timers.countDown);
+				timers.countDown = setInterval(function() {
+					_private.animateCountdown(false);
+				}, 30);
+			} else {
+				progress = new Date().getTime() - $countdown.data('start');
+				duration = $countdown.data('duration');
+			}
+			
+			if(progress / duration >= 1) {
+				clearInterval(timers.countDown);
+			}
+			
+			ctx.clearRect(0,0,100,100);
+			ctx.beginPath();
+			ctx.arc(50, 50, 20, - Math.PI / 2, - Math.PI / 2 + (2*Math.PI) * (progress/duration), false);
+			ctx.stroke();
 		},
 		
 		/**
