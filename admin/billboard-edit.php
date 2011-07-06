@@ -22,6 +22,7 @@ $billboard->addEmptySlide();
 //d($billboards);
 ?>
 <div class="wrap">
+	<div id="icon-edit" class="icon32 icon32-posts-post"><br /></div>
 	<h2>Edit uBillboard</h2>
 	<form id="billboard_update_form" method="post" action="" class="uds-billboard-form">
 		<div class="metabox-holder has-right-sidebar">
@@ -30,6 +31,12 @@ $billboard->addEmptySlide();
 					<div class="handlediv" title="Click to toggle"><br /></div>
 					<h3 class="hndle"><span>Options</span></h3>
 					<div class="inside">
+						<div id="minor-publishing-actions">
+							<div id="preview-action">
+								<a href="" class="preview button">Preview</a>
+								<div class="clear"></div>
+							</div>
+						</div>
 						<?php uds_billboard_render_general_text('width', $uds_billboard_general_options['width'], $billboard->width); ?>
 						<?php uds_billboard_render_general_text('height', $uds_billboard_general_options['height'], $billboard->height); ?>
 						<?php uds_billboard_render_general_checkbox('randomize', $uds_billboard_general_options['randomize'], $billboard->randomize); ?>
@@ -37,11 +44,25 @@ $billboard->addEmptySlide();
 						<?php uds_billboard_render_general_text('square-size', $uds_billboard_general_options['square-size'], $billboard->squareSize); ?>
 						<?php uds_billboard_render_general_select('style', $uds_billboard_general_options['style'], $billboard->style); ?>
 						<div id="major-publishing-actions" class="submitbox">
+							<div id="delete-action">
+								<a href="" class="submitdelete deletion">Delete</a>
+							</div>
 							<div id="publishing-action">
 								<input class="button-primary" type="submit" style="float:right" value="Save uBillboard" />
 							</div>
 							<div class="clear"></div>
 						</div>
+					</div>
+				</div>
+				<div class="postbox">
+					<div class="handlediv" title="Click to toggle"><br /></div>
+					<h3 class="hndle"><span>Slide Order</span></h3>
+					<div class="inside">
+						<ul class="uds-slides-order">
+							<?php foreach($billboard->slides as $key => $item): ?>
+								<li id="uds-slide-handle-<?php echo $key ?>" class="uds-slide-handle">Slide <?php echo $key + 1 ?></li>
+							<?php endforeach; ?>
+						</ul>
 					</div>
 				</div>
 				<div class="postbox">
@@ -80,7 +101,7 @@ $billboard->addEmptySlide();
 					</div>
 					<div class="slides">
 						<?php foreach($billboard->slides as $key => $item): ?>
-							<div class="postbox slide">
+							<div class="postbox slide" id="uds-slide-<?php echo $key ?>">
 								<div class="handlediv" title="Click to toggle">&nbsp;</div>
 								<h3 class="hndle"><span><?php echo sprintf("Slide %u", $key + 1); ?></span></h3>
 								<div class="inside">

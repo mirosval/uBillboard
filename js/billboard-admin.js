@@ -4,23 +4,6 @@ jQuery(function($){
 		return confirm("Really delete? This is not undoable");
 	});
 	
-	$("#uds-billboard-table").sortable({
-		axis: 'y',
-		containment: 'parent',
-		handle: '.billboard-move',
-		items: 'tr',
-		cursor: 'crosshair'
-	});
-	
-	$('#uds-billboard-table .billboard-delete').click(function(){
-		if(confirm("Do you really want to delete this entry?")){
-			$(this).parents('tr').fadeOut(400, function(){
-				$(this).remove();
-			});
-		}
-		return false;
-	});
-	
 	
 	// Billboard image collapsing
 	$('<div id="image-preview">').appendTo('body');
@@ -61,26 +44,33 @@ jQuery(function($){
 		});
 	});
 	
-	// Timthumb options fading
-	var timthumbHandler = function(){
-		if($('#uds-billboard-use-timthumb').is(':checked')){
-			$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').attr('disabled', '');
-			$('.uds-billboard-timthumb-zoom label,.uds-billboard-timthumb-quality label').css('opacity', 1);
-		} else {
-			$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').attr('disabled', 'disabled');
-			$('.uds-billboard-timthumb-zoom label,.uds-billboard-timthumb-quality label').css('opacity', 0.6);
+	// Slides Reorder
+	$('.uds-slides-order').sortable({
+		axis: 'y',
+		placeholder: 'uds-slide-placeholder',
+		update: function(event, ui) {
+			var order = [];
+			$('.uds-slides-order li').each(function(){
+				order.push(parseInt($(this).attr('id').replace('uds-slide-handle-', ''), 10));
+			});
+
+			console.log(order);
+
+			for(var i = 0; i < order.length; i++) {
+				var slide = $('#uds-slide-'+order[i]).detach();
+				console.log(slide);
+				$('.uds-billboard-form .slides').append(slide);
+			}
 		}
-	}
-	timthumbHandler();
-	$('#uds-billboard-use-timthumb').change(timthumbHandler);
+	});
 	
 	// Tooltips
-	$('.tooltip').hover(function(){
+	$('.option-container label').hover(function(){
 		$tt = $(this).parent().find('.tooltip-content');
 		$tt.stop().css({
 			display: 'block',
-			top: $(this).position().top,
-			left: $(this).position().left - $tt.width() - 25 + 'px',
+			top: $(this).position().top + 30 + 'px',
+			left: $(this).position().left + 'px',
 			opacity: 0
 		}).animate({
 			opacity: 1

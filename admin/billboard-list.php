@@ -14,6 +14,7 @@ if(! is_array($billboards)) {
 
 ?>
 <div class="wrap">
+	<div id="icon-edit" class="icon32 icon32-posts-post"><br /></div>
 	<h2>uBillboard</h2>
 	<?php if(!empty($billboards)): ?>
 		<div class="tablenav top">

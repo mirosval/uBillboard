@@ -75,6 +75,9 @@
 				height: options.height
 			})
 			
+			// initialize timers
+			timers = {};
+			
 			_private.initSlides();
 			_private.initAnimationMarkup();
 			// Runs preloader, and when it finishes, it triggers the udsBillboardLoadingComplete Event
@@ -152,6 +155,7 @@
 			
 			// Run Transition cleanup
 			setTimeout(function(){
+				$('.uds-bb-slides').children().stop(true, true);
 				if(animations[transition].cleanup !== null && typeof animations[transition].cleanup === 'function') {
 					animations[transition].cleanup();
 				}
@@ -189,6 +193,10 @@
 		'play': function() {
 			if(typeof currentSlideId !== 'number' || currentSlideId === null) {
 				currentSlideId = 0;
+			}
+			
+			if(timers !== null && timers.nextSlideAnimation !== null) {
+				clearTimeout(timers.nextSlideAnimation);
 			}
 			
 			timers = $.extend(timers, {
@@ -246,7 +254,8 @@
 					continue;
 				}
 				
-				$('<img>').load(function(){
+				$('<img>').data('slideID', i)
+				.load(function(){
 					++progress;
 					
 					if(progress == totalImages) {
@@ -255,6 +264,21 @@
 						d('Progress: '+(progress/totalImages));
 					}
 					
+				}).error(function() {
+					var slideID = $(this).data('slideID');
+					d('Failed to load image: ' + slides[slideID].bg);
+					
+					++progress;
+					if(progress == totalImages) {
+						$bb.trigger('udsBillboardLoadingComplete');
+					} else {
+						d('Progress: '+(progress/totalImages));
+					}
+					
+					if(options.removeSlidesWithBrokenImages === true) {
+						// remove slide
+						slides.splice(slideID, 1);
+					}
 				}).attr('src', slides[i].bg);
 			}
 		},
@@ -284,8 +308,7 @@
 			for(var y = 0; y < rows; y++) {
 				for(var x = 0; x < cols; x++) {
 					$('<div>', {
-						class: 'uds-square uds-column-'+x+' uds-row-'+y,
-						id: 'uds-square-'+(x+(cols*y))
+						class: 'uds-square uds-column-'+x+' uds-row-'+y+' uds-square-'+(x+(cols*y))
 					}).data('position', {x:x,y:y}).append($('<div>',{
 						class: 'uds-square-inside'
 					})).appendTo($next);
@@ -311,7 +334,7 @@
 			
 			for(var y = 0; y < rows; y++) {
 				for(var x = 0; x < cols; x++) {
-					$('#uds-square-'+(x+(cols*y))).css({
+					$('.uds-square-'+(x+(cols*y)), $bb).css({
 						width: squareSize,
 						height: squareSize,
 						top: y*squareSize,
@@ -377,6 +400,10 @@
 				return slides.length;
 			}
 			return prevSlideCandidateId;
+		},
+		
+		createSlideTransitionCountdown: function() {
+			
 		},
 		
 		/**
@@ -636,13 +663,50 @@
 		},
 		
 		'fadeSquaresSpiralIn': {
-			duration: 1100,
+			duration: 1300,
 			direction: '',
 			setup: function() {
 				$next.show();
 				$squares.css('opacity', 0);
 			},
 			perform: function() {
+				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
+				
+				var leftBound = 0;
+				var rightBound = cols - 1;
+				var topBound = 0;
+				var bottomBound = rows - 1;
+				
+				var n = 0, hPos = 0, vPos = 0;
+				while(n < cols * rows){
+					var squareId = cols * vPos + hPos;
+					
+					$('.uds-square-'+squareId).delay(20 * n).animate({
+						opacity: 1
+					}, 500);
+					
+					if(vPos == topBound && hPos < rightBound) {
+						hPos++;
+					} else if(hPos == rightBound && vPos < bottomBound) {
+						vPos++;
+					} else if(vPos == bottomBound && hPos > leftBound) {
+						hPos--;
+					} else {
+						vPos--;
+						if(vPos == 0) {
+							hPos++;
+							vPos++;
+							leftBound++;
+							rightBound--;
+							topBound++;
+							bottomBound--;
+						}
+					}
+					n++;
+				}
+				
+				/*
 				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
 				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
 				
@@ -653,6 +717,7 @@
 						opacity: 1
 					}, 500);
 				});
+				//*/
 			},
 			cleanup: function() {
 				$squares.css('opacity', 1);
@@ -693,7 +758,9 @@
 			width:		'960px',
 			height:		'400px',
 			squareSize:	'80px',
-			autoplay:	true
+			autoplay:	true,
+			
+			removeSlidesWithBrokenImages: true
 		};
 		
 		return this.each(function(){

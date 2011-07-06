@@ -726,7 +726,6 @@ function uds_billboard_render_general_text($option, $field, $value)
 		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
 		<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" value="<?php echo empty($value) ? $field['default'] : $value ?>" class="text" />
 		<span class="unit"><?php echo $field['unit'] ?></span>
-		<span class="tooltip">?</span>
 		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
 		<div class="clear"></div>
 	</div>
@@ -741,7 +740,6 @@ function uds_billboard_render_general_checkbox($option, $field, $value)
 		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
 		<input type="checkbox" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" <?php echo $checked ?> class="checkbox" />
 		<span class="unit"><?php echo $field['unit'] ?></span>
-		<span class="tooltip">?</span>
 		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
 		<div class="clear"></div>
 	</div>
@@ -761,7 +759,6 @@ function uds_billboard_render_general_select($option, $field, $value)
 			<?php endforeach; ?>
 		</select>
 		<span class="unit"><?php echo $field['unit'] ?></span>
-		<span class="tooltip">?</span>
 		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
 		<div class="clear"></div>
 	</div>
