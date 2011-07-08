@@ -1,4 +1,4 @@
-(function($){
+(function($) {
 	function d(variable) {
 		try {
 			console.log(variable);
@@ -168,15 +168,6 @@
 			
 			// Run Countdown Animation
 			_private.animateCountdown(slides[currentSlideId].delay);
-			
-			// Run Transition cleanup
-			setTimeout(function(){
-				$('.uds-bb-slides').children().stop(true, true);
-				if(animations[transition].cleanup !== null && typeof animations[transition].cleanup === 'function') {
-					animations[transition].cleanup();
-				}
-				animations[transition].direction = defaultDirection;
-			}, duration);
 		},
 		
 		/**
@@ -215,12 +206,10 @@
 				clearTimeout(timers.nextSlideAnimation);
 			}
 			
-			timers = $.extend(timers, {
-				nextSlideAnimation: setTimeout(function(){
-					_public.next();
-					_public.play();
-				}, slides[currentSlideId].delay)
-			});
+			timers.nextSlideAnimation = setTimeout(function(){
+				_public.next();
+				_public.play();
+			}, slides[currentSlideId].delay);
 		},
 		
 		/**
@@ -324,9 +313,9 @@
 			for(var y = 0; y < rows; y++) {
 				for(var x = 0; x < cols; x++) {
 					$('<div>', {
-						class: 'uds-square uds-column-'+x+' uds-row-'+y+' uds-square-'+(x+(cols*y))
+						'class': 'uds-square uds-column-'+x+' uds-row-'+y+' uds-square-'+(x+(cols*y))
 					}).data('position', {x:x,y:y}).append($('<div>',{
-						class: 'uds-square-inside'
+						'class': 'uds-square-inside'
 					})).appendTo($next);
 				}
 			}
@@ -336,6 +325,9 @@
 			$squares = $('.uds-square', $bb);
 			$nextInsides = $('.uds-square-inside', $bb);
 			$controls = $('.uds-bb-controls', $bb);
+			
+			// initialize countdown
+			_private.createCountdown();
 		},
 		
 		/**
@@ -355,13 +347,15 @@
 						width: squareSize,
 						height: squareSize,
 						top: y*squareSize,
-						left: x*squareSize
-					}).find('.uds-square-inside').css({
+						left: x*squareSize,
+						opacity: 1
+					}).stop(true, true).find('.uds-square-inside').css({
 						width: width,
 						height: height,
 						top: - (y*squareSize),
-						left: - (x*squareSize)
-					});
+						left: - (x*squareSize),
+						opacity: 1
+					}).stop(true, true);
 				}
 			}
 		},
@@ -419,41 +413,41 @@
 			return prevSlideCandidateId;
 		},
 		
-		animateCountdown: function(duration) {
-			var ctx, progress;
-			
-			if($countdown === false) {
+		createCountdown: function() {
+			$countdown = $('<div class="uds-bb-countdown"></div>').appendTo($controls);
+			canvas = $countdown.append('<canvas width="100" height="100">').find('canvas').get(0);
+			if(canvas.getContext) {
+				ctx = canvas.getContext('2d');
+				
+				// setup style					
+				ctx.lineWidth = 3;
+				ctx.strokeStyle = 'white';
+				ctx.shadowOffsetX = 0;
+				ctx.shadowOffsetY = 0;
+				ctx.shadowBlur = 2;
+				ctx.shadowColor = 'black';
+			} else {
+				$countdown.remove();
+				$countdown = null;
 				return;
 			}
 			
-			if(typeof $countdown == 'undefined') {
-				$countdown = $('<div class="uds-bb-countdown"></div>').appendTo($controls);
-				canvas = $countdown.append('<canvas width="100" height="100">').find('canvas').get(0);
-				if(canvas.getContext) {
-					ctx = canvas.getContext('2d');
-					
-					// setup style					
-					ctx.lineWidth = 3;
-					ctx.strokeStyle = 'white';
-					ctx.shadowOffsetX = 0;
-					ctx.shadowOffsetY = 0;
-					ctx.shadowBlur = 2;
-					ctx.shadowColor = 'black';
-				} else {
-					$countdown.remove();
-					$countdown = false;
-					return;
-				}
-				
-				$countdown.data('context', ctx);
-			} else {
-				ctx = $countdown.data('context');
+			$countdown.data('context', ctx);
+		},
+		
+		animateCountdown: function(duration) {			
+			if($countdown === null || typeof $countdown === 'undefined') {
+				return;
 			}
+			
+			var ctx = $countdown.data('context'),
+				progress = 0;
 			
 			if(duration !== false) {
 				var start = new Date().getTime();
 				$countdown.data('start', start);
 				$countdown.data('duration', duration);
+				
 				clearInterval(timers.countDown);
 				timers.countDown = setInterval(function() {
 					_private.animateCountdown(false);
@@ -521,9 +515,6 @@
 				}, {
 					duration: 500
 				});
-			},
-			cleanup: function() {
-				$next.css('opacity', 1);
 			}
 		},
 		
@@ -546,9 +537,6 @@
 						easing: 'easeInOutQuad'
 					});
 				});
-			},
-			cleanup: function() {
-				$nextInsides.css('opacity', 1);
 			}
 		},
 		
@@ -621,12 +609,6 @@
 						left: '0px'
 					}, animOptions);
 				}
-			},
-			cleanup: function() {
-				$next.add($stage).css({
-					top: '0px',
-					left: '0px'
-				});
 			}
 		},
 		
@@ -672,14 +654,6 @@
 					duration: 1000,
 					easing: 'easeInOutQuad'
 				});
-			},
-			cleanup: function() {
-				$next.show().css({
-					top: '0px',
-					left: '0px',
-					width: options.width,
-					height: options.height
-				});
 			}
 		},
 		
@@ -700,9 +674,6 @@
 						easing: 'easeInOutQuad'
 					});
 				}
-			},
-			cleanup: function() {
-				$squares.css('opacity', 1);
 			}
 		},
 		
@@ -723,9 +694,6 @@
 						easing: 'easeInOutQuad'
 					});
 				}
-			},
-			cleanup: function() {
-				$squares.css('opacity', 1);
 			}
 		},
 		
@@ -785,9 +753,6 @@
 					}, 500);
 				});
 				//*/
-			},
-			cleanup: function() {
-				$squares.css('opacity', 1);
 			}
 		},
 		
@@ -809,9 +774,6 @@
 						opacity: 1
 					}, 500);
 				});
-			},
-			cleanup: function() {
-				$squares.css('opacity', 1);
 			}
 		}
 	};
