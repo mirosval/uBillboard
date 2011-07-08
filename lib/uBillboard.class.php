@@ -100,7 +100,12 @@ class uBillboard {
 		
 		$out .= "</div>";
 		$out .= "<div class='uds-bb-controls'>";
-			
+			$out .= "<div class='uds-bb-paginator mini'>";
+				$out .= "<div class='uds-bb-button uds-bb-playpause'>Play</div>";
+				$out .= "<div class='uds-bb-button uds-bb-prev'>Prev</div>";
+				$out .= "<div class='uds-bb-button uds-bb-next'>Next</div>";
+				$out .= "<div class='uds-bb-position-indicator'></div>";
+			$out .= "</div>";
 		$out .= "</div>";
 		$out .= "</div>";
 		

@@ -10,63 +10,68 @@
 	/**
 	 *	$bb holds the jQuery object for this uBillboard
 	 */
-	var $bb;
+	var $bb,
 	
 	/**
 	 *	$stage is a jQuery object that represents the current slide as it is being displayed
 	 */
-	var $stage;
+	$stage,
 	
 	/**
 	 *	$next is holder div for all the squares that animate to display the next slide
 	 */
-	var $next;
+	$next,
 	
 	/**
 	 *	$squares is jQuery object that references the animatable squares
 	 */
-	var $squares;
+	$squares,
 	
 	/**
 	 *	$nextInsides is jQuery object that references the animatable square inside
 	 */
-	var $nextInsides;
+	$nextInsides,
 	
 	/**
 	 *	$controls is jQuery object that references all playback controls/pagination/slide countdown/etc
 	 */
-	var $controls;
+	$controls,
 	
 	/**
 	 *	$countdown is jQuery referecne to the countdown canvas holder
 	 */
-	var $countdown;
+	$countdown,
 	
 	/**
 	 *	Array of slides
 	 */
-	var slides;
+	slides,
 	
 	/**
 	 *	Object, options for the current uBillboard
 	 */
-	var options;
+	options,
 	
 	/**
 	 *	Array of timers needed for animation
 	 */
-	var timers;
+	timers,
 	
 	/**
 	 *	Int ID of the current slide in the slides array
 	 */
-	var currentSlideId;
+	currentSlideId,
+	
+	/**
+	 *	Bool, true if playing false if not
+	 */
+	playing,
 	
 	/**
 	 *	Public methods callable from the outside. Call like this:
 	 *	$('bb-id').uBillboard('next')
 	 */
-	var _public = {
+	_public = {
 		/**
 		 *	Initializes all necessary data structures
 		 */
@@ -94,14 +99,16 @@
 			// to continue normal code flow
 			_private.preloadImages();
 			
+			// Init pagination and playback controls
+			_private.initControls();
+			
 			// load first slide
-			var currentSlide = slides[0];
+			currentSlideId = 0;
+			var currentSlide = slides[currentSlideId];
 			$stage.css({
 				backgroundImage: 'url('+currentSlide.bg+')'
 			}).html(currentSlide.html);
-			
-			// load countdown
-			_private.animateCountdown(currentSlide.delay);
+			_private.updatePositionIndicators();
 			
 			// Setup Click Event handling
 			$('.uds-bb-slides').live('click', function(){
@@ -113,7 +120,13 @@
 			
 			if(options.autoplay === true) {
 				d('Autoplay Initiated');
+				
+				// Run Countdown Animation
+				_private.animateCountdown(slides[currentSlideId].delay);
+				
 				_public.play();
+			} else {
+				$countdown.hide();
 			}
 		},
 		
@@ -168,6 +181,9 @@
 			
 			// Run Countdown Animation
 			_private.animateCountdown(slides[currentSlideId].delay);
+			
+			// Update Position Indicators
+			_private.updatePositionIndicators();
 		},
 		
 		/**
@@ -206,26 +222,45 @@
 				clearTimeout(timers.nextSlideAnimation);
 			}
 			
+			$countdown.show();
+			
+			if(!playing) {
+				// Run Countdown Animation
+				_private.animateCountdown(slides[currentSlideId].delay);
+			}
+			
 			timers.nextSlideAnimation = setTimeout(function(){
 				_public.next();
 				_public.play();
 			}, slides[currentSlideId].delay);
+			
+			playing = true;
 		},
 		
 		/**
-		 *	Stops Playback
+		 *	Pauses Playback
 		 */
-		'stop': function() {
+		'pause': function() {
+			playing = false;
 			if(timers.nextSlideAnimation !== null) {
 				clearTimeout(timers.nextSlideAnimation);
 			}
+			$countdown.hide();
+		},
+		
+		'playpause': function() {
+			if(playing) {
+				_public.pause();
+			} else {
+				_public.play();
+			}
 		}
-	};
+	},
 	
 	/**
 	 *	Private Method to be called only from within uBillboard methods
 	 */
-	var _private = {
+	_private = {
 		/**
 		 *	Initializes the slides array by parsing the HTML markup
 		 *	Also removes the markup
@@ -391,6 +426,16 @@
 			}).html(nextSlide.html);
 		},
 		
+		initControls: function() {
+			$('.uds-bb-playpause', $bb).click(_public.playpause);
+			$('.uds-bb-next', $bb).click(_public.next);
+			$('.uds-bb-prev', $bb).click(_public.prev);
+		},
+		
+		updatePositionIndicators: function() {
+			$('.uds-bb-position-indicator').text((currentSlideId + 1) + "/" + slides.length);
+		},
+		
 		/**
 		 *	Figures out the next slide ID
 		 */
@@ -408,7 +453,7 @@
 		getPrevSlideId: function() {
 			var prevSlideCandidateId = currentSlideId - 1;
 			if(typeof slides[prevSlideCandidateId] === 'undefined') {
-				return slides.length;
+				return slides.length - 1;
 			}
 			return prevSlideCandidateId;
 		},
@@ -480,24 +525,12 @@
 		neg: function(dim) {
 			return '-' + Math.abs(parseInt(dim, 10)) + 'px';
 		}
-	};
-	
-	/**
-	 *	Binds Event handlers
-	 */
-	function bindEvents() {
-		/**
-		 *	udsBillboardLoadingComplete, run when the loading completes
-		 */
-		$bb.bind('udsBillboardLoadingComplete', function(){
-			d('Loadin Complete!');
-		});
-	}
+	},
 	
 	/**
 	 *	
 	 */
-	var animations = {
+	animations = {
 		/**
 		 *
 		 */
@@ -777,6 +810,18 @@
 			}
 		}
 	};
+	
+	/**
+	 *	Binds Event handlers
+	 */
+	function bindEvents() {
+		/**
+		 *	udsBillboardLoadingComplete, run when the loading completes
+		 */
+		$bb.bind('udsBillboardLoadingComplete', function(){
+			d('Loadin Complete!');
+		});
+	}
 	
 	/**
 	 *	Main jQuery plugin definition
