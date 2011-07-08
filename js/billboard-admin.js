@@ -63,10 +63,20 @@ jQuery(function($){
 	// Timthumb options fading
 	var timthumbHandler = function(){
 		if($('#uds-billboard-use-timthumb').is(':checked')){
-			$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').attr('disabled', '');
+			if(typeof jQuery.prop === 'function'){
+				$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').prop('disabled', false);
+			} else {
+				$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').removeAttr('disabled');
+			}
+			
 			$('.uds-billboard-timthumb-zoom label,.uds-billboard-timthumb-quality label').css('opacity', 1);
 		} else {
-			$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').attr('disabled', 'disabled');
+			if(typeof jQuery.prop === 'function'){
+				$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').prop('disabled', true);
+			} else {
+				$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').attr('disabled', 'disabled');
+			}
+			
 			$('.uds-billboard-timthumb-zoom label,.uds-billboard-timthumb-quality label').css('opacity', 0.6);
 		}
 	}

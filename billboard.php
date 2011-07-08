@@ -261,7 +261,7 @@ function uds_billboard_init()
 		update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
 	}
 
-	$billboard = current($billboards);
+	$billboard = !empty($billboards) ? current($billboards) : array();
 	if(!empty($billboard['slides'][0]) && !is_array($billboard['slides'][0])) {
 		foreach($billboards as $bbkey => $billboard) {
 			foreach($billboard['slides'] as $slidekey => $slide) {
@@ -545,7 +545,7 @@ function uds_billboard_proces_updates()
 	$slides = array();
 	foreach($uds_billboard_attributes as $attrib => $options){
 		foreach($post[$attrib] as $key => $item){
-			if($slides[$key] == null){
+			if(!isset($slides[$key]) ||$slides[$key] == null){
 				$slide = uds_billboard_default_billboard();
 			} else {
 				$slide = $slides[$key];
@@ -782,13 +782,14 @@ function uds_billboard_admin_options($billboard, $name)
 	global $uds_billboard_general_options;
 	
 	foreach($uds_billboard_general_options as $key => $option) {
+		$value = isset($billboard[$key]) ? $billboard[$key] : null;
 		switch($option['type']){
 			case 'checkbox':
-				uds_billboard_render_general_checkbox($key, $option, $billboard[$key]);
+				uds_billboard_render_general_checkbox($key, $option, $value);
 				break;
 			case 'text':
 			default:
-				uds_billboard_render_general_text($key, $option, $key == 'name' ? $name : $billboard[$key]);
+				uds_billboard_render_general_text($key, $option, $key == 'name' ? $name : $value);
 		}
 	}
 }
@@ -817,6 +818,8 @@ function get_uds_billboard($name = 'billboard')
 	else $has_run = true;
 	
 	$bb = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	
+	if(!isset($bb[$name])) return;
 	
 	$bb = $bb[$name];
 	

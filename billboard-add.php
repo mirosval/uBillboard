@@ -9,10 +9,11 @@ if(!empty($_GET['uds-billboard-edit']) && !empty($billboards[$_GET['uds-billboar
 }
 
 // safety check
-if(! is_array($billboard)) {
+if(!isset($billboard) || !is_array($billboard)) {
 	$billboard = array();
 }
 
+$name = '';
 if(!empty($billboards)) {
 	$name = array_search($billboard, $billboards);
 }
