@@ -27,7 +27,7 @@ if(uds_billboard_is_plugin()) {
 }
 
 // User configurable options
-define('UDS_BILLBOARD_OPTION', 'uds-billboard');
+define('UDS_BILLBOARD_OPTION', 'uds-billboard-3');
 
 add_option(UDS_BILLBOARD_OPTION, array());
 
