@@ -56,8 +56,6 @@
 	.uds-bb-paginator {
 		position: absolute;
 		z-index: 3;
-		right: 20px;
-		top: 350px;
 	}
 	
 	.uds-bb-paginator .uds-bb-button {
@@ -65,8 +63,11 @@
 		text-indent: -5000px;
 	}
 	
+	/* Mini skin */
 	.uds-bb-paginator.mini {
 		background: white;
+		right: 20px;
+		bottom: 20px;
 	}
 	
 	.uds-bb-paginator.mini .uds-bb-button {
@@ -99,4 +100,68 @@
 		height: 14px;
 		line-height: 16px;
 		color: black;
+	}
+	
+	/* Oldskool uBillboard skin */
+	.uds-bb-paginator.oldskool {
+		width: 100%;
+		height: 100%;
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-button {
+		background: url(../images/skin-oldskool/bg.png);
+		width: 30px;
+		height: 30px;
+		padding: 8px 10px;
+		border-radius: 3px;
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-playpause {
+		position: absolute;
+	}
+
+	.uds-bb-paginator.oldskool .uds-bb-next {
+		position: absolute;
+		right: 10px;
+	}
+
+	.uds-bb-paginator.oldskool .uds-bb-next span {
+		display: block;
+		background: url(../images/skin-oldskool/next.png) no-repeat center center;
+		width: 30px;
+		height: 30px;
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-prev {
+		position: absolute;
+		left: 10px;
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-prev span {
+		display: block;
+		background: url(../images/skin-oldskool/prev.png) no-repeat center center;
+		left: 0px;
+		width: 30px;
+		height: 30px;
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-position-indicator-bullets {
+		background: url(../images/skin-oldskool/bg.png);
+		position: absolute;
+		bottom: 10px;
+		right: 10px;
+		padding: 3px 5px;
+		border-radius: 3px;
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-bullet {
+		background: url(../images/skin-oldskool/bullet.png) no-repeat;
+		width: 10px;
+		height: 10px;
+		float: left;
+		margin: 2px;
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-bullet.active {
+		background: url(../images/skin-oldskool/bullet-active.png) no-repeat;
 	}

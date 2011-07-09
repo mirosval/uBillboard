@@ -108,7 +108,6 @@
 			$stage.css({
 				backgroundImage: 'url('+currentSlide.bg+')'
 			}).html(currentSlide.html);
-			_private.updatePositionIndicators();
 			
 			// Setup Click Event handling
 			$('.uds-bb-slides').live('click', function(){
@@ -140,6 +139,8 @@
 				$.error('Slide ID ' + slideId + ' does not exist');
 				return;
 			}
+			
+			$bb.trigger('udsBillboardSlideWillChange', currentSlideId);
 			
 			var slide = slides[slideId];
 			
@@ -182,8 +183,7 @@
 			// Run Countdown Animation
 			_private.animateCountdown(slides[currentSlideId].delay);
 			
-			// Update Position Indicators
-			_private.updatePositionIndicators();
+			$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
 		},
 		
 		/**
@@ -427,13 +427,67 @@
 		},
 		
 		initControls: function() {
+			// Setup CSS
+			$('.uds-bb-controls', $bb).css({
+				width: options.width,
+				height: options.height
+			});
+			
+			// Center controls
+			$('.uds-center', $bb).each(function() {
+				var widthAdjustment = $(this).outerWidth() / 2;
+				var heightAdjustment = $(this).outerHeight() / 2;
+				
+				$(this).css({
+					top: parseInt(options.height, 10) / 2 - heightAdjustment,
+					left: parseInt(options.width, 10) / 2 - widthAdjustment
+				});
+			});
+			
+			$('.uds-center-vertical', $bb).each(function() {
+				var heightAdjustment = $(this).outerHeight() / 2;
+				
+				$(this).css({
+					top: parseInt(options.height, 10) / 2 - heightAdjustment
+				});
+			});
+			
+			$('.uds-center-horizontal', $bb).each(function() {
+				var widthAdjustment = $(this).outerWidth() / 2;
+				
+				$(this).css({
+					left: parseInt(options.width, 10) / 2 - widthAdjustment
+				});
+			});
+			
+			// Bind next/prev/playpause handlers
 			$('.uds-bb-playpause', $bb).click(_public.playpause);
 			$('.uds-bb-next', $bb).click(_public.next);
 			$('.uds-bb-prev', $bb).click(_public.prev);
-		},
-		
-		updatePositionIndicators: function() {
-			$('.uds-bb-position-indicator').text((currentSlideId + 1) + "/" + slides.length);
+			
+			// Position Indicator 1/6
+			$('.uds-bb-position-indicator').text(1 + "/" + slides.length);
+			
+			// Bullets
+			var bullets = "";
+			for(slide in slides) {
+				bullets += "<div class='uds-bb-bullet'></div>";
+			}
+			
+			var $bullets = $('.uds-bb-position-indicator-bullets', $bb);
+			$bullets.append(bullets).find('div:first').addClass('active');
+			
+			$('div', $bullets).click(function(){
+				_public.animateSlide($(this).index());
+			});
+			
+			$bb.bind('udsBillboardSlideDidChange', function() {
+				// Position indicator
+				$('.uds-bb-position-indicator').text((currentSlideId + 1) + "/" + slides.length);
+				
+				// Bullets
+				$('div', $bullets).removeClass('active').eq(currentSlideId).addClass('active');
+			});
 		},
 		
 		/**

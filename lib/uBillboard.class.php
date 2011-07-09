@@ -100,12 +100,8 @@ class uBillboard {
 		
 		$out .= "</div>";
 		$out .= "<div class='uds-bb-controls'>";
-			$out .= "<div class='uds-bb-paginator mini'>";
-				$out .= "<div class='uds-bb-button uds-bb-playpause'>Play</div>";
-				$out .= "<div class='uds-bb-button uds-bb-prev'>Prev</div>";
-				$out .= "<div class='uds-bb-button uds-bb-next'>Next</div>";
-				$out .= "<div class='uds-bb-position-indicator'></div>";
-			$out .= "</div>";
+			//$this->paginatorMini();
+			$out .= $this->paginatorOldskool();
 		$out .= "</div>";
 		$out .= "</div>";
 		
@@ -126,6 +122,30 @@ class uBillboard {
 		";
 		
 		return $scripts;
+	}
+	
+	private function paginatorMini()
+	{
+		$out = '';
+		$out .= "<div class='uds-bb-paginator mini'>";
+			$out .= "<div class='uds-bb-button uds-bb-playpause'>Play</div>";
+			$out .= "<div class='uds-bb-button uds-bb-prev'>Prev</div>";
+			$out .= "<div class='uds-bb-button uds-bb-next'>Next</div>";
+			$out .= "<div class='uds-bb-position-indicator'></div>";
+		$out .= "</div>";
+		return $out;
+	}
+	
+	private function paginatorOldskool()
+	{
+		$out = '';
+		$out .= "<div class='uds-bb-paginator oldskool'>";
+			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>Play</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>Prev</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>Next</span></div>";
+			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
+		$out .= "</div>";
+		return $out;
 	}
 	
 	private function sanitizeOption($key, $option)
