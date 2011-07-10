@@ -89,11 +89,27 @@ $uds_billboard_general_options = array(
 		),
 		'default' => ''
 	),
+	'controls-skin' => array(
+		'type' => 'select',
+		'label' => 'Skin',
+		'unit' => '',
+		'tooltip' => 'How the controls should look',
+		'options' => array(
+			'mini' => 'Minimal Style Controls',
+			'oldskool' => 'Old School uBillboard'
+		),
+		'default' => 'mini'
+	),
 	'show-controls' => array(
-		'type' => 'checkbox',
+		'type' => 'select',
 		'label' => 'Show Controls',
 		'unit' => '',
 		'tooltip' => 'Controls enable you to switch between slides',
+		'options' => array(
+			'no' => 'Don\'t show controls',
+			'hover' => 'Show on Mouse Hover',
+			'yes' => 'Show at all times'
+		),
 		'default' => ''
 	),
 	'controls-position' => array(
@@ -133,6 +149,26 @@ $uds_billboard_general_options = array(
 			'thumbs' => 'Thumbs'
 		),
 		'default' => ''
+	),
+	'show-thumbnails' => array(
+		'type' => 'checkbox',
+		'label' => 'Show Thumbnails',
+		'unit' => '',
+		'tooltip' => 'Small preview images for all slides',
+		'default' => ''
+	),
+	'thumbnails-position' => array(
+		'type' => 'select',
+		'label' => 'Thumbnail Position',
+		'unit' => '',
+		'tooltip' => 'Where do you want thumbs to show',
+		'options' => array(
+			'top' => 'Top',
+			'bottom' => 'Bottom',
+			'right' => 'Right',
+			'left' => 'Left'
+		),
+		'default' => 'bottom'
 	),
 	'use-timthumb' => array(
 		'type' => 'checkbox',

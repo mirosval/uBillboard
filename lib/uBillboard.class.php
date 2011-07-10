@@ -112,12 +112,17 @@ class uBillboard {
 	{
 		$autoplay = $this->autoplay === 'on' ? 'true' : 'false';
 		
+		$showControls = 'false';
+		if($this->showControls == 'hover') $showControls = "'hover'";
+		if($this->showControls == 'yes') $showControls = 'true';
+		
 		$scripts = "
 			$('#uds-bb-$id').uBillboard({
 				width: '{$this->width}px',
 				height: '{$this->height}px',
 				squareSize: '{$this->squareSize}px',
-				autoplay: $autoplay
+				autoplay: $autoplay,
+				showControls: $showControls,
 			});
 		";
 		

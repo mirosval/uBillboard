@@ -69,17 +69,14 @@ $billboard->addEmptySlide();
 					<div class="handlediv" title="Click to toggle"><br /></div>
 					<h3 class="hndle"><span>Controls</span></h3>
 					<div class="inside">
-						<?php uds_billboard_render_general_checkbox('show-controls', $uds_billboard_general_options['show-controls'], $billboard->showControls); ?>
-						<?php uds_billboard_render_general_select('controls-position', $uds_billboard_general_options['controls-position'], $billboard->controlsPosition); ?>
+						<?php uds_billboard_render_general_select('controls-skin', $uds_billboard_general_options['controls-skin'], $billboard->controlsSkin); ?>
+						<?php uds_billboard_render_general_select('show-controls', $uds_billboard_general_options['show-controls'], $billboard->showControls); ?>
 						<?php uds_billboard_render_general_checkbox('show-pause', $uds_billboard_general_options['show-pause'], $billboard->showPause); ?>
-					</div>
-				</div>
-				<div class="postbox">
-					<div class="handlediv" title="Click to toggle"><br /></div>
-					<h3 class="hndle"><span>Paginator</span></h3>
-					<div class="inside">
+						<?php uds_billboard_render_general_select('controls-position', $uds_billboard_general_options['controls-position'], $billboard->controlsPosition); ?>
 						<?php uds_billboard_render_general_checkbox('show-paginator', $uds_billboard_general_options['show-paginator'], $billboard->showPaginator); ?>
 						<?php uds_billboard_render_general_select('paginator-position', $uds_billboard_general_options['paginator-position'], $billboard->paginatorPosition); ?>
+						<?php uds_billboard_render_general_checkbox('show-thumbnails', $uds_billboard_general_options['show-thumbnails'], $billboard->showThumbnails); ?>
+						<?php uds_billboard_render_general_select('thumbnails-position', $uds_billboard_general_options['thumbnails-position'], $billboard->thumbnailsPosition); ?>
 					</div>
 				</div>
 				<div class="postbox">
