@@ -333,7 +333,7 @@ jQuery(function($){
 			}, {
 				duration: 400,
 				easing: 'easeOutExpo',
-				callback: function(){
+				complete: function(){
 					if(typeof Cufon !== 'undefined') {
 						Cufon.refresh();
 					}
@@ -348,7 +348,7 @@ jQuery(function($){
 			}, {
 				duration: 400,
 				easing: 'easeOutExpo',
-				callback: function(){
+				complete: function(){
 					if(typeof Cufon !== 'undefined') {
 						Cufon.refresh();
 					}

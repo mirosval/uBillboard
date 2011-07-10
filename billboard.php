@@ -218,7 +218,8 @@ if(!function_exists('d')) {
 function uds_billboard_is_plugin()
 {
 	$plugins = get_option('active_plugins', array());
-	return in_array('uBillboard/billboard.php', $plugins);
+	$dir = end(explode(DIRECTORY_SEPARATOR, dirname(__FILE__)));
+	return in_array($dir . DIRECTORY_SEPARATOR . basename(__FILE__), $plugins);
 }
 
 function uds_billboard_cache_is_writable()
