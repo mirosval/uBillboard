@@ -332,7 +332,12 @@ jQuery(function($){
 				left: width - descrWidth + 'px'
 			}, {
 				duration: 400,
-				easing: 'easeOutExpo'
+				easing: 'easeOutExpo',
+				callback: function(){
+					if(typeof Cufon !== 'undefined') {
+						Cufon.refresh();
+					}
+				}
 			});
 		} else {
 			$descr.css({
@@ -342,7 +347,12 @@ jQuery(function($){
 				bottom: '0px'
 			}, {
 				duration: 400,
-				easing: 'easeOutExpo'
+				easing: 'easeOutExpo',
+				callback: function(){
+					if(typeof Cufon !== 'undefined') {
+						Cufon.refresh();
+					}
+				}
 			});
 		}
 	}
