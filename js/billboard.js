@@ -315,7 +315,12 @@ jQuery(function($){
 				left: '0px'
 			}, {
 				duration: 400,
-				easing: 'easeOutExpo'
+				easing: 'easeOutExpo',
+				complete: function(){
+					if(typeof Cufon !== 'undefined') {
+						Cufon.refresh();
+					}
+				}
 			});
 		} else if ($descr.hasClass('stripe-right')) {
 			// ?? weird JS bug outerWidth is 0 the first time description is shown so we just set it manually...
