@@ -305,6 +305,10 @@ jQuery(function($){
 		}
 		$descr.attr('class', '').addClass(slides[current].layout).html(slides[current].description);
 		
+		if(typeof Cufon !== 'undefined') {
+			Cufon.refresh();
+		}
+		
 		descriptionIEFix();
 		
 		if($descr.hasClass('stripe-left')){
@@ -315,12 +319,7 @@ jQuery(function($){
 				left: '0px'
 			}, {
 				duration: 400,
-				easing: 'easeOutExpo',
-				complete: function(){
-					if(typeof Cufon !== 'undefined') {
-						Cufon.refresh();
-					}
-				}
+				easing: 'easeOutExpo'
 			});
 		} else if ($descr.hasClass('stripe-right')) {
 			// ?? weird JS bug outerWidth is 0 the first time description is shown so we just set it manually...
@@ -337,12 +336,7 @@ jQuery(function($){
 				left: width - descrWidth + 'px'
 			}, {
 				duration: 400,
-				easing: 'easeOutExpo',
-				complete: function(){
-					if(typeof Cufon !== 'undefined') {
-						Cufon.refresh();
-					}
-				}
+				easing: 'easeOutExpo'
 			});
 		} else {
 			$descr.css({
@@ -352,12 +346,7 @@ jQuery(function($){
 				bottom: '0px'
 			}, {
 				duration: 400,
-				easing: 'easeOutExpo',
-				complete: function(){
-					if(typeof Cufon !== 'undefined') {
-						Cufon.refresh();
-					}
-				}
+				easing: 'easeOutExpo'
 			});
 		}
 	}
