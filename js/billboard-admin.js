@@ -62,34 +62,7 @@ jQuery(function($){
 				$('.uds-billboard-form .slides').append(slide);
 			}
 		}
-	}).trigger('click', true);
-	
-	if($.cookie('uds-billboard-general-options-collapsed') != 'yes') {
-		$('.uds-billboard-options .close').trigger('click', true);
-	}
-	
-	// Timthumb options fading
-	var timthumbHandler = function(){
-		if($('#uds-billboard-use-timthumb').is(':checked')){
-			if(typeof jQuery.prop === 'function'){
-				$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').prop('disabled', false);
-			} else {
-				$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').removeAttr('disabled');
-			}
-			
-			$('.uds-billboard-timthumb-zoom label,.uds-billboard-timthumb-quality label').css('opacity', 1);
-		} else {
-			if(typeof jQuery.prop === 'function'){
-				$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').prop('disabled', true);
-			} else {
-				$('#uds-billboard-timthumb-zoom,#uds-billboard-timthumb-quality').attr('disabled', 'disabled');
-			}
-			
-			$('.uds-billboard-timthumb-zoom label,.uds-billboard-timthumb-quality label').css('opacity', 0.6);
-		}
-	}
-	timthumbHandler();
-	$('#uds-billboard-use-timthumb').change(timthumbHandler);
+	});
 	
 	// Tooltips
 	$('.option-container label').hover(function(){

@@ -309,7 +309,7 @@ if(!function_exists('d')) {
 function uds_billboard_is_plugin()
 {
 	$plugins = get_option('active_plugins', array());
-
+	
 	$dir = end(explode(DIRECTORY_SEPARATOR, dirname(__FILE__)));
 	return in_array($dir . DIRECTORY_SEPARATOR . basename(__FILE__), $plugins);
 }
@@ -349,7 +349,7 @@ function uds_billboard_init()
 		add_thickbox();
 		
 		// process updates
-		if(isset($_POST['uds_billboard']) && !empty($_POST['nonce']) && !wp_verify_nonce($_POST['nonce'], 'uds-billboard')){
+		if(!empty($_POST['nonce']) && !wp_verify_nonce($_POST['nonce'], 'uds-billboard')){
 			die('Security check failed');
 		} else {
 			uds_billboard_proces_updates();
@@ -796,19 +796,21 @@ function uds_billboard_render_general_checkbox($option, $field, $value)
 
 function uds_billboard_render_general_select($option, $field, $value)
 {
-	global $uds_billboard_general_options;
-	
-	foreach($uds_billboard_general_options as $key => $option) {
-		$value = isset($billboard[$key]) ? $billboard[$key] : null;
-		switch($option['type']){
-			case 'checkbox':
-				uds_billboard_render_general_checkbox($key, $option, $value);
-				break;
-			case 'text':
-			default:
-				uds_billboard_render_general_text($key, $option, $key == 'name' ? $name : $value);
-		}
-	}
+	$checked = ( $value === null ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
+	?>
+	<div class="uds-billboard-<?php echo $option ?> option-container select">
+		<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+		<select id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" class="select">
+			<option value="" disabled="disabled"><?php echo $field['label'] ?></option>
+			<?php foreach($field['options'] as $key => $label): ?>
+				<option value="<?php echo $key ?>" <?php echo $field['options'][$key] == $value ? 'selected="selected"' : '' ?>><?php echo $label ?></option>
+			<?php endforeach; ?>
+		</select>
+		<span class="unit"><?php echo $field['unit'] ?></span>
+		<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
+		<div class="clear"></div>
+	</div>
+	<?php
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -841,9 +843,7 @@ function get_uds_billboard($name = 'billboard', $options = array())
 		return "Billboard named &quot;$name&quot; does not exist";
 	}
 	
-	if(!isset($bb[$name])) return;
-	
-	$bb = $bb[$name];
+	$bb = $bbs[$name];
 	
 	if(!$bb->isValid()) {
 		return "Billboard is invalid";
