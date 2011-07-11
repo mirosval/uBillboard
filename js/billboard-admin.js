@@ -1,9 +1,20 @@
 jQuery(function($){
 	// admin billboard delete
-	$('.uds-billboard-admin-table .billboard-delete').click(function(){
+	$('#billboard_update_form .deletion').click(function(){
 		return confirm("Really delete? This is not undoable");
 	});
 	
+	// slides delete
+	$('.slide .deletediv').click(function(){
+		if(confirm("Really delete slide?")) {
+			$(this).parents('.slide').remove();
+		}
+	});
+	
+	// Boxes closing
+	$('.handlediv').click(function(){
+		$(this).parent().toggleClass('closed');
+	});
 	
 	// Billboard image collapsing
 	$('<div id="image-preview">').appendTo('body');

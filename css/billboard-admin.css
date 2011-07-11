@@ -12,6 +12,17 @@
     margin-right: 300px;
 }
 
+.postbox .deletediv {
+    cursor: pointer;
+    float: right;
+    height: 30px;
+    width: 27px;
+}
+
+.postbox .deletediv:hover {
+    background: black;
+}
+
 /*-------------------------------------------*/
 
 .wrap .updated.uds-warn {
