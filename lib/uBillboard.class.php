@@ -84,7 +84,15 @@ class uBillboard {
 	}
 	
 	public function render($id = 0)
-	{		
+	{
+		global $uds_bb_params; // parameters of the currently rendered billboard
+		
+		// store width and height into the params
+		$uds_bb_params = array(
+			'width' => $this->width,
+			'height' => $this->height
+		);
+		
 		$out = "<div class='uds-bb' id='uds-bb-$id'>";
 		$out .= "<div class='uds-bb-slides'>";
 		

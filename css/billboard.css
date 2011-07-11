@@ -34,9 +34,16 @@
 	position: absolute;
 }
 
+/* Descriptions */
+.uds-bb-description {
+	position: absolute;
+	padding: 10px;
+}
+
 /* Controls */
 .uds-bb-controls {
 	position: relative;
+	z-index: 3;
 }
 
 .uds-bb-countdown {

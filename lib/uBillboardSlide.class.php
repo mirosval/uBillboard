@@ -49,7 +49,7 @@ class uBillboardSlide {
 			return;
 		}
 
-		if(empty($options['image'])){
+		if(empty($options['image']) && empty($options['text'])){
 			return null;
 		}
 
@@ -85,7 +85,7 @@ class uBillboardSlide {
 	
 	public function isValid()
 	{
-		return !empty($this->image);
+		return !empty($this->image) || !empty($this->text);
 	}
 	
 	public function renderAdmin()
@@ -99,6 +99,19 @@ class uBillboardSlide {
 	
 	public function render()
 	{
+		// Transition, make nil when embedded content exists
+		$transition = $this->transition;
+		if(strpos($this->text, 'uds-embed')) {
+			$transition = 'none';
+		}
+		
+		// Direction
+		$direction = $this->direction;
+		if($direction === 'random') {
+			$directions = array('left', 'right', 'top', 'bottom');
+			$direction = $directions[array_rand($directions)];
+		}
+		
 		$out = "<div class='uds-bb-slide'>";
 			if(empty($this->link)) {
 				$this->link = '#';
@@ -107,15 +120,10 @@ class uBillboardSlide {
 			$out .= "<img src='{$this->image}' alt='' class='uds-bb-bg-image' />";
 			$out .= "</a>";
 			$out .= "<span style='display:none' class='uds-delay'>{$this->delay}</span>";
-			$out .= "<span style='display:none' class='uds-transition'>{$this->transition}</span>";
-			$direction = $this->direction;
-			if($direction === 'random') {
-				$directions = array('left', 'right', 'top', 'bottom');
-				$direction = $directions[array_rand($directions)];
-			}
+			$out .= "<span style='display:none' class='uds-transition'>$transition</span>";
 			$out .= "<span style='display:none' class='uds-direction'>{$direction}</span>";
-			$out .= $this->text;
-		$out .= "</div>";
+			$out .= do_shortcode($this->text);
+		$out .= "</div>\n";
 		return $out;
 	}
 }

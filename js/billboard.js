@@ -146,6 +146,25 @@
 			
 			_private.prepareForAnimation(slideId);
 			
+			// Handle Embedded content
+			if(slide.transition == 'none') {
+				$stage.html(slide.html);
+				
+				$stage.css({
+					backgroundColor: 'black',
+					backgroundImage: 'none'
+				});
+				
+				// center content
+				$element = $('>*', $stage);
+
+				$element.css({
+					position: 'absolute',
+					top: parseInt(options.height, 10) / 2 - $element.attr('height') / 2,
+					left: parseInt(options.width, 10) / 2 - $element.attr('width') / 2
+				});
+			}
+			
 			// Decide on transition
 			var transition = 'fade';
 			if(slide.transition !== null && typeof slide.transition === 'string') {
@@ -414,6 +433,7 @@
 			}
 			
 			$stage.css({
+				backgroundColor: 'transparent',
 				backgroundImage: 'url('+currentSlide.bg+')'
 			}).html(currentSlide.html);
 			
@@ -421,9 +441,11 @@
 			
 			$next.hide();
 			
-			$nextInsides.css({
-				backgroundImage: 'url('+nextSlide.bg+')'
-			}).html(nextSlide.html);
+			if(nextSlide.transition !== 'none') { // Do not create a million copies of embedded content ;)
+				$nextInsides.css({
+					backgroundImage: 'url('+nextSlide.bg+')'
+				}).html(nextSlide.html);
+			}
 		},
 		
 		initControls: function() {
@@ -585,6 +607,16 @@
 	 *	
 	 */
 	animations = {
+		/**
+		 *
+		 */
+		'none': {
+			duration: 0,
+			direction: '',
+			setup: $.noop(),
+			perform: $.noop()
+		},
+		
 		/**
 		 *
 		 */
