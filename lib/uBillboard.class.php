@@ -22,7 +22,7 @@ class uBillboard {
 			}
 		}
 		
-		$this->slides = new uBillboardSlide();
+		$this->slides = array();
 	}
 	
 	public function __destruct()
