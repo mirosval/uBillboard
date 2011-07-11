@@ -125,17 +125,27 @@ $uds_billboard_general_options = array(
 		'default' => ''
 	),
 	'show-pause' => array(
-		'type' => 'checkbox',
+		'type' => 'select',
 		'label' => 'Show Play/Pause',
 		'unit' => '',
-		'tooltip' => 'Unchecked will pause on hover, otherwise will show Play/Pause button <img src="'.UDS_BILLBOARD_URL .'images/show-playpause.png" alt="" />',
+		'tooltip' => 'Display show pause button',
+		'options' => array(
+			'no' => 'Don\'t show Play/Pause',
+			'hover' => 'Show Play/Pause on Mouse Hover',
+			'yes' => 'Show Play/Pause at all times'
+		),
 		'default' => ''
 	),
 	'show-paginator' => array(
-		'type' => 'checkbox',
+		'type' => 'select',
 		'label' => 'Show Paginator',
 		'unit' => '',
-		'tooltip' => 'Check to show paginator in the bottom right corner <img src="'.UDS_BILLBOARD_URL .'images/paginator.png" alt="" />',
+		'tooltip' => 'Display pagination control',
+		'options' => array(
+			'no' => 'Don\'t show Paginator',
+			'hover' => 'Show Paginator on Mouse Hover',
+			'yes' => 'Show Paginator at all times'
+		),
 		'default' => 'on'
 	),
 	'paginator-position' => array(

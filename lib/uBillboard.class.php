@@ -108,8 +108,15 @@ class uBillboard {
 		
 		$out .= "</div>";
 		$out .= "<div class='uds-bb-controls'>";
-			//$this->paginatorMini();
-			$out .= $this->paginatorOldskool();
+		
+		switch($this->controlsSkin){
+			case 'mini':
+				$out .= $this->paginatorMini();
+				break;
+			case 'oldskool':
+				$out .= $this->paginatorOldskool();
+		}
+			
 		$out .= "</div>";
 		$out .= "</div>";
 		
@@ -141,6 +148,7 @@ class uBillboard {
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator mini'>";
+			//if($this)
 			$out .= "<div class='uds-bb-button uds-bb-playpause'>Play</div>";
 			$out .= "<div class='uds-bb-button uds-bb-prev'>Prev</div>";
 			$out .= "<div class='uds-bb-button uds-bb-next'>Next</div>";
