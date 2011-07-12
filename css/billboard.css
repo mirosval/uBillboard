@@ -76,6 +76,7 @@
 		background: white;
 		right: 20px;
 		bottom: 20px;
+		padding: 5px;
 	}
 	
 	.uds-bb-paginator.mini .uds-bb-button {
@@ -86,29 +87,44 @@
 		width: 14px;
 		height: 14px;
 		background: url(../images/minimal-controls.png) no-repeat;
+		margin-right: 1px;
+	}
+	
+	.uds-bb-paginator.mini .uds-bb-playpause:hover {
+		background: url(../images/minimal-controls-hover.png) no-repeat;
 	}
 	
 	.uds-bb-paginator.mini .uds-bb-next {
-		width: 15px;
+		width: 14px;
 		height: 14px;
-		background: url(../images/minimal-controls.png) no-repeat -28px 0px;
+		background: url(../images/minimal-controls.png) no-repeat -30px 0px;
+		margin-right: 3px;
+	}
+	
+	.uds-bb-paginator.mini .uds-bb-next:hover {
+		background: url(../images/minimal-controls-hover.png) no-repeat -30px 0px;
 	}
 	
 	.uds-bb-paginator.mini .uds-bb-prev {
 		width: 14px;
 		height: 14px;
-		background: url(../images/minimal-controls.png) no-repeat -14px 0px;
+		background: url(../images/minimal-controls.png) no-repeat -15px 0px;
+		margin-right: 1px;
+	}
+	
+	.uds-bb-paginator.mini .uds-bb-prev:hover {
+		background: url(../images/minimal-controls-hover.png) no-repeat -15px 0px;
 	}
 	
 	.uds-bb-paginator.mini .uds-bb-position-indicator {
 		font-size: 12px;
-		padding: 0px 4px 0px 2px;
 		float: left;
-		width: 14px;
 		height: 14px;
 		line-height: 16px;
-		color: black;
+		color: #222;
+		margin-top: -1px;
 	}
+	
 	
 	/* Oldskool uBillboard skin */
 	.uds-bb-paginator.oldskool {
