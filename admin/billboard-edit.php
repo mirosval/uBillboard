@@ -121,7 +121,6 @@ $billboard->addEmptySlide();
 									<div class="deletediv" title="Click to delete slide"><br /></div>
 									<h3 class="hndle"><span><?php echo sprintf("Slide %u", $key + 1); ?></span></h3>
 									<div class="inside">
-										<div class="image-wrapper"></div>
 										<?php $item->renderAdmin() ?>
 										<div class="clear"></div>
 									</div>

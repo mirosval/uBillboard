@@ -218,11 +218,18 @@ $uds_billboard_general_options = array(
 $uds_billboard_attributes = array(
 	'image'=> array(
 		'type' => 'image',
-		'label' => 'Image'
+		'label' => 'Image',
+		'default' => ''
+	),
+	'background' => array(
+		'type' => 'text',
+		'label' => 'Background Color',
+		'default' => ''
 	),
 	'link' => array(
 		'type' => 'text',
-		'label' => 'Link URL'
+		'label' => 'Link URL',
+		'default' => ''
 	),
 	'delay' => array(
 		'type' => 'select',
@@ -236,17 +243,6 @@ $uds_billboard_attributes = array(
 			'10000' => '10s',
 		),
 		'default' => '5000'
-	),
-	'layout' => array(
-		'type' => 'select',
-		'label' => 'Slide Layout',
-		'options' => array(
-			'none' => 'No Description',
-			'stripe-left' => 'Stripe Left',
-			'stripe-right' => 'Stripe Right',
-			'stripe-bottom' => 'Stripe Bottom'
-		),
-		'default' => 'none'
 	),
 	'transition' => array(
 		'type' => 'select',
@@ -348,6 +344,20 @@ function uds_billboard_is_active()
 	return true;
 }
 
+add_action('admin_init', 'uds_billboard_editor_admin_init');
+add_action('admin_head', 'uds_billboard_editor_admin_head');
+
+function uds_billboard_editor_admin_init() {
+  wp_enqueue_script('word-count');
+  wp_enqueue_script('post');
+  wp_enqueue_script('editor');
+  wp_enqueue_script('media-upload');
+}
+
+function uds_billboard_editor_admin_head() {
+  wp_tiny_mce();
+}
+
 // initialize billboard
 add_action('init', 'uds_billboard_init');
 function uds_billboard_init()
@@ -358,6 +368,7 @@ function uds_billboard_init()
 	$dir = UDS_BILLBOARD_URL;
 	if(is_admin()){
 		add_thickbox();
+		wp_enqueue_script("jquery-ui-tabs");
 		
 		// process updates
 		if(!empty($_POST['nonce']) && !wp_verify_nonce($_POST['nonce'], 'uds-billboard')){
@@ -647,98 +658,6 @@ function uds_billboard_default_billboard()
 	return $bb;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	Functions to render billboard admin form based on the data structure
-//
-////////////////////////////////////////////////////////////////////////////////
-
-// Render a single input field
-function uds_billboard_render_field($item, $attrib)
-{
-	global $uds_billboard_attributes;
-
-	$attrib_full = $uds_billboard_attributes[$attrib];
-	switch($attrib_full['type']){
-		case 'input':
-		case 'text':
-			uds_billboard_render_text($item, $attrib);
-			break;
-		case 'textarea':
-			uds_billboard_render_textarea($item, $attrib);
-			break;
-		case 'select':
-			uds_billboard_render_select($item, $attrib);
-			break;
-		case 'image':
-			uds_billboard_render_image($item, $attrib);
-			break;
-		default:
-	}
-}
-
-// Render text field
-function uds_billboard_render_text($item, $attrib)
-{
-	global $uds_billboard_attributes;
-	$attrib_full = $uds_billboard_attributes[$attrib];
-	echo '<div class="'. $attrib .'-wrapper">';
-	echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
-	echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($item->{$attrib})) . '" id="billboard-'. $attrib .'" class="billboard-'. $attrib .'" />';
-	echo '</div>';
-}
-
-// Render textarea
-function uds_billboard_render_textarea($item, $attrib)
-{
-	global $uds_billboard_attributes;
-	$attrib_full = $uds_billboard_attributes[$attrib];
-	echo '<div class="'. $attrib .'-wrapper">';
-	echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
-	echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">'. htmlspecialchars(stripslashes($item->{$attrib})) .'</textarea>';
-	echo '</div>';
-}
-
-// Render Select field
-function uds_billboard_render_select($item, $attrib)
-{
-	global $uds_billboard_attributes;
-	$attrib_full = $uds_billboard_attributes[$attrib];
-	
-	if($attrib_full['type'] != 'select') return;
-
-	echo '<div class="'. $attrib .'-wrapper">';
-	echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
-	echo '<select name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">';
-	echo '<option disabled="disabled">'. $attrib_full['label'] .'</option>';
-	if(is_array($attrib_full['options'])){
-		foreach($attrib_full['options'] as $key => $option){
-			$selected = '';
-			if($item->{$attrib} == $key){
-				$selected = 'selected="selected"';
-			}
-			echo '<option value="'. $key .'" '. $selected .'>'. $option .'</option>';
-		}
-	}
-	echo '</select>';
-	echo '</div>';
-}
-
-// Render Image input
-function uds_billboard_render_image($item, $attrib)
-{
-	static $unique_id = 0;
-	
-	echo '<div class="'. $attrib .'-url-wrapper">';
-	echo '	<label for="billboard-'. $attrib .'-'. $unique_id .'-hidden">Image URL</label>';
-	echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $item->{$attrib} .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
-	echo '	<a class="thickbox" title="Add an Image" href="media-upload.php?type=image&TB_iframe=true&width=640&height=345">';
-	echo '		<img alt="Add an Image" src="'. admin_url() . 'images/media-button-image.gif" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
-	echo '	</a>';
-	echo '</div>';
-	
-	$unique_id++;
-}
 
 // render JS support for image input
 function uds_billboard_render_js_support()

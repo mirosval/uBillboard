@@ -29,6 +29,39 @@
 	border-bottom: 1px solid #fff;
 }
 
+.uds-slide-tabs {
+	margin: 20px 10px 20px 60px;
+}
+
+.uds-slide-tabs ul {
+	width: 100%;
+	height: 22px;
+	clear: both;
+	border-bottom: 1px solid #bbb;
+	padding-left: 10px;
+	margin-right: -10px;
+	margin-bottom: 20px;
+}
+
+.uds-slide-tabs ul li {
+	float: left;
+	padding: 3px;
+	margin: 0px;
+}
+
+.uds-slide-tabs ul li a {
+	color: #333;
+	text-decoration: none;
+	border: 1px solid #bbb;
+	padding: 3px 4px;
+	background: #f1f1f1;
+}
+
+.uds-slide-tabs ul li.ui-state-active a {
+	background: #f9f9f9;
+	border-bottom: 1px solid #f5f5f5;
+}
+
 /*-------------------------------------------*/
 
 .wrap .updated.uds-warn {
@@ -72,10 +105,6 @@
 	width: 50px;
 }
 
-.image-url-wrapper, .title-wrapper, .text-wrapper, .delay-wrapper, .link-wrapper {
-	margin: 0px 10px 10px 60px;
-}
-
 .delay-wrapper, .layout-wrapper, .transition-wrapper, .direction-wrapper {
 	float: left;
 	margin-right: 10px;
@@ -83,11 +112,6 @@
 
 .delay-wrapper select, .layout-wrapper select, .transition-wrapper select, .direction-wrapper select {
 	width: 150px;
-}
-
-.image-url-wrapper {
-	padding-top: 10px;
-	margin-bottom: 0px;
 }
 
 .image-url-wrapper input {
@@ -216,14 +240,6 @@
 .uds-billboard-form{
 }
 
-.uds-billboard-form table {
-	min-width: 820px;
-	width: 820px;
-	border-collapse: collapse;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-}
-
 .uds-billboard-form label {
 	display: block;
 	text-align: left;
@@ -236,20 +252,8 @@
 }
 
 .uds-billboard-form  textarea {
-	width: 100%;
+	width: 90%;
 	height: 100px;
-}
-
-.uds-billboard-form table select {
-	width: 210px;
-}
-
-.uds-billboard-form table td {
-	border: 1px solid #ccc;
-	padding: 20px;
-	vertical-align: top;
-	height: 240px;
-	background: #f9f9f9;
 }
 
 .uds-billboard-form {

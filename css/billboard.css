@@ -150,12 +150,23 @@
 		cursor: pointer;
 	}
 	
+	.uds-bb-paginator.oldskool .uds-bb-button span {
+		background: no-repeat center center;
+		display: block;
+		width: 30px;
+		height: 30px;
+	}
+	
 	.uds-bb-paginator.oldskool .uds-bb-playpause {
 		position: absolute;
 	}
 	
-	.uds-bb-paginator.oldskool .uds-bb-playpause span {
-		background: url(../images/skin-oldskool/play.png) no-repeat center center;
+	.uds-bb-paginator.oldskool .uds-bb-playpause.play span {
+		background-image: url(../images/skin-oldskool/play.png);
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-playpause.pause span {
+		background-image: url(../images/skin-oldskool/pause.png);
 	}
 
 	.uds-bb-paginator.oldskool .uds-bb-next {
@@ -164,10 +175,7 @@
 	}
 
 	.uds-bb-paginator.oldskool .uds-bb-next span {
-		display: block;
-		background: url(../images/skin-oldskool/next.png) no-repeat center center;
-		width: 30px;
-		height: 30px;
+		background-image: url(../images/skin-oldskool/next.png);
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-prev {
@@ -176,11 +184,7 @@
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-prev span {
-		display: block;
-		background: url(../images/skin-oldskool/prev.png) no-repeat center center;
-		left: 0px;
-		width: 30px;
-		height: 30px;
+		background-image: url(../images/skin-oldskool/prev.png);
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-position-indicator-bullets {

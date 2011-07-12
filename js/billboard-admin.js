@@ -16,11 +16,22 @@ jQuery(function($){
 		$(this).parent().toggleClass('closed');
 	});
 	
+	// Slide Tabs
+	$('.uds-slide-tabs').tabs({
+		show: function(event, ui){
+			var $image = $(ui.tab).parents('.slide').find('.image-wrapper');
+			$image.css('height', $image.parent().height() + 'px');
+			console.log($image.parent().height() + 'px');
+		}
+	});
+	
 	// Billboard image collapsing
 	$('<div id="image-preview">').appendTo('body');
-	$('.image-wrapper').each(function(){
+	$('.image-wrapper').each(function(el, i){
 		var $input = $(this).parents('.inside').find('.image-url-wrapper input');
 		var preview = this;
+		var totalSlides = $('.slide').length;
+		
 		$(this).css({
 			'background-image': 'url('+$input.val()+')',
 			height: $(this).parent().height() + 'px'
@@ -34,6 +45,14 @@ jQuery(function($){
 		});
 		
 		$(this).hover(function(e){
+			$('.image-wrapper').css({
+				zIndex: 1
+			});
+			
+			$(this).css({
+				zIndex: 10
+			});
+			
 			$('#image-preview').show().css({
 				'background-image': 'url('+$input.val()+')',
 				width: $('#uds-billboard-width').val()+'px',
@@ -41,9 +60,11 @@ jQuery(function($){
 				top: $(preview).offset().top,
 				left: $(preview).offset().left,
 				position: 'absolute',
-				opacity: 0
+				opacity: 0,
+				zIndex: 9
 			}).stop().animate({opacity: 1}, 300);
 		}, function(){
+			var $el = $(this);
 			$('#image-preview').css({
 				opacity: 1
 			}).stop().animate({opacity: 0}, {

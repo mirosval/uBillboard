@@ -254,6 +254,7 @@
 			}, slides[currentSlideId].delay);
 			
 			playing = true;
+			$bb.trigger('didChangePlayingState', {playing: playing});
 		},
 		
 		/**
@@ -261,9 +262,13 @@
 		 */
 		'pause': function() {
 			playing = false;
+			$bb.trigger('didChangePlayingState', {playing: playing});
+			
+			// clear timeouts
 			if(timers.nextSlideAnimation !== null) {
 				clearTimeout(timers.nextSlideAnimation);
 			}
+			
 			$countdown.hide();
 		},
 		
@@ -493,6 +498,18 @@
 			$playpause.click(_public.playpause);
 			$buttonNext.click(_public.next);
 			$buttonPrev.click(_public.prev);
+			
+			// Change playing button class based on the active playing state
+			$playpause.addClass('play');
+			$bb.bind('didChangePlayingState', function(event, data){
+				$playpause.removeClass('play pause');
+				
+				if(data.playing) {
+					$playpause.addClass('pause');
+				} else {
+					$playpause.addClass('play');
+				}
+			});
 			
 			// Position Indicator 1/6
 			$('.uds-bb-position-indicator', $bb).text(1 + "/" + slides.length);
