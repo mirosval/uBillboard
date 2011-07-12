@@ -215,6 +215,8 @@
 .uds-bb-thumbnails {
 	position: absolute;
 	z-index: 3;
+	background: url(../images/skin-oldskool/bg.png);
+	padding: 4px;
 }
 
 	.uds-bb-thumbnails.bottom {
@@ -252,6 +254,14 @@
 	.uds-bb-thumb {
 		margin: 5px;
 		cursor: pointer;
+		background: url(../images/bg-bright.png) #ededed;
+		padding: 5px 5px 0px 5px;
+		-moz-border-radius: 2px;
+		-webkit-border-radius: 2px;
+		border-radius: 2px;
+		-moz-box-shadow: 1px 1px 1px #000;
+ 		-webkit-box-shadow: 1px 1px 1px #000;
+  		box-shadow: 1px 1px 1px #000;
 	}
 	
 	.uds-bb-thumbnails.bottom .uds-bb-thumb,
