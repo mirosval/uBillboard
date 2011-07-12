@@ -131,8 +131,8 @@ $uds_billboard_general_options = array(
 		'tooltip' => 'Display show pause button',
 		'options' => array(
 			'no' => 'Don\'t show Play/Pause',
-			'hover' => 'Show Play/Pause on Mouse Hover',
-			'yes' => 'Show Play/Pause at all times'
+			'hover' => 'Show on Mouse Hover',
+			'yes' => 'Show at all times'
 		),
 		'default' => ''
 	),
@@ -143,8 +143,8 @@ $uds_billboard_general_options = array(
 		'tooltip' => 'Display pagination control',
 		'options' => array(
 			'no' => 'Don\'t show Paginator',
-			'hover' => 'Show Paginator on Mouse Hover',
-			'yes' => 'Show Paginator at all times'
+			'hover' => 'Show on Mouse Hover',
+			'yes' => 'Show at all times'
 		),
 		'default' => 'on'
 	),
@@ -803,7 +803,7 @@ function uds_billboard_render_general_select($option, $field, $value)
 		<select id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" class="select">
 			<option value="" disabled="disabled"><?php echo $field['label'] ?></option>
 			<?php foreach($field['options'] as $key => $label): ?>
-				<option value="<?php echo $key ?>" <?php echo $field['options'][$key] == $value ? 'selected="selected"' : '' ?>><?php echo $label ?></option>
+				<option value="<?php echo $key ?>" <?php echo $key == $value ? 'selected="selected"' : '' ?>><?php echo $label ?></option>
 			<?php endforeach; ?>
 		</select>
 		<span class="unit"><?php echo $field['unit'] ?></span>

@@ -128,9 +128,17 @@ class uBillboard {
 		$autoplay = $this->autoplay === 'on' ? 'true' : 'false';
 		
 		$showControls = 'false';
-		if($this->showControls == 'hover') $showControls = "'hover'";
-		if($this->showControls == 'yes') $showControls = 'true';
-		
+		if($this->showControls == 'hover') 	$showControls = "'hover'";
+		if($this->showControls == 'yes') 	$showControls = 'true';
+
+		$showPause = 'false';
+		if($this->showPause == 'hover') $showPause = "'hover'";
+		if($this->showPause == 'yes') 	$showPause = 'true';
+
+		$showPaginator = 'false';
+		if($this->showPaginator == 'hover') $showPaginator = "'hover'";
+		if($this->showPaginator == 'yes') 	$showPaginator = 'true';
+
 		$scripts = "
 			$('#uds-bb-$id').uBillboard({
 				width: '{$this->width}px',
@@ -138,6 +146,8 @@ class uBillboard {
 				squareSize: '{$this->squareSize}px',
 				autoplay: $autoplay,
 				showControls: $showControls,
+				showPause: $showPause,
+				showPaginator: $showPaginator
 			});
 		";
 		

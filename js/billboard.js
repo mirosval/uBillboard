@@ -482,13 +482,19 @@
 				});
 			});
 			
+			// setup variables for shorter code
+			var $playpause = $('.uds-bb-playpause', $bb);
+			var $buttonNext = $('.uds-bb-next', $bb);
+			var $buttonPrev = $('.uds-bb-prev', $bb);
+			var $bullets = $('.uds-bb-position-indicator-bullets', $bb);
+			
 			// Bind next/prev/playpause handlers
-			$('.uds-bb-playpause', $bb).click(_public.playpause);
-			$('.uds-bb-next', $bb).click(_public.next);
-			$('.uds-bb-prev', $bb).click(_public.prev);
+			$playpause.click(_public.playpause);
+			$buttonNext.click(_public.next);
+			$buttonPrev.click(_public.prev);
 			
 			// Position Indicator 1/6
-			$('.uds-bb-position-indicator').text(1 + "/" + slides.length);
+			$('.uds-bb-position-indicator', $bb).text(1 + "/" + slides.length);
 			
 			// Bullets
 			var bullets = "";
@@ -496,7 +502,6 @@
 				bullets += "<div class='uds-bb-bullet'></div>";
 			}
 			
-			var $bullets = $('.uds-bb-position-indicator-bullets', $bb);
 			$bullets.append(bullets).find('div:first').addClass('active');
 			
 			$('div', $bullets).click(function(){
@@ -510,6 +515,42 @@
 				// Bullets
 				$('div', $bullets).removeClass('active').eq(currentSlideId).addClass('active');
 			});
+			
+			// Comply with options
+			var $controlsToHover = $('');
+			if(options.showControls === 'hover') {
+				$controlsToHover = $controlsToHover.add($buttonNext).add($buttonPrev);
+			}
+
+			if(options.showPause === 'hover') {
+				$controlsToHover = $controlsToHover.add($playpause);
+			}
+			
+			if(options.showPaginator === 'hover') {
+				$controlsToHover = $controlsToHover.add($bullets).add($('.uds-bb-position-indicator', $bb));
+			}
+			
+			$controlsToHover.fadeTo(0, 0);
+			$bb.hover(function(){
+				$controlsToHover.stop().fadeTo(300, 1);
+			}, function(){
+				$controlsToHover.stop().fadeTo(300, 0);
+			});
+			
+			// Hide controls based on the options
+			if(options.showControls === false) {
+				$buttonNext.hide()
+				$buttonPrev.hide();
+			}
+
+			if(options.showPause === false) {
+				$playpause.hide();
+			}
+			
+			if(options.showPaginator === false) {
+				$bullets.hide();
+				$('.uds-bb-position-indicator', $bb).hide();
+			}
 		},
 		
 		/**

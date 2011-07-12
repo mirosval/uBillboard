@@ -70,6 +70,7 @@ $billboard->addEmptySlide();
 						<div class="handlediv" title="Click to toggle"><br /></div>
 						<h3 class="hndle"><span>Controls</span></h3>
 						<div class="inside">
+							<br />
 							<label>Controls skin:</label>
 							<?php uds_billboard_render_general_select('controls-skin', $uds_billboard_general_options['controls-skin'], $billboard->controlsSkin); ?>
 							<label>Show Controls:</label>
