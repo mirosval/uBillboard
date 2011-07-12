@@ -40,6 +40,14 @@
 	padding: 10px;
 }
 
+.uds-bb-description.bright {
+	background: url(../images/bg-bright.png);
+}
+
+.uds-bb-description.dark {
+	background: url(../images/skin-oldskool/bg.png);
+}
+
 /* Controls */
 .uds-bb-controls {
 	position: relative;
@@ -48,7 +56,8 @@
 
 .uds-bb-countdown {
 	float: right;
-	left: -100px;
+	left: -85px;
+	top: -10px;
 	position: relative;
 }
 
@@ -143,6 +152,10 @@
 	
 	.uds-bb-paginator.oldskool .uds-bb-playpause {
 		position: absolute;
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-playpause span {
+		background: url(../images/skin-oldskool/play.png) no-repeat center center;
 	}
 
 	.uds-bb-paginator.oldskool .uds-bb-next {
