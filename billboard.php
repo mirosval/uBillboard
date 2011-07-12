@@ -814,10 +814,13 @@ function uds_billboard_description($atts, $content = null)
 		'left' => '20px',
 		'width' => '200px',
 		'height' => '80%',
-		'bg' => 'white'
+		'bg' => 'white',
+		'skin' => ''
 	), $atts));
 
-	$out = "<div class='uds-bb-description' style='top:$top;left:$left;width:$width;height:$height;background:$bg'>$content</div>";
+	if(!empty($skin)) $skin = 'uds-' . $skin;
+
+	$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;background-color:$bg'>$content</div>";
 	
 	return $out;
 }

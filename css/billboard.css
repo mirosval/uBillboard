@@ -40,11 +40,13 @@
 	padding: 10px;
 }
 
-.uds-bb-description.bright {
+.uds-bright .uds-bb-description,
+.uds-bb .uds-bb-description.uds-bright {
 	background: url(../images/bg-bright.png);
 }
 
-.uds-bb-description.dark {
+.uds-dark .uds-bb-description,
+.uds-bb .uds-bb-description.uds-dark {
 	background: url(../images/skin-oldskool/bg.png);
 }
 

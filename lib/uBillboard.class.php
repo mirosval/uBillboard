@@ -93,7 +93,7 @@ class uBillboard {
 			'height' => $this->height
 		);
 		
-		$out = "<div class='uds-bb' id='uds-bb-$id'>";
+		$out = "<div class='uds-bb uds-{$this->style}' id='uds-bb-$id'>";
 		$out .= "<div class='uds-bb-slides'>";
 		
 		$slides = $this->slides;
