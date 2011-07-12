@@ -670,28 +670,32 @@ function uds_billboard_render_js_support()
 		}
 	}
 	?>
-	<script language='JavaScript' type='text/javascript'>
+	<script language='JavaScript' type='text/javascript'>	
 	var set_receiver = function(rec){
 		//console.log(rec);
 		window.receiver = jQuery(rec).attr('id');
 		window.receiver_hidden = jQuery(rec).attr('id')+'-hidden';
-	}
-	var send_to_editor = function(img){
-		tb_remove();
-		if(jQuery(jQuery(img)).is('a')){ // work around Link URL supplied
-		   var src = jQuery(jQuery(img)).find('img').attr('src');
-		} else {
-		   var src = jQuery(jQuery(img)).attr('src');
+		
+		window.send_to_editor = function(img){
+			tb_remove();
+			if(jQuery(jQuery(img)).is('a')){ // work around Link URL supplied
+			   var src = jQuery(jQuery(img)).find('img').attr('src');
+			} else {
+			   var src = jQuery(jQuery(img)).attr('src');
+			}
+		 
+			//console.log(window.receiver);
+			//console.log(src);
+			//jQuery('#'+window.receiver).attr('src', src);
+			jQuery("#"+window.receiver_hidden).val(src).change();
 		}
-	 
-		//console.log(window.receiver);
-		//console.log(src);
-		//jQuery('#'+window.receiver).attr('src', src);
-		jQuery("#"+window.receiver_hidden).val(src).change();
 	}
-	jQuery('<?php echo $selector; ?>').click(function(){
-		set_receiver(this);
-	});
+	
+	//jQUery(document).ready(function(){
+		jQuery('<?php echo $selector; ?>').click(function(){
+			set_receiver(this);
+		});
+	//});
 	</script>
 	<?php
 }

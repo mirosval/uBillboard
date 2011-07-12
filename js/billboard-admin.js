@@ -21,7 +21,6 @@ jQuery(function($){
 		show: function(event, ui){
 			var $image = $(ui.tab).parents('.slide').find('.image-wrapper');
 			$image.css('height', $image.parent().height() + 'px');
-			console.log($image.parent().height() + 'px');
 		}
 	});
 	

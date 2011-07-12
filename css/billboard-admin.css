@@ -39,14 +39,12 @@
 	clear: both;
 	border-bottom: 1px solid #bbb;
 	padding-left: 10px;
-	margin-right: -10px;
-	margin-bottom: 20px;
 }
 
 .uds-slide-tabs ul li {
 	float: left;
 	padding: 3px;
-	margin: 0px;
+	margin: 0px 0px 20px;
 }
 
 .uds-slide-tabs ul li a {
