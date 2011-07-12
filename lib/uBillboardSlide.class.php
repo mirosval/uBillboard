@@ -126,6 +126,15 @@ class uBillboardSlide {
 		$out .= "</div>\n";
 		return $out;
 	}
+	
+	public function renderThumb()
+	{
+		$timthumb = UDS_BILLBOARD_URL . 'lib/timthumb.php?';
+		
+		$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $this->image) . '&amp;w=100&amp;h=100&amp;zc=1';
+		
+		return "<div class='uds-bb-thumb'><img src='$image' alt='' /></div>";
+	}
 }
 
 ?>

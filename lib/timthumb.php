@@ -15,13 +15,15 @@ define ('CACHE_CLEAR', 20);					// maximum number of files to delete on each cac
 define ('CACHE_USE', TRUE);					// use the cache files? (mostly for testing)
 define ('CACHE_MAX_AGE', 864000);			// time to cache in the browser
 define ('VERSION', '1.30');					// version number (to force a cache refresh)
-define ('DIRECTORY_CACHE', './cache');		// cache directory
+define ('DIRECTORY_CACHE', '../cache');		// cache directory
 define ('MAX_WIDTH', 1500);					// maximum image width
 define ('MAX_HEIGHT', 1500);				// maximum image height
 define ('ALLOW_EXTERNAL', FALSE);			// allow external website (override security precaution - not advised!)
 define ('MEMORY_LIMIT', '30M');				// set PHP memory limit
 define ('MAX_FILE_SIZE', 1500000);			// file size limit to prevent possible DOS attacks (roughly 1.5 megabytes)
 define ('CURL_TIMEOUT', 10);				// timeout duration. Tweak as you require (lower = better)
+
+date_default_timezone_set('Europe/Berlin');
 
 // external domains that are allowed to be displayed on your website
 $allowedSites = array (
@@ -41,7 +43,6 @@ $src = get_request ('src', '');
 if ($src == '' || strlen ($src) <= 3) {
     display_error ('no image specified');
 }
-
 
 // clean params before use
 $src = clean_source ($src);
@@ -484,7 +485,7 @@ function mime_type ($file) {
  * @param <type> $mime_type
  */
 function check_cache ($mime_type) {
-
+	
 	if (CACHE_USE) {
 
 		if (!show_cache_file ($mime_type)) {
@@ -532,7 +533,7 @@ function show_cache_file ($mime_type) {
 		header ('Content-Length: ' . filesize ($cache_file));
 		header ('Cache-Control: max-age=' . CACHE_MAX_AGE . ', must-revalidate');
 		header ('Expires: ' . $gmdate_expires);
-
+		
 		if (!@readfile ($cache_file)) {
 			$content = file_get_contents ($cache_file);
 			if ($content != FALSE) {

@@ -38,12 +38,14 @@ $billboard->addEmptySlide();
 									<div class="clear"></div>
 								</div>
 							</div>
+							<hr />
 							<?php uds_billboard_render_general_text('width', $uds_billboard_general_options['width'], $billboard->width); ?>
 							<?php uds_billboard_render_general_text('height', $uds_billboard_general_options['height'], $billboard->height); ?>
 							<?php uds_billboard_render_general_checkbox('randomize', $uds_billboard_general_options['randomize'], $billboard->randomize); ?>
 							<?php uds_billboard_render_general_checkbox('autoplay', $uds_billboard_general_options['autoplay'], $billboard->autoplay); ?>
 							<?php uds_billboard_render_general_text('square-size', $uds_billboard_general_options['square-size'], $billboard->squareSize); ?>
 							<?php uds_billboard_render_general_select('style', $uds_billboard_general_options['style'], $billboard->style); ?>
+							<hr />
 							<div id="major-publishing-actions" class="submitbox">
 								<div id="delete-action">
 									<a href="" class="submitdelete deletion">Delete</a>
@@ -73,19 +75,24 @@ $billboard->addEmptySlide();
 							<br />
 							<label>Controls skin:</label>
 							<?php uds_billboard_render_general_select('controls-skin', $uds_billboard_general_options['controls-skin'], $billboard->controlsSkin); ?>
+							<hr />
 							<label>Show Controls:</label>
 							<?php uds_billboard_render_general_select('show-controls', $uds_billboard_general_options['show-controls'], $billboard->showControls); ?>
-							<label>Show Play/Pause:</label>
-							<?php uds_billboard_render_general_select('show-pause', $uds_billboard_general_options['show-pause'], $billboard->showPause); ?>
 							<label>Controls Position:</label>
 							<?php uds_billboard_render_general_select('controls-position', $uds_billboard_general_options['controls-position'], $billboard->controlsPosition); ?>
+							<hr />
+							<label>Show Play/Pause:</label>
+							<?php uds_billboard_render_general_select('show-pause', $uds_billboard_general_options['show-pause'], $billboard->showPause); ?>
+							<hr />
 							<label>Show Paginator:</label>
 							<?php uds_billboard_render_general_select('show-paginator', $uds_billboard_general_options['show-paginator'], $billboard->showPaginator); ?>
 							<label>Paginator Position:</label>
 							<?php uds_billboard_render_general_select('paginator-position', $uds_billboard_general_options['paginator-position'], $billboard->paginatorPosition); ?>
+							<hr />
 							<label>Thumbnails:</label>
-							<?php uds_billboard_render_general_checkbox('show-thumbnails', $uds_billboard_general_options['show-thumbnails'], $billboard->showThumbnails); ?>
+							<?php uds_billboard_render_general_select('show-thumbnails', $uds_billboard_general_options['show-thumbnails'], $billboard->showThumbnails); ?>
 							<?php uds_billboard_render_general_select('thumbnails-position', $uds_billboard_general_options['thumbnails-position'], $billboard->thumbnailsPosition); ?>
+							<?php uds_billboard_render_general_checkbox('thumbnails-inside', $uds_billboard_general_options['thumbnails-inside'], $billboard->thumbnailsInside); ?>
 						</div>
 					</div>
 					<div class="postbox">

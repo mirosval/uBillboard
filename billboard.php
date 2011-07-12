@@ -155,17 +155,21 @@ $uds_billboard_general_options = array(
 		'tooltip' => '',
 		'options' => array(
 			'inside' => 'Inside',
-			'outside' => 'Outside',
-			'thumbs' => 'Thumbs'
+			'outside' => 'Outside'
 		),
 		'default' => ''
 	),
 	'show-thumbnails' => array(
-		'type' => 'checkbox',
+		'type' => 'select',
 		'label' => 'Show Thumbnails',
 		'unit' => '',
 		'tooltip' => 'Small preview images for all slides',
-		'default' => ''
+		'options' => array(
+			'no' => 'Don\'t show Thumbnails',
+			'hover' => 'Show on Mouse Hover',
+			'yes' => 'Show at all times'
+		),
+		'default' => 'no'
 	),
 	'thumbnails-position' => array(
 		'type' => 'select',
@@ -179,6 +183,13 @@ $uds_billboard_general_options = array(
 			'left' => 'Left'
 		),
 		'default' => 'bottom'
+	),
+	'thumbnails-inside' => array(
+		'type' => 'checkbox',
+		'label' => 'Inside',
+		'unit' => '',
+		'tooltip' => 'Where do you want thumbs to show',
+		'default' => ''
 	),
 	'use-timthumb' => array(
 		'type' => 'checkbox',

@@ -23,6 +23,12 @@
     background: black;
 }
 
+.postbox hr {
+	color: transparent;
+	border-top: 1px solid #dfdfdf;
+	border-bottom: 1px solid #fff;
+}
+
 /*-------------------------------------------*/
 
 .wrap .updated.uds-warn {

@@ -487,6 +487,7 @@
 			var $buttonNext = $('.uds-bb-next', $bb);
 			var $buttonPrev = $('.uds-bb-prev', $bb);
 			var $bullets = $('.uds-bb-position-indicator-bullets', $bb);
+			var $thumbs = $('.uds-bb-thumbnails', $bb);
 			
 			// Bind next/prev/playpause handlers
 			$playpause.click(_public.playpause);
@@ -514,7 +515,20 @@
 				
 				// Bullets
 				$('div', $bullets).removeClass('active').eq(currentSlideId).addClass('active');
+				
+				// Thumbs
+				$('.uds-bb-thumb', $bb).removeClass('active').eq(currentSlideId).addClass('active');
 			});
+			
+			// Thumbnails
+			$('.uds-bb-thumb', $thumbs).click(function(){
+				_public.animateSlide($(this).index());
+			});
+			
+			$bb.has('.uds-bb-thumbnails.top').css('margin-top', $thumbs.outerHeight());
+			$bb.has('.uds-bb-thumbnails.bottom').css('margin-bottom', $thumbs.outerHeight());
+			$bb.has('.uds-bb-thumbnails.left').css('margin-left', $thumbs.outerWidth());
+			$bb.has('.uds-bb-thumbnails.right').css('margin-right', $thumbs.outerWidth());
 			
 			// Comply with options
 			var $controlsToHover = $('');
@@ -528,6 +542,10 @@
 			
 			if(options.showPaginator === 'hover') {
 				$controlsToHover = $controlsToHover.add($bullets).add($('.uds-bb-position-indicator', $bb));
+			}
+			
+			if(options.showThumbnails === 'hover') {
+				$controlsToHover = $controlsToHover.add($thumbs);
 			}
 			
 			$controlsToHover.fadeTo(0, 0);
@@ -550,6 +568,10 @@
 			if(options.showPaginator === false) {
 				$bullets.hide();
 				$('.uds-bb-position-indicator', $bb).hide();
+			}
+			
+			if(options.showThumbnails === false) {
+				$thumbs.hide();
 			}
 		},
 		

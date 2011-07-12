@@ -68,6 +68,7 @@
 	.uds-bb-paginator .uds-bb-button {
 		float: left;
 		text-indent: -5000px;
+		cursor: pointer;
 	}
 	
 	/* Mini skin */
@@ -121,6 +122,7 @@
 		height: 30px;
 		padding: 8px 10px;
 		border-radius: 3px;
+		cursor: pointer;
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-playpause {
@@ -167,8 +169,59 @@
 		height: 10px;
 		float: left;
 		margin: 2px;
+		cursor: pointer;
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-bullet.active {
 		background: url(../images/skin-oldskool/bullet-active.png) no-repeat;
 	}
+
+/* Thumbnails */
+.uds-bb-thumbnails {
+	position: absolute;
+	z-index: 3;
+}
+
+	.uds-bb-thumbnails.bottom {
+		bottom: -130px;
+	}
+	
+	.uds-bb-thumbnails.top {
+		top: -133px;
+	}
+	
+	.uds-bb-thumbnails.left {
+		left: -133px;
+	}
+	
+	.uds-bb-thumbnails.right {
+		right: -133px;
+	}
+	
+	.uds-bb-thumbnails.inside.bottom {
+		bottom: 0px;
+	}
+	
+	.uds-bb-thumbnails.inside.top {
+		top: 0px;
+	}
+	
+	.uds-bb-thumbnails.inside.left {
+		left: 0px;
+	}
+	
+	.uds-bb-thumbnails.inside.right {
+		right: 0px;
+	}
+	
+	.uds-bb-thumb {
+		margin: 5px;
+		cursor: pointer;
+	}
+	
+	.uds-bb-thumbnails.bottom .uds-bb-thumb,
+	.uds-bb-thumbnails.top .uds-bb-thumb {
+		float: left;
+	}
+	
+	

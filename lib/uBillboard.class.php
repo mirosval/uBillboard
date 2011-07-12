@@ -116,6 +116,10 @@ class uBillboard {
 			case 'oldskool':
 				$out .= $this->paginatorOldskool();
 		}
+
+		if($this->showThumbnails !== 'no') {
+			$out .= $this->thumbnails();
+		}
 			
 		$out .= "</div>";
 		$out .= "</div>";
@@ -138,6 +142,10 @@ class uBillboard {
 		$showPaginator = 'false';
 		if($this->showPaginator == 'hover') $showPaginator = "'hover'";
 		if($this->showPaginator == 'yes') 	$showPaginator = 'true';
+		
+		$showThumbnails = 'false';
+		if($this->showThumbnails == 'hover')	$showThumbnails = "'hover'";
+		if($this->showThumbnails == 'yes')		$showThumbnails = 'true';
 
 		$scripts = "
 			$('#uds-bb-$id').uBillboard({
@@ -147,7 +155,8 @@ class uBillboard {
 				autoplay: $autoplay,
 				showControls: $showControls,
 				showPause: $showPause,
-				showPaginator: $showPaginator
+				showPaginator: $showPaginator,
+				showThumbnails: $showThumbnails
 			});
 		";
 		
@@ -158,7 +167,6 @@ class uBillboard {
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator mini'>";
-			//if($this)
 			$out .= "<div class='uds-bb-button uds-bb-playpause'>Play</div>";
 			$out .= "<div class='uds-bb-button uds-bb-prev'>Prev</div>";
 			$out .= "<div class='uds-bb-button uds-bb-next'>Next</div>";
@@ -175,6 +183,22 @@ class uBillboard {
 			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>Prev</span></div>";
 			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>Next</span></div>";
 			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
+		$out .= "</div>";
+		return $out;
+	}
+	
+	private function thumbnails()
+	{
+		$position = $this->thumbnailsPosition;
+		$inside = $this->thumbnailsInside === 'on' ? 'inside' : '';
+		
+		$out = '';
+		$out .= "<div class='uds-bb-thumbnails $position $inside'>";
+		$out .= "<div class='uds-bb-thumbnail-container'>";
+		foreach($this->slides as $slide) {
+			$out .= $slide->renderThumb();
+		}
+		$out .= "</div>";
 		$out .= "</div>";
 		return $out;
 	}
