@@ -203,6 +203,12 @@
 			_private.animateCountdown(slides[currentSlideId].delay);
 			
 			$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
+			
+			// continue playing
+			if(options.autoplay) {
+				clearTimeout(timers.nextSlideAnimation);
+				_public.play();
+			}
 		},
 		
 		/**
@@ -248,9 +254,9 @@
 				_private.animateCountdown(slides[currentSlideId].delay);
 			}
 			
+			clearTimeout(timers.nextSlideAnimation);
 			timers.nextSlideAnimation = setTimeout(function(){
 				_public.next();
-				_public.play();
 			}, slides[currentSlideId].delay);
 			
 			playing = true;
