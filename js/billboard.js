@@ -557,6 +557,7 @@
 				orientation = $thumbs.is('.right,.left') ? 'vertical' : 'horizontal',
 				margin;
 			
+			// Calculate variables
 			if(orientation == 'vertical') {
 				windowDim = $thumbs.height();
 				margin = ($thumb.outerHeight(true) - $thumb.outerHeight()) / 2;
