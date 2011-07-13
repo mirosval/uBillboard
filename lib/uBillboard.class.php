@@ -55,6 +55,13 @@ $uds_billboard_general_options = array(
 		),
 		'default' => ''
 	),
+	'show-timer' => array(
+		'type' => 'checkbox',
+		'label' => 'Show Timer',
+		'unit' => '',
+		'tooltip' => 'Shows countdown until the next slide transition when playing',
+		'default' => 'on'
+	),
 	'controls-skin' => array(
 		'type' => 'select',
 		'label' => 'Skin',
@@ -64,7 +71,7 @@ $uds_billboard_general_options = array(
 			'mini' => 'Minimal Style Controls',
 			'oldskool' => 'Old School uBillboard'
 		),
-		'default' => 'mini'
+		'default' => 'oldskool'
 	),
 	'show-controls' => array(
 		'type' => 'select',
@@ -76,7 +83,7 @@ $uds_billboard_general_options = array(
 			'hover' => 'Show on Mouse Hover',
 			'yes' => 'Show at all times'
 		),
-		'default' => ''
+		'default' => 'yes'
 	),
 	'controls-position' => array(
 		'type' => 'select',
@@ -88,7 +95,7 @@ $uds_billboard_general_options = array(
 			'outside' => 'Outside',
 			'below' => 'Below'
 		),
-		'default' => ''
+		'default' => 'inside'
 	),
 	'show-pause' => array(
 		'type' => 'select',
@@ -100,7 +107,7 @@ $uds_billboard_general_options = array(
 			'hover' => 'Show on Mouse Hover',
 			'yes' => 'Show at all times'
 		),
-		'default' => ''
+		'default' => 'yes'
 	),
 	'show-paginator' => array(
 		'type' => 'select',
@@ -112,7 +119,7 @@ $uds_billboard_general_options = array(
 			'hover' => 'Show on Mouse Hover',
 			'yes' => 'Show at all times'
 		),
-		'default' => 'on'
+		'default' => 'yes'
 	),
 	'paginator-position' => array(
 		'type' => 'select',
@@ -123,7 +130,7 @@ $uds_billboard_general_options = array(
 			'inside' => 'Inside',
 			'outside' => 'Outside'
 		),
-		'default' => ''
+		'default' => 'inside'
 	),
 	'show-thumbnails' => array(
 		'type' => 'select',
@@ -135,7 +142,7 @@ $uds_billboard_general_options = array(
 			'hover' => 'Show on Mouse Hover',
 			'yes' => 'Show at all times'
 		),
-		'default' => 'no'
+		'default' => 'yes'
 	),
 	'thumbnails-position' => array(
 		'type' => 'select',
@@ -170,27 +177,6 @@ $uds_billboard_general_options = array(
 		'unit' => 'px',
 		'tooltip' => 'Height of the thumbnail images',
 		'default' => '60'
-	),
-	'use-timthumb' => array(
-		'type' => 'checkbox',
-		'label' => 'Enable',
-		'unit' => '',
-		'tooltip' => 'When checked, all your images will be resized and zoomed/stretched to fit the Billboard size',
-		'default' => ''
-	),
-	'timthumb-zoom' => array(
-		'type' => 'checkbox',
-		'label' => 'Crop if doesn\'t fit',
-		'unit' => '',
-		'tooltip' => 'When checked will crop images that don\'t have the same proportions as Billboard. Otherwise will stretch images to fit the Billboard',
-		'default' => ''
-	),
-	'timthumb-quality' => array(
-		'type' => 'text',
-		'label' => 'Image Quality',
-		'unit' => 'px',
-		'tooltip' => 'Image compression - use lower values for faster page loads and lower traffic, use high values to increase image quality. Optimal values are 60-80',
-		'default' => 80
 	)
 );
 
@@ -344,6 +330,7 @@ class uBillboard {
 	public function renderJS($id = 0)
 	{
 		$autoplay = $this->autoplay === 'on' ? 'true' : 'false';
+		$showTimer = $this->showTimer === 'on' ? 'true' : 'false';
 		
 		$showControls = 'false';
 		if($this->showControls == 'hover') 	$showControls = "'hover'";
@@ -370,7 +357,8 @@ class uBillboard {
 				showControls: $showControls,
 				showPause: $showPause,
 				showPaginator: $showPaginator,
-				showThumbnails: $showThumbnails
+				showThumbnails: $showThumbnails,
+				showTimer: $showTimer,
 			});
 		";
 		

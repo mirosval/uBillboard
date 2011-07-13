@@ -247,7 +247,9 @@
 				clearTimeout(timers.nextSlideAnimation);
 			}
 			
-			$countdown.show();
+			if(typeof $countdown !== 'undefined') {
+				$countdown.show();
+			}
 			
 			if(!playing) {
 				// Run Countdown Animation
@@ -690,6 +692,10 @@
 		},
 		
 		createCountdown: function() {
+			if(options.showTimer === false) {
+				return;
+			}
+			
 			$countdown = $('<div class="uds-bb-countdown"></div>').appendTo($controls);
 			canvas = $countdown.append('<canvas width="100" height="100">').find('canvas').get(0);
 			if(canvas.getContext) {
@@ -712,7 +718,7 @@
 		},
 		
 		animateCountdown: function(duration) {			
-			if($countdown === null || typeof $countdown === 'undefined') {
+			if($countdown === null || typeof $countdown === 'undefined' || options.showTimer === false) {
 				return;
 			}
 			
@@ -1070,10 +1076,15 @@
 	$.fn.uBillboard = function(options){
 		
 		var defaults = {
-			width:		'960px',
-			height:		'400px',
-			squareSize:	'80px',
-			autoplay:	true,
+			width:			'960px',
+			height:			'400px',
+			squareSize:		'80px',
+			autoplay:		true,
+			showControls: 	true,
+			showPause: 		true,
+			showPaginator: 	true,
+			showThumbnails: true,
+			showTimer: 		true,
 			
 			removeSlidesWithBrokenImages: true
 		};

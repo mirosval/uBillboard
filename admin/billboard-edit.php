@@ -75,6 +75,8 @@ $billboard->addEmptySlide();
 						<h3 class="hndle"><span>Controls</span></h3>
 						<div class="inside">
 							<br />
+							<?php $billboard->renderAdminOption('show-timer'); ?>
+							<hr />
 							<label>Controls skin:</label>
 							<?php $billboard->renderAdminOption('controls-skin'); ?>
 							<hr />
