@@ -13,6 +13,7 @@ if(!empty($_GET['uds-billboard-edit']) && !empty($billboards[$_GET['uds-billboar
 //d(is_a($billboard, 'uBillboard'));
 if(!isset($billboard) || !is_a($billboard, 'uBillboard')) {
 	$billboard = new uBillboard();
+	$billboard->setUniqueName();
 }
 
 //d($billboard);
@@ -25,6 +26,7 @@ $billboard->addEmptySlide();
 	<div id="icon-edit" class="icon32 icon32-posts-post"><br /></div>
 	<h2>Edit uBillboard</h2>
 	<form id="billboard_update_form" method="post" action="" class="uds-billboard-form">
+		<?php wp_nonce_field('uds-billboard-update', 'uds-billboard-update-nonce'); ?>
 		<div class="metabox-holder has-right-sidebar">
 			<div class="inner-sidebar">
 				<div id="side-sortables" class="meta-box-sortables ui-sortable">
@@ -48,7 +50,7 @@ $billboard->addEmptySlide();
 							<hr />
 							<div id="major-publishing-actions" class="submitbox">
 								<div id="delete-action">
-									<a href="" class="submitdelete deletion">Delete</a>
+									<a href="<?php echo admin_url("admin.php?page=uds_billboard_admin&uds-billboard-delete={$billboard->name}&nonce=".wp_create_nonce('uds-billboard-delete-nonce')) ?>" class="submitdelete deletion">Delete</a>
 								</div>
 								<div id="publishing-action">
 									<input class="button-primary" type="submit" style="float:right" value="Save uBillboard" />

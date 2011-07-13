@@ -50,16 +50,16 @@ if(! is_array($billboards)) {
 						</th>
 						<td>
 							<strong>
-								<a href="admin.php?page=uds_billboard_add&uds-billboard-edit=<?php echo $key ?>">
+								<a href="<?php echo admin_url('admin.php?page=uds_billboard_add&uds-billboard-edit='.$key) ?>">
 									<?php echo $billboard->name ?>
 								</a>
 							</strong>
 							<div class="row-actions">
 								<span class="edit">
-									<a href="admin.php?page=uds_billboard_add&uds-billboard-edit=<?php echo $key ?>">Edit</a> | 
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_add&uds-billboard-edit='.$key) ?>">Edit</a> | 
 								</span>
 								<span class="trash">
-									<a href="admin.php?page=uds_billboard_add&uds-billboard-delete=<?php echo $key ?>">Trash</a>
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_admin&uds-billboard-delete='.$key.'&nonce='.wp_create_nonce('uds-billboard-delete-nonce')) ?>">Trash</a>
 								</span>
 							</div>
 						</td>
@@ -72,6 +72,6 @@ if(! is_array($billboards)) {
 			</tbody>
 		</table>
 	<?php else: ?>
-		<p>There are no uBillboards defined yet.</p>
+		<p>There are no uBillboards defined yet. Create your first one <a href="<?php echo admin_url('admin.php?page=uds_billboard_add') ?>">here</a>!</p>
 	<?php endif; ?>
 </div>
