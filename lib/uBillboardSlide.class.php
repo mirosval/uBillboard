@@ -37,7 +37,7 @@ class uBillboardSlide {
 
 			$n++;
 		}
-		die();
+		
 		return $slides;
 	}
 	
