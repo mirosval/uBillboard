@@ -125,7 +125,9 @@
 				
 				_public.play();
 			} else {
-				$countdown.hide();
+				if(typeof $countdown !== 'undefined') {
+					$countdown.hide();
+				}
 			}
 		},
 		
@@ -553,10 +555,10 @@
 				_public.animateSlide($(this).index());
 			});
 			
-			$bb.has('.uds-bb-thumbnails.top').css('margin-top', $thumbs.outerHeight());
-			$bb.has('.uds-bb-thumbnails.bottom').css('margin-bottom', $thumbs.outerHeight());
-			$bb.has('.uds-bb-thumbnails.left').css('margin-left', $thumbs.outerWidth());
-			$bb.has('.uds-bb-thumbnails.right').css('margin-right', $thumbs.outerWidth());
+			$bb.has('.uds-bb-thumbnails.top:not(.inside)').css('margin-top', $thumbs.outerHeight());
+			$bb.has('.uds-bb-thumbnails.bottom:not(.inside)').css('margin-bottom', $thumbs.outerHeight());
+			$bb.has('.uds-bb-thumbnails.left:not(.inside)').css('margin-left', $thumbs.outerWidth());
+			$bb.has('.uds-bb-thumbnails.right:not(.inside)').css('margin-right', $thumbs.outerWidth());
 			
 			// Thumbnails scrolling
 			var windowDim,
