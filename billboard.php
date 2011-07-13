@@ -360,16 +360,25 @@ function uds_billboard_is_active()
 
 add_action('admin_init', 'uds_billboard_editor_admin_init');
 add_action('admin_head', 'uds_billboard_editor_admin_head');
+add_action('admin_notices', 'uds_billboard_admin_notices');
 
 function uds_billboard_editor_admin_init() {
-  wp_enqueue_script('word-count');
-  wp_enqueue_script('post');
-  wp_enqueue_script('editor');
-  wp_enqueue_script('media-upload');
+	wp_enqueue_script('word-count');
+	wp_enqueue_script('post');
+	wp_enqueue_script('editor');
+	wp_enqueue_script('media-upload');
 }
 
 function uds_billboard_editor_admin_head() {
-  wp_tiny_mce();
+	wp_tiny_mce();
+}
+
+function uds_billboard_admin_notices() {
+	if(!empty($_REQUEST['uds-message'])) {
+		$message = $_REQUEST['uds-message'];
+		$class = $_REQUEST['uds-class'];
+		echo "<div id='message' class='$class'>$message</div>";
+	}
 }
 
 // initialize billboard
@@ -385,10 +394,15 @@ function uds_billboard_init()
 		wp_enqueue_script("jquery-ui-tabs");
 		
 		// process updates
-		if(!empty($_POST['nonce']) && !wp_verify_nonce($_POST['nonce'], 'uds-billboard')){
+		if(!empty($_POST['uds-billboard']) && !wp_verify_nonce('uds-billboard-update-nonce', $_REQUEST['uds-billboard-update-nonce'])){
 			die('Security check failed');
 		} else {
 			uds_billboard_proces_updates();
+		}
+		
+		// process deletes
+		if(!empty($_REQUEST['uds-billboard-delete']) && wp_verify_nonce('uds-billboard-delete-nonce', $_REQUEST['nonce'])) {
+			uds_billboard_delete();
 		}
 		
 		// process imports/exports
@@ -637,7 +651,7 @@ function uds_billboard_proces_updates()
 	global $uds_billboard_attributes, $uds_billboard_general_options;
 
 	$post = isset($_POST['uds_billboard']) ? $_POST['uds_billboard'] : array();
-	
+
 	if(empty($post) || !is_admin()) return;
 
 	$billboard = new uBillboard();
@@ -649,9 +663,29 @@ function uds_billboard_proces_updates()
 		$billboards[$billboard->name] = $billboard;
 	
 		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
+		$message = 'uds-message='.urlencode('Billboard updated successfully').'&uds-class='.urlencode('updated fade');
 	}
 	
-	wp_redirect('admin.php?page=uds_billboard_add&uds-billboard-edit='.$billboard->name);
+	wp_safe_redirect(admin_url('admin.php?page=uds_billboard_add&uds-billboard-edit='.$billboard->name.'&'.$message));
+	exit();
+}
+
+function uds_billboard_delete()
+{
+	$billboard = $_REQUEST['uds-billboard-delete'];
+
+	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	
+	$message = '';
+	if(!isset($billboards[$billboard])) {
+		$message = 'uds-message='.urlencode(sprintf('Billboard %s does not exist', esc_html($billboard))).'&uds-class='.urlencode('error');
+	} else {
+		unset($billboards[$billboard]);
+		$message = 'uds-message='.urlencode(sprintf('Billboard %s has been successfully deleted', esc_html($billboard))).'&uds-class='.urlencode('update fade');
+	}
+	
+	wp_safe_redirect(admin_url('admin.php?page=uds_billboard_admin&'.$message));
+	exit();
 }
 
 // Initialize empty billboard instance

@@ -52,6 +52,21 @@ class uBillboard {
 		}
 	}
 	
+	public function setUniqueName()
+	{
+		$billboards = array_keys(maybe_unserialize(get_option(UDS_BILLBOARD_OPTION)));
+	
+		$guess = $root = 'billboard';
+	
+		$i = 1;
+		while(in_array($guess, $billboards)) {
+			$guess = $root . '-' . $i;
+			$i++;
+		}
+		//d($billboards);
+		$this->name = $guess;
+	}
+	
 	public function update($options)
 	{
 		global $uds_billboard_general_options;
