@@ -488,11 +488,12 @@
 			});
 			
 			// setup variables for shorter code
-			var $playpause = $('.uds-bb-playpause', $bb);
-			var $buttonNext = $('.uds-bb-next', $bb);
-			var $buttonPrev = $('.uds-bb-prev', $bb);
-			var $bullets = $('.uds-bb-position-indicator-bullets', $bb);
-			var $thumbs = $('.uds-bb-thumbnails', $bb);
+			var $playpause = $('.uds-bb-playpause', $bb),
+				$buttonNext = $('.uds-bb-next', $bb),
+				$buttonPrev = $('.uds-bb-prev', $bb),
+				$bullets = $('.uds-bb-position-indicator-bullets', $bb),
+				$thumbs = $('.uds-bb-thumbnails', $bb),
+				$thumb = $('.uds-bb-thumb', $thumbs);
 			
 			// Bind next/prev/playpause handlers
 			$playpause.click(_public.playpause);
@@ -546,6 +547,72 @@
 			$bb.has('.uds-bb-thumbnails.bottom').css('margin-bottom', $thumbs.outerHeight());
 			$bb.has('.uds-bb-thumbnails.left').css('margin-left', $thumbs.outerWidth());
 			$bb.has('.uds-bb-thumbnails.right').css('margin-right', $thumbs.outerWidth());
+			
+			// Thumbnails scrolling
+			var windowDim,
+				containerDim,
+				scrollProperty,
+				position = 0,
+				$container = $('.uds-bb-thumbnail-container', $thumbs),
+				orientation = $thumbs.is('.right,.left') ? 'vertical' : 'horizontal',
+				margin;
+			
+			if(orientation == 'vertical') {
+				windowDim = $thumbs.height();
+				margin = ($thumb.outerHeight(true) - $thumb.outerHeight()) / 2;
+				containerDim = $thumb.length * $thumb.outerHeight(true) - ($thumb.length - 1) * margin;
+				scrollProperty = 'top';
+			} else {
+				windowDim = $thumbs.width();
+				margin = ($thumb.outerWidth(true) - $thumb.outerWidth()) / 2;
+				containerDim = $thumb.length * $thumb.outerWidth(true) - ($thumb.length - 1) * margin;
+				scrollProperty = 'left';
+			}
+
+			if(windowDim > containerDim) {
+				position = windowDim / 2 - containerDim / 2;
+				$container.css(scrollProperty, position + 'px');
+			}
+
+			var recalculateContainerPosition = function(e){
+				// Normalize coordinates
+				var offset = 0, speed = 0;
+				if(orientation == 'vertical') {
+					offset = e.pageY - $thumbs.offset().top;
+				} else {
+					offset = e.pageX - $thumbs.offset().left;
+				}
+				
+				// speed is the distance from the center
+				speed = offset - windowDim / 2;
+				
+				// normalize it to 0..1
+				speed = speed / (windowDim / 2);
+				
+				if(windowDim > containerDim) {
+					return;
+				}
+				
+				if(speed < 0 && position > 0) {
+					position--;
+				} else if(speed > 0 && position < (containerDim - windowDim)) {
+					position++;
+				}
+				
+				$container.css(scrollProperty, - position + 'px');
+			}
+			
+			$thumbs.bind({
+				'mouseenter mousemove': function(e){
+					clearInterval(timers.thumbMove);
+					timers.thumbMove = setInterval(function() {
+						recalculateContainerPosition(e);
+					}, 10);
+				}, 
+				'mouseleave': function(){
+					clearInterval(timers.thumbMove);
+				}
+			});
 			
 			// Comply with options
 			var $controlsToHover = $('');

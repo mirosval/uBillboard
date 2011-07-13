@@ -1,7 +1,9 @@
 <?php
 
-class uBillboardSlide {	
-	public static function getSlides($options)
+class uBillboardSlide {
+	private $slider;
+	
+	public static function getSlides($options, $slider)
 	{
 		global $uds_billboard_attributes;
 		
@@ -23,7 +25,7 @@ class uBillboardSlide {
 			}
 
 			if(!empty($attributes)) {
-				$slide = new uBillboardSlide($attributes);
+				$slide = new uBillboardSlide($attributes, $slider);
 				if($slide !== null) $slides[] = $slide;
 			}
 			
@@ -33,7 +35,7 @@ class uBillboardSlide {
 		return $slides;
 	}
 	
-	public function __construct($options = false)
+	public function __construct($options = false, $slider)
 	{
 		global $uds_billboard_attributes;
 
@@ -56,6 +58,8 @@ class uBillboardSlide {
 		foreach($uds_billboard_attributes as $key => $option) {
 			$this->{$key} = $options[$key];
 		}
+		
+		$this->setSlider($slider);
 	}
 	
 	public function __wakeup()
@@ -175,9 +179,19 @@ foreach($uds_billboard_attributes as $attrib => $options) {
 	{
 		$timthumb = UDS_BILLBOARD_URL . 'lib/timthumb.php?';
 		
-		$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $this->image) . '&amp;w=100&amp;h=100&amp;zc=1';
+		$width = $this->slider->thumbnailsWidth;
+		$height = $this->slider->thumbnailsHeight;
+		
+		$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $this->image) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
 		
 		return "<div class='uds-bb-thumb'><img src='$image' alt='' /></div>";
+	}
+	
+	public function setSlider($slider)
+	{
+		if(is_a($slider, 'uBillboard')) {
+			$this->slider = $slider;
+		}
 	}
 	
 	private function renderAdminField($item, $attrib)
@@ -283,6 +297,7 @@ foreach($uds_billboard_attributes as $attrib => $options) {
 		
 		$unique_id++;
 	}
+	
 }
 
 ?>

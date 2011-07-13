@@ -191,6 +191,20 @@ $uds_billboard_general_options = array(
 		'tooltip' => 'Where do you want thumbs to show',
 		'default' => ''
 	),
+	'thumbnails-width' => array(
+		'type' => 'text',
+		'label' => 'Thumbnail Width',
+		'unit' => 'px',
+		'tooltip' => 'Width of the thumbnail images',
+		'default' => '80'
+	),
+	'thumbnails-height' => array(
+		'type' => 'text',
+		'label' => 'Thumbnail Height',
+		'unit' => 'px',
+		'tooltip' => 'Height of the thumbnail images',
+		'default' => '60'
+	),
 	'use-timthumb' => array(
 		'type' => 'checkbox',
 		'label' => 'Enable',
