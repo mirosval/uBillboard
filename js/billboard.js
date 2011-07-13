@@ -563,11 +563,12 @@
 				margin = ($thumb.outerHeight(true) - $thumb.outerHeight()) / 2;
 				containerDim = $thumb.length * $thumb.outerHeight(true) - ($thumb.length - 1) * margin;
 				scrollProperty = 'top';
+				$container.css('height', containerDim + 'px');
 			} else {
 				windowDim = $thumbs.width();
-				margin = ($thumb.outerWidth(true) - $thumb.outerWidth()) / 2;
-				containerDim = $thumb.length * $thumb.outerWidth(true) - ($thumb.length - 1) * margin;
+				containerDim = $thumb.length * $thumb.outerWidth(true);
 				scrollProperty = 'left';
+				$container.css('width', containerDim + 'px');
 			}
 
 			if(windowDim > containerDim) {
