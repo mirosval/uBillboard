@@ -554,15 +554,18 @@
 				scrollProperty,
 				position = 0,
 				$container = $('.uds-bb-thumbnail-container', $thumbs),
-				orientation = $thumbs.is('.right,.left') ? 'vertical' : 'horizontal';
+				orientation = $thumbs.is('.right,.left') ? 'vertical' : 'horizontal',
+				margin;
 			
 			if(orientation == 'vertical') {
 				windowDim = $thumbs.height();
-				containerDim = $thumb.length * $thumb.outerHeight(true);
+				margin = ($thumb.outerHeight(true) - $thumb.outerHeight()) / 2;
+				containerDim = $thumb.length * $thumb.outerHeight(true) - ($thumb.length - 1) * margin;
 				scrollProperty = 'top';
 			} else {
 				windowDim = $thumbs.width();
-				containerDim = $thumb.length * $thumb.outerWidth(true);
+				margin = ($thumb.outerWidth(true) - $thumb.outerWidth()) / 2;
+				containerDim = $thumb.length * $thumb.outerWidth(true) - ($thumb.length - 1) * margin;
 				scrollProperty = 'left';
 			}
 
@@ -570,7 +573,7 @@
 				position = windowDim / 2 - containerDim / 2;
 				$container.css(scrollProperty, position + 'px');
 			}
-			
+
 			var recalculateContainerPosition = function(e){
 				// Normalize coordinates
 				var offset = 0, speed = 0;
@@ -592,7 +595,7 @@
 				
 				if(speed < 0 && position > 0) {
 					position--;
-				} else if(speed > 0 && position < (containerDim - windowDim) + 10) {
+				} else if(speed > 0 && position < (containerDim - windowDim)) {
 					position++;
 				}
 				

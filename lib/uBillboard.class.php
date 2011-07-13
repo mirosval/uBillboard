@@ -202,7 +202,6 @@ class uBillboard {
 		foreach($this->slides as $slide) {
 			$out .= $slide->renderThumb();
 		}
-		$out .= "<div class='clear'></div>";
 		$out .= "</div>";
 		$out .= "</div>";
 		return $out;
