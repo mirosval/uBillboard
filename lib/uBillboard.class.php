@@ -46,6 +46,10 @@ class uBillboard {
 				$this->{$camelized} = $option['default'];
 			}
 		}
+		
+		foreach($this->slides as $slide) {
+			$slide->setSlider($this);
+		}
 	}
 	
 	public function update($options)
@@ -62,7 +66,7 @@ class uBillboard {
 			}
 		}
 		
-		$this->slides = uBillboardSlide::getSlides($options);
+		$this->slides = uBillboardSlide::getSlides($options, $this);
 		
 		if(!empty($this->slides)) {
 			foreach($this->slides as $key => $slide) {
@@ -80,7 +84,7 @@ class uBillboard {
 	
 	public function addEmptySlide()
 	{
-		$this->slides[] = new uBillboardSlide();
+		$this->slides[] = new uBillboardSlide(false, $this);
 	}
 	
 	public function render($id = 0)
@@ -198,6 +202,7 @@ class uBillboard {
 		foreach($this->slides as $slide) {
 			$out .= $slide->renderThumb();
 		}
+		$out .= "<div class='clear'></div>";
 		$out .= "</div>";
 		$out .= "</div>";
 		return $out;

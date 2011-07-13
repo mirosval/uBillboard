@@ -216,23 +216,31 @@
 	position: absolute;
 	z-index: 3;
 	background: url(../images/skin-oldskool/bg.png);
-	padding: 4px;
+	overflow: hidden;
 }
+	.uds-bb-thumbnail-container {
+		display: block;
+		position: relative;
+	}
 
 	.uds-bb-thumbnails.bottom {
 		bottom: -130px;
+		width: 100%;
 	}
 	
 	.uds-bb-thumbnails.top {
 		top: -133px;
+		width: 100%;
 	}
 	
 	.uds-bb-thumbnails.left {
 		left: -133px;
+		height: 100%;
 	}
 	
 	.uds-bb-thumbnails.right {
 		right: -133px;
+		height: 100%;
 	}
 	
 	.uds-bb-thumbnails.inside.bottom {
@@ -255,13 +263,14 @@
 		margin: 5px;
 		cursor: pointer;
 		background: url(../images/bg-bright.png) #ededed;
-		padding: 5px 5px 0px 5px;
+		padding: 5px;
 		-moz-border-radius: 2px;
 		-webkit-border-radius: 2px;
 		border-radius: 2px;
 		-moz-box-shadow: 1px 1px 1px #000;
  		-webkit-box-shadow: 1px 1px 1px #000;
   		box-shadow: 1px 1px 1px #000;
+  		line-height: 0;
 	}
 	
 	.uds-bb-thumbnails.bottom .uds-bb-thumb,

@@ -93,6 +93,8 @@ $billboard->addEmptySlide();
 							<?php uds_billboard_render_general_select('show-thumbnails', $uds_billboard_general_options['show-thumbnails'], $billboard->showThumbnails); ?>
 							<?php uds_billboard_render_general_select('thumbnails-position', $uds_billboard_general_options['thumbnails-position'], $billboard->thumbnailsPosition); ?>
 							<?php uds_billboard_render_general_checkbox('thumbnails-inside', $uds_billboard_general_options['thumbnails-inside'], $billboard->thumbnailsInside); ?>
+							<?php uds_billboard_render_general_text('thumbnails-width', $uds_billboard_general_options['thumbnails-width'], $billboard->thumbnailsWidth); ?>
+							<?php uds_billboard_render_general_text('thumbnails-height', $uds_billboard_general_options['thumbnails-height'], $billboard->thumbnailsHeight); ?>
 						</div>
 					</div>
 					<div class="postbox">
