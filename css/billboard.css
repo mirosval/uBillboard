@@ -43,11 +43,14 @@
 .uds-bright .uds-bb-description,
 .uds-bb .uds-bb-description.uds-bright {
 	background: url(../images/bg-bright.png);
+	color: #222;
 }
 
 .uds-dark .uds-bb-description,
 .uds-bb .uds-bb-description.uds-dark {
 	background: url(../images/skin-oldskool/bg.png);
+	color: #fafafa;
+	text-shadow: 1px 1px 1px #222;
 }
 
 /* Controls */
