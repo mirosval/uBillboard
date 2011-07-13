@@ -63,7 +63,7 @@ class uBillboard {
 			$guess = $root . '-' . $i;
 			$i++;
 		}
-		//d($billboards);
+		
 		$this->name = $guess;
 	}
 	

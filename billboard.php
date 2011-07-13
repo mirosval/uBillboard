@@ -235,6 +235,11 @@ $uds_billboard_attributes = array(
 		'label' => 'Image',
 		'default' => ''
 	),
+	'resize' => array(
+		'type' => 'checkbox',
+		'label' => 'Apply Automatic resizing',
+		'default' => ''
+	),
 	'background' => array(
 		'type' => 'text',
 		'label' => 'Background Color',

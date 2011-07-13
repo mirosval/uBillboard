@@ -241,12 +241,25 @@
 .uds-billboard-form label {
 	display: block;
 	text-align: left;
-	width: 130px;
+	width: 150px;
 	margin: 0px 5px 5px 5px;
 }
 
 .uds-billboard-form input {
 	width: 100%;
+}
+
+.uds-billboard-form .resize-wrapper {
+	margin-bottom: 5px;
+}
+
+.uds-billboard-form .resize-wrapper label {
+	float: left;
+}
+
+.uds-billboard-form input.checkbox {
+	width: auto;
+	margin: 0px 0px 10px 0px;
 }
 
 .uds-billboard-form  textarea {

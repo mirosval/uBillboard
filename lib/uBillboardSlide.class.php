@@ -8,15 +8,21 @@ class uBillboardSlide {
 		global $uds_billboard_attributes;
 		
 		$slides = array();
-		
+
 		$n = 0;
 		while(!empty($options) && $n < 100) {
 			$attributes = array();
 			foreach($uds_billboard_attributes as $key => $option) {
-				if(!isset($options[$key][$n])) {
+				if(!isset($options[$key][$n]) && $option['type'] != 'checkbox') {
 					break;
 				}
-				$attributes[$key] = $options[$key][$n];
+				
+				if($option['type'] == 'checkbox') {
+					$attributes[$key] = '';
+				} else {
+					$attributes[$key] = $options[$key][$n];
+				}
+				
 				unset($options[$key][$n]);
 				
 				if(empty($options[$key])) {
@@ -28,10 +34,10 @@ class uBillboardSlide {
 				$slide = new uBillboardSlide($attributes, $slider);
 				if($slide !== null) $slides[] = $slide;
 			}
-			
+
 			$n++;
 		}
-		
+		die();
 		return $slides;
 	}
 	
@@ -54,9 +60,13 @@ class uBillboardSlide {
 		if(empty($options['image']) && empty($options['text'])){
 			return null;
 		}
-
+		
 		foreach($uds_billboard_attributes as $key => $option) {
-			$this->{$key} = $options[$key];
+			if(isset($options[$key])) {
+				$this->{$key} = $options[$key];
+			} else {
+				$this->{$key} = '';	
+			}
 		}
 		
 		$this->setSlider($slider);
@@ -119,6 +129,7 @@ class uBillboardSlide {
 			</ul>
 			<div id="uds-slide-tab-background-<?php echo $id ?>">
 				<?php $this->renderAdminField($this, 'image') ?>
+				<?php $this->renderAdminField($this, 'resize') ?>
 				<?php $this->renderAdminField($this, 'background') ?>
 			</div>
 			<div id="uds-slide-tab-content-<?php echo $id ?>">
@@ -135,12 +146,6 @@ class uBillboardSlide {
 			</div>
 		</div>
 		<?php
-
-		/*
-foreach($uds_billboard_attributes as $attrib => $options) {
-			uds_billboard_render_field($this, $attrib);
-		}
-*/
 		
 		$id++;
 	}
@@ -160,12 +165,24 @@ foreach($uds_billboard_attributes as $attrib => $options) {
 			$direction = $directions[array_rand($directions)];
 		}
 		
+		// Image
+		if($this->resize == 'on') {
+			$timthumb = UDS_BILLBOARD_URL . 'lib/timthumb.php?';
+		
+			$width = $this->slider->width;
+			$height = $this->slider->height;
+		
+			$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $this->image) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
+		} else {
+			$image = $this->image;
+		}
+		
 		$out = "<div class='uds-bb-slide'>";
 			if(empty($this->link)) {
 				$this->link = '#';
 			}
 			$out .= "<a href='{$this->link}' class='uds-bb-link'>";
-			$out .= "<img src='{$this->image}' alt='' class='uds-bb-bg-image' />";
+			$out .= "<img src='$image' alt='' class='uds-bb-bg-image' />";
 			$out .= "</a>";
 			$out .= "<span style='display:none' class='uds-delay'>{$this->delay}</span>";
 			$out .= "<span style='display:none' class='uds-transition'>$transition</span>";
@@ -204,6 +221,9 @@ foreach($uds_billboard_attributes as $attrib => $options) {
 			case 'text':
 				$this->renderAdminText($item, $attrib);
 				break;
+			case 'checkbox':
+				$this->renderAdminCheckbox($item, $attrib);
+				break;
 			case 'textarea':
 				$this->renderAdminTextarea($item, $attrib);
 				break;
@@ -224,6 +244,16 @@ foreach($uds_billboard_attributes as $attrib => $options) {
 		echo '<div class="'. $attrib .'-wrapper">';
 		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
 		echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($item->{$attrib})) . '" id="billboard-'. $attrib .'" class="billboard-'. $attrib .'" />';
+		echo '</div>';
+	}
+	
+	private function renderAdminCheckbox($item, $attrib)
+	{
+		global $uds_billboard_attributes;
+		$attrib_full = $uds_billboard_attributes[$attrib];
+		echo '<div class="'. $attrib .'-wrapper">';
+		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
+		echo '<input type="checkbox" name="uds_billboard['. $attrib .'][]" '.checked($item->{$attrib}, 'on', false) . '" id="billboard-'. $attrib .'" class="billboard-'. $attrib .' checkbox" />';
 		echo '</div>';
 	}
 	
