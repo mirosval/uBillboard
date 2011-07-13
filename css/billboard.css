@@ -227,13 +227,21 @@
 	}
 
 	.uds-bb-thumbnails.bottom {
-		bottom: -130px;
+		bottom: -80px;
 		width: 100%;
+		background: url(../images/bg-bright.png) #333;
+		padding: 4px 0px;
+	}
+	
+	.uds-bb-thumbnails.bottom.inside, .uds-bb-thumbnails.top.inside {
+		background: url(../images/skin-oldskool/bg.png) #333;
 	}
 	
 	.uds-bb-thumbnails.top {
-		top: -133px;
+		top: -80px;
 		width: 100%;
+		background: url(../images/bg-bright.png) #333;
+		padding: 4px 0px;
 	}
 	
 	.uds-bb-thumbnails.left {
