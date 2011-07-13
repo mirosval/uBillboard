@@ -184,7 +184,7 @@ foreach($uds_billboard_attributes as $attrib => $options) {
 		
 		$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $this->image) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
 		
-		return "<div class='uds-bb-thumb'><img src='$image' alt='' /></div>";
+		return "<div class='uds-bb-thumb'><img src='$image' alt='' width='$width' height='$height' /></div>";
 	}
 	
 	public function setSlider($slider)
