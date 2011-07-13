@@ -277,7 +277,9 @@
 				clearTimeout(timers.nextSlideAnimation);
 			}
 			
-			$countdown.hide();
+			if(typeof $countdown !== 'undefined') {
+				$countdown.hide();
+			}
 		},
 		
 		'playpause': function() {
