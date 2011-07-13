@@ -1,5 +1,98 @@
 <?php
 
+// define data structure for billboard
+$uds_billboard_attributes = array(
+	'image'=> array(
+		'type' => 'image',
+		'label' => 'Image',
+		'default' => ''
+	),
+	'resize' => array(
+		'type' => 'checkbox',
+		'label' => 'Apply Automatic resizing',
+		'default' => ''
+	),
+	'background' => array(
+		'type' => 'text',
+		'label' => 'Background Color',
+		'default' => ''
+	),
+	'link' => array(
+		'type' => 'text',
+		'label' => 'Link URL',
+		'default' => ''
+	),
+	'delay' => array(
+		'type' => 'select',
+		'label' => 'Delay',
+		'options' => array(
+			'1000' => '1s',
+			'2000' => '2s',
+			'3000' => '3s',
+			'4000' => '4s',
+			'5000' => '5s',
+			'10000' => '10s',
+		),
+		'default' => '5000'
+	),
+	'transition' => array(
+		'type' => 'select',
+		'label' => 'Transition',
+		'options' => array(
+			'random' => 'Random',
+			'fade' => 'Fade',
+			'fadeSquaresRandom' => 'Fade Random Squares',
+			'fadeSquaresRows' => 'Fade Squares by Rows',
+			'fadeSquaresCols' => 'Fade Squares by Columns',
+			'fadeSquaresSpiralIn' => 'Fade Squares Spiral In',
+			'fadeSquaresSpiralOut' => 'Fade Squares Spiral Out',
+			'slide' => 'Slide',
+			'scale' => 'Scale',
+			//////////////////////////////////////////////////
+			'slideLeft' => 'Slide from Left',
+			'slideTop' => 'Slide from Top',
+			'slideRight' => 'Slide from Right',
+			'slideBottom' => 'Slide from Bottom',
+			'scaleTop' => 'Scale from Top',
+			'scaleCenter' => 'Scale from Center',
+			'scaleBottom' => 'Scale from Bottom',
+			'scaleRight' => 'Scale from Right',
+			'scaleLeft' => 'Scale from Left',
+			'squaresRandom' => 'Squares Random',
+			'squaresRows' => 'Squares by Rows',
+			'squaresCols' => 'Squares by Columns',
+			'squaresMoveIn' => 'Squares Fly in',
+			'squaresMoveOut' => 'Squares Fly out',
+			'columnsRandom' => 'Columns Random',
+			'columnWave' => 'Column Wave',
+			'curtainRight' => 'Curtain Right',
+			'curtainLeft' => 'Curtain Left',
+			'curtainRotateRight' => 'Curtain Rotate Right',
+			'curtainRotateLeft' => 'Curtain Rotate Left',
+			'interweaveLeft' => 'Interweave Left',
+			'interweaveRight' => 'Interweave Right'
+		),
+		'default' => 'fade'
+	),
+	'direction' => array(
+		'type' => 'select',
+		'label' => 'Transition Direction',
+		'options' => array(
+			'' => '--',
+			'random' => 'Random',
+			'left' => 'From Left',
+			'right' => 'From Right',
+			'top' => 'From Top',
+			'bottom' => 'From Bottom'
+		),
+		'default' => ''
+	),
+	'text' => array(
+		'type' => 'textarea',
+		'label' => 'Text'
+	)
+);
+
 class uBillboardSlide {
 	private $slider;
 	
@@ -128,20 +221,20 @@ class uBillboardSlide {
 				<li><a href="#uds-slide-tab-transition-<?php echo $id ?>">Transition</a></li>
 			</ul>
 			<div id="uds-slide-tab-background-<?php echo $id ?>">
-				<?php $this->renderAdminField($this, 'image') ?>
-				<?php $this->renderAdminField($this, 'resize') ?>
-				<?php $this->renderAdminField($this, 'background') ?>
+				<?php $this->renderAdminField('image') ?>
+				<?php $this->renderAdminField('resize') ?>
+				<?php $this->renderAdminField('background') ?>
 			</div>
 			<div id="uds-slide-tab-content-<?php echo $id ?>">
-				<?php $this->renderAdminField($this, 'text') ?>
+				<?php $this->renderAdminField('text') ?>
 			</div>
 			<div id="uds-slide-tab-link-<?php echo $id ?>">
-				<?php $this->renderAdminField($this, 'link') ?>
+				<?php $this->renderAdminField('link') ?>
 			</div>
 			<div id="uds-slide-tab-transition-<?php echo $id ?>">
-				<?php $this->renderAdminField($this, 'delay') ?>
-				<?php $this->renderAdminField($this, 'transition') ?>
-				<?php $this->renderAdminField($this, 'direction') ?>
+				<?php $this->renderAdminField('delay') ?>
+				<?php $this->renderAdminField('transition') ?>
+				<?php $this->renderAdminField('direction') ?>
 				<div class="clear"></div>
 			</div>
 		</div>
@@ -211,7 +304,7 @@ class uBillboardSlide {
 		}
 	}
 	
-	private function renderAdminField($item, $attrib)
+	private function renderAdminField($attrib)
 	{
 		global $uds_billboard_attributes;
 	
@@ -219,45 +312,45 @@ class uBillboardSlide {
 		switch($attrib_full['type']){
 			case 'input':
 			case 'text':
-				$this->renderAdminText($item, $attrib);
+				$this->renderAdminText($attrib);
 				break;
 			case 'checkbox':
-				$this->renderAdminCheckbox($item, $attrib);
+				$this->renderAdminCheckbox($attrib);
 				break;
 			case 'textarea':
-				$this->renderAdminTextarea($item, $attrib);
+				$this->renderAdminTextarea($attrib);
 				break;
 			case 'select':
-				$this->renderAdminSelect($item, $attrib);
+				$this->renderAdminSelect($attrib);
 				break;
 			case 'image':
-				$this->renderAdminImage($item, $attrib);
+				$this->renderAdminImage($attrib);
 				break;
 			default:
 		}
 	}
 	
-	private function renderAdminText($item, $attrib)
+	private function renderAdminText($attrib)
 	{
 		global $uds_billboard_attributes;
 		$attrib_full = $uds_billboard_attributes[$attrib];
 		echo '<div class="'. $attrib .'-wrapper">';
 		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
-		echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($item->{$attrib})) . '" id="billboard-'. $attrib .'" class="billboard-'. $attrib .'" />';
+		echo '<input type="text" name="uds_billboard['. $attrib .'][]" value="' . htmlspecialchars(stripslashes($this->{$attrib})) . '" id="billboard-'. $attrib .'" class="billboard-'. $attrib .'" />';
 		echo '</div>';
 	}
 	
-	private function renderAdminCheckbox($item, $attrib)
+	private function renderAdminCheckbox($attrib)
 	{
 		global $uds_billboard_attributes;
 		$attrib_full = $uds_billboard_attributes[$attrib];
 		echo '<div class="'. $attrib .'-wrapper">';
 		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
-		echo '<input type="checkbox" name="uds_billboard['. $attrib .'][]" '.checked($item->{$attrib}, 'on', false) . '" id="billboard-'. $attrib .'" class="billboard-'. $attrib .' checkbox" />';
+		echo '<input type="checkbox" name="uds_billboard['. $attrib .'][]" '.checked($this->{$attrib}, 'on', false) . '" id="billboard-'. $attrib .'" class="billboard-'. $attrib .' checkbox" />';
 		echo '</div>';
 	}
 	
-	private function renderAdminTextarea($item, $attrib)
+	private function renderAdminTextarea($attrib)
 	{
 		global $uds_billboard_attributes;
 		
@@ -266,7 +359,7 @@ class uBillboardSlide {
 		$attrib_full = $uds_billboard_attributes[$attrib];
 		echo '<div class="'. $attrib .'-wrapper">';
 		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
-		echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'" id="uds-text-'.$id.'">'. htmlspecialchars(stripslashes($item->{$attrib})) .'</textarea>';
+		echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'" id="uds-text-'.$id.'">'. htmlspecialchars(stripslashes($this->{$attrib})) .'</textarea>';
 		echo "<script language='javascript' type='text/javascript'>\n";
 		echo "	tinyMCE.init({\n";
 		echo "		theme : 'advanced',\n";
@@ -289,7 +382,7 @@ class uBillboardSlide {
 		$id++;
 	}
 	
-	private function renderAdminSelect($item, $attrib)
+	private function renderAdminSelect($attrib)
 	{
 		global $uds_billboard_attributes;
 		$attrib_full = $uds_billboard_attributes[$attrib];
@@ -303,7 +396,7 @@ class uBillboardSlide {
 		if(is_array($attrib_full['options'])){
 			foreach($attrib_full['options'] as $key => $option){
 				$selected = '';
-				if($item->{$attrib} == $key){
+				if($this->{$attrib} == $key){
 					$selected = 'selected="selected"';
 				}
 				echo '<option value="'. $key .'" '. $selected .'>'. $option .'</option>';
@@ -313,13 +406,13 @@ class uBillboardSlide {
 		echo '</div>';
 	}
 	
-	private function renderAdminImage($item, $attrib)
+	private function renderAdminImage($attrib)
 	{
 		static $unique_id = 0;
 		
 		echo '<div class="'. $attrib .'-url-wrapper">';
 		echo '	<label for="billboard-'. $attrib .'-'. $unique_id .'-hidden">Image URL</label>';
-		echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $item->{$attrib} .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
+		echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $this->{$attrib} .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
 		echo '	<a class="thickbox" title="Add an Image" href="media-upload.php?type=image&TB_iframe=true&width=640&height=345">';
 		echo '		<img alt="Add an Image" src="'. admin_url() . 'images/media-button-image.gif" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
 		echo '	</a>';

@@ -41,12 +41,12 @@ $billboard->addEmptySlide();
 								</div>
 							</div>
 							<hr />
-							<?php uds_billboard_render_general_text('width', $uds_billboard_general_options['width'], $billboard->width); ?>
-							<?php uds_billboard_render_general_text('height', $uds_billboard_general_options['height'], $billboard->height); ?>
-							<?php uds_billboard_render_general_checkbox('randomize', $uds_billboard_general_options['randomize'], $billboard->randomize); ?>
-							<?php uds_billboard_render_general_checkbox('autoplay', $uds_billboard_general_options['autoplay'], $billboard->autoplay); ?>
-							<?php uds_billboard_render_general_text('square-size', $uds_billboard_general_options['square-size'], $billboard->squareSize); ?>
-							<?php uds_billboard_render_general_select('style', $uds_billboard_general_options['style'], $billboard->style); ?>
+							<?php $billboard->renderAdminOption('width'); ?>
+							<?php $billboard->renderAdminOption('height'); ?>
+							<?php $billboard->renderAdminOption('randomize'); ?>
+							<?php $billboard->renderAdminOption('autoplay'); ?>
+							<?php $billboard->renderAdminOption('square-size'); ?>
+							<?php $billboard->renderAdminOption('style'); ?>
 							<hr />
 							<div id="major-publishing-actions" class="submitbox">
 								<div id="delete-action">
@@ -76,36 +76,27 @@ $billboard->addEmptySlide();
 						<div class="inside">
 							<br />
 							<label>Controls skin:</label>
-							<?php uds_billboard_render_general_select('controls-skin', $uds_billboard_general_options['controls-skin'], $billboard->controlsSkin); ?>
+							<?php $billboard->renderAdminOption('controls-skin'); ?>
 							<hr />
 							<label>Show Controls:</label>
-							<?php uds_billboard_render_general_select('show-controls', $uds_billboard_general_options['show-controls'], $billboard->showControls); ?>
+							<?php $billboard->renderAdminOption('show-controls'); ?>
 							<label>Controls Position:</label>
-							<?php uds_billboard_render_general_select('controls-position', $uds_billboard_general_options['controls-position'], $billboard->controlsPosition); ?>
+							<?php $billboard->renderAdminOption('controls-position'); ?>
 							<hr />
 							<label>Show Play/Pause:</label>
-							<?php uds_billboard_render_general_select('show-pause', $uds_billboard_general_options['show-pause'], $billboard->showPause); ?>
+							<?php $billboard->renderAdminOption('show-pause'); ?>
 							<hr />
 							<label>Show Paginator:</label>
-							<?php uds_billboard_render_general_select('show-paginator', $uds_billboard_general_options['show-paginator'], $billboard->showPaginator); ?>
+							<?php $billboard->renderAdminOption('show-paginator'); ?>
 							<label>Paginator Position:</label>
-							<?php uds_billboard_render_general_select('paginator-position', $uds_billboard_general_options['paginator-position'], $billboard->paginatorPosition); ?>
+							<?php $billboard->renderAdminOption('paginator-position'); ?>
 							<hr />
 							<label>Thumbnails:</label>
-							<?php uds_billboard_render_general_select('show-thumbnails', $uds_billboard_general_options['show-thumbnails'], $billboard->showThumbnails); ?>
-							<?php uds_billboard_render_general_select('thumbnails-position', $uds_billboard_general_options['thumbnails-position'], $billboard->thumbnailsPosition); ?>
-							<?php uds_billboard_render_general_checkbox('thumbnails-inside', $uds_billboard_general_options['thumbnails-inside'], $billboard->thumbnailsInside); ?>
-							<?php uds_billboard_render_general_text('thumbnails-width', $uds_billboard_general_options['thumbnails-width'], $billboard->thumbnailsWidth); ?>
-							<?php uds_billboard_render_general_text('thumbnails-height', $uds_billboard_general_options['thumbnails-height'], $billboard->thumbnailsHeight); ?>
-						</div>
-					</div>
-					<div class="postbox">
-						<div class="handlediv" title="Click to toggle"><br /></div>
-						<h3 class="hndle"><span>Image Resizing Options</span></h3>
-						<div class="inside">
-							<?php uds_billboard_render_general_checkbox('use-timthumb', $uds_billboard_general_options['use-timthumb'], $billboard->useTimthumb); ?>
-							<?php uds_billboard_render_general_checkbox('timthumb-zoom', $uds_billboard_general_options['timthumb-zoom'], $billboard->timthumbZoom); ?>
-							<?php uds_billboard_render_general_text('timthumb-quality', $uds_billboard_general_options['timthumb-quality'], $billboard->timthumbQuality); ?>
+							<?php $billboard->renderAdminOption('show-thumbnails'); ?>
+							<?php $billboard->renderAdminOption('thumbnails-position'); ?>
+							<?php $billboard->renderAdminOption('thumbnails-inside'); ?>
+							<?php $billboard->renderAdminOption('thumbnails-width'); ?>
+							<?php $billboard->renderAdminOption('thumbnails-height'); ?>
 						</div>
 					</div>
 				</div>

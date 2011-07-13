@@ -1,5 +1,200 @@
 <?php
 
+// define general options for billboard
+$uds_billboard_general_options = array(
+	'name' => array(
+		'type' => 'text',
+		'label' => 'Billboard Name',
+		'unit' => '',
+		'tooltip' => 'Enter a name for this Billboard. You will use this name to create the Billboard on your site.',
+		'default' => 'billboard'
+	),
+	'width' => array(
+		'type' => 'text',
+		'label' => 'Width',
+		'unit' => 'px',
+		'tooltip' => 'Billboard Width in pixels',
+		'default' => 940
+	),
+	'height' => array(
+		'type' => 'text',
+		'label' => 'Height',
+		'unit' => 'px',
+		'tooltip' => 'Billboard Height in pixels',
+		'default' => 380
+	),
+	'autoplay' => array(
+		'type' => 'checkbox',
+		'label' => 'Autoplay',
+		'unit' => '',
+		'tooltip' => 'Automatically start playing slides, makes sense to turn this off only if Show Controls is enabled.',
+		'default' => 'on'
+	),
+	'randomize' => array(
+		'type' => 'checkbox',
+		'label' => 'Shuffle Slides',
+		'unit' => '',
+		'tooltip' => 'Shuffle slides each time the slider is loaded',
+		'default' => ''
+	),
+	'square-size' => array(
+		'type' => 'text',
+		'label' => 'Square Size',
+		'unit' => 'pixels',
+		'tooltip' => 'Square dimension, applies only to transitions based on squares <img src="'.UDS_BILLBOARD_URL .'images/square_size.png" alt="" />',
+		'default' => 100
+	),
+	'style' => array(
+		'type' => 'select',
+		'label' => 'Style',
+		'unit' => '',
+		'tooltip' => '',
+		'options' => array(
+			'dark' => 'Dark',
+			'bright' => 'Bright'
+		),
+		'default' => ''
+	),
+	'controls-skin' => array(
+		'type' => 'select',
+		'label' => 'Skin',
+		'unit' => '',
+		'tooltip' => 'How the controls should look',
+		'options' => array(
+			'mini' => 'Minimal Style Controls',
+			'oldskool' => 'Old School uBillboard'
+		),
+		'default' => 'mini'
+	),
+	'show-controls' => array(
+		'type' => 'select',
+		'label' => 'Show Controls',
+		'unit' => '',
+		'tooltip' => 'Controls enable you to switch between slides',
+		'options' => array(
+			'no' => 'Don\'t show controls',
+			'hover' => 'Show on Mouse Hover',
+			'yes' => 'Show at all times'
+		),
+		'default' => ''
+	),
+	'controls-position' => array(
+		'type' => 'select',
+		'label' => 'Position',
+		'unit' => '',
+		'tooltip' => '',
+		'options' => array(
+			'inside' => 'Inside',
+			'outside' => 'Outside',
+			'below' => 'Below'
+		),
+		'default' => ''
+	),
+	'show-pause' => array(
+		'type' => 'select',
+		'label' => 'Show Play/Pause',
+		'unit' => '',
+		'tooltip' => 'Display show pause button',
+		'options' => array(
+			'no' => 'Don\'t show Play/Pause',
+			'hover' => 'Show on Mouse Hover',
+			'yes' => 'Show at all times'
+		),
+		'default' => ''
+	),
+	'show-paginator' => array(
+		'type' => 'select',
+		'label' => 'Show Paginator',
+		'unit' => '',
+		'tooltip' => 'Display pagination control',
+		'options' => array(
+			'no' => 'Don\'t show Paginator',
+			'hover' => 'Show on Mouse Hover',
+			'yes' => 'Show at all times'
+		),
+		'default' => 'on'
+	),
+	'paginator-position' => array(
+		'type' => 'select',
+		'label' => 'Position',
+		'unit' => '',
+		'tooltip' => '',
+		'options' => array(
+			'inside' => 'Inside',
+			'outside' => 'Outside'
+		),
+		'default' => ''
+	),
+	'show-thumbnails' => array(
+		'type' => 'select',
+		'label' => 'Show Thumbnails',
+		'unit' => '',
+		'tooltip' => 'Small preview images for all slides',
+		'options' => array(
+			'no' => 'Don\'t show Thumbnails',
+			'hover' => 'Show on Mouse Hover',
+			'yes' => 'Show at all times'
+		),
+		'default' => 'no'
+	),
+	'thumbnails-position' => array(
+		'type' => 'select',
+		'label' => 'Thumbnail Position',
+		'unit' => '',
+		'tooltip' => 'Where do you want thumbs to show',
+		'options' => array(
+			'top' => 'Top',
+			'bottom' => 'Bottom',
+			'right' => 'Right',
+			'left' => 'Left'
+		),
+		'default' => 'bottom'
+	),
+	'thumbnails-inside' => array(
+		'type' => 'checkbox',
+		'label' => 'Inside',
+		'unit' => '',
+		'tooltip' => 'Where do you want thumbs to show',
+		'default' => ''
+	),
+	'thumbnails-width' => array(
+		'type' => 'text',
+		'label' => 'Thumbnail Width',
+		'unit' => 'px',
+		'tooltip' => 'Width of the thumbnail images',
+		'default' => '80'
+	),
+	'thumbnails-height' => array(
+		'type' => 'text',
+		'label' => 'Thumbnail Height',
+		'unit' => 'px',
+		'tooltip' => 'Height of the thumbnail images',
+		'default' => '60'
+	),
+	'use-timthumb' => array(
+		'type' => 'checkbox',
+		'label' => 'Enable',
+		'unit' => '',
+		'tooltip' => 'When checked, all your images will be resized and zoomed/stretched to fit the Billboard size',
+		'default' => ''
+	),
+	'timthumb-zoom' => array(
+		'type' => 'checkbox',
+		'label' => 'Crop if doesn\'t fit',
+		'unit' => '',
+		'tooltip' => 'When checked will crop images that don\'t have the same proportions as Billboard. Otherwise will stretch images to fit the Billboard',
+		'default' => ''
+	),
+	'timthumb-quality' => array(
+		'type' => 'text',
+		'label' => 'Image Quality',
+		'unit' => 'px',
+		'tooltip' => 'Image compression - use lower values for faster page loads and lower traffic, use high values to increase image quality. Optimal values are 60-80',
+		'default' => 80
+	)
+);
+
+
 class uBillboard {
 	private $slides;
 	
@@ -180,6 +375,73 @@ class uBillboard {
 		";
 		
 		return $scripts;
+	}
+	
+	public function renderAdminOption($option)
+	{
+		global $uds_billboard_general_options;
+		$field = $uds_billboard_general_options[$option];
+		$camelized = $this->camelize($option);
+		$value = $this->{$camelized};
+		
+		switch($uds_billboard_general_options[$option]['type']) {
+			case 'text':
+				$this->renderAdminOptionText($option, $field, $value);
+				break;
+			case 'checkbox':
+				$this->renderAdminOptionCheckbox($option, $field, $value);
+				break;
+			case 'select':
+				$this->renderAdminOptionSelect($option, $field, $value);
+				break;
+		}
+	}
+	
+	// Functions to render single fields in general options for each billboard
+	public function renderAdminOptionText($option, $field, $value)
+	{
+		?>
+		<div class="uds-billboard-<?php echo $option ?> option-container">
+			<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+			<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" value="<?php echo empty($value) ? $field['default'] : $value ?>" class="text" />
+			<span class="unit"><?php echo $field['unit'] ?></span>
+			<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
+			<div class="clear"></div>
+		</div>
+		<?php
+	}
+	
+	public function renderAdminOptionCheckbox($option, $field, $value)
+	{
+		$checked = ( $value === null ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
+		?>
+		<div class="uds-billboard-<?php echo $option ?> option-container">
+			<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+			<input type="checkbox" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" <?php echo $checked ?> class="checkbox" />
+			<span class="unit"><?php echo $field['unit'] ?></span>
+			<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
+			<div class="clear"></div>
+		</div>
+		<?php
+	}
+	
+	function renderAdminOptionSelect($option, $field, $value)
+	{
+		$checked = ( $value === null ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
+		?>
+		<div class="uds-billboard-<?php echo $option ?> option-container select">
+			<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+			<select id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" class="select">
+				<option value="" disabled="disabled"><?php echo $field['label'] ?></option>
+				<?php foreach($field['options'] as $key => $label): ?>
+					<option value="<?php echo $key ?>" <?php echo $key == $value ? 'selected="selected"' : '' ?>><?php echo $label ?></option>
+				<?php endforeach; ?>
+			</select>
+			<span class="unit"><?php echo $field['unit'] ?></span>
+			<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
+			<div class="clear"></div>
+		</div>
+		<?php
 	}
 	
 	private function paginatorMini()

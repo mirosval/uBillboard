@@ -103,13 +103,10 @@
 	width: 50px;
 }
 
-.delay-wrapper, .layout-wrapper, .transition-wrapper, .direction-wrapper {
-	float: left;
-	margin-right: 10px;
-}
 
 .delay-wrapper select, .layout-wrapper select, .transition-wrapper select, .direction-wrapper select {
 	width: 150px;
+	margin-bottom: 20px;
 }
 
 .image-url-wrapper input {
@@ -255,6 +252,17 @@
 
 .uds-billboard-form .resize-wrapper label {
 	float: left;
+}
+
+.uds-billboard-form .text-wrapper label {
+	display: none;
+}
+
+.uds-billboard-form .text-wrapper .mceEditor {
+	clear: both;
+	float: left;
+	width: 100%;
+	margin-bottom: 20px;
 }
 
 .uds-billboard-form input.checkbox {
