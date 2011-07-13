@@ -205,7 +205,7 @@
 			$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
 			
 			// continue playing
-			if(options.autoplay) {
+			if(options.autoplay || playing) {
 				clearTimeout(timers.nextSlideAnimation);
 				_public.play();
 			}
