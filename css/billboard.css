@@ -234,7 +234,7 @@
 	}
 	
 	.uds-bb-thumbnails.bottom.inside, .uds-bb-thumbnails.top.inside {
-		background: url(../images/skin-oldskool/bg.png) #333;
+		background: url(../images/skin-oldskool/bg.png);
 	}
 	
 	.uds-bb-thumbnails.top {
@@ -245,8 +245,13 @@
 	}
 	
 	.uds-bb-thumbnails.left {
-		left: -133px;
+		left: -100px;
 		height: 100%;
+		background: url(../images/bg-bright.png) #333;
+	}
+	
+	.uds-bb-thumbnails.left.inside {
+		background: url(../images/skin-oldskool/bg.png);
 	}
 	
 	.uds-bb-thumbnails.right {
