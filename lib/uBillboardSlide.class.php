@@ -203,7 +203,8 @@ class uBillboardSlide {
 	
 	public function isValid()
 	{
-		return !empty($this->image) || !empty($this->text);
+		$text = strip_tags($this->text);
+		return !empty($this->image) || !empty($text);
 	}
 	
 	public function renderAdmin()

@@ -22,11 +22,10 @@ $billboard->addEmptySlide();
 
 //d($billboards);
 ?>
-<script language='javascript' src='http://meosoft/code/plugins/wp-content/plugins/uBillboard/lib/tinymce/uds-description/editor_plugin.js'></script>
 <div class="wrap">
 	<div id="icon-edit" class="icon32 icon32-posts-post"><br /></div>
 	<h2>Edit uBillboard</h2>
-	<form id="billboard_update_form" method="post" action="" class="uds-billboard-form">
+	<form id="billboard_update_form" method="post" action="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard='.$billboard->name) ?>" class="uds-billboard-form">
 		<?php wp_nonce_field('uds-billboard-update', 'uds-billboard-update-nonce'); ?>
 		<div class="metabox-holder has-right-sidebar">
 			<div class="inner-sidebar">
@@ -37,7 +36,7 @@ $billboard->addEmptySlide();
 						<div class="inside">
 							<div id="minor-publishing-actions">
 								<div id="preview-action">
-									<a href="" class="preview button">Preview</a>
+									<a href="<?php echo admin_url("admin.php?page=uds_billboard_edit&action=preview&noheader") ?>" class="preview button">Preview</a>
 									<div class="clear"></div>
 								</div>
 							</div>

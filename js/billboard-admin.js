@@ -17,12 +17,16 @@ jQuery(function($){
 	});
 	
 	// Slide Tabs
-	$('.uds-slide-tabs').tabs({
-		show: function(event, ui){
-			var $image = $(ui.tab).parents('.slide').find('.image-wrapper');
-			$image.css('height', $image.parent().height() + 'px');
-		}
-	});
+	function createTabs() {
+		$('.uds-slide-tabs').tabs({
+			show: function(event, ui){
+				var $image = $(ui.tab).parents('.slide').find('.image-wrapper');
+				$image.css('height', $image.parent().height() + 'px');
+			}
+		});
+	}
+	
+	createTabs();
 	
 	// Billboard image collapsing
 	$('<div id="image-preview">').appendTo('body');
@@ -140,5 +144,42 @@ jQuery(function($){
 		    theme_advanced_statusbar_location : 'bottom',
 		    width : '100%'
 		});
+	});
+	
+	// Admin preview
+	$('a.preview').click(function(){
+		var url = $(this).attr('href');
+		
+		if(typeof tb_show === 'function') {
+			// save uBillboard
+			var originalName = $('#title').val();
+			$('#title').val('_uds_temp_billboard');
+			var form = $('#billboard_update_form').serialize() + '&action=uds_billboard_update';
+			$('#title').val(originalName);
+			
+			$.post(ajaxurl, form, function(data) {
+				if(data !== 'OK') {
+					console.log('Failed to save uBillboard');
+					return;
+				}
+				// Show Thickbox
+				
+				var originalRemove = window.tb_remove;
+				window.tb_remove = function() {
+					console.log(123);
+					originalRemove();
+					createTabs();
+				};
+				
+				var width = parseInt($('#uds-billboard-width').val(), 10) + 130;
+				var height = parseInt($('#uds-billboard-height').val(), 10) + 60;
+				tb_show('uBillboard Preview', url + '&width='+width+'&height='+height);
+				$('#TB_window').addClass('uds-preview');
+			});
+		} else {
+			alert('Thickbox not loaded!');
+		}
+		
+		return false;
 	});
 });
