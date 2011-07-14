@@ -40,6 +40,7 @@
 					}
 					
 					jQuery('#TB_window').css({
+						overflow: 'hidden',
 						width: parseInt(jQuery('#uds-bb-0').css('width'),10) + correctionX + 'px',
 						height: parseInt(jQuery('#uds-bb-0').css('height'),10) + correctionY + 'px',
 						marginLeft: -1000 / 2 + 'px'

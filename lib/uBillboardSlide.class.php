@@ -203,7 +203,7 @@ class uBillboardSlide {
 	
 	public function isValid()
 	{
-		$text = strip_tags($this->text);
+		$text = isset($this->text) ? strip_tags($this->text) : '';
 		return !empty($this->image) || !empty($text);
 	}
 	
