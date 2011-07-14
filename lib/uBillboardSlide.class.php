@@ -203,7 +203,8 @@ class uBillboardSlide {
 	
 	public function isValid()
 	{
-		return !empty($this->image) || !empty($this->text);
+		$text = strip_tags($this->text);
+		return !empty($this->image) || !empty($text);
 	}
 	
 	public function renderAdmin()
@@ -280,7 +281,7 @@ class uBillboardSlide {
 			$out .= "<span style='display:none' class='uds-delay'>{$this->delay}</span>";
 			$out .= "<span style='display:none' class='uds-transition'>$transition</span>";
 			$out .= "<span style='display:none' class='uds-direction'>{$direction}</span>";
-			$out .= do_shortcode($this->text);
+			$out .= do_shortcode(stripslashes($this->text));
 		$out .= "</div>\n";
 		return $out;
 	}
@@ -360,23 +361,6 @@ class uBillboardSlide {
 		echo '<div class="'. $attrib .'-wrapper">';
 		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
 		echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'" id="uds-text-'.$id.'">'. htmlspecialchars(stripslashes($this->{$attrib})) .'</textarea>';
-		echo "<script language='javascript' type='text/javascript'>\n";
-		echo "	tinyMCE.init({\n";
-		echo "		theme : 'advanced',\n";
-		echo "		mode: 'exact',\n";
-		echo "		elements : 'uds-text-$id',\n";
-		echo "		theme_advanced_toolbar_location : 'top',\n";
-		echo "		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,separator,'\n";
-		echo "		+ 'justifyleft,justifycenter,justifyright,justifyfull,formatselect,'\n";
-		echo "		+ 'bullist,numlist',\n";
-		echo "		theme_advanced_buttons2 : 'link,unlink,image,separator,'\n";
-		echo "		+'undo,redo,cleanup,code,separator,sub,sup,charmap,outdent,indent',\n";
-		echo "		theme_advanced_buttons3 : '',\n";
-		echo "		theme_advanced_resizing : true, \n";
-		echo "		theme_advanced_statusbar_location : 'bottom', \n";
-		echo "		width : '100%' \n";
-		echo "	});\n";
-		echo "</script>\n";
 		echo '</div>';
 		
 		$id++;

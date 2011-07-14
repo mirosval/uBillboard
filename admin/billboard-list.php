@@ -44,19 +44,20 @@ if(! is_array($billboards)) {
 			<tbody id="the-list">
 				<?php $n = 0; ?>
 				<?php foreach($billboards as $key => $billboard): ?>
+					<?php if($billboard->name == '_uds_temp_billboard') continue; ?>
 					<tr class="<?php echo $n % 2 == 0 ? 'alternate' : '' ?>">
 						<th class="check-column" scope="row">
 							<input type="checkbox" value="<?php echo $key ?>" name="billboard[]" />
 						</th>
 						<td>
 							<strong>
-								<a href="<?php echo admin_url('admin.php?page=uds_billboard_add&uds-billboard-edit='.$key) ?>">
+								<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.$key) ?>">
 									<?php echo $billboard->name ?>
 								</a>
 							</strong>
 							<div class="row-actions">
 								<span class="edit">
-									<a href="<?php echo admin_url('admin.php?page=uds_billboard_add&uds-billboard-edit='.$key) ?>">Edit</a> | 
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.$key) ?>">Edit</a> | 
 								</span>
 								<span class="trash">
 									<a href="<?php echo admin_url('admin.php?page=uds_billboard_admin&uds-billboard-delete='.$key.'&nonce='.wp_create_nonce('uds-billboard-delete-nonce')) ?>">Trash</a>
@@ -72,6 +73,6 @@ if(! is_array($billboards)) {
 			</tbody>
 		</table>
 	<?php else: ?>
-		<p>There are no uBillboards defined yet. Create your first one <a href="<?php echo admin_url('admin.php?page=uds_billboard_add') ?>">here</a>!</p>
+		<p>There are no uBillboards defined yet. Create your first one <a href="<?php echo admin_url('admin.php?page=uds_billboard_edit') ?>">here</a>!</p>
 	<?php endif; ?>
 </div>
