@@ -22,6 +22,7 @@ $billboard->addEmptySlide();
 
 //d($billboards);
 ?>
+<script language='javascript' src='http://meosoft/code/plugins/wp-content/plugins/uBillboard/lib/tinymce/uds-description/editor_plugin.js'></script>
 <div class="wrap">
 	<div id="icon-edit" class="icon32 icon32-posts-post"><br /></div>
 	<h2>Edit uBillboard</h2>

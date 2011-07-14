@@ -33,6 +33,7 @@ add_option(UDS_BILLBOARD_OPTION, array());
 
 require_once 'lib/uBillboard.class.php';
 require_once 'lib/uBillboardSlide.class.php';
+require 'lib/tinymce/tinymce.php';
 
 global $uds_billboard_errors;
 
@@ -81,10 +82,10 @@ add_action('admin_head', 'uds_billboard_editor_admin_head');
 add_action('admin_notices', 'uds_billboard_admin_notices');
 
 function uds_billboard_editor_admin_init() {
-	wp_enqueue_script('word-count');
-	wp_enqueue_script('post');
-	wp_enqueue_script('editor');
-	wp_enqueue_script('media-upload');
+	//wp_enqueue_script('word-count');
+	//wp_enqueue_script('post');
+	//wp_enqueue_script('editor');
+	//wp_enqueue_script('media-upload');
 }
 
 function uds_billboard_editor_admin_head() {
@@ -108,6 +109,7 @@ function uds_billboard_init()
 	// Basic init
 	$dir = UDS_BILLBOARD_URL;
 	if(is_admin()){
+		//
 		add_thickbox();
 		wp_enqueue_script("jquery-ui-tabs");
 		
@@ -527,6 +529,7 @@ function uds_billboard_description($atts, $content = null)
 	
 	return $out;
 }
+
 
 add_shortcode('uds-embed', 'uds_billboard_embed');
 function uds_billboard_embed($atts, $content = null)
