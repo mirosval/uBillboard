@@ -11,8 +11,6 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 
 // General Options
 define('UDS_BILLBOARD_VERSION', '3.0.0');
-define('UDS_BILLBOARD_USE_COMPRESSION', false);
-define('UDS_BILLBOARD_USE_RELATIVE_PATH', false);
 
 // WARNING!!!
 // set this to true only if you are calling uBillboard via shortcodes only!!!
@@ -28,12 +26,14 @@ if(uds_billboard_is_plugin()) {
 
 // User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard-3');
+define('UDS_BILLBOARD_OPTION_GENERAL', 'uds-billboard-general-3');
 
 add_option(UDS_BILLBOARD_OPTION, array());
 
 require_once 'lib/uBillboard.class.php';
 require_once 'lib/uBillboardSlide.class.php';
 require_once 'lib/tinymce/tinymce.php';
+require_once 'lib/shortcodes.php';
 
 global $uds_billboard_errors;
 
@@ -65,7 +65,7 @@ function uds_billboard_cache_is_writable()
 
 function uds_billboard_is_active()
 {
-	if(true == UDS_BILLBOARD_ENABLE_SHORTCODE_OPTIMIZATION) {
+	if(uds_billboard_use_shortcode_optimization()) {
 		if(function_exists('uds_active_shortcodes')) {
 			$active_shortcodes = uds_active_shortcodes();
 			if( ! in_array('uds-billboard', $active_shortcodes)) {
@@ -93,45 +93,46 @@ function uds_billboard_admin_notices() {
 }
 
 // initialize billboard
-add_action('init', 'uds_billboard_init');
+add_action('admin_init', 'uds_billboard_init');
 function uds_billboard_init()
 {
 	global $uds_billboard_general_options, $uds_billboard_attributes;
 	
+	// Register settings
+	register_setting('uds_billboard_general_options', UDS_BILLBOARD_OPTION_GENERAL, 'uds_billboard_general_validate');
+	
 	// Basic init
 	$dir = UDS_BILLBOARD_URL;
-	if(is_admin()){
-		//
-		add_thickbox();
-		wp_enqueue_script("jquery-ui-tabs");
-		
-		$nonce = isset($_REQUEST['uds-billboard-update-nonce']) && wp_verify_nonce('uds-billboard-update-nonce', $_REQUEST['uds-billboard-update-nonce']);
-		
-		// process updates
-		if(!empty($_POST['uds-billboard']) && !$nonce && !is_ajax()){
-			die('Security check failed');
-		} else {
-			uds_billboard_process_updates();
+	//
+	add_thickbox();
+	wp_enqueue_script("jquery-ui-tabs");
+	
+	$nonce = isset($_REQUEST['uds-billboard-update-nonce']) && wp_verify_nonce('uds-billboard-update-nonce', $_REQUEST['uds-billboard-update-nonce']);
+	
+	// process updates
+	if(!empty($_POST['uds-billboard']) && !$nonce && !is_ajax()){
+		die('Security check failed');
+	} else {
+		uds_billboard_process_updates();
+	}
+	
+	// process deletes
+	if(!empty($_REQUEST['uds-billboard-delete']) && wp_verify_nonce('uds-billboard-delete-nonce', $_REQUEST['nonce'])) {
+		uds_billboard_delete();
+	}
+	
+	// process imports/exports
+	if(isset($_GET['page']) && $_GET['page'] == 'uds_billboard_import_export') {
+		if(isset($_GET['download_export']) && wp_verify_nonce($_GET['download_export'], 'uds-billboard-export')) {
+			if(isset($_GET['uds-billboard-export'])) {
+				uds_billboard_export($_GET['uds-billboard-export']);
+			} else {
+				uds_billboard_export();
+			}
 		}
 		
-		// process deletes
-		if(!empty($_REQUEST['uds-billboard-delete']) && wp_verify_nonce('uds-billboard-delete-nonce', $_REQUEST['nonce'])) {
-			uds_billboard_delete();
-		}
-		
-		// process imports/exports
-		if(isset($_GET['page']) && $_GET['page'] == 'uds_billboard_import_export') {
-			if(isset($_GET['download_export']) && wp_verify_nonce($_GET['download_export'], 'uds-billboard-export')) {
-				if(isset($_GET['uds-billboard-export'])) {
-					uds_billboard_export($_GET['uds-billboard-export']);
-				} else {
-					uds_billboard_export();
-				}
-			}
-			
-			if(isset($_FILES['uds-billboard-import']) && is_uploaded_file($_FILES['uds-billboard-import']['tmp_name'])) {
-				uds_billboard_import($_FILES['uds-billboard-import']['tmp_name']);
-			}
+		if(isset($_FILES['uds-billboard-import']) && is_uploaded_file($_FILES['uds-billboard-import']['tmp_name'])) {
+			uds_billboard_import($_FILES['uds-billboard-import']['tmp_name']);
 		}
 	}
 }
@@ -151,7 +152,7 @@ function uds_billboard_scripts()
 	}
 	
 	wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'), '1.3', true);
-	if(UDS_BILLBOARD_USE_COMPRESSION){
+	if(uds_billboard_use_compression()){
 		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'), '3.0', true);
 	} else {
 		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery', 'easing'), '3.0', true);
@@ -189,17 +190,36 @@ function uds_billboard_styles()
 
 if(uds_billboard_is_plugin()) {
 	register_activation_hook(__FILE__, 'uds_billboard_activation_hook');
-	register_activation_hook(__FILE__, 'uds_billboard_deactivation_hook');
+	register_deactivation_hook(__FILE__, 'uds_billboard_deactivation_hook');
+	register_uninstall_hook(__FILE__, 'uds_billboard_uninstall_hook');
 }
 
 function uds_billboard_activation_hook()
 {
-	add_option(UDS_BILLBOARD_OPTION, array());
+	$bb = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, null));
+	if($bb === null) {
+		add_option(UDS_BILLBOARD_OPTION, array());
+	}
+	
+	$general = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION_GENERAL, null));
+	if($general === null) {
+		$arr = array(
+			'compression' => true,
+			'shortcode_optimization' => true
+		);
+		add_option(UDS_BILLBOARD_OPTION_GENERAL, '');
+	}
 }
 
 function uds_billboard_deactivation_hook()
 {
 	//delete_option(UDS_BILLBOARD_OPTION);
+}
+
+function uds_billboard_uninstall_hook()
+{
+	delete_option(UDS_BILLBOARD_OPTION);
+	delete_option(UDS_BILLBOARD_OPTION_GENERAL);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -217,6 +237,7 @@ function uds_billboard_menu()
 	$icon = UDS_BILLBOARD_URL . 'images/menu-icon.png';
 	$ubillboard = add_menu_page("uBillboard", "uBillboard", 'edit_pages', 'uds_billboard_admin', 'uds_billboard_admin', $icon, $position);
 	$ubillboard_add = add_submenu_page('uds_billboard_admin', "Add Billboard", 'Add Billboard', 'edit_pages', 'uds_billboard_edit', 'uds_billboard_edit');
+	$ubillboard_general = add_submenu_page('uds_billboard_admin', "General Options", 'General Options', 'manage_options', 'uds_billboard_general', 'uds_billboard_general');
 	$ubillboard_importexport = add_submenu_page('uds_billboard_admin', "Import/Export", 'Import/Export', 'import', 'uds_billboard_import_export', 'uds_billboard_import_export');
 	
 	add_action("admin_print_styles-$ubillboard", 'uds_billboard_enqueue_admin_styles');
@@ -250,6 +271,16 @@ function uds_billboard_edit()
 	} else {
 		include 'admin/billboard-edit.php';
 	}
+}
+
+// Admin menu entry handling
+function uds_billboard_general()
+{
+	if(!current_user_can('manage_options')) {
+		wp_die(__('You do not have sufficient permissions to access this page'));
+	}
+
+	include 'admin/billboard-general.php';
 }
 
 // Admin menu entry handling
@@ -510,6 +541,17 @@ function uds_billboard_list()
 	die();
 }
 
+function uds_billboard_use_compression()
+{
+	$option = get_option(UDS_BILLBOARD_OPTION_GENERAL);
+	return $option['compression'];
+}
+
+function uds_billboard_use_shortcode_optimization()
+{
+	$option = get_option(UDS_BILLBOARD_OPTION_GENERAL);
+	return $option['shortcode_optimization'];
+}
 
 if(!function_exists('is_ajax')) {
 /**
@@ -522,6 +564,14 @@ function is_ajax()
 {
 	return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
 }
+}
+
+function uds_billboard_general_validate($input)
+{
+	$input['compression'] = isset($input['compression']) && in_array($input['compression'], array('', 'on')) ? true : false;
+	$input['shortcode_optimization'] = isset($input['shortcode_optimization']) && in_array($input['shortcode_optimization'], array('', 'on')) ? true : false;
+
+	return $input;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

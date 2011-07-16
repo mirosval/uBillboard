@@ -31,14 +31,14 @@ if(! is_array($billboards)) {
 				<tr>
 					<th id="cb" class="manage-column column-cb check-column" scope="col"><input type="checkbox" /></th>
 					<th id="title">Billboard Name</th>
-					<th>Shortcode</th>
+					<th class="shortcode">Shortcode</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
 					<th id="cb" class="manage-column column-cb check-column" scope="col"><input type="checkbox" /></th>
 					<th id="title">Billboard Name</th>
-					<th>Shortcode</th>
+					<th class="shortcode">Shortcode</th>
 				</tr>
 			</tfoot>
 			<tbody id="the-list">
@@ -70,7 +70,7 @@ if(! is_array($billboards)) {
 								</span>
 							</div>
 						</td>
-						<td>
+						<td class="shortcode">
 							<?php echo "[uds-billboard name=\"{$billboard->name}\"]"?>
 						</td>
 					</tr>
