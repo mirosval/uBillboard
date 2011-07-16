@@ -1,18 +1,5 @@
 <?php
 
-global $uds_billboard_tinymce_extensions;
-
-$uds_billboard_tinymce_extensions = array(
-	array(
-		'row' => 3,
-		'dir' => 'uds-description'
-	),
-	array(
-		'row' => 3,
-		'dir' => 'uds-embed'
-	)
-);
-
 class uds_billboard_tinymce_extensions {
 	
 	var $plugin_name = "udsExtensions";
@@ -40,16 +27,11 @@ class uds_billboard_tinymce_extensions {
 	
 	// used to insert button in wordpress 2.5x editor
 	function register_button($buttons) {
-		global $uds_billboard_tinymce_extensions;
-		
-		foreach($uds_billboard_tinymce_extensions as $ext) {
-			if($ext['row'] == 3 && $ext['dir'] == 'divider'){
-				$buttons[] = '|';
-				continue;
-			}
-			if($ext['row'] == 3) {
-				$buttons[] = $this->dash_to_camel($ext['dir']);
-			}
+		if(isset($_GET['page']) && $_GET['page'] === 'uds_billboard_edit') {
+			$buttons[] = 'udsDescription';
+			$buttons[] = 'udsEmbed';
+		} else {
+			$buttons[] = 'udsBillboard';
 		}
 		
 		return $buttons;
@@ -57,11 +39,11 @@ class uds_billboard_tinymce_extensions {
 	
 	// Load the TinyMCE plugin : editor_plugin.js (wp2.5)
 	function add_tinymce_plugin($plugin_array) {   
-		global $uds_billboard_tinymce_extensions;
-		
-		foreach($uds_billboard_tinymce_extensions as $ext) {
-			if($ext['dir'] == 'divider') continue;
-			$plugin_array[$this->dash_to_camel($ext['dir'])] =  UDS_BILLBOARD_URL.'lib/tinymce/'.$ext['dir'].'/editor_plugin.js';
+		if(isset($_GET['page']) && $_GET['page'] === 'uds_billboard_edit') {
+			$plugin_array['udsDescription'] =  UDS_BILLBOARD_URL.'lib/tinymce/uds-description/editor_plugin.js';
+			$plugin_array['udsEmbed'] =  UDS_BILLBOARD_URL.'lib/tinymce/uds-embed/editor_plugin.js';
+		} else {
+			$plugin_array['udsBillboard'] =  UDS_BILLBOARD_URL.'lib/tinymce/uds-billboard/editor_plugin.js';
 		}
 		
 		return $plugin_array;
@@ -70,12 +52,6 @@ class uds_billboard_tinymce_extensions {
 	function change_tinymce_version($version) {
 		return ++$version;
 	}
-	
-	function dash_to_camel($name) {
-		$elements = explode('-', $name);
-		return array_shift($elements) . implode('', array_map('ucfirst', $elements));
-	}
-	
 }
 
 // Call it now

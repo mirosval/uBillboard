@@ -77,16 +77,8 @@ function uds_billboard_is_active()
 	return true;
 }
 
-add_action('admin_init', 'uds_billboard_editor_admin_init');
 add_action('admin_head', 'uds_billboard_editor_admin_head');
 add_action('admin_notices', 'uds_billboard_admin_notices');
-
-function uds_billboard_editor_admin_init() {
-	//wp_enqueue_script('word-count');
-	//wp_enqueue_script('post');
-	//wp_enqueue_script('editor');
-	//wp_enqueue_script('media-upload');
-}
 
 function uds_billboard_editor_admin_head() {
 	wp_tiny_mce();
@@ -128,7 +120,7 @@ function uds_billboard_init()
 		}
 		
 		// process imports/exports
-		if($_GET['page'] == 'uds_billboard_import_export') {
+		if(isset($_GET['page']) && $_GET['page'] == 'uds_billboard_import_export') {
 			if(isset($_GET['download_export']) && wp_verify_nonce($_GET['download_export'], 'uds-billboard-export')) {
 				uds_billboard_export();
 			}
@@ -265,7 +257,7 @@ function uds_billboard_import_export()
 		wp_die(__('You do not have sufficient permissions to access this page'));
 	}
 	
-	include 'billboard-import-export.php';
+	include 'admin/billboard-import-export.php';
 }
 
 function uds_billboard_enqueue_admin_styles()
@@ -492,6 +484,21 @@ function uds_billboard_render_js_support()
 	<?php
 }
 
+add_action('wp_ajax_uds_billboard_list', 'uds_billboard_list');
+function uds_billboard_list()
+{
+	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	
+	foreach($billboards as $name => $billboard) {
+		if($name == '_uds_temp_billboard') continue;
+		
+		echo '<option name="'.$name.'">'.$name.'</option>';
+	}
+	
+	die();
+}
+
+
 if(!function_exists('is_ajax')) {
 /**
  *	Is Ajax
@@ -553,61 +560,6 @@ function get_uds_billboard($name = 'billboard', $options = array())
 function the_uds_billboard($name = 'billboard')
 {
 	echo get_uds_billboard($name);
-}
-
-add_shortcode('uds-billboard', 'uds_billboard_shortcode');
-function uds_billboard_shortcode($atts, $content = null)
-{	
-	extract(shortcode_atts(array(
-		'name' => 'billboard'
-	), $atts));
-	return get_uds_billboard($name);
-}
-
-add_shortcode('uds-description', 'uds_billboard_description');
-function uds_billboard_description($atts, $content = null)
-{
-	extract(shortcode_atts(array(
-		'top' => '20px',
-		'left' => '20px',
-		'width' => '200px',
-		'height' => '80%',
-		'bg' => 'white',
-		'skin' => ''
-	), $atts));
-
-	if(!empty($skin)) $skin = 'uds-' . $skin;
-
-	$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;background-color:$bg'>$content</div>";
-	
-	return $out;
-}
-
-
-add_shortcode('uds-embed', 'uds_billboard_embed');
-function uds_billboard_embed($atts, $content = null)
-{
-	global $uds_bb_params;
-	extract(shortcode_atts(array(
-		'url' => ''
-	), $atts));
-	
-	if(empty($url)) return __('URL Must not be empty');
-	
-	$width = (int)$uds_bb_params['width'];
-	$height = (int)$uds_bb_params['height'];
-	
-	$url = 'http://api.embed.ly/1/oembed?url='.urlencode($url)."&maxwidth=$width&maxheight=$height&format=json";
-
-	$response = @file_get_contents($url);
-	
-	if(empty($response)) {
-		return __('There was an error when loading the video');
-	}
-	
-	$response = json_decode($response);
-	
-	return apply_filters('uds_shortcode_out_filter', $response->html);
 }
 
 ?>
