@@ -16,6 +16,14 @@ jQuery(function($){
 		$(this).parent().toggleClass('closed');
 	});
 	
+	// Before uBillboard submit
+	$('#billboard_update_form').submit(function(){
+		// remove all hidden fields from before checked checkboxes
+		$('.slides input:checked').each(function(){
+			$(this).prev().remove();
+		});
+	});
+	
 	// Slide Tabs
 	function createTabs() {
 		$('.uds-slide-tabs').tabs({

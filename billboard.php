@@ -33,7 +33,7 @@ add_option(UDS_BILLBOARD_OPTION, array());
 
 require_once 'lib/uBillboard.class.php';
 require_once 'lib/uBillboardSlide.class.php';
-require 'lib/tinymce/tinymce.php';
+require_once 'lib/tinymce/tinymce.php';
 
 global $uds_billboard_errors;
 

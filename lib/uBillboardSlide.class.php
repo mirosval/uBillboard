@@ -106,15 +106,11 @@ class uBillboardSlide {
 		while(!empty($options) && $n < 100) {
 			$attributes = array();
 			foreach($uds_billboard_attributes as $key => $option) {
-				if(!isset($options[$key][$n]) && $option['type'] != 'checkbox') {
+				if(!isset($options[$key][$n])) {
 					break;
 				}
 				
-				if($option['type'] == 'checkbox') {
-					$attributes[$key] = '';
-				} else {
-					$attributes[$key] = $options[$key][$n];
-				}
+				$attributes[$key] = $options[$key][$n];
 				
 				unset($options[$key][$n]);
 				
@@ -366,7 +362,8 @@ class uBillboardSlide {
 		$attrib_full = $uds_billboard_attributes[$attrib];
 		echo '<div class="'. $attrib .'-wrapper">';
 		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
-		echo '<input type="checkbox" name="uds_billboard['. $attrib .'][]" '.checked($this->{$attrib}, 'on', false) . '" id="billboard-'. $attrib .'" class="billboard-'. $attrib .' checkbox" />';
+		echo '<input type="hidden" name="uds_billboard['. $attrib .'][]" id="billboard-'. $attrib .'" class="billboard-'. $attrib .'" value="" />';
+		echo '<input type="checkbox" name="uds_billboard['. $attrib .'][]" '.checked($this->{$attrib}, 'on', false) . ' id="billboard-'. $attrib .'" class="billboard-'. $attrib .' checkbox" />';
 		echo '</div>';
 	}
 	
