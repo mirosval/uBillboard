@@ -255,7 +255,7 @@
 		box-shadow: 1px 1Px 1Px #666;
 	}
 	
-	.uds-bb-paginator.oldskool .uds-bb-bullet, .uds-bb-paginator.oldskool-bright .uds-bb-bullet {
+	.uds-bb-paginator.oldskool .uds-bb-bullet, .uds-bb-paginator.oldskool-bright .uds-bb-bullet, .uds-bb-paginator.uTube .uds-bb-bullet {
 		background: url(../images/skin-oldskool/bullet.png) no-repeat;
 		width: 10px;
 		height: 10px;
@@ -275,6 +275,70 @@
 	.uds-bb-paginator.oldskool-bright .uds-bb-bullet.active {
 		background: url(../images/skin-oldskool-bright/bullet-active.png) no-repeat;
 	}
+	
+	/* uTube Skin */
+	
+	.uds-bb-paginator.uTube {
+		width: 100%;
+		height: 40px;
+		background: red;
+		position: absolute;
+		bottom: 0px;
+		background: url(../images/skin-uTube/bg.png) repeat-x;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-prev {
+		background: url(../images/skin-uTube/prev.png);
+		width: 40px;
+		height: 40px;
+		float: left;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-playpause{
+		background: url(../images/skin-uTube/play.png);
+		width: 40px;
+		height: 40px;
+		float: left;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-playpause:hover{
+		background: url(../images/skin-uTube/play-hover.png);
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-prev:hover {
+		background: url(../images/skin-uTube/prev-hover.png);
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-next {
+		background: url(../images/skin-uTube/next.png);
+		width: 40px;
+		height: 40px;
+		float: right;
+		margin-left: 20px;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-next:hover {
+		background: url(../images/skin-uTube/next-hover.png);
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-position-indicator-bullets {
+		height: 27px;
+		padding-top: 13px;
+		float: right;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-bullet {
+		background: url(../images/skin-uTube/bullet.png) no-repeat;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-bullet:hover {
+		background: url(../images/skin-uTube/bullet-hover.png) no-repeat;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-bullet.active {
+		background: url(../images/skin-uTube/bullet-active.png) no-repeat;
+	}
+
 
 /* Thumbnails */
 .uds-bb-thumbnails {

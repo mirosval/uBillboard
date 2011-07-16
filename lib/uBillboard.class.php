@@ -70,7 +70,8 @@ $uds_billboard_general_options = array(
 		'options' => array(
 			'mini' => 'Minimal Style Controls',
 			'oldskool' => 'Old School uBillboard',
-			'oldskool-bright' => 'Bright Old School uBillboard'
+			'oldskool-bright' => 'Bright Old School uBillboard',
+			'utube' => 'uTube'
 		),
 		'default' => 'oldskool'
 	),
@@ -354,7 +355,10 @@ class uBillboard {
 				$out .= $this->paginatorOldskool();
 				break;
 			case 'oldskool-bright':
-				$out .= $this->paginatorOldskoolBright();	
+				$out .= $this->paginatorOldskoolBright();
+				break;
+			case 'utube':
+				$out .= $this->paginatoruTube();
 		}
 
 		if($this->showThumbnails !== 'no') {
@@ -503,6 +507,18 @@ class uBillboard {
 			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>Play</span></div>";
 			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>Prev</span></div>";
 			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>Next</span></div>";
+			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
+		$out .= "</div>";
+		return $out;
+	}
+	
+	private function paginatoruTube()
+	{
+		$out = '';
+		$out .= "<div class='uds-bb-paginator uTube'>";
+			$out .= "<div class='uds-bb-button uds-bb-prev'><span>Prev</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-playpause uds-left'><span>Play</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-next'><span>Next</span></div>";
 			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
 		$out .= "</div>";
 		return $out;
