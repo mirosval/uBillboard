@@ -348,7 +348,7 @@
 			
 			if(progress >= 1) {
 				$indicator.fadeOut('200', function(){
-					$(this).remove();
+					$preloader.remove();
 				});
 			}
 		},
