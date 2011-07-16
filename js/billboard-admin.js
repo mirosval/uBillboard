@@ -155,7 +155,7 @@ jQuery(function($){
 	});
 	
 	// Admin preview
-	$('a.preview').click(function(){
+	var adminPreview = function(){
 		var url = $(this).attr('href');
 		
 		if(typeof tb_show === 'function') {
@@ -189,5 +189,11 @@ jQuery(function($){
 		}
 		
 		return false;
-	});
+	}
+	
+	$('a.preview').click(adminPreview);
+
+	if(window.location.hash === '#preview') {
+		$('a.preview').trigger('click');
+	}
 });

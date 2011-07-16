@@ -122,7 +122,11 @@ function uds_billboard_init()
 		// process imports/exports
 		if(isset($_GET['page']) && $_GET['page'] == 'uds_billboard_import_export') {
 			if(isset($_GET['download_export']) && wp_verify_nonce($_GET['download_export'], 'uds-billboard-export')) {
-				uds_billboard_export();
+				if(isset($_GET['uds-billboard-export'])) {
+					uds_billboard_export($_GET['uds-billboard-export']);
+				} else {
+					uds_billboard_export();
+				}
 			}
 			
 			if(isset($_FILES['uds-billboard-import']) && is_uploaded_file($_FILES['uds-billboard-import']['tmp_name'])) {
@@ -362,7 +366,7 @@ function uds_billboard_import($file)
 		wp_redirect('admin.php?page=uds_billboard_admin');
 }
 
-function uds_billboard_export()
+function uds_billboard_export($what = false)
 {
 	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
 	
@@ -371,7 +375,15 @@ function uds_billboard_export()
 	$export .= ' <version>'.UDS_BILLBOARD_VERSION.'</version>' . "\n";
 	$export .= ' <udsBillboards>' . "\n";
 	
-	foreach($billboards as $billboard) {
+	foreach($billboards as $name => $billboard) {
+		if($what !== false) {
+			if(is_array($what) && !in_array($name, $what)) {
+				continue;
+			} elseif($name === $what) {
+				continue;
+			}
+		}
+		
 		$export .= $billboard->export() . "\n";
 	}
 	

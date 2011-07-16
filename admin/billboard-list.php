@@ -59,6 +59,12 @@ if(! is_array($billboards)) {
 								<span class="edit">
 									<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.$key) ?>">Edit</a> | 
 								</span>
+								<span class="preview-action">
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.$key.'#preview') ?>">Preview</a> | 
+								</span>
+								<span class="export">
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_import_export&uds-billboard-export='.$key.'&download_export='.wp_create_nonce('uds-billboard-export')) ?>">Export</a> | 
+								</span>
 								<span class="trash">
 									<a href="<?php echo admin_url('admin.php?page=uds_billboard_admin&uds-billboard-delete='.$key.'&nonce='.wp_create_nonce('uds-billboard-delete-nonce')) ?>">Trash</a>
 								</span>
