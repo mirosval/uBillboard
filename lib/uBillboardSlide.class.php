@@ -172,6 +172,20 @@ class uBillboardSlide {
 		}
 	}
 	
+	public function importFromXML($slide)
+	{
+		global $uds_billboard_attributes;
+		
+		foreach($uds_billboard_attributes as $key => $option) {
+			foreach($slide->property as $property) {
+				if($property->key == $key) {
+					$camelized = $this->camelize($key);
+					$this->{$key} = (string)$property->value;
+				}
+			}
+		}
+	}
+	
 	public function update($options)
 	{
 		global $uds_billboard_attributes;

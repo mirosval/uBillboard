@@ -191,11 +191,6 @@ class uBillboard {
 		
 	}
 	
-	public static function import($string)
-	{
-	
-	}
-	
 	public function __construct($options = false)
 	{
 		global $uds_billboard_general_options;
@@ -237,6 +232,26 @@ class uBillboard {
 		
 		foreach($this->slides as $slide) {
 			$slide->setSlider($this);
+		}
+	}
+	
+	public function importFromXML($billboard)
+	{
+		global $uds_billboard_general_options;
+		
+		foreach($billboard->properties[0] as $property){
+			foreach($uds_billboard_general_options as $key => $option) {
+				if($property->key == $key) {
+					$camelized = $this->camelize($key);
+					$this->{$camelized} = (string)$property->value;
+				}
+			}
+		}
+		
+		foreach($billboard->slides->slide as $slide) {
+			$s = new uBillboardSlide(false, $this);
+			$s->importFromXML($slide);
+			$this->slides[] = $s;
 		}
 	}
 	

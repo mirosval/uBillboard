@@ -299,24 +299,30 @@ function uds_billboard_import($file)
 		return;
 	}
 	
-	$import = maybe_unserialize($import);
+	$import = new SimpleXMLElement($import);
 	
-	if(empty($import['data'])) {
+	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
+	
+	foreach($import->udsBillboards as $udsBillboard) {
+		$billboard = new uBillboard();
+		$billboard->importFromXML($udsBillboard->udsBillboard);
+		$billboards[$billboard->name] = $billboard;
+	}
+	
+	if(!$billboard->isValid()) {
 		$uds_billboard_errors[] = 'Import file is corrupted';
 		return;
 	}
-	
-	$billboards = $import['data'];
-	
+
 	if($_POST['import-attachments'] == 'on') {
 		foreach($billboards as $bbname => $billboard) {
-			foreach($billboard['slides'] as $key => $slide) {
-				$urlinfo = parse_url($slide['image']);
+			foreach($billboard->slides as $slide) {
+				$urlinfo = parse_url($slide->image);
 				$localurl = parse_url(get_option('siteurl'));
 				//if($urlinfo['hostname'] == $localurl['hostname']) continue;
 				
 				//echo "Downloading attachment";
-				$image = @file_get_contents($slide['image']);
+				$image = @file_get_contents($slide->image);
 				if(!empty($image)) {
 					$uploads = wp_upload_dir();
 					if(false === $uploads['error']) {
@@ -324,7 +330,7 @@ function uds_billboard_import($file)
 						$path = trailingslashit($uploads['path']) . wp_unique_filename($uploads['path'], $filename['basename']);
 						if(! (false === @file_put_contents($path, $image)) ) {
 							$filename = pathinfo($path);
-							$billboards[$bbname]['slides'][$key]['image'] = $uploads['url'] . '/' . $filename['basename'];
+							$slide->image = $uploads['url'] . '/' . $filename['basename'];
 							
 							$wp_filetype = wp_check_filetype(basename($path), null );
 							$attachment = array(
@@ -358,7 +364,7 @@ function uds_billboard_import($file)
 		}
 	}
 	
-	update_option(UDS_BILLBOARD_OPTION, $billboards);
+	update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
 	
 	if(empty($uds_billboards_errors))
 		wp_redirect('admin.php?page=uds_billboard_admin');
