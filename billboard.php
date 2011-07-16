@@ -128,11 +128,12 @@ function uds_billboard_init()
 		}
 		
 		// process imports/exports
-		if(isset($_POST['uds-billboard']) && isset($_GET['page']) && $_GET['page'] == 'uds_billboard_import_export') {
+		if($_GET['page'] == 'uds_billboard_import_export') {
 			if(isset($_GET['download_export']) && wp_verify_nonce($_GET['download_export'], 'uds-billboard-export')) {
 				uds_billboard_export();
 			}
-			if(is_uploaded_file($_FILES['uds-billboard-import']['tmp_name'])) {
+			
+			if(isset($_FILES['uds-billboard-import']) && is_uploaded_file($_FILES['uds-billboard-import']['tmp_name'])) {
 				uds_billboard_import($_FILES['uds-billboard-import']['tmp_name']);
 			}
 		}
@@ -365,14 +366,22 @@ function uds_billboard_import($file)
 
 function uds_billboard_export()
 {
-	$export = array();
-	$export['version'] = UDS_BILLBOARD_VERSION;
-	$export['data'] = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
+	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
 	
-	$export = serialize($export);
+	$export = '<?xml version="1.0"?>' . "\n";
+	$export .= '<udsBillboardExport>' . "\n";
+	$export .= ' <version>'.UDS_BILLBOARD_VERSION.'</version>' . "\n";
+	$export .= ' <udsBillboards>' . "\n";
 	
-	header('Content-type: text/plain');
-	header('Content-Disposition: attachment; filename="uBillboard.txt"');
+	foreach($billboards as $billboard) {
+		$export .= $billboard->export() . "\n";
+	}
+	
+	$export .= ' </udsBillboards>' . "\n";
+	$export .= '</udsBillboardExport>' . "\n";
+	
+	header('Content-type: text/xml');
+	header('Content-Disposition: attachment; filename="uBillboard.xml"');
 	die($export);
 }
 

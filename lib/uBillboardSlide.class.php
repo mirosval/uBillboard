@@ -201,6 +201,25 @@ class uBillboardSlide {
 		}
 	}
 	
+	public function export()
+	{
+		global $uds_billboard_attributes;
+		
+		$out = '    <slide>' . "\n";
+		
+		foreach($uds_billboard_attributes as $key => $option) {
+			$camelKey = $this->camelize($key);
+			$out .= '     <property>' . "\n";
+			$out .= '      <key>' . $key . '</key>' . "\n";
+			$out .= '      <value>' . $this->{$key} . '</value>' . "\n";
+			$out .= '     </property>' . "\n";
+		}
+		
+		$out .= '    </slide>' . "\n";
+		
+		return $out;
+	}
+	
 	public function isValid()
 	{
 		$text = isset($this->text) ? strip_tags($this->text) : '';
@@ -405,6 +424,16 @@ class uBillboardSlide {
 		$unique_id++;
 	}
 	
+	private function camelize($string) 
+	{
+		$string = str_replace(array('-', '_'), ' ', $string); 
+		$string = ucwords($string); 
+		$string = str_replace(' ', '', $string);  
+		
+		$string = lcfirst($string);
+		
+		return $string;
+	}
 }
 
 ?>

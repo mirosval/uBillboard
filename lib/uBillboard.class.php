@@ -190,6 +190,11 @@ class uBillboard {
 		
 	}
 	
+	public static function import($string)
+	{
+	
+	}
+	
 	public function __construct($options = false)
 	{
 		global $uds_billboard_general_options;
@@ -282,6 +287,37 @@ class uBillboard {
 	public function addEmptySlide()
 	{
 		$this->slides[] = new uBillboardSlide(false, $this);
+	}
+	
+	public function export()
+	{
+		global $uds_billboard_general_options;
+		
+		$out = '  <udsBillboard>' . "\n";
+		
+		$out .= '     <properties>'. "\n";
+		
+		foreach($uds_billboard_general_options as $key => $option) {
+			$camelKey = $this->camelize($key);
+			$out .= '     <property>' . "\n";
+			$out .= '      <key>' . $key . '</key>' . "\n";
+			$out .= '      <value>' . $this->{$key} . '</value>' . "\n";
+			$out .= '     </property>' . "\n";
+		}
+		
+		$out .= '   </properties>'. "\n";
+		
+		$out .= '   <slides>' . "\n";
+		
+		foreach($this->slides as $slide) {
+			$out .= $slide->export();
+		}
+		
+		$out .= '   </slides>' . "\n";
+		
+		$out .= '  </udsBillboard>' . "\n";
+		
+		return $out;
 	}
 	
 	public function render($id = 0)
