@@ -12,10 +12,6 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 // General Options
 define('UDS_BILLBOARD_VERSION', '3.0.0');
 
-// WARNING!!!
-// set this to true only if you are calling uBillboard via shortcodes only!!!
-define('UDS_BILLBOARD_ENABLE_SHORTCODE_OPTIMIZATION', false); 
-
 if(uds_billboard_is_plugin()) {
 	define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 	define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
@@ -584,7 +580,7 @@ add_action('wp_footer', 'uds_billboard_footer_scripts');
 function uds_billboard_footer_scripts()
 {
 	global $uds_billboard_footer_scripts;
-	
+
 	echo "
 	<script language='JavaScript' type='text/javascript'>
 		jQuery(document).ready(function($){

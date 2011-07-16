@@ -6,7 +6,7 @@ function uds_billboard_shortcode($atts, $content = null)
 	extract(shortcode_atts(array(
 		'name' => 'billboard'
 	), $atts));
-	
+
 	return get_uds_billboard($name);
 }
 
