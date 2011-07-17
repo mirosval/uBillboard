@@ -43,6 +43,7 @@ jQuery(function($){
 	var slideClone = $('#normal-sortables .slides .slide:last').clone();
 	$('.slide .adddiv').live('click', function(){
 		$(this).parents('.slide').after(slideClone.clone());
+		createTabs();
 	});
 	
 	// slide Deleting

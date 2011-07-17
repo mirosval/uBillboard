@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: uBillboard
+Plugin Name: uBillboard 3 Beta
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
-Description: uBillboard is a slider plugin by uDesignStudios that allows you to create complex and eye-catching presentations for your web.
-Version: 3.0.0
+Description: <strong>uBillboard 3 Beta is not recommended for use on production servers!</strong> <br /> uBillboard is a slider plugin by uDesignStudios that allows you to create complex and eye-catching presentations for your web.
+Version: 3.0.0 Beta
 Author: uDesign
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
@@ -23,8 +23,6 @@ if(uds_billboard_is_plugin()) {
 // User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard-3');
 define('UDS_BILLBOARD_OPTION_GENERAL', 'uds-billboard-general-3');
-
-add_option(UDS_BILLBOARD_OPTION, array());
 
 require_once 'lib/uBillboard.class.php';
 require_once 'lib/uBillboardSlide.class.php';
@@ -184,26 +182,23 @@ function uds_billboard_styles()
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-if(uds_billboard_is_plugin()) {
-	register_activation_hook(__FILE__, 'uds_billboard_activation_hook');
-	register_deactivation_hook(__FILE__, 'uds_billboard_deactivation_hook');
-	register_uninstall_hook(__FILE__, 'uds_billboard_uninstall_hook');
-}
+register_activation_hook(__FILE__, 'uds_billboard_activation_hook');
+register_deactivation_hook(__FILE__, 'uds_billboard_deactivation_hook');
+register_uninstall_hook(__FILE__, 'uds_billboard_uninstall_hook');
 
 function uds_billboard_activation_hook()
 {
-	$bb = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, null));
-	if($bb === null) {
+	$option = get_option(UDS_BILLBOARD_OPTION);
+	if(!$option) {
 		add_option(UDS_BILLBOARD_OPTION, array());
 	}
 	
-	$general = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION_GENERAL, null));
-	if($general === null) {
-		$arr = array(
+	$option = get_option(UDS_BILLBOARD_OPTION_GENERAL);
+	if(!$option) {
+		add_option(UDS_BILLBOARD_OPTION_GENERAL, array(
 			'compression' => true,
-			'shortcode_optimization' => true
-		);
-		add_option(UDS_BILLBOARD_OPTION_GENERAL, '');
+			'shortcode_optimization' => false
+		));
 	}
 }
 
