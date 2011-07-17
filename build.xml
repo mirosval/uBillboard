@@ -3,7 +3,7 @@
 	<!-- Main project name -->
 	<property name="project_name" value="uBillboard" />
 	<!-- This is the basename of all related files (php, js, css) -->
-	<property name="file_name" value="slider" />
+	<property name="file_name" value="billboard" />
 	<!-- Software version -->
 	<property name="version" value="3.0.0" />
 	
@@ -17,13 +17,12 @@
 		<delete dir="build" />
 		<delete file="js/${file_name}.min.js" />
 		<delete file="css/${file_name}.min.css" />
-		<replace file="${file_name}.php" token="'UDS_SLIDER_USE_COMPRESSION', true" value="'UDS_SLIDER_USE_COMPRESSION', false" />
 	</target>
 	
 	<!-- Update version string in all occurrences -->
 	<target name="update_version">
 		<replaceregexp file="${file_name}.php" match="Version: [0-9]\.[0-9]\.[0-9]" replace="Version: ${version}" byline="true"/>
-		<replaceregexp file="${file_name}.php" match="define\('UDS_SLIDER_VERSION', '[0-9]\.[0-9]\.[0-9]'\);" replace="define\('UDS_SLIDER_VERSION', '${version}'\);" byline="true"/>
+		<replaceregexp file="${file_name}.php" match="define\('UDS_BILLBOARD_VERSION', '[0-9]\.[0-9]\.[0-9]'\);" replace="define\('UDS_BILLBOARD_VERSION', '${version}'\);" byline="true"/>
 		<echo>Updated Version Strings</echo>
 	</target>
 	
@@ -48,7 +47,6 @@
 	
 	<!-- Main Target -->
 	<target name="build" depends="update_version,minify_css,minify_js">
-		<replace file="${file_name}.php" token="'UDS_SLIDER_USE_COMPRESSION', false" value="'UDS_SLIDER_USE_COMPRESSION', true" />
 		<echo>Done</echo>
 	</target>
 	
@@ -82,6 +80,50 @@
 				<include name="*.php" />
 			</fileset>
 		</copy>
+		<!-- Create Archive -->
+		<zip destfile="build/${project_name}.zip" basedir="build/${project_name}" />
+	</target>
+	
+	<!-- Package For Beta -->
+	<target name="package_beta" depends="build">
+		<!-- Create dir for compression -->
+		<mkdir dir="build/${project_name}" />
+		
+		<!-- Create dir for cache -->
+		<mkdir dir="build/${project_name}/cache" />
+		
+		<!-- Copy CSS -->
+		<copy todir="build/${project_name}/css">
+			<fileset dir="css" />
+		</copy>
+		<!-- Copy JS -->
+		<copy todir="build/${project_name}/js">
+			<fileset dir="js">
+				<exclude name="${file_name}.js" />
+			</fileset>
+		</copy>
+		<!-- Copy Images -->
+		<copy todir="build/${project_name}/images">
+			<fileset dir="images" />
+		</copy>
+
+		<!-- Copy PHP Files -->
+		<copy todir="build/${project_name}">
+			<fileset dir=".">
+				<include name="*.php" />
+			</fileset>
+		</copy>
+		
+		<!-- Copy PHP Admin Files -->
+		<copy todir="build/${project_name}/admin">
+			<fileset dir="admin" />
+		</copy>
+
+		<!-- Copy PHP Lib Files -->
+		<copy todir="build/${project_name}/lib">
+			<fileset dir="lib" />
+		</copy>
+		
 		<!-- Create Archive -->
 		<zip destfile="build/${project_name}.zip" basedir="build/${project_name}" />
 	</target>

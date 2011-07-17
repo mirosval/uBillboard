@@ -2,7 +2,7 @@
 /*
 Plugin Name: uBillboard
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
-Description: uBillboard is a slider plugin by uDesignStudios that allows you to create an eye-catching presentation for your web. (Admin menu icon: http://p.yusukekamiyamane.com/)
+Description: uBillboard is a slider plugin by uDesignStudios that allows you to create complex and eye-catching presentations for your web.
 Version: 3.0.0
 Author: uDesign
 Author URI: http://udesignstudios.net
@@ -101,7 +101,6 @@ function uds_billboard_init()
 	$dir = UDS_BILLBOARD_URL;
 	//
 	add_thickbox();
-	wp_enqueue_script("jquery-ui-tabs");
 	
 	$nonce = isset($_REQUEST['uds-billboard-update-nonce']) && wp_verify_nonce('uds-billboard-update-nonce', $_REQUEST['uds-billboard-update-nonce']);
 	
@@ -148,11 +147,11 @@ function uds_billboard_scripts()
 		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
 	}
 	
-	wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'), '1.3', true);
+	//wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'), '1.3', true);
 	if(uds_billboard_use_compression()){
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery', 'easing'), '3.0', true);
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery'), '3.0', true);
 	} else {
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery', 'easing'), '3.0', true);
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery'), '3.0', true);
 	}
 }
 
@@ -301,10 +300,13 @@ function uds_billboard_enqueue_admin_styles()
 function uds_billboard_enqueue_admin_scripts()
 {
 	$dir = UDS_BILLBOARD_URL;
+	
+	wp_enqueue_script("jquery-ui-tabs");
 	wp_enqueue_script("jquery-ui-sortable");
 	wp_enqueue_script("jquery-ui-draggable");
-	wp_enqueue_script('uds-cookie', $dir."js/jquery_cookie.js");
-	wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js");
+	
+	wp_enqueue_script('jquery-cookie', $dir."js/jquery_cookie.js", array('jquery'), UDS_BILLBOARD_VERSION, false);
+	wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js", array('jquery', 'jquery-cookie', 'jquery-ui-tabs'), UDS_BILLBOARD_VERSION, false);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

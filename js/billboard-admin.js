@@ -27,6 +27,9 @@ jQuery(function($){
 	// Slide Tabs
 	function createTabs() {
 		$('.uds-slide-tabs').tabs({
+			cookie: {
+				expire: 1
+			},
 			show: function(event, ui){
 				var $image = $(ui.tab).parents('.slide').find('.image-wrapper');
 				$image.css('height', $image.parent().height() + 'px');
@@ -49,7 +52,6 @@ jQuery(function($){
 		});
 		
 		$input.change(function(){
-			console.log($input.val());
 			$(preview).css({
 				'background-image': 'url('+$input.val()+')'
 			});
@@ -97,11 +99,8 @@ jQuery(function($){
 				order.push(parseInt($(this).attr('id').replace('uds-slide-handle-', ''), 10));
 			});
 
-			console.log(order);
-
 			for(var i = 0; i < order.length; i++) {
 				var slide = $('#uds-slide-'+order[i]).detach();
-				console.log(slide);
 				$('.uds-billboard-form .slides').append(slide);
 			}
 		}
@@ -168,14 +167,14 @@ jQuery(function($){
 			
 			$.post(ajaxurl, form, function(data) {
 				if(data !== 'OK') {
-					console.log('Failed to save uBillboard');
+					//console.log('Failed to save uBillboard');
+					alert('Failed to save uBillboard');
 					return;
 				}
 				// Show Thickbox
 				
 				var originalRemove = window.tb_remove;
 				window.tb_remove = function() {
-					console.log(123);
 					originalRemove();
 					createTabs();
 				};

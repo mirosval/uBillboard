@@ -1,3 +1,12 @@
+/**
+ *	@license
+ *	uBillboard - Premium Slide for WordPress
+ *
+ *	Version: 3.0.0
+ *
+ *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
+ *	
+ */
 (function($) {
 	function d(variable) {
 		try {
@@ -6,6 +15,13 @@
 			//
 		}
 	}
+	
+	$.extend(jQuery.easing, {
+		easeInOutQuad: function (x, t, b, c, d) {
+			if ((t/=d/2) < 1) return c/2*t*t + b;
+			return -c/2 * ((--t)*(t-2) - 1) + b;
+		}
+	});
 	
 	/**
 	 *	$bb holds the jQuery object for this uBillboard
@@ -337,7 +353,7 @@
 			
 			$('.uds-bb-preloader').css({
 				top: parseInt(options.height, 10) / 2 - $indicator.height() / 2 + 'px',
-				left: parseInt(options.width, 10) / 2 - $indicator.width() / 2 + 'px',
+				left: parseInt(options.width, 10) / 2 - $indicator.width() / 2 + 'px'
 			});
 		},
 		
