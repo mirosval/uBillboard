@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<project name="uSlider Build" basedir="." default="build">
+<project name="uBillboard Build" basedir="." default="build">
 	<!-- Main project name -->
-	<property name="project_name" value="uSlider" />
+	<property name="project_name" value="uBillboard" />
 	<!-- This is the basename of all related files (php, js, css) -->
 	<property name="file_name" value="slider" />
 	<!-- Software version -->
-	<property name="version" value="1.0.0" />
+	<property name="version" value="3.0.0" />
 	
 	<!-- JS Compiler taskdef -->
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="/usr/local/closure/compiler.jar"/>

@@ -193,6 +193,8 @@
 			var defaultDirection = animations[transition].direction;
 			animations[transition].direction = slide.direction;
 			
+			$next.show().css('opacity', 1);
+			
 			// Run Transition Setup function
 			if(animations[transition].setup !== null && typeof animations[transition].setup === 'function') {
 				animations[transition].setup();
@@ -822,6 +824,128 @@
 		}
 	},
 	
+	directions = {
+		'left': {
+			delay: function() {
+				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+				for(var i = 0; i < cols; i++) {
+					$('.uds-column-'+i, $bb).delay(i * (600/cols));
+				}
+			}
+		},
+		
+		'right': {
+			delay: function() {
+				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+				for(var i = 0; i < cols; i++) {
+					$('.uds-column-'+i, $bb).delay((600/cols) - i * (600/cols));
+				}
+			}
+		},
+		
+		'top': {
+			delay: function() {
+				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
+				for(var i = 0; i < rows; i++) {
+					$('.uds-row-'+i, $bb).delay(i * (600/rows));
+				}
+			}
+		},
+		
+		'bottom': {
+			delay: function() {
+				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
+				for(var i = 0; i < rows; i++) {
+					$('.uds-row-'+i, $bb).delay((600/rows) - i * (600/rows));
+				}
+			}
+		},
+		
+		'randomSquares': {
+			delay: function() {
+				$squares.each(function(){
+					$(this).delay(Math.random() * 700);
+				});
+			}
+		},
+		
+		'spiralIn': {
+			delay: function() {
+				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
+				
+				var leftBound = 0;
+				var rightBound = cols - 1;
+				var topBound = 0;
+				var bottomBound = rows - 1;
+				
+				var n = 0, hPos = 0, vPos = 0;
+				while(n < cols * rows){
+					var squareId = cols * vPos + hPos;
+					
+					$('.uds-square-'+squareId).delay(1000 * (n/(cols*rows)));
+					
+					if(vPos == topBound && hPos < rightBound) {
+						hPos++;
+					} else if(hPos == rightBound && vPos < bottomBound) {
+						vPos++;
+					} else if(vPos == bottomBound && hPos > leftBound) {
+						hPos--;
+					} else {
+						vPos--;
+						if(vPos == 0) {
+							hPos++;
+							vPos++;
+							leftBound++;
+							rightBound--;
+							topBound++;
+							bottomBound--;
+						}
+					}
+					n++;
+				}
+			}
+		},
+		
+		'spiralOut': {
+			delay: function() {
+				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
+				
+				var leftBound = 0;
+				var rightBound = cols - 1;
+				var topBound = 0;
+				var bottomBound = rows - 1;
+				
+				var n = 0, hPos = 0, vPos = 0;
+				while(n < cols * rows){
+					var squareId = cols * vPos + hPos;
+					
+					$('.uds-square-'+squareId).delay(1000 - 1000 * (n/(cols*rows)));
+					
+					if(vPos == topBound && hPos < rightBound) {
+						hPos++;
+					} else if(hPos == rightBound && vPos < bottomBound) {
+						vPos++;
+					} else if(vPos == bottomBound && hPos > leftBound) {
+						hPos--;
+					} else {
+						vPos--;
+						if(vPos == 0) {
+							hPos++;
+							vPos++;
+							leftBound++;
+							rightBound--;
+							topBound++;
+							bottomBound--;
+						}
+					}
+					n++;
+				}
+			}
+		}
+	},
+	
 	/**
 	 *	
 	 */
@@ -843,37 +967,16 @@
 			duration: 500,
 			direction: '',
 			setup: function() {
-				$next.show().css({
+				$squares.css({
 					opacity: 0
 				});
 			},
 			perform: function() {
-				$next.animate({
+				directions[this.direction].delay();
+				$squares.animate({
 					opacity: 1
 				}, {
 					duration: 500
-				});
-			}
-		},
-		
-		/**
-		 *
-		 */
-		'fadeSquaresRandom': {
-			duration: 1100,
-			direction: '',
-			setup: function() {
-				$next.show();
-				$nextInsides.css('opacity', 0);
-			},
-			perform: function() {
-				$nextInsides.each(function(el, i){
-					$(this).delay(Math.random() * 700).animate({
-						opacity: 1
-					}, {
-						duration: 400,
-						easing: 'easeInOutQuad'
-					});
 				});
 			}
 		},
@@ -970,12 +1073,26 @@
 				} else if(this.direction === 'bottom') {
 					top = _private.pos(options.height);
 					left = _private.pos(parseInt(options.width, 10) / 2);
-				} else {
+				} else if(this.direction === 'center') {
 					top = _private.pos(parseInt(options.height, 10) / 2);
 					left = _private.pos(parseInt(options.width, 10) / 2);
+				} else {
+					var sq = parseInt(options.squareSize, 10);
+					$squares.each(function(){
+						$(this).css({
+							top: parseInt($(this).css('top'), 10) + sq / 2 + 'px',
+							left: parseInt($(this).css('left'), 10) + sq / 2 + 'px',
+							width: '0px',
+							height: '0px'
+						});
+					});
+					
+					directions[this.direction].delay();
+					
+					return;
 				}
 				
-				$next.show().css({
+				$next.css({
 					top: top,
 					left: left,
 					width: '1px',
@@ -983,135 +1100,27 @@
 				});
 			},
 			perform: function() {
-				$next.animate({
-					top: '0px',
-					left: '0px',
-					width: options.width,
-					height: options.height
-				}, {
-					duration: 1000,
-					easing: 'easeInOutQuad'
-				});
-			}
-		},
-		
-		'fadeSquaresRows': {
-			duration: 1100,
-			direction: '',
-			setup: function() {
-				$next.show();
-				$squares.css('opacity', 0);
-			},
-			perform: function() {
-				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
-				for(var i = 0; i < rows; i++) {
-					$('.uds-row-'+i, $bb).delay(i * 100).animate({
-						opacity: 1
+				if($.inArray(this.direction, ['center', 'top', 'left', 'bottom', 'right']) > -1) {
+					$next.animate({
+						top: '0px',
+						left: '0px',
+						width: options.width,
+						height: options.height
 					}, {
-						duration: 400,
+						duration: 1000,
 						easing: 'easeInOutQuad'
 					});
-				}
-			}
-		},
-		
-		'fadeSquaresCols': {
-			duration: 1000,
-			direction: '',
-			setup: function() {
-				$next.show();
-				$squares.css('opacity', 0);
-			},
-			perform: function() {
-				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
-				for(var i = 0; i < cols; i++) {
-					$('.uds-column-'+i, $bb).delay(i * (600/cols)).animate({
-						opacity: 1
-					}, {
-						duration: 400,
-						easing: 'easeInOutQuad'
+				} else {
+					var sq = parseInt(options.squareSize, 10);
+					$squares.each(function(i, el){
+						$(this).animate({
+							top: parseInt($(el).css('top'), 10) - sq / 2 + 'px',
+							left: parseInt($(el).css('left'), 10) - sq / 2 + 'px',
+							width: sq + 'px',
+							height: sq + 'px'
+						}, 500);
 					});
 				}
-			}
-		},
-		
-		'fadeSquaresSpiralIn': {
-			duration: 1300,
-			direction: '',
-			setup: function() {
-				$next.show();
-				$squares.css('opacity', 0);
-			},
-			perform: function() {
-				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
-				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
-				
-				var leftBound = 0;
-				var rightBound = cols - 1;
-				var topBound = 0;
-				var bottomBound = rows - 1;
-				
-				var n = 0, hPos = 0, vPos = 0;
-				while(n < cols * rows){
-					var squareId = cols * vPos + hPos;
-					
-					$('.uds-square-'+squareId).delay(20 * n).animate({
-						opacity: 1
-					}, 500);
-					
-					if(vPos == topBound && hPos < rightBound) {
-						hPos++;
-					} else if(hPos == rightBound && vPos < bottomBound) {
-						vPos++;
-					} else if(vPos == bottomBound && hPos > leftBound) {
-						hPos--;
-					} else {
-						vPos--;
-						if(vPos == 0) {
-							hPos++;
-							vPos++;
-							leftBound++;
-							rightBound--;
-							topBound++;
-							bottomBound--;
-						}
-					}
-					n++;
-				}
-				
-				/*
-				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
-				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
-				
-				$squares.each(function(i, el){
-					var x = $(el).data('position').x - cols / 2 + 0.5;
-					var y = $(el).data('position').y - rows / 2 + 0.5;
-					$(el).delay((Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + Math.atan2(x, y)) * 100).animate({
-						opacity: 1
-					}, 500);
-				});
-				//*/
-			}
-		},
-		
-		'fadeSquaresSpiralOut': {
-			duration: 1100,
-			direction: '',
-			setup: function() {
-				$next.show();
-				$squares.css('opacity', 0);
-			},
-			perform: function() {
-				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
-				var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
-				
-				$squares.each(function(i, el){
-					var x = $(el).data('position').x - cols / 2 + 0.5;
-					var y = $(el).data('position').y - rows / 2 + 0.5;
-					$(el).delay((5 - Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + Math.atan2(x, y)) * 100).animate({
-						opacity: 1
-					}, 500);
-				});
 			}
 		}
 	};
