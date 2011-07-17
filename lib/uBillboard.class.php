@@ -41,7 +41,7 @@ $uds_billboard_general_options = array(
 		'type' => 'text',
 		'label' => 'Square Size',
 		'unit' => 'pixels',
-		'tooltip' => 'Square dimension, applies only to transitions based on squares <img src="'.UDS_BILLBOARD_URL .'images/square_size.png" alt="" />',
+		'tooltip' => 'Square dimension, applies only to transitions based on squares',
 		'default' => 100
 	),
 	'style' => array(

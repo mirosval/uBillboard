@@ -39,6 +39,17 @@ jQuery(function($){
 	
 	createTabs();
 	
+	// Slide Cloning
+	var slideClone = $('#normal-sortables .slides .slide:last').clone();
+	$('.slide .adddiv').live('click', function(){
+		$(this).parents('.slide').after(slideClone.clone());
+	});
+	
+	// slide Deleting
+	$('.slide .deletediv').live('click', function(){
+		$(this).parents('.slide').remove();
+	});
+	
 	// Billboard image collapsing
 	$('<div id="image-preview">').appendTo('body');
 	$('.image-wrapper').each(function(el, i){

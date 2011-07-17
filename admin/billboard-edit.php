@@ -116,6 +116,7 @@ $billboard->addEmptySlide();
 								<div class="postbox slide" id="uds-slide-<?php echo $key ?>">
 									<div class="handlediv" title="Click to toggle"><br /></div>
 									<div class="deletediv" title="Click to delete slide"><br /></div>
+									<div class="adddiv" title="Click to add slide"><br /></div>
 									<h3 class="hndle"><span><?php echo sprintf("Slide %u", $key + 1); ?></span></h3>
 									<div class="inside">
 										<?php $item->renderAdmin() ?>

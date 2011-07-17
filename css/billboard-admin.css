@@ -12,15 +12,22 @@
     margin-right: 300px;
 }
 
-.postbox .deletediv {
+.postbox .deletediv,
+.postbox .adddiv {
     cursor: pointer;
     float: right;
     height: 30px;
     width: 27px;
 }
 
-.postbox .deletediv:hover {
-    background: black;
+.postbox:hover .adddiv {
+    background: url(../images/admin/slide-add.png) no-repeat center center;
+    cursor: pointer;
+}
+
+.postbox:hover .deletediv {
+    background: url(../images/admin/slide-delete.png) no-repeat center center;
+    cursor: pointer;
 }
 
 .postbox hr {
