@@ -486,6 +486,11 @@
 					}).stop(true, true);
 				}
 			}
+			
+			$stage.add($next).css({
+				top: '0px',
+				left: '0px'
+			});
 		},
 		
 		/**
