@@ -255,7 +255,7 @@
 		box-shadow: 1px 1Px 1Px #666;
 	}
 	
-	.uds-bb-paginator.oldskool .uds-bb-bullet, .uds-bb-paginator.oldskool-bright .uds-bb-bullet, .uds-bb-paginator.uTube .uds-bb-bullet {
+	.uds-bb-paginator.oldskool .uds-bb-bullet, .uds-bb-paginator.oldskool-bright .uds-bb-bullet, .uds-bb-paginator.uTube .uds-bb-bullet, .uds-bb-paginator.modern .uds-bb-bullet {
 		background: url(../images/skin-oldskool/bullet.png) no-repeat;
 		width: 10px;
 		height: 10px;
@@ -338,6 +338,76 @@
 	.uds-bb-paginator.uTube .uds-bb-bullet.active {
 		background: url(../images/skin-uTube/bullet-active.png) no-repeat;
 	}
+	
+	/* Modern Skin */
+	
+	.uds-bb-paginator.modern {
+		width: 100%;
+		height: 30px;
+		position: absolute;
+		bottom: 0px;
+		background: url(../images/skin-modern/bg.png) repeat-x;
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-prev {
+		background: url(../images/skin-modern/prev.png);
+		width: 30px;
+		height: 30px;
+		float: left;
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-prev:hover {
+		background: url(../images/skin-modern/prev-hover.png);
+		width: 30px;
+		height: 30px;
+		float: left;
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-next {
+		background: url(../images/skin-modern/next.png);
+		width: 31px;
+		height: 30px;
+		float: right;
+		margin-left: 10px;
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-next:hover {
+		background: url(../images/skin-modern/next-hover.png);
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-playpause{
+		background: url(../images/skin-modern/playpause.png);
+		width: 33px;
+		height: 30px;
+		float: left;
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-playpause:hover {
+		background: url(../images/skin-modern/playpause-hover.png);
+		width: 33px;
+		height: 30px;
+		float: left;
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-position-indicator-bullets {
+		height: 21px;
+		padding-top: 9px;
+		float: right;
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-bullet {
+		background: url(../images/skin-modern/bullet.png) no-repeat;
+		width: 10px
+		height: 10px;
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-bullet:hover {
+		background: url(../images/skin-modern/bullet-active.png) no-repeat;
+	}
+	
+	.uds-bb-paginator.modern .uds-bb-bullet.active {
+		background: url(../images/skin-modern/bullet-active.png) no-repeat;
+	}
 
 
 /* Thumbnails */
@@ -405,7 +475,7 @@
 		margin: 5px;
 		cursor: pointer;
 		background: url(../images/bg-bright.png) #ededed;
-		padding: 5px;
+		padding: 4px;
 		-moz-border-radius: 2px;
 		-webkit-border-radius: 2px;
 		border-radius: 2px;
@@ -413,6 +483,14 @@
  		-webkit-box-shadow: 1px 1px 1px #000;
   		box-shadow: 1px 1px 1px #000;
   		line-height: 0;
+	}
+	
+	.uds-bb-thumb:hover {
+		background: #20b1be;	
+	}
+	
+	.uds-bb-thumb.active {
+		background: #20b1be;
 	}
 	
 	#branding .uds-bb-thumb img {
