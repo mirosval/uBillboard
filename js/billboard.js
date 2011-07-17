@@ -587,11 +587,16 @@
 				$('div', $bullets).removeClass('active').eq(currentSlideId).addClass('active');
 				
 				// Thumbs
-				$('.uds-bb-thumb', $bb).removeClass('active').eq(currentSlideId).addClass('active');
+				$thumb.removeClass('active').eq(currentSlideId).addClass('active');
 			});
 			
 			// Thumbnails
-			$('.uds-bb-thumb', $thumbs).click(function(){
+			
+			// Active class assign
+			$thumb.removeClass('active').eq(0).addClass('active');
+			
+			// Thumbnail Click Handler
+			$thumb.click(function(){
 				_public.animateSlide($(this).index());
 			});
 			
@@ -599,6 +604,15 @@
 			$bb.has('.uds-bb-thumbnails.bottom:not(.inside)').css('margin-bottom', $thumbs.outerHeight());
 			$bb.has('.uds-bb-thumbnails.left:not(.inside)').css('margin-left', $thumbs.outerWidth());
 			$bb.has('.uds-bb-thumbnails.right:not(.inside)').css('margin-right', $thumbs.outerWidth());
+			
+			// Precompute thumbnail dimensions
+			$thumb.each(function(){
+				var $img = $('img', this);
+				$img.css({
+					width: $img.attr('width') + 'px',
+					height: $img.attr('height') + 'px'
+				});
+			});
 			
 			// Thumbnails scrolling
 			var windowDim,

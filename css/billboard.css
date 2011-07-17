@@ -415,6 +415,12 @@
   		line-height: 0;
 	}
 	
+	#branding .uds-bb-thumb img {
+		width: auto;
+		height: auto;
+		margin: 0px;
+	}
+	
 	.uds-bb-thumbnails.bottom .uds-bb-thumb,
 	.uds-bb-thumbnails.top .uds-bb-thumb {
 		float: left;

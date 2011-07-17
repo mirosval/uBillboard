@@ -61,7 +61,7 @@ function uds_billboard_cache_is_writable()
 
 function uds_billboard_is_active()
 {
-	if(uds_billboard_use_shortcode_optimization()) {
+	if(uds_billboard_use_shortcode_optimization() && !is_admin()) {
 		if(function_exists('uds_active_shortcodes')) {
 			$active_shortcodes = uds_active_shortcodes();
 			if( ! in_array('uds-billboard', $active_shortcodes)) {
@@ -144,6 +144,7 @@ function uds_billboard_scripts()
 	// We need to override jQuery on WP < 3.0 because the default there is jQuery 1.3 and we need 1.4
 	if(version_compare($wp_version, '3.0.0', '<=')){
 		wp_deregister_script('jquery');
+		//wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js');
 		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
 	}
 	
