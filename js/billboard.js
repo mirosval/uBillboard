@@ -841,6 +841,10 @@
 	},
 	
 	directions = {
+		'none': {
+			delay: $.noop
+		},
+		
 		'left': {
 			delay: function() {
 				var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));

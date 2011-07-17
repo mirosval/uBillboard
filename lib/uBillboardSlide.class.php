@@ -50,7 +50,7 @@ $uds_billboard_attributes = array(
 		'type' => 'select',
 		'label' => 'Transition Direction',
 		'options' => array(
-			'' 				=> '--',
+			'none'			=> '--',
 			'random' 		=> 'Random Direction',
 			'center'		=> 'From Center',
 			'left' 			=> 'From Left',
@@ -62,7 +62,7 @@ $uds_billboard_attributes = array(
 			'spiralOut'		=> 'Spiral Out',
 			//'zigzag'		=> 'Zig-zag'
 		),
-		'default' => ''
+		'default' => 'none'
 	),
 	'text' => array(
 		'type' => 'textarea',
@@ -252,16 +252,24 @@ class uBillboardSlide {
 	
 	public function render()
 	{
+		global $uds_billboard_attributes;
 		// Transition, make nil when embedded content exists
 		$transition = $this->transition;
 		if(strpos($this->text, 'uds-embed')) {
 			$transition = 'none';
 		}
 		
+		if($transition === 'random') {
+			$transitions = array_keys($uds_billboard_attributes['transition']['options']);
+			$transitions = array_diff($transitions, array('random'));
+			$transition = $transitions[array_rand($transitions)];
+		}
+		
 		// Direction
 		$direction = $this->direction;
 		if($direction === 'random') {
-			$directions = array('left', 'right', 'top', 'bottom');
+			$directions = array_keys($uds_billboard_attributes['direction']['options']);
+			$directions = array_diff($directions, array('random'));
 			$direction = $directions[array_rand($directions)];
 		}
 		
