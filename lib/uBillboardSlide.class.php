@@ -376,6 +376,7 @@ class uBillboardSlide {
 		echo '<div class="'. $attrib .'-wrapper">';
 		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
 		echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'" id="uds-text-'.$id.'">'. htmlspecialchars(stripslashes($this->{$attrib})) .'</textarea>';
+		echo '<div class="clear"></div>';
 		echo '</div>';
 		
 		$id++;
@@ -412,7 +413,7 @@ class uBillboardSlide {
 		echo '<div class="'. $attrib .'-url-wrapper">';
 		echo '	<label for="billboard-'. $attrib .'-'. $unique_id .'-hidden">Image URL</label>';
 		echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $this->{$attrib} .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
-		echo '	<a class="thickbox" title="Add an Image" href="media-upload.php?type=image&TB_iframe=true&width=640&height=345">';
+		echo '	<a class="image-upload" title="Add an Image" href="">';
 		echo '		<img alt="Add an Image" src="'. admin_url() . 'images/media-button-image.gif" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
 		echo '	</a>';
 		echo '</div>';

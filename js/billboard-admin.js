@@ -39,6 +39,52 @@ jQuery(function($){
 	
 	createTabs();
 	
+	function showImageAdder(offset, element) {
+		var $preview = $(element).parents('.slide').find('.image-wrapper');
+		var $image = $(element).prev();
+		var postsPerPage = 5;
+		
+		if($('#uds-dialog').length === 0) {
+			$('<div id="uds-dialog" title="Add an Image">').appendTo('body');
+		}
+		
+		$dialog = $('#uds-dialog');
+		
+		$.get(ajaxurl, {
+			action: 'uds_billboard_list_images',
+			offset: offset
+		}, function(data) {
+			$dialog.html(data);
+			$dialog.dialog({
+				modal: true,
+				width: 450,
+				minHeight: 500
+			});
+			
+			$('.uds-image-select').click(function(){
+				var src = $(this).find('input.uds-image').val();
+				$preview.css('background-image', 'url('+src+')');
+				$image.val(src);
+				$dialog.dialog('close');
+			});
+			
+			$('.uds-paginate a').click(function(){
+				var page = $(this).text();
+				
+				showImageAdder(postsPerPage * (page - 1), element);
+				
+				return false;
+			});
+		});
+	}
+	
+	// image upload dialog
+	$('.image-upload').live('click', function() {
+		showImageAdder(0, this);
+		
+		return false;
+	});
+	
 	// Slide Cloning
 	var slideClone = $('#normal-sortables .slides .slide:last').clone();
 	$('.slide .adddiv').live('click', function(){
@@ -168,38 +214,27 @@ jQuery(function($){
 	
 	// Admin preview
 	var adminPreview = function(){
+		var originalName = $('#title').val();
+		
+		$('#title').val('_uds_temp_billboard');
+		
+		var form = $('#billboard_update_form').serialize() + '&action=uds_billboard_update';
 		var url = $(this).attr('href');
 		
-		if(typeof tb_show === 'function') {
-			// save uBillboard
-			var originalName = $('#title').val();
-			$('#title').val('_uds_temp_billboard');
-			var form = $('#billboard_update_form').serialize() + '&action=uds_billboard_update';
-			$('#title').val(originalName);
-			
-			$.post(ajaxurl, form, function(data) {
-				if(data !== 'OK') {
-					//console.log('Failed to save uBillboard');
-					alert('Failed to save uBillboard');
-					return;
-				}
-				// Show Thickbox
-				
-				var originalRemove = window.tb_remove;
-				window.tb_remove = function() {
-					originalRemove();
-					createTabs();
-				};
-				
-				var width = parseInt($('#uds-billboard-width').val(), 10) + 130;
-				var height = parseInt($('#uds-billboard-height').val(), 10) + 60;
-				tb_show('uBillboard Preview', url + '&width='+width+'&height='+height);
-				$('#TB_window').addClass('uds-preview');
-			});
-		} else {
-			alert('Thickbox not loaded!');
-		}
+		$('#title').val(originalName);
 		
+		$.post(ajaxurl, form, function(data) {
+			$dialog = $('<div id="uds-preview-dialog" title="uBillboard Preview">').appendTo('body');
+			
+			$dialog.html("<iframe src='" + url + "' width='100%' height='100%'></iframe>");
+			
+			$dialog.dialog({
+				modal: true,
+				width: parseInt($('#uds-billboard-width').val(), 10) + 130,
+				height: parseInt($('#uds-billboard-height').val(), 10) + 200
+			});
+		});
+
 		return false;
 	}
 	

@@ -40,31 +40,12 @@
 	margin: 20px 10px 20px 60px;
 }
 
-.uds-slide-tabs ul {
-	width: 100%;
-	height: 22px;
-	clear: both;
-	border-bottom: 1px solid #bbb;
-	padding-left: 10px;
+.ui-widget {
+	font-size: inherit;
 }
 
-.uds-slide-tabs ul li {
-	float: left;
-	padding: 3px;
-	margin: 0px 0px 20px;
-}
-
-.uds-slide-tabs ul li a {
-	color: #333;
-	text-decoration: none;
-	border: 1px solid #bbb;
-	padding: 3px 4px;
-	background: #f1f1f1;
-}
-
-.uds-slide-tabs ul li.ui-state-active a {
-	background: #f9f9f9;
-	border-bottom: 1px solid #f5f5f5;
+.ui-widget-overlay {
+	background-repeat: repeat;
 }
 
 th.shortcode,
@@ -250,7 +231,7 @@ td.shortcode {
 .uds-billboard-form label {
 	display: block;
 	text-align: left;
-	width: 150px;
+	width: 200px;
 	margin: 0px 5px 5px 5px;
 }
 
@@ -279,7 +260,7 @@ td.shortcode {
 
 .uds-billboard-form input.checkbox {
 	width: auto;
-	margin: 0px 0px 10px 0px;
+	margin: 3px 0px 10px 0px;
 }
 
 .uds-billboard-form  textarea {
@@ -348,4 +329,44 @@ td.shortcode {
 .uds-slides-order li.uds-slide-placeholder {
 	height: 17px;
 	border-style: dashed;
+}
+
+/* Image Select */
+.uds-image-select {
+	background-color: #efefef;
+	border: 1px solid #ccc;
+	color: #333;
+	cursor: pointer;
+	margin-bottom: 5px;
+	width: 400px;
+	padding: 3px;
+	border-radius: 3px;
+}
+
+.uds-image-select img {
+	padding: 3px;
+	margin-right: 10px;
+	float: left;
+	display: block;
+	border-radius: 3px;
+}
+
+.uds-paginate {
+	text-align: center;
+	margin-top: 5px;
+}
+
+.uds-paginate a {
+	display: block;
+	float: left;
+	padding: 3px 6px;
+	text-decoration: none;
+	background-color: #555;
+	color: #fefefe;
+	border-radius: 3px;
+	margin-right: 3px;
+}
+
+.uds-paginate a:hover {
+	background-color: #777;
 }

@@ -131,4 +131,3 @@ $billboard->addEmptySlide();
 		</div> <!-- END metabox holder -->
 	</form> <!-- END billboard update form -->
 </div> <!-- END Wrap -->
-<?php uds_billboard_render_js_support() ?>

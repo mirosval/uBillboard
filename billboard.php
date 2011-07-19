@@ -97,8 +97,6 @@ function uds_billboard_init()
 	
 	// Basic init
 	$dir = UDS_BILLBOARD_URL;
-	//
-	add_thickbox();
 	
 	$nonce = isset($_REQUEST['uds-billboard-update-nonce']) && wp_verify_nonce('uds-billboard-update-nonce', $_REQUEST['uds-billboard-update-nonce']);
 	
@@ -289,6 +287,7 @@ function uds_billboard_import_export()
 function uds_billboard_enqueue_admin_styles()
 {
 	$dir = UDS_BILLBOARD_URL;
+	wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 	wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
 }
 
@@ -296,7 +295,10 @@ function uds_billboard_enqueue_admin_scripts()
 {
 	$dir = UDS_BILLBOARD_URL;
 	
+	wp_enqueue_script("swfupload");
+	wp_enqueue_script("jquery-ui-core");
 	wp_enqueue_script("jquery-ui-tabs");
+	wp_enqueue_script("jquery-ui-dialog");
 	wp_enqueue_script("jquery-ui-sortable");
 	wp_enqueue_script("jquery-ui-draggable");
 	
@@ -479,48 +481,6 @@ function uds_billboard_delete()
 	exit();
 }
 
-
-// render JS support for image input
-function uds_billboard_render_js_support()
-{
-	global $uds_billboard_attributes;
-	$selector = '';
-	foreach($uds_billboard_attributes as $attrib => $options){
-		if($options['type'] == 'image'){
-			$selector .= '.billboard-'.$attrib;
-		}
-	}
-	?>
-	<script language='JavaScript' type='text/javascript'>	
-	var set_receiver = function(rec){
-		//console.log(rec);
-		window.receiver = jQuery(rec).attr('id');
-		window.receiver_hidden = jQuery(rec).attr('id')+'-hidden';
-		
-		window.send_to_editor = function(img){
-			tb_remove();
-			if(jQuery(jQuery(img)).is('a')){ // work around Link URL supplied
-			   var src = jQuery(jQuery(img)).find('img').attr('src');
-			} else {
-			   var src = jQuery(jQuery(img)).attr('src');
-			}
-		 
-			//console.log(window.receiver);
-			//console.log(src);
-			//jQuery('#'+window.receiver).attr('src', src);
-			jQuery("#"+window.receiver_hidden).val(src).change();
-		}
-	}
-	
-	//jQUery(document).ready(function(){
-		jQuery('<?php echo $selector; ?>').click(function(){
-			set_receiver(this);
-		});
-	//});
-	</script>
-	<?php
-}
-
 add_action('wp_ajax_uds_billboard_list', 'uds_billboard_list');
 function uds_billboard_list()
 {
@@ -530,6 +490,51 @@ function uds_billboard_list()
 		if($name == '_uds_temp_billboard') continue;
 		
 		echo '<option name="'.$name.'">'.$name.'</option>';
+	}
+	
+	die();
+}
+
+add_action('wp_ajax_uds_billboard_list_images', 'uds_billboard_list_images');
+function uds_billboard_list_images()
+{
+	$count_array = wp_count_attachments();
+
+	$count = 0;
+	$count += isset($count_array->{'image/jpeg'}) ? $count_array->{'image/jpeg'} : 0;
+	$count += isset($count_array->{'image/png'}) ? $count_array->{'image/png'} : 0;
+	
+	if($count == 0) {
+		die('<p>You have no images in your Media Library</p>');
+	}
+	
+	$offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
+	$numberposts = 5;
+	
+	$posts = get_posts(array('post_type' => 'attachment', 'numberposts' => $numberposts, 'offset' => $offset, 'post_status' => null, 'post_parent' => null));
+	
+	echo '<p>Click an image to add it to the Slide</p>';
+	echo '<div class="uds-images-select">';
+	foreach($posts as $post) {
+		if(!wp_attachment_is_image($post->ID)) continue;
+		$metadata = wp_get_attachment_metadata($post->ID);
+		echo '<div class="uds-image-select">';
+		echo wp_get_attachment_image($post->ID, 'thumb');
+		$image = wp_get_attachment_image_src($post->ID, 'full');
+		$full = $image[0];
+		echo '<input type="hidden" class="uds-image" value="'.$full.'" />';
+		echo '<div class="meta">Filename: '.$metadata['file'].'<br />Size: '.$metadata['width'].'x'.$metadata['height'].'</div>';
+		echo '<div class="clear"></div>';
+		echo '</div>';
+	}
+	echo '</div>';
+	
+	if($count > $numberposts) {
+		echo '<div class="uds-paginate">';
+		for($i = 0; $i < $count / $numberposts; $i++) {
+			echo '<a href="">'.($i+1).'</a>';
+		}
+		echo '</div>';
 	}
 	
 	die();
