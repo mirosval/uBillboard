@@ -4,27 +4,27 @@
 $uds_billboard_attributes = array(
 	'image'=> array(
 		'type' => 'image',
-		'label' => 'Image',
+		'label' => __('Image', uds_billboard_textdomain),
 		'default' => ''
 	),
 	'resize' => array(
 		'type' => 'checkbox',
-		'label' => 'Apply Automatic resizing',
+		'label' => __('Apply Automatic resizing', uds_billboard_textdomain),
 		'default' => ''
 	),
 	'background' => array(
 		'type' => 'text',
-		'label' => 'Background Color',
+		'label' => __('Background Color', uds_billboard_textdomain),
 		'default' => ''
 	),
 	'link' => array(
 		'type' => 'text',
-		'label' => 'Link URL',
+		'label' => __('Link URL', uds_billboard_textdomain),
 		'default' => ''
 	),
 	'delay' => array(
 		'type' => 'select',
-		'label' => 'Delay',
+		'label' => __('Delay', uds_billboard_textdomain),
 		'options' => array(
 			'1000' => '1s',
 			'2000' => '2s',
@@ -37,36 +37,36 @@ $uds_billboard_attributes = array(
 	),
 	'transition' => array(
 		'type' => 'select',
-		'label' => 'Transition',
+		'label' => __('Transition', uds_billboard_textdomain),
 		'options' => array(
-			'random' => 'Random',
-			'fade' => 'Fade',
-			'slide' => 'Slide',
-			'scale' => 'Scale'
+			'random' 	=> __('Random', uds_billboard_textdomain),
+			'fade' 		=> __('Fade', uds_billboard_textdomain),
+			'slide' 	=> __('Slide', uds_billboard_textdomain),
+			'scale' 	=> __('Scale', uds_billboard_textdomain)
 		),
 		'default' => 'fade'
 	),
 	'direction' => array(
 		'type' => 'select',
-		'label' => 'Transition Direction',
+		'label' => __('Transition Direction', uds_billboard_textdomain),
 		'options' => array(
 			'none'			=> '--',
-			'random' 		=> 'Random Direction',
-			'center'		=> 'From Center',
-			'left' 			=> 'From Left',
-			'right' 		=> 'From Right',
-			'top' 			=> 'From Top',
-			'bottom' 		=> 'From Bottom',
-			'randomSquares' => 'Random Squares',
-			'spiralIn' 		=> 'Spiral in',
-			'spiralOut'		=> 'Spiral Out',
-			//'zigzag'		=> 'Zig-zag'
+			'random' 		=> __('Random Direction', uds_billboard_textdomain),
+			'center'		=> __('From Center', uds_billboard_textdomain),
+			'left' 			=> __('From Left', uds_billboard_textdomain),
+			'right' 		=> __('From Right', uds_billboard_textdomain),
+			'top' 			=> __('From Top', uds_billboard_textdomain),
+			'bottom' 		=> __('From Bottom', uds_billboard_textdomain),
+			'randomSquares' => __('Random Squares', uds_billboard_textdomain),
+			'spiralIn' 		=> __('Spiral in', uds_billboard_textdomain),
+			'spiralOut'		=> __('Spiral Out', uds_billboard_textdomain),
+			//'zigzag'		=> __('Zig-zag', uds_billboard_textdomain)
 		),
 		'default' => 'none'
 	),
 	'text' => array(
 		'type' => 'textarea',
-		'label' => 'Text'
+		'label' => __('Text', uds_billboard_textdomain)
 	)
 );
 
@@ -222,10 +222,10 @@ class uBillboardSlide {
 		<div class="image-wrapper"></div>
 		<div class="uds-slide-tabs">	
 			<ul>
-				<li><a href="#uds-slide-tab-background-<?php echo $id ?>">Background</a></li>
-				<li><a href="#uds-slide-tab-content-<?php echo $id ?>">Content</a></li>
-				<li><a href="#uds-slide-tab-link-<?php echo $id ?>">Link</a></li>
-				<li><a href="#uds-slide-tab-transition-<?php echo $id ?>">Transition</a></li>
+				<li><a href="#uds-slide-tab-background-<?php echo $id ?>"><?php _e('Background' , uds_billboard_textdomain) ?></a></li>
+				<li><a href="#uds-slide-tab-content-<?php echo $id ?>"><?php _e('Content', uds_billboard_textdomain) ?></a></li>
+				<li><a href="#uds-slide-tab-link-<?php echo $id ?>"><?php _e('Link', uds_billboard_textdomain) ?></a></li>
+				<li><a href="#uds-slide-tab-transition-<?php echo $id ?>"><?php _e('Transition', uds_billboard_textdomain) ?></a></li>
 			</ul>
 			<div id="uds-slide-tab-background-<?php echo $id ?>">
 				<?php $this->renderAdminField('image') ?>

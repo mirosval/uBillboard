@@ -24,6 +24,8 @@ if(uds_billboard_is_plugin()) {
 define('UDS_BILLBOARD_OPTION', 'uds-billboard-3');
 define('UDS_BILLBOARD_OPTION_GENERAL', 'uds-billboard-general-3');
 
+define('uds_billboard_textdomain', 'uBillboard');
+
 require_once 'lib/uBillboard.class.php';
 require_once 'lib/uBillboardSlide.class.php';
 require_once 'lib/tinymce/tinymce.php';
@@ -86,9 +88,15 @@ function uds_billboard_admin_notices() {
 	}
 }
 
-// initialize billboard
-add_action('admin_init', 'uds_billboard_init');
+add_action('init', 'uds_billboard_init');
 function uds_billboard_init()
+{
+	load_plugin_textdomain(uds_billboard_textdomain, false, dirname( plugin_basename( __FILE__ ) ) . '/lang/');
+}
+
+// initialize billboard
+add_action('admin_init', 'uds_billboard_admin_init');
+function uds_billboard_admin_init()
 {
 	global $uds_billboard_general_options, $uds_billboard_attributes;
 	
@@ -162,26 +170,11 @@ function uds_billboard_styles()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	Plugin update
-//
-////////////////////////////////////////////////////////////////////////////////
-
-//add_filter('plugins_api_result', 'uds_billboard_updater');
-//function uds_billboard_updater($res, $action, $args)
-//{
-//	d($res);
-//	d($action);
-//	d($args);
-//}
-
-////////////////////////////////////////////////////////////////////////////////
-//
 //	Activation hooks
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 register_activation_hook(__FILE__, 'uds_billboard_activation_hook');
-register_deactivation_hook(__FILE__, 'uds_billboard_deactivation_hook');
 register_uninstall_hook(__FILE__, 'uds_billboard_uninstall_hook');
 
 function uds_billboard_activation_hook()
@@ -198,11 +191,6 @@ function uds_billboard_activation_hook()
 			'shortcode_optimization' => false
 		));
 	}
-}
-
-function uds_billboard_deactivation_hook()
-{
-	//delete_option(UDS_BILLBOARD_OPTION);
 }
 
 function uds_billboard_uninstall_hook()
@@ -225,9 +213,14 @@ function uds_billboard_menu()
 	
 	$icon = UDS_BILLBOARD_URL . 'images/menu-icon.png';
 	$ubillboard = add_menu_page("uBillboard", "uBillboard", 'edit_pages', 'uds_billboard_admin', 'uds_billboard_admin', $icon, $position);
-	$ubillboard_add = add_submenu_page('uds_billboard_admin', "Add Billboard", 'Add Billboard', 'edit_pages', 'uds_billboard_edit', 'uds_billboard_edit');
-	$ubillboard_general = add_submenu_page('uds_billboard_admin', "General Options", 'General Options', 'manage_options', 'uds_billboard_general', 'uds_billboard_general');
-	$ubillboard_importexport = add_submenu_page('uds_billboard_admin', "Import/Export", 'Import/Export', 'import', 'uds_billboard_import_export', 'uds_billboard_import_export');
+	
+	$add_title = __("Add Billboard", uds_billboard_textdomain);
+	$general_title = __("General Options", uds_billboard_textdomain);
+	$import_title = __("Import/Export", uds_billboard_textdomain);
+	
+	$ubillboard_add = add_submenu_page('uds_billboard_admin', $add_title, $add_title, 'edit_pages', 'uds_billboard_edit', 'uds_billboard_edit');
+	$ubillboard_general = add_submenu_page('uds_billboard_admin', $general_title, $general_title, 'manage_options', 'uds_billboard_general', 'uds_billboard_general');
+	$ubillboard_importexport = add_submenu_page('uds_billboard_admin', $import_title, $import_title, 'import', 'uds_billboard_import_export', 'uds_billboard_import_export');
 	
 	add_action("admin_print_styles-$ubillboard", 'uds_billboard_enqueue_admin_styles');
 	add_action("admin_print_styles-$ubillboard_add", 'uds_billboard_enqueue_admin_styles');
@@ -242,7 +235,7 @@ function uds_billboard_menu()
 function uds_billboard_admin()
 {
 	if(!current_user_can('edit_pages')) {
-		wp_die(__('You do not have sufficient permissions to access this page'));
+		wp_die(__('You do not have sufficient permissions to access this page', uds_billboard_textdomain));
 	}
 	
 	include 'admin/billboard-list.php';
@@ -252,7 +245,7 @@ function uds_billboard_admin()
 function uds_billboard_edit()
 {
 	if(!current_user_can('edit_pages')) {
-		wp_die(__('You do not have sufficient permissions to access this page'));
+		wp_die(__('You do not have sufficient permissions to access this page', uds_billboard_textdomain));
 	}
 
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'preview') {
@@ -266,7 +259,7 @@ function uds_billboard_edit()
 function uds_billboard_general()
 {
 	if(!current_user_can('manage_options')) {
-		wp_die(__('You do not have sufficient permissions to access this page'));
+		wp_die(__('You do not have sufficient permissions to access this page', uds_billboard_textdomain));
 	}
 
 	include 'admin/billboard-general.php';
@@ -278,7 +271,7 @@ function uds_billboard_import_export()
 	global $uds_billboard_errors;
 	
 	if(!current_user_can('import')) {
-		wp_die(__('You do not have sufficient permissions to access this page'));
+		wp_die(__('You do not have sufficient permissions to access this page', uds_billboard_textdomain));
 	}
 	
 	include 'admin/billboard-import-export.php';
@@ -304,7 +297,16 @@ function uds_billboard_enqueue_admin_scripts()
 	
 	wp_enqueue_script('jquery-cookie', $dir."js/jquery_cookie.js", array('jquery'), UDS_BILLBOARD_VERSION, false);
 	wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js", array('jquery', 'jquery-cookie', 'jquery-ui-tabs'), UDS_BILLBOARD_VERSION, false);
+	wp_localize_script('uds-billboard', 'udsAdminL10n', array(
+		'billboardDeleteConfirmation' => __('Really delete? This is not undoable', uds_billboard_textdomain),
+		'slideDeleteConfirmation' => __('Really delete slide?', uds_billboard_textdomain),
+		'addAnImage' => __('Add an Image', uds_billboard_textdomain),
+		'slideN' => __('Slide %s', uds_billboard_textdomain),
+		'billboardPreview' => __('uBillboard Preview', uds_billboard_textdomain)
+	));
 }
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -318,7 +320,7 @@ function uds_billboard_import($file)
 	$import = @file_get_contents($file);
 	
 	if(empty($import)) {
-		$uds_billboard_errors[] = 'Import file is empty';
+		$uds_billboard_errors[] = __('Import file is empty', uds_billboard_textdomain);
 		return;
 	}
 	
@@ -326,7 +328,7 @@ function uds_billboard_import($file)
 		libxml_use_internal_errors(true);
 		$import = new SimpleXMLElement($import);
 	} catch(Exception $e) {
-		$uds_billboard_errors[] = __(sprintf('An error has occurred during XML Parsing: %s', $e->getMessage()));
+		$uds_billboard_errors[] = sprintf(__('An error has occurred during XML Parsing: %s', uds_billboard_textdomain), $e->getMessage());
 		return;
 	}
 	
@@ -339,7 +341,7 @@ function uds_billboard_import($file)
 	}
 	
 	if(!$billboard->isValid()) {
-		$uds_billboard_errors[] = 'Import file is corrupted';
+		$uds_billboard_errors[] = __('Import file is corrupted', uds_billboard_textdomain);
 		return;
 	}
 
@@ -376,15 +378,15 @@ function uds_billboard_import($file)
 							wp_update_attachment_metadata( $attach_id,  $attach_data );
 							//echo "Attachment saved in ".$billboards[$bbname]['slides'][$key]->image;
 						} else {
-							$uds_billboard_errors[] = "Failed to save image to ".$path;
+							$uds_billboard_errors[] = sprintf(__("Failed to save image to %s", uds_billboard_textdomain), $path);
 							break;
 						}
 					} else {
-						$uds_billboard_errors[] = "Uploads dir is not writable";
+						$uds_billboard_errors[] = __("Uploads dir is not writable", uds_billboard_textdomain);
 						break;
 					}
 				} else {
-					$uds_billboard_errors[] = "Failed to download image";
+					$uds_billboard_errors[] = __("Failed to download image", uds_billboard_textdomain);
 					break;
 				}
 			}
@@ -454,7 +456,7 @@ function uds_billboard_process_updates()
 		$billboards[$billboard->name] = $billboard;
 	
 		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
-		$message = 'uds-message='.urlencode('Billboard updated successfully').'&uds-class='.urlencode('updated fade');
+		$message = 'uds-message='.urlencode(__('Billboard updated successfully', uds_billboard_textdomain)).'&uds-class='.urlencode('updated fade');
 		
 		if(is_ajax()) {
 			die('OK');
@@ -477,10 +479,10 @@ function uds_billboard_delete()
 	
 	$message = '';
 	if(!isset($billboards[$billboard])) {
-		$message = 'uds-message='.urlencode(sprintf('Billboard %s does not exist', esc_html($billboard))).'&uds-class='.urlencode('error');
+		$message = 'uds-message='.urlencode(sprintf(__('Billboard %s does not exist', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('error');
 	} else {
 		unset($billboards[$billboard]);
-		$message = 'uds-message='.urlencode(sprintf('Billboard %s has been successfully deleted', esc_html($billboard))).'&uds-class='.urlencode('update fade');
+		$message = 'uds-message='.urlencode(sprintf(__('Billboard %s has been successfully deleted', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('update fade');
 	}
 	
 	wp_safe_redirect(admin_url('admin.php?page=uds_billboard_admin&'.$message));
@@ -511,7 +513,7 @@ function uds_billboard_list_images()
 	$count += isset($count_array->{'image/png'}) ? $count_array->{'image/png'} : 0;
 	
 	if($count == 0) {
-		die('<p>You have no images in your Media Library</p>');
+		die('<p>' . __('You have no images in your Media Library', uds_billboard_textdomain) . '</p>');
 	}
 	
 	$offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
@@ -519,7 +521,7 @@ function uds_billboard_list_images()
 	
 	$posts = get_posts(array('post_type' => 'attachment', 'numberposts' => $numberposts, 'offset' => $offset, 'post_status' => null, 'post_parent' => null));
 	
-	echo '<p>Click an image to add it to the Slide</p>';
+	echo '<p>' . __('Click an image to add it to the Slide', uds_billboard_textdomain) . '</p>';
 	echo '<div class="uds-images-select">';
 	foreach($posts as $post) {
 		if(!wp_attachment_is_image($post->ID)) continue;
@@ -592,9 +594,11 @@ function uds_billboard_footer_scripts()
 
 	echo "
 	<script language='JavaScript' type='text/javascript'>
+		//<![CDATA[
 		jQuery(document).ready(function($){
 			$uds_billboard_footer_scripts
 		});
+		//]]>
 	</script>";
 }
 
@@ -606,13 +610,13 @@ function get_uds_billboard($name = 'billboard', $options = array())
 	$bbs = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
 	
 	if(!isset($bbs[$name])) {
-		return "Billboard named &quot;$name&quot; does not exist";
+		return sprintf(__("Billboard named &quot;%s&quot; does not exist", uds_billboard_textdomain), $name);
 	}
 	
 	$bb = $bbs[$name];
 	
 	if(!$bb->isValid()) {
-		return "Billboard is invalid";
+		return __("Billboard is invalid", uds_billboard_textdomain);
 	}
 	
 	$out = $bb->render($id);

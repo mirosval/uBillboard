@@ -37,7 +37,7 @@ function uds_billboard_embed($atts, $content = null)
 		'url' => ''
 	), $atts));
 	
-	if(empty($url)) return __('URL Must not be empty');
+	if(empty($url)) return __('URL Must not be empty', uds_billboard_textdomain);
 	
 	$width = (int)$uds_bb_params['width'];
 	$height = (int)$uds_bb_params['height'];
@@ -47,7 +47,7 @@ function uds_billboard_embed($atts, $content = null)
 	$response = @file_get_contents($url);
 	
 	if(empty($response)) {
-		return __('There was an error when loading the video');
+		return __('There was an error when loading the video', uds_billboard_textdomain);
 	}
 	
 	$response = json_decode($response);

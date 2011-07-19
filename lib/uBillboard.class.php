@@ -4,181 +4,181 @@
 $uds_billboard_general_options = array(
 	'name' => array(
 		'type' => 'text',
-		'label' => 'Billboard Name',
+		'label' => __('Billboard Name', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Enter a name for this Billboard. You will use this name to create the Billboard on your site.',
+		'tooltip' => __('Enter a name for this Billboard. You will use this name to create the Billboard on your site.', uds_billboard_textdomain),
 		'default' => 'billboard'
 	),
 	'width' => array(
 		'type' => 'text',
-		'label' => 'Width',
+		'label' => __('Width', uds_billboard_textdomain),
 		'unit' => 'px',
-		'tooltip' => 'Billboard Width in pixels',
+		'tooltip' => __('Billboard Width in pixels', uds_billboard_textdomain),
 		'default' => 940
 	),
 	'height' => array(
 		'type' => 'text',
-		'label' => 'Height',
+		'label' => __('Height', uds_billboard_textdomain),
 		'unit' => 'px',
-		'tooltip' => 'Billboard Height in pixels',
+		'tooltip' => __('Billboard Height in pixels', uds_billboard_textdomain),
 		'default' => 380
 	),
 	'autoplay' => array(
 		'type' => 'checkbox',
-		'label' => 'Autoplay',
+		'label' => __('Autoplay', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Automatically start playing slides, makes sense to turn this off only if Show Controls is enabled.',
+		'tooltip' => __('Automatically start playing slides, makes sense to turn this off only if Show Controls is enabled.', uds_billboard_textdomain),
 		'default' => 'on'
 	),
 	'randomize' => array(
 		'type' => 'checkbox',
-		'label' => 'Shuffle Slides',
+		'label' => __('Shuffle Slides', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Shuffle slides each time the slider is loaded',
+		'tooltip' => __('Shuffle slides each time the slider is loaded', uds_billboard_textdomain),
 		'default' => ''
 	),
 	'square-size' => array(
 		'type' => 'text',
-		'label' => 'Square Size',
+		'label' => __('Square Size', uds_billboard_textdomain),
 		'unit' => 'pixels',
-		'tooltip' => 'Square dimension, applies only to transitions based on squares',
+		'tooltip' => __('Square dimension, applies only to transitions based on squares', uds_billboard_textdomain),
 		'default' => 100
 	),
 	'style' => array(
 		'type' => 'select',
-		'label' => 'Style',
+		'label' => __('Style', uds_billboard_textdomain),
 		'unit' => '',
 		'tooltip' => '',
 		'options' => array(
-			'dark' => 'Dark',
-			'bright' => 'Bright'
+			'dark' => __('Dark', uds_billboard_textdomain),
+			'bright' => __('Bright', uds_billboard_textdomain)
 		),
 		'default' => ''
 	),
 	'show-timer' => array(
 		'type' => 'checkbox',
-		'label' => 'Show Timer',
+		'label' => __('Show Timer', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Shows countdown until the next slide transition when playing',
+		'tooltip' => __('Shows countdown until the next slide transition when playing', uds_billboard_textdomain),
 		'default' => 'on'
 	),
 	'controls-skin' => array(
 		'type' => 'select',
-		'label' => 'Skin',
+		'label' => __('Skin', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'How the controls should look',
+		'tooltip' => __('How the controls should look', uds_billboard_textdomain),
 		'options' => array(
-			'mini' => 'Minimal Style Controls',
-			'oldskool' => 'Old School uBillboard',
-			'oldskool-bright' => 'Bright Old School uBillboard',
-			'utube' => 'uTube',
-			'modern'=> 'Modern'
+			'mini' 				=> __('Minimal Style Controls', uds_billboard_textdomain),
+			'oldskool' 			=> __('Old School uBillboard', uds_billboard_textdomain),
+			'oldskool-bright' 	=> __('Bright Old School uBillboard', uds_billboard_textdomain),
+			'utube' 			=> __('uTube', uds_billboard_textdomain),
+			'modern'			=> __('Modern')
 		),
 		'default' => 'oldskool'
 	),
 	'show-controls' => array(
 		'type' => 'select',
-		'label' => 'Show Controls',
+		'label' => __('Show Controls', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Controls enable you to switch between slides',
+		'tooltip' => __('Controls enable you to switch between slides', uds_billboard_textdomain),
 		'options' => array(
-			'no' => 'Don\'t show controls',
-			'hover' => 'Show on Mouse Hover',
-			'yes' => 'Show at all times'
+			'no' 	=> __("Don't show controls", uds_billboard_textdomain),
+			'hover' => __('Show on Mouse Hover', uds_billboard_textdomain),
+			'yes' 	=> __('Show at all times', uds_billboard_textdomain)
 		),
 		'default' => 'yes'
 	),
 	'controls-position' => array(
 		'type' => 'select',
-		'label' => 'Position',
+		'label' => __('Position', uds_billboard_textdomain),
 		'unit' => '',
 		'tooltip' => '',
 		'options' => array(
-			'inside' => 'Inside',
-			'outside' => 'Outside',
-			'below' => 'Below'
+			'inside' 	=> __('Inside', uds_billboard_textdomain),
+			'outside' 	=> __('Outside', uds_billboard_textdomain),
+			'below' 	=> __('Below', uds_billboard_textdomain)
 		),
 		'default' => 'inside'
 	),
 	'show-pause' => array(
 		'type' => 'select',
-		'label' => 'Show Play/Pause',
+		'label' => __('Show Play/Pause', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Display show pause button',
+		'tooltip' => __('Display show pause button', uds_billboard_textdomain),
 		'options' => array(
-			'no' => 'Don\'t show Play/Pause',
-			'hover' => 'Show on Mouse Hover',
-			'yes' => 'Show at all times'
+			'no' 	=> __("Don\'t show Play/Pause", uds_billboard_textdomain),
+			'hover' => __('Show on Mouse Hover', uds_billboard_textdomain),
+			'yes' 	=> __('Show at all times', uds_billboard_textdomain)
 		),
 		'default' => 'yes'
 	),
 	'show-paginator' => array(
 		'type' => 'select',
-		'label' => 'Show Paginator',
+		'label' => __('Show Paginator', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Display pagination control',
+		'tooltip' => __('Display pagination control', uds_billboard_textdomain),
 		'options' => array(
-			'no' => 'Don\'t show Paginator',
-			'hover' => 'Show on Mouse Hover',
-			'yes' => 'Show at all times'
+			'no' 	=> __("Don't show Paginator", uds_billboard_textdomain),
+			'hover' => __('Show on Mouse Hover', uds_billboard_textdomain),
+			'yes' 	=> __('Show at all times', uds_billboard_textdomain)
 		),
 		'default' => 'yes'
 	),
 	'paginator-position' => array(
 		'type' => 'select',
-		'label' => 'Position',
+		'label' => __('Position', uds_billboard_textdomain),
 		'unit' => '',
 		'tooltip' => '',
 		'options' => array(
-			'inside' => 'Inside',
-			'outside' => 'Outside'
+			'inside' => __('Inside', uds_billboard_textdomain),
+			'outside' => __('Outside', uds_billboard_textdomain)
 		),
 		'default' => 'inside'
 	),
 	'show-thumbnails' => array(
 		'type' => 'select',
-		'label' => 'Show Thumbnails',
+		'label' => __('Show Thumbnails', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Small preview images for all slides',
+		'tooltip' => __('Small preview images for all slides', uds_billboard_textdomain),
 		'options' => array(
-			'no' => 'Don\'t show Thumbnails',
-			'hover' => 'Show on Mouse Hover',
-			'yes' => 'Show at all times'
+			'no' 	=> __("Don't show Thumbnails", uds_billboard_textdomain),
+			'hover' => __('Show on Mouse Hover', uds_billboard_textdomain),
+			'yes' 	=> __('Show at all times', uds_billboard_textdomain)
 		),
 		'default' => 'yes'
 	),
 	'thumbnails-position' => array(
 		'type' => 'select',
-		'label' => 'Thumbnail Position',
+		'label' => __('Thumbnail Position', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Where do you want thumbs to show',
+		'tooltip' => __('Where do you want thumbs to show', uds_billboard_textdomain),
 		'options' => array(
-			'top' => 'Top',
-			'bottom' => 'Bottom',
-			'right' => 'Right',
-			'left' => 'Left'
+			'top' 		=> __('Top', uds_billboard_textdomain),
+			'bottom' 	=> __('Bottom', uds_billboard_textdomain),
+			'right' 	=> __('Right', uds_billboard_textdomain),
+			'left' 		=> __('Left', uds_billboard_textdomain)
 		),
 		'default' => 'bottom'
 	),
 	'thumbnails-inside' => array(
 		'type' => 'checkbox',
-		'label' => 'Inside',
+		'label' => __('Inside', uds_billboard_textdomain),
 		'unit' => '',
-		'tooltip' => 'Where do you want thumbs to show',
+		'tooltip' => __('Where do you want thumbs to show', uds_billboard_textdomain),
 		'default' => ''
 	),
 	'thumbnails-width' => array(
 		'type' => 'text',
-		'label' => 'Thumbnail Width',
+		'label' => __('Thumbnail Width', uds_billboard_textdomain),
 		'unit' => 'px',
-		'tooltip' => 'Width of the thumbnail images',
+		'tooltip' => __('Width of the thumbnail images', uds_billboard_textdomain),
 		'default' => '80'
 	),
 	'thumbnails-height' => array(
 		'type' => 'text',
-		'label' => 'Thumbnail Height',
+		'label' => __('Thumbnail Height', uds_billboard_textdomain),
 		'unit' => 'px',
-		'tooltip' => 'Height of the thumbnail images',
+		'tooltip' => __('Height of the thumbnail images', uds_billboard_textdomain),
 		'default' => '60'
 	)
 );
@@ -499,9 +499,9 @@ class uBillboard {
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator mini'>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause'>Play</div>";
-			$out .= "<div class='uds-bb-button uds-bb-prev'>Prev</div>";
-			$out .= "<div class='uds-bb-button uds-bb-next'>Next</div>";
+			$out .= "<div class='uds-bb-button uds-bb-playpause'>".__('Play', uds_billboard_textdomain)."</div>";
+			$out .= "<div class='uds-bb-button uds-bb-prev'>".__('Prev', uds_billboard_textdomain)."</div>";
+			$out .= "<div class='uds-bb-button uds-bb-next'>".__('Next', uds_billboard_textdomain)."</div>";
 			$out .= "<div class='uds-bb-position-indicator'></div>";
 		$out .= "</div>";
 		return $out;
@@ -511,9 +511,9 @@ class uBillboard {
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator oldskool'>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>Play</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>Prev</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>Next</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
 			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
 		$out .= "</div>";
 		return $out;
@@ -523,9 +523,9 @@ class uBillboard {
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator oldskool-bright'>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>Play</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>Prev</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>Next</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
 			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
 		$out .= "</div>";
 		return $out;
@@ -535,9 +535,9 @@ class uBillboard {
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator uTube'>";
-			$out .= "<div class='uds-bb-button uds-bb-prev'><span>Prev</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause uds-left'><span>Play</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-next'><span>Next</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-prev'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-playpause uds-left'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-next'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
 			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
 		$out .= "</div>";
 		return $out;
@@ -547,9 +547,9 @@ class uBillboard {
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator modern'>";
-			$out .= "<div class='uds-bb-button uds-bb-prev'><span>Prev</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause uds-left'><span>Play</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-next'><span>Next</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-prev'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-playpause uds-left'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-next'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
 			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
 		$out .= "</div>";
 		return $out;

@@ -29,6 +29,11 @@
 	var $bb,
 	
 	/**
+	 *	$slides is a jQuery object that holds $stage and $next
+	 */
+	$slides,
+	
+	/**
 	 *	$stage is a jQuery object that represents the current slide as it is being displayed
 	 */
 	$stage,
@@ -100,13 +105,12 @@
 			d('Init');
 			$bb = $(this);
 			
-			// Bind All events defined below
-			bindEvents();
+			$slides = $('.uds-bb-slides', $bb);
 			
 			// Fix options
 			options = $.extend(defaults, passedOptions);
 			
-			$bb.css({
+			$bb.add($slides).css({
 				width: options.width,
 				height: options.height
 			})
@@ -1010,7 +1014,7 @@
 			duration: 500,
 			direction: 'right',
 			setup: function() {
-				$bb.css({
+				$('.uds-bb-slides', $bb).css({
 					overflow: 'hidden'
 				});
 				$stage.css({
@@ -1149,18 +1153,6 @@
 			}
 		}
 	};
-	
-	/**
-	 *	Binds Event handlers
-	 */
-	function bindEvents() {
-		/**
-		 *	udsBillboardLoadingDidComplete, run when the loading completes
-		 */
-		$bb.bind('udsBillboardLoadingDidComplete', function(){
-			d('Loadin Complete!');
-		});
-	}
 	
 	/**
 	 *	Main jQuery plugin definition

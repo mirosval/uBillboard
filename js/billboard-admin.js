@@ -1,17 +1,17 @@
 jQuery(function($){
 	// admin billboard delete
 	$('#billboard_update_form .deletion').click(function(){
-		return confirm("Really delete? This is not undoable");
+		return confirm(udsAdminL10n.billboardDeleteConfirmation);
 	});
 	
 	// Delete from the list page
 	$('.trash a').click(function(){
-		return confirm("Really delete? This is not undoable");
+		return confirm(udsAdminL10n.billboardDeleteConfirmation);
 	});
 	
 	// slides delete
 	$('.slide .deletediv').click(function(){
-		if(confirm("Really delete slide?")) {
+		if(confirm(udsAdminL10n.slideDeleteConfirmation)) {
 			$(this).parents('.slide').remove();
 		}
 	});
@@ -50,7 +50,7 @@ jQuery(function($){
 		var postsPerPage = 5;
 		
 		if($('#uds-dialog').length === 0) {
-			$('<div id="uds-dialog" title="Add an Image">').appendTo('body');
+			$('<div id="uds-dialog" title="'+udsAdminL10n.addAnImage+'">').appendTo('body');
 		}
 		
 		$dialog = $('#uds-dialog');
@@ -95,8 +95,8 @@ jQuery(function($){
 		$('.uds-slides-order li').remove();
 		$('.slides .slide').each(function(i, el){
 			$(this).attr('id', 'uds-slide-'+i);
-			$(this).find('.hndle span').text('Slide ' + (i + 1));
-			$('.uds-slides-order').append('<li id="uds-slide-handle-'+i+'" class="uds-slide-handle">Slide ' + (i + 1) + '</li>');
+			$(this).find('.hndle span').text(udsAdminL10n.slideN.replace('%s', (i + 1)));
+			$('.uds-slides-order').append('<li id="uds-slide-handle-'+i+'" class="uds-slide-handle">' + udsAdminL10n.slideN.replace('%s', (i + 1)) + '</li>');
 		});
 		
 		$('.uds-slides-order').sortable('refresh');
@@ -245,7 +245,7 @@ jQuery(function($){
 		$('#title').val(originalName);
 		
 		$.post(ajaxurl, form, function(data) {
-			$dialog = $('<div id="uds-preview-dialog" title="uBillboard Preview">').appendTo('body');
+			$dialog = $('<div id="uds-preview-dialog" title="' + udsAdminL10n.billboardPreview + '">').appendTo('body');
 			
 			$dialog.html("<iframe src='" + url + "' width='100%' height='100%'></iframe>");
 			
