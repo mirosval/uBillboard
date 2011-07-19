@@ -85,16 +85,30 @@ jQuery(function($){
 		return false;
 	});
 	
+	// Update slide fields/IDs after changing/adding/sorting/deleting slides
+	function resetSlides() {
+		$('.uds-slides-order li').remove();
+		$('.slides .slide').each(function(i, el){
+			$(this).attr('id', 'uds-slide-'+i);
+			$(this).find('.hndle span').text('Slide ' + (i + 1));
+			$('.uds-slides-order').append('<li id="uds-slide-handle-'+i+'" class="uds-slide-handle">Slide ' + (i + 1) + '</li>');
+		});
+		
+		$('.uds-slides-order').sortable('refresh');
+		createTabs();
+	}
+	
 	// Slide Cloning
 	var slideClone = $('#normal-sortables .slides .slide:last').clone();
 	$('.slide .adddiv').live('click', function(){
 		$(this).parents('.slide').after(slideClone.clone());
-		createTabs();
+		resetSlides();
 	});
 	
 	// slide Deleting
 	$('.slide .deletediv').live('click', function(){
 		$(this).parents('.slide').remove();
+		resetSlides();
 	});
 	
 	// Billboard image collapsing
@@ -161,6 +175,8 @@ jQuery(function($){
 				var slide = $('#uds-slide-'+order[i]).detach();
 				$('.uds-billboard-form .slides').append(slide);
 			}
+			
+			resetSlides();
 		}
 	});
 	
