@@ -198,7 +198,7 @@ class uBillboardSlide {
 			$camelKey = $this->camelize($key);
 			$out .= '     <property>' . "\n";
 			$out .= '      <key>' . $key . '</key>' . "\n";
-			$out .= '      <value>' . $this->{$key} . '</value>' . "\n";
+			$out .= '      <value><![CDATA[' . $this->{$key} . ']]></value>' . "\n";
 			$out .= '     </property>' . "\n";
 		}
 		

@@ -4,6 +4,11 @@ jQuery(function($){
 		return confirm("Really delete? This is not undoable");
 	});
 	
+	// Delete from the list page
+	$('.trash a').click(function(){
+		return confirm("Really delete? This is not undoable");
+	});
+	
 	// slides delete
 	$('.slide .deletediv').click(function(){
 		if(confirm("Really delete slide?")) {

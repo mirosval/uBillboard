@@ -406,7 +406,7 @@ function uds_billboard_export($what = false)
 		if($what !== false) {
 			if(is_array($what) && !in_array($name, $what)) {
 				continue;
-			} elseif($name === $what) {
+			} elseif($name !== $what) {
 				continue;
 			}
 		}
