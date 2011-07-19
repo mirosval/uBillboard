@@ -322,7 +322,13 @@ function uds_billboard_import($file)
 		return;
 	}
 	
-	$import = new SimpleXMLElement($import);
+	try {
+		libxml_use_internal_errors(true);
+		$import = new SimpleXMLElement($import);
+	} catch(Exception $e) {
+		$uds_billboard_errors[] = __(sprintf('An error has occurred during XML Parsing: %s', $e->getMessage()));
+		return;
+	}
 	
 	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
 	
