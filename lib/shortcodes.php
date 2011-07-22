@@ -19,7 +19,6 @@ function uds_billboard_description($atts, $content = null)
 		'left' => '20px',
 		'width' => '200px',
 		'height' => '80%',
-		'bg' => 'white',
 		'skin' => ''
 	), $atts));
 
@@ -29,7 +28,7 @@ function uds_billboard_description($atts, $content = null)
 		$textile = new Textile();
 		$content = $textile->TextileRestricted($content, '');
 		if(!empty($skin)) $skin = 'uds-' . $skin;
-		$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;background-color:$bg'>$content</div>";
+		$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;'>$content</div>";
 	}
 	
 	return $out;
