@@ -429,6 +429,8 @@
 			$stage = $('.uds-stage', $bb);
 			$next = $('.uds-next', $bb);
 			
+			$next.hide();
+			
 			$($stage).add($next).css({
 				width: options.width,
 				height: options.height,
@@ -522,8 +524,6 @@
 			
 			_private.resetAnimation();
 			
-			$next.hide();
-			
 			if(nextSlide.transition !== 'none') { // Do not create a million copies of embedded content ;)
 				$nextInsides.css({
 					backgroundImage: 'url('+nextSlide.bg+')'
@@ -532,11 +532,19 @@
 		},
 		
 		initControls: function() {
+			$controls = $('.uds-bb-controls', $bb);
+			
 			// Setup CSS
-			$('.uds-bb-controls', $bb).css({
+			$controls.css({
 				width: options.width,
 				height: options.height,
-				opacity: 0
+				opacity: 0,
+				visibility: 'hidden'
+			});
+			
+			// Make sure all controls are visible (to counter visibility: hidden; on $controls
+			$('*', $controls).css({
+				visibility: 'visible'
 			});
 			
 			// Center controls
