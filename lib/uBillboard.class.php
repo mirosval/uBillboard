@@ -445,6 +445,9 @@ class uBillboard {
 			case 'select':
 				$this->renderAdminOptionSelect($option, $field, $value);
 				break;
+			case 'color':
+				$this->uds_render_colorpicker($key, $options, $id);
+				break;
 		}
 	}
 	
@@ -494,6 +497,25 @@ class uBillboard {
 		</div>
 		<?php
 	}
+	
+	function uds_render_colorpicker($key, $options, $unique_id, $value = '')
+{
+	global $uds_general_options, $current_page;
+
+	$field = get_option($current_page);
+	
+	$name = $current_page.'['.$key.']';
+	$value = isset($field[$key]) ? $field[$key] : $options['default'];
+?>
+	<div class="'. $key .'-wrapper">
+	<label for="general-'. $key .'-'. $unique_id .'">'. $options['label'] .'</label>
+	<span class="colorpicker">
+	<input type="text" name="'. $name .'" value="' . $value . '" id="general-'. $key .'-'. $unique_id .'" class="general-'. $key .' color" />
+	</span>
+	</div>';
+	<?php
+}
+	
 	
 	private function paginatorMini()
 	{

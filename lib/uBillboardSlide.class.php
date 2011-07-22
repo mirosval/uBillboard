@@ -13,7 +13,7 @@ $uds_billboard_attributes = array(
 		'default' => ''
 	),
 	'background' => array(
-		'type' => 'text',
+		'type' => 'color',
 		'label' => __('Background Color', uds_billboard_textdomain),
 		'default' => ''
 	),
