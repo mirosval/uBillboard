@@ -396,6 +396,14 @@ class uBillboardSlide {
 		echo '<div class="toolbar-buttons">';
 		echo '<span class="button add">'.__('Add new box', uds_billboard_textdomain).'</span>';
 		echo '<span class="button remove">'.__('Remove currently focused box', uds_billboard_textdomain).'</span>';
+		echo '<label>Current Box Skin: </label>';
+		echo '<select class="box-skin">';
+		echo '<option value="" disabled="disabled"></option>';
+		echo '<option value="inherit">'.__('Inherit', uds_billboard_textdomain).'</option>';
+		echo '<option value="transparent">'.__('Transparent', uds_billboard_textdomain).'</option>';
+		echo '<option value="dark">'.__('Dark', uds_billboard_textdomain).'</option>';
+		echo '<option value="bright">'.__('Bright', uds_billboard_textdomain).'</option>';
+		echo '</select>';
 		echo '<div class="clear"></div>';
 		echo '</div>';
 		echo '<div class="editor-area">';

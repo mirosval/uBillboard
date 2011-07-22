@@ -23,13 +23,12 @@ function uds_billboard_description($atts, $content = null)
 		'skin' => ''
 	), $atts));
 
-	if(!empty($skin)) $skin = 'uds-' . $skin;
-
 	if(isset($uds_description_mode) && $uds_description_mode == 'editor') {
-		$out = "<div class='editable-box' style='top:$top;left:$left;width:$width;height:$height;'><textarea>$content</textarea></div>";
+		$out = "<div class='editable-box' data-skin='$skin' style='top:$top;left:$left;width:$width;height:$height;'><textarea>$content</textarea></div>";
 	} else {
 		$textile = new Textile();
 		$content = $textile->TextileRestricted($content, '');
+		if(!empty($skin)) $skin = 'uds-' . $skin;
 		$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;background-color:$bg'>$content</div>";
 	}
 	

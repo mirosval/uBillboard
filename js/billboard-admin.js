@@ -295,25 +295,34 @@ jQuery(function($){
 			});
 		}
 		
-		$('.editable-box', $editor).each(function(){
+		function focusHandler() {
+			$('.editable-box', $editor).removeClass('focused');
+			$editableBox = $(this).parents('.editable-box');
+			$editableBox.addClass('focused');
+
+			$('.box-skin', $dialog).val($editableBox.data('skin'));
+		}
+		
+		$('.editable-box textarea').focus(focusHandler);
+		
+		$('.editable-box', $dialog).each(function(){
 			$(this).css('position', 'absolute');
 			setDraggableAndResizable(this);
 		});
 		
-		$('.editable-box textarea', $editor).live('focus', function(){
-			$('.editable-box', $editor).removeClass('focused');
-			$(this).parents('.editable-box').addClass('focused');
+		$('.box-skin', $dialog).change(function(){
+			$('.editable-box.focused').data('skin', $(this).val());
 		});
 			
 		function createEditorArea() {
 			var $editorArea = $("<div class='editable-box'><textarea></textarea></div>");
 			$editor.append($editorArea);
-			$editorArea.css('z-index', 10);
 			setDraggableAndResizable($editorArea);
+			$editorArea.find('textarea').focus(focusHandler).focus();
 			return $editorArea;
 		}
 		
-		$('input', $dialog).click(function(){
+		$('input.save', $dialog).click(function(){
 			$content.val('');
 			$('.editable-box', $dialog).each(function(){
 				$(this).draggable('destroy');
@@ -323,10 +332,11 @@ jQuery(function($){
 					height = ' height="'+$(this).height()+'px"',
 					top = ' top="'+parseInt($(this).css('top'), 10)+'px"',
 					left = ' left="'+parseInt($(this).css('left'), 10)+'px"',
-					content = $(this).find('textarea').val();
-				
+					content = $(this).find('textarea').val(),
+					skin = ' skin="'+$(this).data('skin')+'"';
+				console.log(skin);
 				if(content != '') {
-					$content.val(val + '[uds-description '+width+height+top+left+']' + content + '[/uds-description] ');
+					$content.val(val + '[uds-description '+width+height+top+left+skin+']' + content + '[/uds-description] ');
 				}
 				$dialog.dialog('close');
 			});
