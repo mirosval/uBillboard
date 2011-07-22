@@ -13,6 +13,7 @@ function uds_billboard_shortcode($atts, $content = null)
 add_shortcode('uds-description', 'uds_billboard_description');
 function uds_billboard_description($atts, $content = null)
 {
+	global $uds_description_mode;
 	extract(shortcode_atts(array(
 		'top' => '20px',
 		'left' => '20px',
@@ -24,7 +25,13 @@ function uds_billboard_description($atts, $content = null)
 
 	if(!empty($skin)) $skin = 'uds-' . $skin;
 
-	$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;background-color:$bg'>$content</div>";
+	if(isset($uds_description_mode) && $uds_description_mode == 'editor') {
+		$out = "<div class='editable-box' style='top:$top;left:$left;width:$width;height:$height;'><textarea>$content</textarea></div>";
+	} else {
+		$textile = new Textile();
+		$content = $textile->TextileRestricted($content, '');
+		$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;background-color:$bg'>$content</div>";
+	}
 	
 	return $out;
 }

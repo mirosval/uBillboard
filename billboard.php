@@ -26,20 +26,14 @@ define('UDS_BILLBOARD_OPTION_GENERAL', 'uds-billboard-general-3');
 
 define('uds_billboard_textdomain', 'uBillboard');
 
+require_once 'lib/compat.php';
+require_once 'lib/classTextile.php';
 require_once 'lib/uBillboard.class.php';
 require_once 'lib/uBillboardSlide.class.php';
 require_once 'lib/tinymce/tinymce.php';
 require_once 'lib/shortcodes.php';
 
 global $uds_billboard_errors;
-
-if(!function_exists('d')) {
-	function d($var) {
-		echo "<pre>";
-		var_dump($var);
-		echo "</pre>";
-	}
-}
 
 // returns true if used as a standalone plugin, false when it's used as part of a theme
 function uds_billboard_is_plugin()
@@ -293,6 +287,7 @@ function uds_billboard_enqueue_admin_scripts()
 	wp_enqueue_script("jquery-ui-tabs");
 	wp_enqueue_script("jquery-ui-dialog");
 	wp_enqueue_script("jquery-ui-sortable");
+	wp_enqueue_script("jquery-ui-resizable");
 	wp_enqueue_script("jquery-ui-draggable");
 	
 	wp_enqueue_script('jquery-cookie', $dir."js/jquery_cookie.js", array('jquery'), UDS_BILLBOARD_VERSION, false);

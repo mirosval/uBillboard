@@ -214,6 +214,7 @@ jQuery(function($){
 	//tinyMCE.PluginManager.load("udsDescription", "http://meosoft/code/plugins/wp-content/plugins/uBillboard/lib/tinymce/uds-description/editor_plugin.js");
 	
 	$('.billboard-text').each(function() {
+	return;
 		tinyMCE.init({
 		    theme : 'advanced',
 		    mode: 'exact',
@@ -264,4 +265,91 @@ jQuery(function($){
 	if(window.location.hash === '#preview') {
 		$('a.preview').trigger('click');
 	}
+	
+	
+	
+	// Content editor
+	$('.content-editor').hide();
+	$('.uds-content-editor').live('click', function(){
+		$dialog = $('.content-editor', $(this).parent()).clone().appendTo('body');
+		$content = $(this).parent().find('textarea');
+		
+		var width =  parseInt($('#uds-billboard-width').val(), 10),
+			height = parseInt($('#uds-billboard-height').val(), 10),
+			image =  $(this).parents('.inside').find('.image-wrapper').css('background-image');
+		
+		$editor = $('.editor-area', $dialog).css({
+			width: width + 'px',
+			height: height + 'px',
+			backgroundColor: 'gray',
+			backgroundImage: image,
+			backgroundPosition: 'center center',
+			backgroundRepeat: 'no-repeat'
+		});
+		
+		function setDraggableAndResizable(el) {
+			$(el).draggable({
+				container: $editor
+			});
+			
+			$(el).resizable({
+				container: $editor
+			});
+		}
+		
+		$('.editable-box', $editor).each(function(){
+			$(this).css('position', 'absolute');
+			setDraggableAndResizable(this);
+		});
+		
+		$('.editable-box textarea', $editor).live('focus', function(){
+			$('.editable-box', $editor).removeClass('focused');
+			$(this).parents('.editable-box').addClass('focused');
+		});
+			
+		function createEditorArea() {
+			var $editorArea = $("<div class='editable-box'><textarea></textarea></div>");
+			$editor.append($editorArea);
+			$editorArea.css('z-index', 10);
+			setDraggableAndResizable($editorArea);
+			return $editorArea;
+		}
+		
+		$('input', $dialog).click(function(){
+			$content.val('');
+			$('.editable-box', $dialog).each(function(){
+				$(this).draggable('destroy');
+				$(this).resizable('destroy');
+				var val = $content.val(),
+					width = 'width="'+$(this).width()+'px"',
+					height = ' height="'+$(this).height()+'px"',
+					top = ' top="'+parseInt($(this).css('top'), 10)+'px"',
+					left = ' left="'+parseInt($(this).css('left'), 10)+'px"',
+					content = $(this).find('textarea').val();
+				
+				if(content != '') {
+					$content.val(val + '[uds-description '+width+height+top+left+']' + content + '[/uds-description] ');
+				}
+				$dialog.dialog('close');
+			});
+		});
+		
+		$addButton = $('span.add', $dialog);
+		$addButton.click(createEditorArea);
+		
+		$removeButton = $('span.remove', $dialog);
+		$removeButton.click(function(){
+			$('.editable-box.focused', $editor).draggable('destroy').resizable('destroy').remove();
+			
+			return false;
+		});
+		
+		$dialog.dialog({
+			width: width + 30,
+			height: height + 130,
+			modal: true
+		});
+		
+		return false;
+	});
 });

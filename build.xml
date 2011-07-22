@@ -96,17 +96,24 @@
 		<copy todir="build/${project_name}/css">
 			<fileset dir="css" />
 		</copy>
+		
 		<!-- Copy JS -->
 		<copy todir="build/${project_name}/js">
 			<fileset dir="js">
 				<exclude name="${file_name}.js" />
 			</fileset>
 		</copy>
+		
 		<!-- Copy Images -->
 		<copy todir="build/${project_name}/images">
 			<fileset dir="images" />
 		</copy>
-
+		
+		<!-- Copy Language files -->
+		<copy todir="build/${project_name}/lang">
+			<fileset dir="lang" />
+		</copy>
+		
 		<!-- Copy PHP Files -->
 		<copy todir="build/${project_name}">
 			<fileset dir=".">
