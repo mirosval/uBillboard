@@ -64,6 +64,10 @@
 	padding: 10px;
 }
 
+.uds-bright  .uds-bb-description.uds-transparent, .uds-dark  .uds-bb-description.uds-transparent {
+	background: none;
+}
+
 .uds-bright .uds-bb-description,
 .uds-bb .uds-bb-description.uds-bright {
 	background: url(../images/bg-bright.png);
