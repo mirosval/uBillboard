@@ -506,15 +506,15 @@ class uBillboard {
 	
 	$name = $current_page.'['.$key.']';
 	$value = isset($field[$key]) ? $field[$key] : $options['default'];
-?>
-	<div class="'. $key .'-wrapper">
-	<label for="general-'. $key .'-'. $unique_id .'">'. $options['label'] .'</label>
-	<span class="colorpicker">
-	<input type="text" name="'. $name .'" value="' . $value . '" id="general-'. $key .'-'. $unique_id .'" class="general-'. $key .' color" />
-	</span>
-	</div>';
-	<?php
+
+	echo '<div class="'. $key .'-wrapper">';
+	echo '<label for="general-'. $key .'-'. $unique_id .'">'. $options['label'] .'</label>';
+	echo '<span class="colorpicker">';
+	echo '#<input type="text" name="'. $name .'" value="' . $value . '" id="general-'. $key .'-'. $unique_id .'" class="general-'. $key .' color" />';
+	echo '</span>';
+	echo '</div>';
 }
+	
 	
 	
 	private function paginatorMini()
