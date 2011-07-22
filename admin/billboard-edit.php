@@ -131,3 +131,4 @@ $billboard->addEmptySlide();
 		</div> <!-- END metabox holder -->
 	</form> <!-- END billboard update form -->
 </div> <!-- END Wrap -->
+<div id="colorpicker"></div>

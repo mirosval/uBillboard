@@ -265,9 +265,7 @@ jQuery(function($){
 	if(window.location.hash === '#preview') {
 		$('a.preview').trigger('click');
 	}
-	
-	
-	
+		
 	// Content editor
 	$('.content-editor').hide();
 	$('.uds-content-editor').live('click', function(){

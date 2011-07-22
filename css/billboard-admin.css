@@ -240,8 +240,11 @@ td.shortcode {
 }
 
 .uds-billboard-form input.button {
-	width: auto;
-	
+	width: auto;	
+}
+
+.uds-billboard-form input.color {
+	width: 55px;	
 }
 
 .uds-billboard-form .resize-wrapper {

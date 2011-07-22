@@ -292,6 +292,7 @@ function uds_billboard_enqueue_admin_scripts()
 	wp_enqueue_script("uds-colorpicker", $dir."js/colorpicker/jscolor.js", UDS_BILLBOARD_VERSION, false);
 	wp_enqueue_script('jquery-cookie', $dir."js/jquery_cookie.js", array('jquery'), UDS_BILLBOARD_VERSION, false);
 	wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js", array('jquery', 'jquery-cookie', 'jquery-ui-tabs'), UDS_BILLBOARD_VERSION, false);
+	
 	wp_localize_script('uds-billboard', 'udsAdminL10n', array(
 		'billboardDeleteConfirmation' => __('Really delete? This is not undoable', uds_billboard_textdomain),
 		'slideDeleteConfirmation' => __('Really delete slide?', uds_billboard_textdomain),

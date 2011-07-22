@@ -15,7 +15,7 @@ $uds_billboard_attributes = array(
 	'background' => array(
 		'type' => 'color',
 		'label' => __('Background Color', uds_billboard_textdomain),
-		'default' => ''
+		'default' => 'ffffff'
 	),
 	'link' => array(
 		'type' => 'text',
@@ -76,7 +76,7 @@ class uBillboardSlide {
 	public static function getSlides($options, $slider)
 	{
 		global $uds_billboard_attributes;
-		
+
 		$slides = array();
 
 		$n = 0;
@@ -342,7 +342,7 @@ class uBillboardSlide {
 				$this->renderAdminImage($attrib);
 				break;
 			case 'color';
-				$this->uds_render_colorpicker($attrib);
+				$this->renderAdminColorpicker($attrib);
 				break;
 			default:
 		}
@@ -358,22 +358,16 @@ class uBillboardSlide {
 		echo '</div>';
 	}
 	
-	private function uds_render_colorpicker($attrib)
-{
-	global $uds_general_options, $current_page;
+	private function renderAdminColorpicker($attrib)
+	{
+		global $uds_billboard_attributes;
 
-	$field = get_option($current_page);
-	
-	$name = $current_page.'['.$key.']';
-	$value = isset($field[$key]) ? $field[$key] : $options['default'];
-
-	echo '<div class="'. $key .'-wrapper">';
-	echo '<label for="general-'. $key .'-'. $unique_id .'">'. $options['label'] .'</label>';
-	echo '<span class="colorpicker">';
-	echo '#<input type="text" name="'. $name .'" value="' . $value . '" id="general-'. $key .'-'. $unique_id .'" class="general-'. $key .' color" />';
-	echo '</span>';
-	echo '</div>';
-}
+		$attrib_full = $uds_billboard_attributes[$attrib];
+		echo '<div class="'. $attrib .'-wrapper">';
+		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
+		echo '#<input type="text" name="uds_billboard['. $attrib .'][]" value="'.$this->{$attrib}.'" id="billboard-'. $attrib .'" class="billboard-'. $attrib .' color" />';
+		echo '</div>';
+	}
 	
 	
 	private function renderAdminCheckbox($attrib)
