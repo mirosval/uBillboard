@@ -103,7 +103,9 @@
 	z-index: 3;
 }
 
+.uds-bb-paginator .uds-bb-button,
 .uds-bb-paginator .uds-bb-position-indicator-bullets {
+	position: relative;
 	z-index: 5;
 }
 
@@ -117,6 +119,8 @@
 		text-indent: -5000px;
 		cursor: pointer;
 	}
+	
+	
 	
 	/* Mini skin */
 	.uds-bb-paginator.mini {
