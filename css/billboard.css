@@ -449,12 +449,7 @@
 /* Thumbnails */
 .uds-bb-thumbnails {
 	position: absolute;
-<<<<<<< HEAD
-	z-index: 3;
-=======
 	z-index: 4;
-	background: url(../images/skin-oldskool/bg.png);
->>>>>>> d29c825932bcc998527003b31cef1b6efb2f1161
 	overflow: hidden;
 }
 
