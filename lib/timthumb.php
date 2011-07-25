@@ -33,6 +33,7 @@ $allowedSites = array (
 	'wordpress.com',
 	'img.youtube.com',
 	'upload.wikimedia.org',
+	'vimeocdn.com'
 );
 
 // STOP MODIFYING HERE!

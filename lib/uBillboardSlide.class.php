@@ -366,21 +366,18 @@ class uBillboardSlide {
 						$text = __('URL Must not be empty', uds_billboard_textdomain);
 						break;
 					}
-	
+					
 					$width = (int)$this->slider->width;
-					$height = (int)$this->slider->height;
+					$height = (int)$this->slider->height;	
+
+					$response = uds_billboard_oembed($url, $width, $height);
 					
-					$url = 'http://api.embed.ly/1/oembed?url='.urlencode($url)."&maxwidth=$width&maxheight=$height&format=json";
-				
-					$response = @file_get_contents($url);
-					
-					if(empty($response)) {
-						$text .= __('There was an error when loading the video', uds_billboard_textdomain);
-						break;
+					if(is_object($response)) {
+						$text = $response->html;
+						$this->thumb = isset($response->thumbnail_url) ? $response->thumbnail_url : '';
+					} else {
+						$text = $response;
 					}
-					
-					$response = json_decode($response);
-					$text = $response->html;
 					
 					break;
 				case 'dynamic':

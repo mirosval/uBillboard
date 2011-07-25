@@ -27,6 +27,7 @@ define('UDS_BILLBOARD_OPTION_GENERAL', 'uds-billboard-general-3');
 define('uds_billboard_textdomain', 'uBillboard');
 
 require_once 'lib/compat.php';
+require_once 'lib/embed.php';
 require_once 'lib/classTextile.php';
 require_once 'lib/uBillboard.class.php';
 require_once 'lib/uBillboardSlide.class.php';
