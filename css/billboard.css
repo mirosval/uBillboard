@@ -86,7 +86,7 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	z-index: 4;
+	z-index: 3;
 }
 
 .uds-bb-countdown {
@@ -103,10 +103,13 @@
 	z-index: 3;
 }
 
+.uds-bb-paginator .uds-bb-position-indicator-bullets {
+	z-index: 5;
+}
+
 	/* Paginator */
 	.uds-bb-paginator {
 		position: absolute;
-		z-index: 4;
 	}
 	
 	.uds-bb-paginator .uds-bb-button {
@@ -446,7 +449,7 @@
 /* Thumbnails */
 .uds-bb-thumbnails {
 	position: absolute;
-	z-index: 3;
+	z-index: 4;
 	background: url(../images/skin-oldskool/bg.png);
 	overflow: hidden;
 }
