@@ -547,9 +547,10 @@ class uBillboard {
 	{
 		$position = $this->thumbnailsPosition;
 		$inside = $this->thumbnailsInside === 'on' ? 'inside' : '';
+		$skin = $this->controlsSkin;
 		
 		$out = '';
-		$out .= "<div class='uds-bb-thumbnails $position $inside'>";
+		$out .= "<div class='uds-bb-thumbnails $skin $position $inside'>";
 		$out .= "<div class='uds-bb-thumbnail-container'>";
 		foreach($this->slides as $slide) {
 			$out .= $slide->renderThumb();
