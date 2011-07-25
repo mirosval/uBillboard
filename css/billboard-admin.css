@@ -87,6 +87,14 @@ td.shortcode {
 	overflow: hidden;
 }
 
+.content-wrapper {
+	margin: 0px 0px 15px;
+}
+
+.text-wrapper {
+	margin: 0px 0px 15px;
+}
+
 .image-wrapper {
 	background-repeat: no-repeat;
 	position: absolute;
@@ -96,6 +104,13 @@ td.shortcode {
 	width: 50px;
 }
 
+.background-wrapper {
+	margin-bottom: 10px;
+}
+
+.background-wrapper label {
+	line-height: 20px;
+}
 
 .delay-wrapper select, .layout-wrapper select, .transition-wrapper select, .direction-wrapper select {
 	width: 150px;
@@ -235,8 +250,19 @@ td.shortcode {
 	margin: 0px 5px 5px 5px;
 }
 
+.uds-billboard-form label.radio {
+	width: 250px;
+	margin-bottom: 7px;
+}
+
 .uds-billboard-form input {
 	width: 100%;
+}
+
+.uds-billboard-form input.radio {
+	width: auto;
+	float: left;
+	margin-right: 5px;
 }
 
 .uds-billboard-form input.button {
@@ -251,7 +277,9 @@ td.shortcode {
 	margin-bottom: 5px;
 }
 
-.uds-billboard-form .resize-wrapper label {
+.uds-billboard-form .resize-wrapper label,
+.uds-billboard-form .background-wrapper label,
+.uds-billboard-form .background-transparent-wrapper label {
 	float: left;
 }
 

@@ -13,7 +13,7 @@ function uds_billboard_shortcode($atts, $content = null)
 add_shortcode('uds-description', 'uds_billboard_description');
 function uds_billboard_description($atts, $content = null)
 {
-	global $uds_description_mode;
+	global $uds_description_mode, $uds_billboard_text_evaluation;
 	extract(shortcode_atts(array(
 		'top' => '20px',
 		'left' => '20px',
@@ -25,39 +25,16 @@ function uds_billboard_description($atts, $content = null)
 	if(isset($uds_description_mode) && $uds_description_mode == 'editor') {
 		$out = "<div class='editable-box' data-skin='$skin' style='top:$top;left:$left;width:$width;height:$height;'><textarea>$content</textarea></div>";
 	} else {
-		$textile = new Textile();
-		$content = $textile->TextileRestricted($content, '');
+		if($uds_billboard_text_evaluation == 'textile') {
+			$textile = new Textile();
+			$content = $textile->TextileRestricted($content, '');
+		}
+		
 		if(!empty($skin)) $skin = 'uds-' . $skin;
 		$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;'>$content</div>";
 	}
 	
 	return $out;
-}
-
-add_shortcode('uds-embed', 'uds_billboard_embed');
-function uds_billboard_embed($atts, $content = null)
-{
-	global $uds_bb_params;
-	extract(shortcode_atts(array(
-		'url' => ''
-	), $atts));
-	
-	if(empty($url)) return __('URL Must not be empty', uds_billboard_textdomain);
-	
-	$width = (int)$uds_bb_params['width'];
-	$height = (int)$uds_bb_params['height'];
-	
-	$url = 'http://api.embed.ly/1/oembed?url='.urlencode($url)."&maxwidth=$width&maxheight=$height&format=json";
-
-	$response = @file_get_contents($url);
-	
-	if(empty($response)) {
-		return __('There was an error when loading the video', uds_billboard_textdomain);
-	}
-	
-	$response = json_decode($response);
-	
-	return apply_filters('uds_shortcode_out_filter', $response->html);
 }
 
 ?>

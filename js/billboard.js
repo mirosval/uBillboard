@@ -184,7 +184,7 @@
 				$stage.html(slide.html);
 				
 				$stage.css({
-					backgroundColor: 'black',
+					backgroundColor: slide.bgColor,
 					backgroundImage: 'none'
 				});
 				
@@ -341,6 +341,7 @@
 					delay: parseInt($('.uds-delay', el).remove().text(), 10),
 					transition: $('.uds-transition', el).remove().text(),
 					direction: $('.uds-direction', el).remove().text(),
+					bgColor: $('.uds-background', el).remove().text(),
 					bg: $('.uds-bb-bg-image', el).remove().attr('src'),
 					link: $('.uds-bb-link', el).remove().attr('href'),
 					html: $(el).remove().html()
@@ -993,7 +994,10 @@
 		'none': {
 			duration: 0,
 			direction: '',
-			setup: $.noop(),
+			setup: function() {
+				// we dont want squares to interfere with the content
+				$next.hide();
+			},
 			perform: $.noop()
 		},
 		

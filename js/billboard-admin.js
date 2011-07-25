@@ -265,7 +265,32 @@ jQuery(function($){
 	if(window.location.hash === '#preview') {
 		$('a.preview').trigger('click');
 	}
-		
+	
+	// handle content type switching
+	function contentType(){
+		$('.uds-slide-tab-content').each(function(i, el){
+			var $tab = $(el);
+			$('.billboard-content', $tab).change(function(){
+				$('>div:not(.content-wrapper)', $tab).hide();
+				switch($(this).val()) {
+					case 'editor':
+						$('.text-wrapper,.text-evaluation-wrapper', $tab).show();
+						break;
+					case 'embed':
+						$('.embed-url-wrapper', $tab).show();
+						break;
+					case 'dynamic':
+						$('.dynamic-offset-wrapper', $tab).show();
+						break;
+					case 'none':
+					default:
+				}
+			}).change();
+		});
+	}
+	
+	contentType();
+	
 	// Content editor
 	$('.content-editor').hide();
 	$('.uds-content-editor').live('click', function(){
