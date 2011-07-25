@@ -79,19 +79,17 @@ $billboard->addEmptySlide();
 							<hr />
 							<label><?php _e('Controls skin', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('controls-skin'); ?>
+							<label><?php _e('Controls Position', uds_billboard_textdomain) ?>:</label>
+							<?php $billboard->renderAdminOption('controls-position'); ?>
 							<hr />
 							<label><?php _e('Show Controls', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('show-controls'); ?>
-							<label><?php _e('Controls Position', uds_billboard_textdomain) ?>:</label>
-							<?php $billboard->renderAdminOption('controls-position'); ?>
 							<hr />
 							<label><?php _e('Show Play/Pause', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('show-pause'); ?>
 							<hr />
 							<label><?php _e('Show Paginator', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('show-paginator'); ?>
-							<label><?php _e('Paginator Position', uds_billboard_textdomain) ?>:</label>
-							<?php $billboard->renderAdminOption('paginator-position'); ?>
 							<hr />
 							<label><?php _e('Thumbnails', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('show-thumbnails'); ?>

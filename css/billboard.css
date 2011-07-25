@@ -86,7 +86,7 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	z-index: 3;
+	z-index: 4;
 }
 
 .uds-bb-countdown {
@@ -106,7 +106,7 @@
 	/* Paginator */
 	.uds-bb-paginator {
 		position: absolute;
-		z-index: 3;
+		z-index: 4;
 	}
 	
 	.uds-bb-paginator .uds-bb-button {
@@ -224,6 +224,11 @@
 		right: 10px;
 	}
 
+	.uds-bb-paginator.outside.oldskool .uds-bb-next,
+	.uds-bb-paginator.outside.oldskool-bright .uds-bb-next  {
+		right: -60px;
+	}
+
 	.uds-bb-paginator.oldskool .uds-bb-next span, .uds-bb-paginator.oldskool-bright .uds-bb-next span {
 		background-image: url(../images/skin-oldskool/next.png);
 	}
@@ -235,6 +240,11 @@
 	.uds-bb-paginator.oldskool .uds-bb-prev, .uds-bb-paginator.oldskool-bright .uds-bb-prev {
 		position: absolute;
 		left: 10px;
+	}
+	
+	.uds-bb-paginator.oldskool.outside .uds-bb-prev, 
+	.uds-bb-paginator.oldskool-bright.outside .uds-bb-prev {
+		left: -60px;
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-prev span {
@@ -252,6 +262,11 @@
 		right: 10px;
 		padding: 3px 5px;
 		border-radius: 3px;
+	}
+	
+	.uds-bb-paginator.outside.oldskool .uds-bb-position-indicator-bullets,
+	.uds-bb-paginator.outside.oldskool-bright .uds-bb-position-indicator-bullets {
+		bottom: -30px;
 	}
 	
 	.uds-bb-paginator.oldskool-bright .uds-bb-position-indicator-bullets {

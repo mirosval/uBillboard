@@ -579,6 +579,7 @@
 			var $playpause = $('.uds-bb-playpause', $bb),
 				$buttonNext = $('.uds-bb-next', $bb),
 				$buttonPrev = $('.uds-bb-prev', $bb),
+				$paginator = $('.uds-bb-paginator', $bb),
 				$bullets = $('.uds-bb-position-indicator-bullets', $bb),
 				$thumbs = $('.uds-bb-thumbnails', $bb),
 				$thumb = $('.uds-bb-thumb', $thumbs);
@@ -736,6 +737,11 @@
 				$controlsToHover = $controlsToHover.add($thumbs);
 			}
 			
+			// handle paginator background hiding
+			if(options.showPaginator !== true && options.showPause !== true && options.showControls !== true) {
+				$controlsToHover = $controlsToHover.add($paginator);
+			}
+
 			$controlsToHover.fadeTo(0, 0);
 			$bb.hover(function(){
 				$controlsToHover.stop().fadeTo(300, 1);
