@@ -65,7 +65,7 @@ $billboard->addEmptySlide();
 						<div class="inside">
 							<ul class="uds-slides-order">
 								<?php foreach($billboard->slides as $key => $item): ?>
-									<li id="uds-slide-handle-<?php echo $key ?>" class="uds-slide-handle"><?php printf(__('Slide', uds_billboard_textdomain), $key + 1) ?></li>
+									<li id="uds-slide-handle-<?php echo $key ?>" class="uds-slide-handle"><?php printf(__('Slide %u', uds_billboard_textdomain), $key + 1) ?></li>
 								<?php endforeach; ?>
 							</ul>
 						</div>
