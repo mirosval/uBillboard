@@ -369,7 +369,7 @@ class uBillboard {
 		}
 
 		if($this->showThumbnails !== 'no') {
-			$out .= $this->thumbnails();
+			$out .= $this->thumbnails($slides);
 		}
 			
 		$out .= "</div>";
@@ -543,7 +543,7 @@ class uBillboard {
 		return $out;
 	}
 	
-	private function thumbnails()
+	private function thumbnails($slides)
 	{
 		$position = $this->thumbnailsPosition;
 		$inside = $this->thumbnailsInside === 'on' ? 'inside' : '';
@@ -552,7 +552,7 @@ class uBillboard {
 		$out = '';
 		$out .= "<div class='uds-bb-thumbnails $skin $position $inside'>";
 		$out .= "<div class='uds-bb-thumbnail-container'>";
-		foreach($this->slides as $slide) {
+		foreach($slides as $slide) {
 			$out .= $slide->renderThumb();
 		}
 		$out .= "</div>";
