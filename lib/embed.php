@@ -1,5 +1,15 @@
 <?php
 
+/**
+ *	Function, oEmbed handler, will query the service
+ *	and return the embed code
+ *
+ *	@param string $url URL address of the content to embed
+ *	@param string|int $width max width of the frame for the content
+ *	@param string|int $height max height of the frame for the content
+ *	
+ *	@return string error or the embed code
+ */
 function uds_billboard_oembed($url, $width, $height)
 {
 	$services = array(
@@ -7,17 +17,21 @@ function uds_billboard_oembed($url, $width, $height)
 		'vimeo.com' => 'http://www.vimeo.com/api/oembed.json?'
 	);
 	
+	$url = '';
 	foreach($services as $pattern => $endpoint) {
 		if(strpos($url, $pattern) !== false) {
 			$url = $endpoint . 'url='.urlencode($url)."&maxwidth=$width&maxheight=$height&format=json";
 		}	
-	}	
+	}
+	
+	if(empty($url)) {
+		return __('Service not supported', uds_billboard_textdomain);
+	}
 
 	$response = @file_get_contents($url);
 	
 	if(empty($response)) {
-		$text .= __('There was an error when loading the video', uds_billboard_textdomain);
-		break;
+		return __('There was an error when loading the video', uds_billboard_textdomain);
 	}
 	
 	$response = json_decode($response);

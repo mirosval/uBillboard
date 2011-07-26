@@ -173,13 +173,30 @@ $uds_billboard_general_options = array(
 
 
 class uBillboard {
+	/**
+	 *	@var array of slides in this slider
+	 */
 	private $slides;
 	
+	/**
+	 *	Helper static function to transform an oldschool
+	 *	uBillboard v2 style billboards array into v3 format
+	 *
+	 *	@param array $billboards v2 style billboards array
+	 *	
+	 *	@return array of v3 billboards
+	 */
 	public static function upgradeFromV2($billboards)
 	{
 		
 	}
 	
+	/**
+	 *	Constructor, will parse $options to create uBillboard
+	 *	
+	 *	@param array|bool $options 
+	 *	@return uBillboard
+	 */
 	public function __construct($options = false)
 	{
 		global $uds_billboard_general_options;
@@ -197,17 +214,23 @@ class uBillboard {
 		$this->slides = array();
 	}
 	
-	public function __destruct()
-	{
-		
-	}
-	
+	/**
+	 *	Generalized getter 
+	 *	
+	 *	@return mixed
+	 */
 	public function __get($key)
 	{
 		$key = $this->camelize($key);
 		return $this->{$key};
 	}
 	
+	/**
+	 *	unserialize uBillboard, reset all attributes that
+	 *	are not present to their default values
+	 *	
+	 *	@return void
+	 */
 	public function __wakeup()
 	{
 		global $uds_billboard_general_options;
@@ -224,6 +247,12 @@ class uBillboard {
 		}
 	}
 	
+	/**
+	 *	Importer, set up current instance based on SimpleXMLElement
+	 *	XML data from an import file
+	 *	
+	 *	@return void
+	 */
 	public function importFromXML($billboard)
 	{
 		global $uds_billboard_general_options;
@@ -244,6 +273,12 @@ class uBillboard {
 		}
 	}
 	
+	/**
+	 *	Helper, make sure that this uBillboard has an unique name among other uBillboards
+	 *	in this installation
+	 *	
+	 *	@return void
+	 */
 	public function setUniqueName()
 	{
 		$billboards = array_keys(maybe_unserialize(get_option(UDS_BILLBOARD_OPTION)));
@@ -259,6 +294,13 @@ class uBillboard {
 		$this->name = $guess;
 	}
 	
+	/**
+	 *	Update current uBillboard with data from the $options array
+	 *
+	 *	@param array $options
+	 *	
+	 *	@return void
+	 */
 	public function update($options)
 	{
 		global $uds_billboard_general_options;
@@ -284,16 +326,32 @@ class uBillboard {
 		}
 	}
 	
+	/**
+	 *	Helper function, performs internal checks to determine if uBillboard
+	 *	is valid
+	 *	
+	 *	@return bool
+	 */
 	public function isValid()
 	{
 		return !empty($this->slides);
 	}
 	
+	/**
+	 *	Add empty default slide to the end of slide array
+	 *	
+	 *	@return void
+	 */
 	public function addEmptySlide()
 	{
 		$this->slides[] = new uBillboardSlide(false, $this);
 	}
 	
+	/**
+	 *	Exporter, exports self in the XML format that can be read by the importer
+	 *	
+	 *	@return void
+	 */
 	public function export()
 	{
 		global $uds_billboard_general_options;
@@ -325,6 +383,12 @@ class uBillboard {
 		return $out;
 	}
 	
+	/**
+	 *	The main frontend renderer
+	 *	
+	 *	@param int $id ID of the current uBillboard on the currently rendered page
+	 *	@return string rendered html markup
+	 */
 	public function render($id = 0)
 	{
 		global $uds_bb_params; // parameters of the currently rendered billboard
@@ -378,6 +442,11 @@ class uBillboard {
 		return $out;
 	}
 	
+	/**
+	 *	Render JS calls for the uBillboard
+	 *	
+	 *	@return string rendered JS
+	 */
 	public function renderJS($id = 0)
 	{
 		$autoplay = $this->autoplay === 'on' ? 'true' : 'false';
@@ -416,6 +485,11 @@ class uBillboard {
 		return $scripts;
 	}
 	
+	/**
+	 *	Admin renderer function for every field
+	 *	
+	 *	@return
+	 */
 	public function renderAdminOption($option)
 	{
 		global $uds_billboard_general_options;
@@ -483,6 +557,11 @@ class uBillboard {
 		<?php
 	}
 	
+	/**
+	 *	Mini paginator renderer
+	 *	
+	 *	@return string rendered paginator
+	 */
 	private function paginatorMini()
 	{
 		$out = '';
@@ -495,6 +574,11 @@ class uBillboard {
 		return $out;
 	}
 	
+	/**
+	 *	Oldskool paginator renderer
+	 *	
+	 *	@return string rendered paginator
+	 */
 	private function paginatorOldskool()
 	{
 		$out = '';
@@ -507,6 +591,11 @@ class uBillboard {
 		return $out;
 	}
 	
+	/**
+	 *	Oldskool bright paginator renderer
+	 *	
+	 *	@return string rendered paginator
+	 */
 	private function paginatorOldskoolBright()
 	{
 		$out = '';
@@ -519,6 +608,11 @@ class uBillboard {
 		return $out;
 	}
 	
+	/**
+	 *	uTube paginator renderer
+	 *	
+	 *	@return string rendered paginator
+	 */
 	private function paginatoruTube()
 	{
 		$out = '';
@@ -531,7 +625,12 @@ class uBillboard {
 		return $out;
 	}
 	
-		private function paginatorModern()
+	/**
+	 *	Modern paginator renderer
+	 *	
+	 *	@return string rendered paginator
+	 */
+	private function paginatorModern()
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator modern {$this->controlsPosition}'>";
@@ -543,6 +642,11 @@ class uBillboard {
 		return $out;
 	}
 	
+	/**
+	 *	thumbnails renderer
+	 *	
+	 *	@return string thumbnails renderer
+	 */
 	private function thumbnails($slides)
 	{
 		$position = $this->thumbnailsPosition;
@@ -560,6 +664,12 @@ class uBillboard {
 		return $out;
 	}
 	
+	/**
+	 *	Make sure the option conforms to the possible value types
+	 *	and definition in attribute array
+	 *	
+	 *	@return NULL or option
+	 */
 	private function sanitizeOption($key, $option)
 	{
 		global $uds_billboard_general_options;
@@ -583,6 +693,11 @@ class uBillboard {
 		return $uds_billboard_general_options[$key]['default'];
 	}
 	
+	/**
+	 *	Helper function to transform attributes from dash to cammelCase
+	 *	
+	 *	@return string camelized string
+	 */
 	private function camelize($string) 
 	{
 		$string = str_replace(array('-', '_'), ' ', $string); 

@@ -118,31 +118,48 @@ $uds_billboard_attributes = array(
 );
 
 class uBillboardSlide {
+	/**
+	 *	@var $slider backlink back to the slider that contains this slide
+	 */
 	private $slider;
 	
+	/**
+	 *	Static function to parse form arrays and transform them to
+	 *	array of slides
+	 *	
+	 *	@param array $options keyed by slide and attribute
+	 *	@param uBillboard $slider parent slider
+	 *	@return array of slides
+	 */
 	public static function getSlides($options, $slider)
 	{
 		global $uds_billboard_attributes;
 
 		$slides = array();
-
+		
+		// Loop through all form fields
 		$n = 0;
 		while(!empty($options) && $n < 100) {
+			// Loop through all attributes
 			$attributes = array();
 			foreach($uds_billboard_attributes as $key => $option) {
+				// if attribute is in form
 				if(!isset($options[$key][$n])) {
 					break;
 				}
 				
+				// add it to the array
 				$attributes[$key] = $options[$key][$n];
 				
+				// and remove it from form fields
 				unset($options[$key][$n]);
 				
 				if(empty($options[$key])) {
 					unset($options[$key]);
 				}
 			}
-
+			
+			// create a new slide from attributes
 			if(!empty($attributes)) {
 				$slide = new uBillboardSlide($attributes, $slider);
 				if($slide !== null) $slides[] = $slide;
@@ -154,10 +171,22 @@ class uBillboardSlide {
 		return $slides;
 	}
 	
+	/**
+	 *	Constructor, create a new slide from options, or a default slide
+	 *	$options:
+	 *		bool false -> create default empty slide
+	 *		array -> fill slide attributes from this array
+	 *
+	 *	@param bool|array $options
+	 *	@param uBillboard $slider
+	 *	
+	 *	@return uBillboardSlide
+	 */
 	public function __construct($options = false, $slider)
 	{
 		global $uds_billboard_attributes;
-
+		
+		// fill in with defaults
 		if($options === false) {
 			foreach($uds_billboard_attributes as $key => $option) {
 				if(isset($option['default'])) {
@@ -169,11 +198,13 @@ class uBillboardSlide {
 			
 			return;
 		}
-
+		
+		// fail if image AND text is empty
 		if(empty($options['image']) && empty($options['text'])){
 			return null;
 		}
 		
+		// fill in from attributes
 		foreach($uds_billboard_attributes as $key => $option) {
 			if(isset($options[$key])) {
 				$this->{$key} = $options[$key];
@@ -182,9 +213,16 @@ class uBillboardSlide {
 			}
 		}
 		
+		// set parent slider
 		$this->setSlider($slider);
 	}
 	
+	/**
+	 *	unserialize, make sure that every attribute is set,
+	 *	if its not, set it up with default value
+	 *	
+	 *	@return void
+	 */
 	public function __wakeup()
 	{
 		global $uds_billboard_attributes;
@@ -196,6 +234,12 @@ class uBillboardSlide {
 		}
 	}
 	
+	/**
+	 *	Importer, fills current instance attributes from
+	 *	a SimpleXMLElement object
+	 *	
+	 *	@return void
+	 */
 	public function importFromXML($slide)
 	{
 		global $uds_billboard_attributes;
@@ -210,6 +254,14 @@ class uBillboardSlide {
 		}
 	}
 	
+	/**
+	 *	go through attributes and copy them from the options array
+	 *	while handling the default values correctly
+	 *	
+	 *	@param array $options
+	 *
+	 *	@return void
+	 */
 	public function update($options)
 	{
 		global $uds_billboard_attributes;
@@ -235,6 +287,12 @@ class uBillboardSlide {
 		}
 	}
 	
+	/**
+	 *	Exporter, processes all attributes and saves them in an xml
+	 *	format that can be read by the importer.
+	 *	
+	 *	@return string exported XML
+	 */
 	public function export()
 	{
 		global $uds_billboard_attributes;
@@ -254,12 +312,22 @@ class uBillboardSlide {
 		return $out;
 	}
 	
+	/**
+	 *	Performs internal checks on the uBillboardSlide if everything is ok
+	 *	
+	 *	@return bool
+	 */
 	public function isValid()
 	{
 		$text = isset($this->text) ? strip_tags($this->text) : '';
 		return !empty($this->image) || !empty($text);
 	}
 	
+	/**
+	 *	Helper function to render administration screens for this slide
+	 *	
+	 *	@return void
+	 */
 	public function renderAdmin()
 	{
 		global $uds_billboard_attributes;
@@ -302,6 +370,11 @@ class uBillboardSlide {
 		$id++;
 	}
 	
+	/**
+	 *	Main Frontend renderer
+	 *	
+	 *	@return string rendered html content
+	 */
 	public function render()
 	{
 		global $uds_billboard_attributes, $uds_billboard_text_evaluation;
@@ -419,6 +492,11 @@ class uBillboardSlide {
 		return $out;
 	}
 	
+	/**
+	 *	Render thumbnail image
+	 *	
+	 *	@return string thumbnail html
+	 */
 	public function renderThumb()
 	{
 		$timthumb = UDS_BILLBOARD_URL . 'lib/timthumb.php?';
@@ -431,6 +509,11 @@ class uBillboardSlide {
 		return "<div class='uds-bb-thumb'><img src='$image' alt='' width='$width' height='$height' /></div>";
 	}
 	
+	/**
+	 *	Setter for parent slider
+	 *	
+	 *	@return void
+	 */
 	public function setSlider($slider)
 	{
 		if(is_a($slider, 'uBillboard')) {
@@ -438,6 +521,11 @@ class uBillboardSlide {
 		}
 	}
 	
+	/**
+	 *	Helper function to render every admin field
+	 *	
+	 *	@return void
+	 */
 	private function renderAdminField($attrib)
 	{
 		global $uds_billboard_attributes;
@@ -467,6 +555,11 @@ class uBillboardSlide {
 		}
 	}
 	
+	/**
+	 *	Helper function to render admin text fields
+	 *	
+	 *	@return
+	 */
 	private function renderAdminText($attrib)
 	{
 		global $uds_billboard_attributes;
@@ -477,6 +570,11 @@ class uBillboardSlide {
 		echo '</div>';
 	}
 	
+	/**
+	 *	Helper function to render admin colorpicker field
+	 *	
+	 *	@return void
+	 */
 	private function renderAdminColorpicker($attrib)
 	{
 		global $uds_billboard_attributes;
@@ -488,7 +586,11 @@ class uBillboardSlide {
 		echo '</div>';
 	}
 	
-	
+	/**
+	 *	Helper function to render admin checkbox field
+	 *	
+	 *	@return void
+	 */
 	private function renderAdminCheckbox($attrib)
 	{
 		global $uds_billboard_attributes;
@@ -500,6 +602,11 @@ class uBillboardSlide {
 		echo '</div>';
 	}
 	
+	/**
+	 *	Helper function to render the content editor
+	 *	
+	 *	@return void
+	 */
 	private function renderAdminTextarea($attrib)
 	{
 		global $uds_billboard_attributes, $uds_description_mode;
@@ -537,6 +644,11 @@ class uBillboardSlide {
 		$id++;
 	}
 	
+	/**
+	 *	Helper function to render admin select
+	 *	
+	 *	@return void
+	 */
 	private function renderAdminSelect($attrib)
 	{
 		global $uds_billboard_attributes;
@@ -561,6 +673,11 @@ class uBillboardSlide {
 		echo '</div>';
 	}
 	
+	/**
+	 *	Helper function to render images
+	 *	
+	 *	@return void
+	 */
 	private function renderAdminImage($attrib)
 	{
 		static $unique_id = 0;
@@ -576,6 +693,11 @@ class uBillboardSlide {
 		$unique_id++;
 	}
 	
+	/**
+	 *	Helper function to transform attributes from attribute-text to attributeText
+	 *	
+	 *	@return stirng camelized string
+	 */
 	private function camelize($string) 
 	{
 		$string = str_replace(array('-', '_'), ' ', $string); 

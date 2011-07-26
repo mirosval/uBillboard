@@ -1,35 +1,35 @@
 <?php 
-//d(maybe_unserialize(get_option(UDS_BILLBOARD_OPTION))); 
 
-global $uds_billboard_attributes, $uds_billboard_general_options;
-
+// Load Billboards
 $billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
 
+// Select billboard for editing
 if(!empty($_GET['uds-billboard-edit']) && !empty($billboards[$_GET['uds-billboard-edit']])) {
 	$billboard = $billboards[$_GET['uds-billboard-edit']];
 }
 
 // safety check
-//d(is_a($billboard, 'uBillboard'));
 if(!isset($billboard) || !is_a($billboard, 'uBillboard')) {
 	$billboard = new uBillboard();
 	$billboard->setUniqueName();
 }
 
-//d($billboard);
-
+// Add new empty slide at the end, if the user wants to add new slide
 $billboard->addEmptySlide();
 
-//d($billboards);
 ?>
 <div class="wrap">
+	<!-- Heading -->
 	<div id="icon-edit" class="icon32 icon32-posts-post"><br /></div>
 	<h2><?php _e('Edit uBillboard', uds_billboard_textdomain) ?></h2>
+	<!-- Form -->
 	<form id="billboard_update_form" method="post" action="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard='.$billboard->name) ?>" class="uds-billboard-form">
 		<?php wp_nonce_field('uds-billboard-update', 'uds-billboard-update-nonce'); ?>
+		<!-- Sidebar -->
 		<div class="metabox-holder has-right-sidebar">
 			<div class="inner-sidebar">
 				<div id="side-sortables" class="meta-box-sortables ui-sortable">
+					<!-- General Options -->
 					<div class="postbox">
 						<div class="handlediv" title="<?php esc_attr_e('Click to toggle', uds_billboard_textdomain) ?>"><br /></div>
 						<h3 class="hndle"><span><?php _e('Options', uds_billboard_textdomain) ?></span></h3>
@@ -50,7 +50,7 @@ $billboard->addEmptySlide();
 							<hr />
 							<div id="major-publishing-actions" class="submitbox">
 								<div id="delete-action">
-									<a href="<?php echo admin_url("admin.php?page=uds_billboard_admin&uds-billboard-delete={$billboard->name}&nonce=".wp_create_nonce('uds-billboard-delete-nonce')) ?>" class="submitdelete deletion"><?php _e('Delete', uds_billboard_textdomain) ?></a>
+									<a href="<?php echo admin_url("admin.php?page=uds_billboard_admin&uds-billboard-delete={$billboard->name}&uds-billboard-delete-nonce=".wp_create_nonce('uds-billboard-delete-nonce')) ?>" class="submitdelete deletion"><?php _e('Delete', uds_billboard_textdomain) ?></a>
 								</div>
 								<div id="publishing-action">
 									<input class="button-primary" type="submit" style="float:right" value="<?php esc_attr_e('Save uBillboard', uds_billboard_textdomain) ?>" />
@@ -59,6 +59,7 @@ $billboard->addEmptySlide();
 							</div>
 						</div>
 					</div>
+					<!-- Slide Order -->
 					<div class="postbox">
 						<div class="handlediv" title="<?php esc_attr_e('Click to toggle', uds_billboard_textdomain) ?>"><br /></div>
 						<h3 class="hndle"><span><?php _e('Slide Order', uds_billboard_textdomain) ?></span></h3>
@@ -70,6 +71,7 @@ $billboard->addEmptySlide();
 							</ul>
 						</div>
 					</div>
+					<!-- Controls options -->
 					<div class="postbox">
 						<div class="handlediv" title="<?php esc_attr_e('Click to toggle', uds_billboard_textdomain) ?>"><br /></div>
 						<h3 class="hndle"><span><?php _e('Controls', uds_billboard_textdomain) ?></span></h3>
@@ -101,6 +103,7 @@ $billboard->addEmptySlide();
 					</div>
 				</div>
 			</div>
+			<!-- Main editor -->
 			<div class="editor-wrapper">
 				<div class="editor-body">
 					<div id="titlediv">

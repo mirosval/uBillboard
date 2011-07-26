@@ -1,22 +1,26 @@
 <?php
 
-$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
-
-if(!empty($_GET['uds-billboard-delete'])) {
-	unset($billboards[$_GET['uds-billboard-delete']]);
-	update_option(UDS_BILLBOARD_OPTION, serialize($billboards));
-}
+// Load Billboards
+$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
 
 // safety check
 if(! is_array($billboards)) {
 	$billboards = array();
 }
 
+if(isset($billboards['_uds_temp_billboard'])) {
+	unset($billboards['_uds_temp_billboard']);
+}
+
 ?>
 <div class="wrap">
+	<!-- Header -->
 	<div id="icon-edit" class="icon32 icon32-posts-post"><br /></div>
-	<h2>uBillboard</h2>
+	<h2>uBillboard <a href="<?php echo admin_url('admin.php?page=uds_billboard_edit') ?>" class="add-new-h2"><?php _e('Add New', uds_billboard_textdomain) ?></a></h2>
+	
+	<!-- Billboards List -->
 	<?php if(!empty($billboards)): ?>
+		<!-- Bulk Actions -->
 		<div class="tablenav top">
 			<div class="alignleft actions">
 				<select name="action">
@@ -27,6 +31,7 @@ if(! is_array($billboards)) {
 			</div>
 		</div>
 		<table class="wp-list-table widefat fixed billboards">
+			<!-- Table Header -->
 			<thead>
 				<tr>
 					<th id="cb" class="manage-column column-cb check-column" scope="col"><input type="checkbox" /></th>
@@ -34,6 +39,7 @@ if(! is_array($billboards)) {
 					<th class="shortcode"><?php _e('Shortcode', uds_billboard_textdomain) ?></th>
 				</tr>
 			</thead>
+			<!-- Table Footer -->
 			<tfoot>
 				<tr>
 					<th id="cb" class="manage-column column-cb check-column" scope="col"><input type="checkbox" /></th>
@@ -41,10 +47,10 @@ if(! is_array($billboards)) {
 					<th class="shortcode"><?php _e('Shortcode', uds_billboard_textdomain) ?></th>
 				</tr>
 			</tfoot>
+			<!-- Billboards -->
 			<tbody id="the-list">
 				<?php $n = 0; ?>
 				<?php foreach($billboards as $key => $billboard): ?>
-					<?php if($billboard->name == '_uds_temp_billboard') continue; ?>
 					<tr class="<?php echo $n % 2 == 0 ? 'alternate' : '' ?>">
 						<th class="check-column" scope="row">
 							<input type="checkbox" value="<?php echo $key ?>" name="billboard[]" />
@@ -66,7 +72,7 @@ if(! is_array($billboards)) {
 									<a href="<?php echo admin_url('admin.php?page=uds_billboard_import_export&uds-billboard-export='.$key.'&download_export='.wp_create_nonce('uds-billboard-export')) ?>"><?php _e('Export', uds_billboard_textdomain) ?></a> | 
 								</span>
 								<span class="trash">
-									<a href="<?php echo admin_url('admin.php?page=uds_billboard_admin&uds-billboard-delete='.$key.'&nonce='.wp_create_nonce('uds-billboard-delete-nonce')) ?>"><?php _e('Delete', uds_billboard_textdomain) ?></a>
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_admin&uds-billboard-delete='.$key.'&uds-billboard-delete-nonce='.wp_create_nonce('uds-billboard-delete-nonce')) ?>"><?php _e('Delete', uds_billboard_textdomain) ?></a>
 								</span>
 							</div>
 						</td>
