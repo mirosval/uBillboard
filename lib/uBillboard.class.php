@@ -196,14 +196,32 @@ class uBillboard {
 	public static function upgradeFromV2($billboards)
 	{
 		$v2 = array();
-		foreach($billboards as $name => $billboard) {
-			//d($billboard);
+		foreach($billboards as $name => $bbv2) {
+			$billboard = new uBillboard(array(
+				'width' => $bbv2['width'],
+				'height' => $bbv2['height'],
+				'square-size' => $bbv2['square-size'],
+				'show-paginator' => $bbv2['show-paginator'] == 'on' ? 'yes' : 'no',
+				'show-controls' => $bbv2['show-controls'] == 'on' ? 'yes' : 'no',
+				'show-pause' => $bbv2['show-pause'] == 'on' ? 'yes' : 'no',
+				'autoplay' => $bbv2['autoplay'],
+				'randomize' => $bbv2['randomize']
+			));
+			
+			foreach($bbv2['slides'] as $slide) {
+				$v3slide = uBillboardSlide::upgradeFromV2($slide, $billboard);
+				$billboard->addSlide($v3slide);	
+			}
+			
+			d($bbv2);
+			d($billboard->randomize);
+			$v2[$name] = $billboard;
 		}
 		
 		$v3 = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
 		
 		$v3 = array_merge($v3, $v2);
-		//d($v3);
+		d($v3);
 		//update_option(UDS_BILLBOARD_OPTION, maybe_serialize($v3));
 	}
 	
@@ -308,6 +326,20 @@ class uBillboard {
 		}
 		
 		$this->name = $guess;
+	}
+	
+	/**
+	 *	Function, adds a new slide to the end of the slide array
+	 *	
+	 *	@return bool success
+	 */
+	public function addSlide($slide)
+	{
+		if(is_a($slide, 'uBillboardSlide')) {
+			$this->slides[] = $slide;
+			return true;
+		}
+		return false;
 	}
 	
 	/**
