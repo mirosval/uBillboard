@@ -471,7 +471,7 @@ function uds_billboard_process_updates()
 		$billboards[$billboard->name] = $billboard;
 	
 		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
-		$message = 'uds-message='.urlencode(__('Billboard updated successfully', uds_billboard_textdomain)).'&uds-class='.urlencode('updated fade');
+		$message = 'uds-message='.urlencode(__('Billboard updated successfully', uds_billboard_textdomain)).'&uds-class='.urlencode('updated');
 		
 		if(is_ajax()) {
 			die('OK');
@@ -499,11 +499,11 @@ function uds_billboard_delete()
 	
 	$message = '';
 	if(!isset($billboards[$billboard])) {
-		$message = 'uds-message='.urlencode(sprintf(__('Billboard %s does not exist', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('error below-h2');
+		$message = 'uds-message='.urlencode(sprintf(__('Billboard %s does not exist', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('error');
 	} else {
 		unset($billboards[$billboard]);
 		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
-		$message = 'uds-message='.urlencode(sprintf(__('Billboard &quot;%s&quot; has been successfully deleted', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('updated below-h2');
+		$message = 'uds-message='.urlencode(sprintf(__('Billboard &quot;%s&quot; has been successfully deleted', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('updated');
 	}
 	
 	wp_safe_redirect(admin_url('admin.php?page=uds_billboard_admin&'.$message));

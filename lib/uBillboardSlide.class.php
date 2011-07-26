@@ -123,7 +123,7 @@ class uBillboardSlide {
 	 */
 	private $slider;
 	
-	public static function upgradeFromV2($slide, $slider)
+	public static function upgradeFromV2($slide, $bbv2, $slider)
 	{
 		global $uds_billboard_attributes;
 		
@@ -149,23 +149,25 @@ class uBillboardSlide {
 		$content = 'none';
 		$text = '';
 		$text_evaluation = 'html';
-		d($slide['layout']);
+
 		if($slide['layout'] !== 'none') {
 			$content = 'editor';
 			
+			$padding_correction = 20;
+			
 			if(strpos($slide['layout'], 'left') !== false) {
-				$width = round(0.3 * (int)$slider->width);
-				$height = (int)$slider->height;
+				$width = round(0.3 * (int)$slider->width) - $padding_correction;
+				$height = (int)$slider->height - $padding_correction;
 				$top = 0;
 				$left = 0;
 			} elseif(strpos($slide['layout'], 'right') !== false) {
-				$width = round(0.3 * (int)$slider->width);
-				$height = (int)$slider->height;
+				$width = round(0.3 * (int)$slider->width) - $padding_correction;
+				$height = (int)$slider->height - $padding_correction;
 				$top = 0;
 				$left = (int)$slider->width - $width;
 			} else { // bottom
-				$width = (int)$slider->width;
-				$height = round(0.3 * (int)$slider->height);
+				$width = (int)$slider->width - $padding_correction;
+				$height = round(0.3 * (int)$slider->height) - $padding_correction;
 				$top = (int)$slider->height - $height;
 				$left = 0;
 			}
@@ -176,8 +178,8 @@ class uBillboardSlide {
 				$skin = 'dark';
 			}
 			
-			$text = '<h2>' . $slide['title'] . '</h2>';
-			$text .= '<p>' . $slide['text'] . '</p>';
+			$text = '<h2>' . stripslashes($slide['title']) . '</h2>';
+			$text .= '<p>' . stripslashes($slide['text']) . '</p>';
 			
 			$text = '[uds-description top="'.$top.'px" left="'.$left.'px" width="'.$width.'px" height="'.$height.'px" skin="'.$skin.'"]' . $text . '[/uds-description]';
 		}
@@ -185,7 +187,7 @@ class uBillboardSlide {
 		// Create slide
 		$v3slide = new uBillboardSlide(array(
 			'image' => $slide['image'],
-			'resize' => '',
+			'resize' => $bbv2['use-timthumb'],
 			'background' => '000000',
 			'background-transparent' => 'on',
 			'link' => $slide['link'],
@@ -196,9 +198,6 @@ class uBillboardSlide {
 			'text' => $text,
 			'text-evaluation' => $text_evaluation
 		), $slider);
-		
-		d($slide);
-		d($v3slide->text);
 		
 		return $v3slide;
 	}
