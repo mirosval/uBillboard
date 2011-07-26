@@ -566,6 +566,7 @@ class uBillboard {
 		<?php
 	}
 	
+
 	function renderAdminColorpicker($attrib)
 	{
 		global $uds_billboard_attributes;
@@ -578,12 +579,12 @@ class uBillboard {
 		echo '</div>';
 	}
 	
+
 	/**
 	 *	Mini paginator renderer
 	 *	
 	 *	@return string rendered paginator
 	 */
-	 
 	private function paginatorMini()
 	{
 		$out = '';
