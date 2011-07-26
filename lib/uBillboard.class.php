@@ -579,14 +579,14 @@ class uBillboard {
 
 	 function renderAdminColorpicker($option, $field, $value)
 	{
-		 ?>
-+        <div class="uds-billboard-<?php echo $option ?> option-container color">
-+            <label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
-+            #<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" value="<?php echo $value ?>" class="color" />
-+            <div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
-+            <div class="clear"></div>
-+        </div>
-+        <?php
+		?>
+        <div class="uds-billboard-<?php echo $option ?> option-container color">
+            <label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+            #<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" value="<?php echo $value ?>" class="color" />
+            <div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
+            <div class="clear"></div>
+        </div>
+        <?php
 	}
 	
 
