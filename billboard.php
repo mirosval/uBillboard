@@ -63,7 +63,7 @@ function uds_billboard_is_plugin()
 	$plugins = get_option('active_plugins', array());
 	
 	$dir = end(explode(DIRECTORY_SEPARATOR, dirname(__FILE__)));
-	return in_array($dir . DIRECTORY_SEPARATOR . basename(__FILE__), $plugins);
+	return in_array($dir . '/' . basename(__FILE__), $plugins);
 }
 
 /**
