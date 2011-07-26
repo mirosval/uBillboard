@@ -36,6 +36,7 @@ define('uds_billboard_textdomain', 'uBillboard');
 
 require_once 'lib/compat.php';
 require_once 'lib/embed.php';
+require_once 'lib/importexport.php';
 require_once 'lib/classTextile.php';
 require_once 'lib/uBillboard.class.php';
 require_once 'lib/uBillboardSlide.class.php';
@@ -206,6 +207,10 @@ function uds_billboard_admin_init()
 			} else {
 				uds_billboard_export();
 			}
+		}
+		
+		if(isset($_GET['uds-billboard-import-v2']) && wp_verify_nonce($_GET['uds-billboard-import-v2'], 'uds-billboard-import-v2')) {
+			uds_billboard_import_v2();
 		}
 		
 		if(isset($_FILES['uds-billboard-import']) && is_uploaded_file($_FILES['uds-billboard-import']['tmp_name'])) {
@@ -434,148 +439,6 @@ function uds_billboard_enqueue_admin_scripts()
 		'slideN' => __('Slide %s', uds_billboard_textdomain),
 		'billboardPreview' => __('uBillboard Preview', uds_billboard_textdomain)
 	));
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//
-//	Importer and Exporter
-//
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- *	Function, process file at location $file, import billboards from it
- *	Function might redirect using wp_redirect()
- *
- *	@param string $file Path to the import file
- *	
- *	@return void
- */
-function uds_billboard_import($file)
-{
-	global $uds_billboard_errors, $uds_billboard_attributes;
-	$import = @file_get_contents($file);
-	
-	if(empty($import)) {
-		$uds_billboard_errors[] = __('Import file is empty', uds_billboard_textdomain);
-		return;
-	}
-	
-	try {
-		libxml_use_internal_errors(true);
-		$import = new SimpleXMLElement($import);
-	} catch(Exception $e) {
-		$uds_billboard_errors[] = sprintf(__('An error has occurred during XML Parsing: %s', uds_billboard_textdomain), $e->getMessage());
-		return;
-	}
-	
-	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
-	
-	foreach($import->udsBillboards as $udsBillboard) {
-		$billboard = new uBillboard();
-		$billboard->importFromXML($udsBillboard->udsBillboard);
-		$billboards[$billboard->name] = $billboard;
-	}
-	
-	if(!$billboard->isValid()) {
-		$uds_billboard_errors[] = __('Import file is corrupted', uds_billboard_textdomain);
-		return;
-	}
-
-	if($_POST['import-attachments'] == 'on') {
-		foreach($billboards as $bbname => $billboard) {
-			foreach($billboard->slides as $slide) {
-				$urlinfo = parse_url($slide->image);
-				$localurl = parse_url(get_option('siteurl'));
-				//if($urlinfo['hostname'] == $localurl['hostname']) continue;
-				
-				//echo "Downloading attachment";
-				$image = @file_get_contents($slide->image);
-				if(!empty($image)) {
-					$uploads = wp_upload_dir();
-					if(false === $uploads['error']) {
-						$filename = pathinfo($urlinfo['path']);
-						$path = trailingslashit($uploads['path']) . wp_unique_filename($uploads['path'], $filename['basename']);
-						if(! (false === @file_put_contents($path, $image)) ) {
-							$filename = pathinfo($path);
-							$slide->image = $uploads['url'] . '/' . $filename['basename'];
-							
-							$wp_filetype = wp_check_filetype(basename($path), null );
-							$attachment = array(
-								'post_mime_type' => $wp_filetype['type'],
-								'post_title' => preg_replace('/\.[^.]+$/', '', basename($path)),
-								'post_content' => '',
-								'post_status' => 'inherit'
-							);
-							$attach_id = wp_insert_attachment( $attachment, $path );
-							// you must first include the image.php file
-							// for the function wp_generate_attachment_metadata() to work
-							require_once(ABSPATH . "wp-admin" . '/includes/image.php');
-							$attach_data = wp_generate_attachment_metadata( $attach_id, $path );
-							wp_update_attachment_metadata( $attach_id,  $attach_data );
-							//echo "Attachment saved in ".$billboards[$bbname]['slides'][$key]->image;
-						} else {
-							$uds_billboard_errors[] = sprintf(__("Failed to save image to %s", uds_billboard_textdomain), $path);
-							break;
-						}
-					} else {
-						$uds_billboard_errors[] = __("Uploads dir is not writable", uds_billboard_textdomain);
-						break;
-					}
-				} else {
-					$uds_billboard_errors[] = __("Failed to download image", uds_billboard_textdomain);
-					break;
-				}
-			}
-			
-			if(!empty($uds_billboards_errors)) break;
-		}
-	}
-	
-	update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
-	
-	if(empty($uds_billboards_errors))
-		wp_redirect('admin.php?page=uds_billboard_admin');
-}
-
-/**
- *	Function, export a billboard or all billboards. Directly echoes the content with
- *	appropriate headers
- *
- *	Parameter can be:
- *		bool false -> will export all billboards
- *		string -> will export single uBillboard by name
- *		array -> array('billboard', 'billboard2') will export all billboards by names
- *	
- *	@param bool|string|array
- *	@return void
- */
-function uds_billboard_export($what = false)
-{
-	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
-	
-	$export = '<?xml version="1.0"?>' . "\n";
-	$export .= '<udsBillboardExport>' . "\n";
-	$export .= ' <version>'.UDS_BILLBOARD_VERSION.'</version>' . "\n";
-	$export .= ' <udsBillboards>' . "\n";
-	
-	foreach($billboards as $name => $billboard) {
-		if($what !== false) {
-			if(is_array($what) && !in_array($name, $what)) {
-				continue;
-			} elseif($name !== $what) {
-				continue;
-			}
-		}
-		
-		$export .= $billboard->export() . "\n";
-	}
-	
-	$export .= ' </udsBillboards>' . "\n";
-	$export .= '</udsBillboardExport>' . "\n";
-	
-	header('Content-type: text/xml');
-	header('Content-Disposition: attachment; filename="uBillboard.xml"');
-	die($export);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -195,7 +195,16 @@ class uBillboard {
 	 */
 	public static function upgradeFromV2($billboards)
 	{
+		$v2 = array();
+		foreach($billboards as $name => $billboard) {
+			//d($billboard);
+		}
 		
+		$v3 = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
+		
+		$v3 = array_merge($v3, $v2);
+		//d($v3);
+		//update_option(UDS_BILLBOARD_OPTION, maybe_serialize($v3));
 	}
 	
 	/**
