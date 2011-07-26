@@ -9,9 +9,16 @@ Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
 */
 
-// General Options
+////////////////////////////////////////////////////////////////////////////////
+//
+//	Constants
+//
+////////////////////////////////////////////////////////////////////////////////
+
+// Version
 define('UDS_BILLBOARD_VERSION', '3.0.0');
 
+// Handle theme insertion
 if(uds_billboard_is_plugin()) {
 	define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 	define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
@@ -24,6 +31,7 @@ if(uds_billboard_is_plugin()) {
 define('UDS_BILLBOARD_OPTION', 'uds-billboard-3');
 define('UDS_BILLBOARD_OPTION_GENERAL', 'uds-billboard-general-3');
 
+// Localization textdomain
 define('uds_billboard_textdomain', 'uBillboard');
 
 require_once 'lib/compat.php';
@@ -34,9 +42,21 @@ require_once 'lib/uBillboardSlide.class.php';
 require_once 'lib/tinymce/tinymce.php';
 require_once 'lib/shortcodes.php';
 
+// Error Handler
 global $uds_billboard_errors;
 
-// returns true if used as a standalone plugin, false when it's used as part of a theme
+////////////////////////////////////////////////////////////////////////////////
+//
+//	Helper Functions
+//
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ *	Function, detect if uBillboard is currently being used as a plugin or
+ *	as a part of a theme.
+ *
+ *	@return bool
+ */
 function uds_billboard_is_plugin()
 {
 	$plugins = get_option('active_plugins', array());
@@ -45,6 +65,11 @@ function uds_billboard_is_plugin()
 	return in_array($dir . DIRECTORY_SEPARATOR . basename(__FILE__), $plugins);
 }
 
+/**
+ *	Function, check if timthumb image cache is writable
+ *
+ *	@return bool
+ */
 function uds_billboard_cache_is_writable()
 {
 	if(uds_billboard_is_plugin()) {
@@ -54,6 +79,14 @@ function uds_billboard_cache_is_writable()
 	}
 }
 
+/**
+ *	Function, detect if uBillboard will be used on the current page.
+ *	This is only possible when uBillboard is loaded exclusively using
+ *	shortcodes. Fuction checks if the uBillboard shortcode is present
+ *	on the current page
+ *
+ *	@return bool
+ */
 function uds_billboard_is_active()
 {
 	if(uds_billboard_use_shortcode_optimization() && !is_admin()) {
@@ -68,13 +101,53 @@ function uds_billboard_is_active()
 	return true;
 }
 
-add_action('admin_head', 'uds_billboard_editor_admin_head');
-add_action('admin_notices', 'uds_billboard_admin_notices');
-
-function uds_billboard_editor_admin_head() {
-	wp_tiny_mce();
+/**
+ *	Function, gets the "use compression" option value
+ *
+ *	@return bool
+ */
+function uds_billboard_use_compression()
+{
+	$option = get_option(UDS_BILLBOARD_OPTION_GENERAL, array('compression' => true));
+	return $option['compression'];
 }
 
+/**
+ *	Function, gets the "shortcode optimization" option value
+ *
+ *	@return bool
+ */
+function uds_billboard_use_shortcode_optimization()
+{
+	$option = get_option(UDS_BILLBOARD_OPTION_GENERAL, array('shortcode_optimization' => true));
+	return $option['shortcode_optimization'];
+}
+
+if(!function_exists('is_ajax')) {
+/**
+ *	Is Ajax
+ *	Simple tag that detects if the current request is an AJAX Call
+ *
+ *	@return bool True if current page has been requested via AJAX
+ */
+function is_ajax()
+{
+	return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//	WordPress Hooks
+//
+////////////////////////////////////////////////////////////////////////////////
+
+add_action('admin_notices', 'uds_billboard_admin_notices');
+/**
+ *	Function, message handling, used with billboard edit message
+ *	
+ *	@return void
+ */
 function uds_billboard_admin_notices() {
 	if(!empty($_REQUEST['uds-message'])) {
 		$message = $_REQUEST['uds-message'];
@@ -84,6 +157,11 @@ function uds_billboard_admin_notices() {
 }
 
 add_action('init', 'uds_billboard_init');
+/**
+ *	Function, global init hook
+ *	
+ *	@return void
+ */
 function uds_billboard_init()
 {
 	load_plugin_textdomain(uds_billboard_textdomain, false, dirname( plugin_basename( __FILE__ ) ) . '/lang/');
@@ -91,6 +169,11 @@ function uds_billboard_init()
 
 // initialize billboard
 add_action('admin_init', 'uds_billboard_admin_init');
+/**
+ *	Function, admin init hook
+ *	
+ *	@return void
+ */
 function uds_billboard_admin_init()
 {
 	global $uds_billboard_general_options, $uds_billboard_attributes;
@@ -111,7 +194,7 @@ function uds_billboard_admin_init()
 	}
 	
 	// process deletes
-	if(!empty($_REQUEST['uds-billboard-delete']) && wp_verify_nonce('uds-billboard-delete-nonce', $_REQUEST['nonce'])) {
+	if(!empty($_REQUEST['uds-billboard-delete']) && wp_verify_nonce($_REQUEST['uds-billboard-delete-nonce'], 'uds-billboard-delete-nonce')) {
 		uds_billboard_delete();
 	}
 	
@@ -132,6 +215,11 @@ function uds_billboard_admin_init()
 }
 
 add_action('wp_print_scripts', 'uds_billboard_scripts');
+/**
+ *	Function, frontend scripts hook
+ *	
+ *	@return void
+ */
 function uds_billboard_scripts()
 {
 	global $wp_version;
@@ -146,7 +234,6 @@ function uds_billboard_scripts()
 		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
 	}
 	
-	//wp_enqueue_script("easing", $dir."js/jquery.easing.js", array('jquery'), '1.3', true);
 	if(uds_billboard_use_compression()){
 		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery'), '3.0', true);
 	} else {
@@ -155,6 +242,11 @@ function uds_billboard_scripts()
 }
 
 add_action('wp_print_styles', 'uds_billboard_styles');
+/**
+ *	Function, frontend styles hook
+ *	
+ *	@return void
+ */
 function uds_billboard_styles()
 {
 	if(!uds_billboard_is_active()) return;
@@ -172,6 +264,11 @@ function uds_billboard_styles()
 register_activation_hook(__FILE__, 'uds_billboard_activation_hook');
 register_uninstall_hook(__FILE__, 'uds_billboard_uninstall_hook');
 
+/**
+ *	Function, run on plugin activation, sets up the options with default values
+ *	
+ *	@return void
+ */
 function uds_billboard_activation_hook()
 {
 	$option = get_option(UDS_BILLBOARD_OPTION);
@@ -188,6 +285,11 @@ function uds_billboard_activation_hook()
 	}
 }
 
+/**
+ *	Function, run on plugin uninstall, removes all uBillboard options
+ *	
+ *	@return void
+ */
 function uds_billboard_uninstall_hook()
 {
 	delete_option(UDS_BILLBOARD_OPTION);
@@ -201,6 +303,11 @@ function uds_billboard_uninstall_hook()
 ////////////////////////////////////////////////////////////////////////////////
 
 add_action('admin_menu', 'uds_billboard_menu');
+/**
+ *	Function, set up admin menu
+ *	
+ *	@return void
+ */
 function uds_billboard_menu()
 {
 	global $menu;
@@ -226,7 +333,11 @@ function uds_billboard_menu()
 	add_action("admin_print_scripts-$ubillboard_importexport", 'uds_billboard_enqueue_admin_scripts');
 }
 
-// Admin menu entry handling
+/**
+ *	Function, admin menu entry handler
+ *	
+ *	@return void
+ */
 function uds_billboard_admin()
 {
 	if(!current_user_can('edit_pages')) {
@@ -236,7 +347,11 @@ function uds_billboard_admin()
 	include 'admin/billboard-list.php';
 }
 
-// Admin menu entry handling
+/**
+ *	Function, admin menu entry handler
+ *	
+ *	@return void
+ */
 function uds_billboard_edit()
 {
 	if(!current_user_can('edit_pages')) {
@@ -250,7 +365,11 @@ function uds_billboard_edit()
 	}
 }
 
-// Admin menu entry handling
+/**
+ *	Function, admin menu entry handler
+ *	
+ *	@return void
+ */
 function uds_billboard_general()
 {
 	if(!current_user_can('manage_options')) {
@@ -260,7 +379,11 @@ function uds_billboard_general()
 	include 'admin/billboard-general.php';
 }
 
-// Admin menu entry handling
+/**
+ *	Function, admin menu entry handler
+ *	
+ *	@return void
+ */
 function uds_billboard_import_export()
 {
 	global $uds_billboard_errors;
@@ -272,6 +395,11 @@ function uds_billboard_import_export()
 	include 'admin/billboard-import-export.php';
 }
 
+/**
+ *	Function, enqueues admin styles
+ *	
+ *	@return void
+ */
 function uds_billboard_enqueue_admin_styles()
 {
 	$dir = UDS_BILLBOARD_URL;
@@ -279,6 +407,11 @@ function uds_billboard_enqueue_admin_styles()
 	wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
 }
 
+/**
+ *	Function, enqueues admin scripts
+ *	
+ *	@return void
+ */
 function uds_billboard_enqueue_admin_scripts()
 {
 	$dir = UDS_BILLBOARD_URL;
@@ -303,14 +436,20 @@ function uds_billboard_enqueue_admin_scripts()
 	));
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 //	Importer and Exporter
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ *	Function, process file at location $file, import billboards from it
+ *	Function might redirect using wp_redirect()
+ *
+ *	@param string $file Path to the import file
+ *	
+ *	@return void
+ */
 function uds_billboard_import($file)
 {
 	global $uds_billboard_errors, $uds_billboard_attributes;
@@ -398,6 +537,18 @@ function uds_billboard_import($file)
 		wp_redirect('admin.php?page=uds_billboard_admin');
 }
 
+/**
+ *	Function, export a billboard or all billboards. Directly echoes the content with
+ *	appropriate headers
+ *
+ *	Parameter can be:
+ *		bool false -> will export all billboards
+ *		string -> will export single uBillboard by name
+ *		array -> array('billboard', 'billboard2') will export all billboards by names
+ *	
+ *	@param bool|string|array
+ *	@return void
+ */
 function uds_billboard_export($what = false)
 {
 	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
@@ -434,8 +585,12 @@ function uds_billboard_export($what = false)
 ////////////////////////////////////////////////////////////////////////////////
 
 add_action('wp_ajax_uds_billboard_update', 'uds_billboard_process_updates');
-
-// check for POST data and update billboard accordingly
+/**
+ *	Function, check for POST data and update billboard accordingly
+ *	will redirect if successful
+ *	
+ *	@return void
+ */
 function uds_billboard_process_updates()
 {
 	global $uds_billboard_attributes, $uds_billboard_general_options;
@@ -468,18 +623,24 @@ function uds_billboard_process_updates()
 	exit();
 }
 
+/**
+ *	Function, handle uBillboard deletion and redirect
+ *	
+ *	@return void
+ */
 function uds_billboard_delete()
 {
 	$billboard = $_REQUEST['uds-billboard-delete'];
-
-	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	
+	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
 	
 	$message = '';
 	if(!isset($billboards[$billboard])) {
-		$message = 'uds-message='.urlencode(sprintf(__('Billboard %s does not exist', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('error');
+		$message = 'uds-message='.urlencode(sprintf(__('Billboard %s does not exist', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('error below-h2');
 	} else {
 		unset($billboards[$billboard]);
-		$message = 'uds-message='.urlencode(sprintf(__('Billboard %s has been successfully deleted', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('update fade');
+		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
+		$message = 'uds-message='.urlencode(sprintf(__('Billboard &quot;%s&quot; has been successfully deleted', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('updated below-h2');
 	}
 	
 	wp_safe_redirect(admin_url('admin.php?page=uds_billboard_admin&'.$message));
@@ -487,6 +648,11 @@ function uds_billboard_delete()
 }
 
 add_action('wp_ajax_uds_billboard_list', 'uds_billboard_list');
+/**
+ *	Function, AJAX list billboards, used for shortcode uBillboard entry
+ *	
+ *	@return void
+ */
 function uds_billboard_list()
 {
 	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
@@ -501,6 +667,11 @@ function uds_billboard_list()
 }
 
 add_action('wp_ajax_uds_billboard_list_images', 'uds_billboard_list_images');
+/**
+ *	Function, AJAX list images, used with image selection form in uBillboard admin
+ *	
+ *	@return void
+ */
 function uds_billboard_list_images()
 {
 	$count_array = wp_count_attachments();
@@ -545,31 +716,11 @@ function uds_billboard_list_images()
 	die();
 }
 
-function uds_billboard_use_compression()
-{
-	$option = get_option(UDS_BILLBOARD_OPTION_GENERAL);
-	return $option['compression'];
-}
-
-function uds_billboard_use_shortcode_optimization()
-{
-	$option = get_option(UDS_BILLBOARD_OPTION_GENERAL);
-	return $option['shortcode_optimization'];
-}
-
-if(!function_exists('is_ajax')) {
 /**
- *	Is Ajax
- *	Simple tag that detects if the current request is an AJAX Call
- *
- *	@return bool True if current page has been requested via AJAX
+ *	Validation function for General Options, plugs in the settings api
+ *	
+ *	@return
  */
-function is_ajax()
-{
-	return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
-}
-}
-
 function uds_billboard_general_validate($input)
 {
 	$input['compression'] = isset($input['compression']) && in_array($input['compression'], array('', 'on')) ? true : false;
@@ -585,6 +736,11 @@ function uds_billboard_general_validate($input)
 ////////////////////////////////////////////////////////////////////////////////
 
 add_action('wp_footer', 'uds_billboard_footer_scripts');
+/**
+ *	Function, renders footer scripts, creates uBillboards
+ *	
+ *	@return void
+ */
 function uds_billboard_footer_scripts()
 {
 	global $uds_billboard_footer_scripts;
@@ -599,12 +755,20 @@ function uds_billboard_footer_scripts()
 	</script>";
 }
 
+/**
+ *	Function, create uBillboard markup
+ *
+ *	@param (optional) string $name of the uBillboard to redner, defaults to 'billboard'
+ *	@param (optional) array $options, currently unused
+ *	
+ *	@return string rendered billboard
+ */
 function get_uds_billboard($name = 'billboard', $options = array())
 {
 	global $uds_billboard_footer_scripts;
 	static $id = 0;
 	
-	$bbs = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION));
+	$bbs = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
 	
 	if(!isset($bbs[$name])) {
 		return sprintf(__("Billboard named &quot;%s&quot; does not exist", uds_billboard_textdomain), $name);
@@ -625,6 +789,11 @@ function get_uds_billboard($name = 'billboard', $options = array())
 	return $out;
 }
 
+/**
+ *	Function, proxy to get_uds_billboard(), echoes the output
+ *	
+ *	@return void
+ */
 function the_uds_billboard($name = 'billboard')
 {
 	echo get_uds_billboard($name);

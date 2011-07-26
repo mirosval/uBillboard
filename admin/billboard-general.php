@@ -1,9 +1,12 @@
+<!-- General Options -->
 <div class="wrap">
+	<!-- Heading -->
 	<div class="icon32" id="icon-options-general"><br></div>
 	<h2><?php _e('uBillboard General Options', uds_billboard_textdomain) ?></h2>
 	<p><?php _e('These options are site-wide, they relate to specific optimizations applied to uBillboard to make it faster. If you want to edit the code however, you might find
 	it better to have them turned off, here you can comfortably do so.', uds_billboard_textdomain) ?></p>
-
+	
+	<!-- Form -->
 	<form method="post" action="options.php">
 		<?php settings_fields('uds_billboard_general_options'); ?>
 		<?php $options = get_option(UDS_BILLBOARD_OPTION_GENERAL); ?>
