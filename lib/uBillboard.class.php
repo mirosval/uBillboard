@@ -171,6 +171,7 @@ $uds_billboard_general_options = array(
 	),
 	'thumbnails-hover-color' => array(
 		'type' => 'color',
+		'unit' => '',
 		'label' => __('Thumbnail border hover color', uds_billboard_textdomain),
 		'tooltip' => __('Border color of thumbnail on mouse over', uds_billboard_textdomain),
 		'default' => 'red'
@@ -567,16 +568,16 @@ class uBillboard {
 	}
 	
 
-	function renderAdminColorpicker($attrib)
+	 function renderAdminColorpicker($option, $field, $value)
 	{
-		global $uds_billboard_attributes;
-
-		$attrib_full = $uds_billboard_attributes[$attrib];
-		
-		echo '<div class="'. $attrib .'-wrapper">';
-		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
-		echo '#<input type="text" name="uds_billboard['. $attrib .'][]" value="'.$this->{$attrib}.'" id="billboard-'. $attrib .'" class="billboard-'. $attrib .' color" />';
-		echo '</div>';
+		 ?>
++        <div class="uds-billboard-<?php echo $option ?> option-container color">
++            <label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
++            #<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" value="<?php echo $value ?>" class="color" />
++            <div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
++            <div class="clear"></div>
++        </div>
++        <?php
 	}
 	
 
