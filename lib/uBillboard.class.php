@@ -168,6 +168,12 @@ $uds_billboard_general_options = array(
 		'unit' => 'px',
 		'tooltip' => __('Height of the thumbnail images', uds_billboard_textdomain),
 		'default' => '60'
+	),
+	'thumbnails-hover-color' => array(
+		'type' => 'color',
+		'label' => __('Thumbnail border hover color', uds_billboard_textdomain),
+		'tooltip' => __('Border color of thumbnail on mouse over', uds_billboard_textdomain),
+		'default' => 'red'
 	)
 );
 
@@ -430,6 +436,9 @@ class uBillboard {
 			case 'checkbox':
 				$this->renderAdminOptionCheckbox($option, $field, $value);
 				break;
+			case 'color':
+				$this->renderAdminColorpicker($option, $field, $value);
+				break;
 			case 'select':
 				$this->renderAdminOptionSelect($option, $field, $value);
 				break;
@@ -481,6 +490,18 @@ class uBillboard {
 			<div class="clear"></div>
 		</div>
 		<?php
+	}
+	
+	function renderAdminColorpicker($attrib)
+	{
+		global $uds_billboard_attributes;
+
+		$attrib_full = $uds_billboard_attributes[$attrib];
+		
+		echo '<div class="'. $attrib .'-wrapper">';
+		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
+		echo '#<input type="text" name="uds_billboard['. $attrib .'][]" value="'.$this->{$attrib}.'" id="billboard-'. $attrib .'" class="billboard-'. $attrib .' color" />';
+		echo '</div>';
 	}
 	
 	private function paginatorMini()

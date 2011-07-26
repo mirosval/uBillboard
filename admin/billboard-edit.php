@@ -97,6 +97,7 @@ $billboard->addEmptySlide();
 							<?php $billboard->renderAdminOption('thumbnails-inside'); ?>
 							<?php $billboard->renderAdminOption('thumbnails-width'); ?>
 							<?php $billboard->renderAdminOption('thumbnails-height'); ?>
+							<?php $billboard->renderAdminOption('thumbnails-hover-color'); ?>
 						</div>
 					</div>
 				</div>
