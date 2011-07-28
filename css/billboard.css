@@ -182,7 +182,7 @@
 	
 	
 	/* Oldskool uBillboard skin */
-	.uds-bb-paginator.oldskool, .uds-bb-paginator.oldskool-bright {
+	.uds-bb-paginator.oldskool, .uds-bb-paginator.oldskool-bright, .uds-bb-paginator.silver  {
 		width: 100%;
 		height: 100%;
 	}
@@ -307,6 +307,169 @@
 	.uds-bb-paginator.oldskool-bright .uds-bb-bullet.active {
 		background: url(../images/skin-oldskool-bright/bullet-active.png) no-repeat;
 	}
+	
+	/* Silver Skin */
+	
+	.uds-bb-paginator.silver.inside .uds-bb-prev {
+		width: 40px;
+		height: 40px;
+		position: absolute;
+		left: 0px;
+		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
+		box-shadow: 0px 0px 2px #666;
+		-webkit-border-bottom-right-radius: 10px;
+		-webkit-border-top-right-radius: 10px;
+		-moz-border-top-right-radius: 10px;
+		-moz-border-bottom-right-radius: 10px;
+	}
+	
+	.uds-bb-paginator.silver.inside .uds-bb-prev span {
+		background: url(../images/skin-silver/prev.png);
+		width: 40px;
+		height: 40px;
+		position: absolute;
+		left: 0px;
+	}
+	
+	.uds-bb-paginator.silver.inside .uds-bb-prev span:hover, .uds-bb-paginator.silver.outside .uds-bb-prev span:hover {
+		background: url(../images/skin-silver/prev.png) 0px 40px;
+	}
+	
+	.uds-bb-paginator.silver.outside .uds-bb-prev {
+		width: 40px;
+		height: 40px;
+		position: absolute;
+		left: -40px;
+		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
+		box-shadow: 0px 0px 2px #666;
+		-webkit-border-bottom-left-radius: 10px;
+		-webkit-border-top-left-radius: 10px;
+		-moz-border-top-left-radius: 10px;
+		-moz-border-bottom-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+		border-top-left-riadus: 10px;
+	}
+	
+	.uds-bb-paginator.silver.outside .uds-bb-prev span {
+		background: url(../images/skin-silver/prev.png);
+		width: 40px;
+		height: 40px;
+		position: absolute;
+		left: 0px;
+	}
+	
+	.uds-bb-paginator.silver.inside .uds-bb-next {
+		width: 40px;
+		height: 40px;
+		position: absolute;
+		right: 0px;
+		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
+		box-shadow: 0px 0px 2px #666;
+		-webkit-border-bottom-left-radius: 10px;
+		-webkit-border-top-left-radius: 10px;
+		-moz-border-top-left-radius: 10px;
+		-moz-border-bottom-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+		border-top-left-radius: 10px;
+	}
+	
+	.uds-bb-paginator.silver.outside .uds-bb-next {
+		width: 40px;
+		height: 40px;
+		position: absolute;
+		right: -40px;
+		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
+		box-shadow: 0px 0px 2px #666;
+		-webkit-border-bottom-right-radius: 10px;
+		-webkit-border-top-right-radius: 10px;
+		-moz-border-top-right-radius: 10px;
+		-moz-border-bottom-right-radius: 10px;
+		border-top-right-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
+	
+	.uds-bb-paginator.silver.inside .uds-bb-next span {
+		background: url(../images/skin-silver/next.png);
+		width: 40px;
+		height: 40px;
+		position: absolute;
+		right: 0px;
+	}
+	
+	.uds-bb-paginator.silver.outside .uds-bb-next span {
+		background: url(../images/skin-silver/next.png);
+		width: 40px;
+		height: 40px;
+		position: absolute;
+		right: 0px;
+	}
+	
+	
+	.uds-bb-paginator.silver.inside .uds-bb-next span:hover, .uds-bb-paginator.silver.outside .uds-bb-next span:hover {
+		background: url(../images/skin-silver/next.png) 0px 40px;
+	}
+	
+	.uds-bb-paginator.silver.inside .uds-bb-position-indicator-bullets-container {
+		height: 22px;
+		float: left;
+		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
+		padding: 9px 10px;;
+		position: absolute;
+		bottom: 0px;
+		-webkit-border-top-right-radius: 10px;
+		-webkit-border-top-left-radius: 10px;
+		-moz-border-top-right-radius: 10px;
+		-moz-border-top-left-radius: 10px;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+		box-shadow: 0px 0px 2px #666;
+	}
+	
+	.uds-bb-paginator.silver.outside .uds-bb-position-indicator-bullets-container {
+		height: 22px;
+		float: left;
+		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
+		padding: 9px 10px;;
+		position: absolute;
+		bottom: -40px;
+		-webkit-border-bottom-right-radius: 10px;
+		-webkit-border-bottom-left-radius: 10px;
+		-moz-border-bottom-right-radius: 10px;
+		-moz-border-bottom-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+		box-shadow: 0px 0px 2px #666;
+	}
+	
+	.uds-bb-paginator.silver .uds-bb-position-indicator-bullets {
+		float: left;
+	}
+	
+	.uds-bb-paginator.silver .uds-bb-bullet {
+		background: url(../images/skin-silver/bullet.png) no-repeat;
+		width: 14px;
+		height: 14px;
+		float: left;
+		margin: 5px 10px 0px 0px;
+		cursor: pointer;
+	}
+	
+	.uds-bb-paginator.silver .uds-bb-bullet.active, .uds-bb-paginator.silver .uds-bb-bullet:hover  {
+		background: url(../images/skin-silver/bullet-active.png) no-repeat;
+	}
+	
+	.uds-bb-paginator.silver  .uds-bb-playpause {
+		background: url(../images/skin-silver/playpause.png) no-repeat;
+		width: 14px;
+		height: 14px;
+		float: left;
+		margin: 5px 0px 0px 0px;
+	}
+	
+	.uds-bb-paginator.silver  .uds-bb-playpause:hover {
+		background: url(../images/skin-silver/playpause.png) 0px 14px;
+	}
+	
 	
 	/* uTube Skin */
 	
