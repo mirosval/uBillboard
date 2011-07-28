@@ -61,7 +61,10 @@
 /* Descriptions */
 .uds-bb-description {
 	position: absolute;
-	padding: 10px;
+}
+
+.uds-bb-description p {
+	margin: 5px 10px;
 }
 
 .uds-bright  .uds-bb-description.uds-transparent, .uds-dark  .uds-bb-description.uds-transparent {

@@ -12,6 +12,11 @@ $uds_billboard_attributes = array(
 		'label' => __('Apply Automatic resizing', uds_billboard_textdomain),
 		'default' => ''
 	),
+	'relative-paths' => array(
+		'type' => 'checkbox',
+		'label' => __('Use Relative Paths', uds_billboard_textdomain),
+		'default' => 'on'
+	),
 	'background' => array(
 		'type' => 'color',
 		'label' => __('Background Color', uds_billboard_textdomain),
@@ -424,6 +429,7 @@ class uBillboardSlide {
 			<div id="uds-slide-tab-background-<?php echo $id ?>" class="uds-slide-tab-background">
 				<?php $this->renderAdminField('image') ?>
 				<?php $this->renderAdminField('resize') ?>
+				<?php $this->renderAdminField('relative-paths') ?>
 				<?php $this->renderAdminField('background') ?>
 				<?php $this->renderAdminField('background-transparent') ?>
 			</div>
@@ -583,7 +589,12 @@ class uBillboardSlide {
 		$width = $this->slider->thumbnailsWidth;
 		$height = $this->slider->thumbnailsHeight;
 		
-		$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $this->thumb) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
+		$src = $this->thumb;
+		if($this->{'relative-paths'} == 'on') {
+			$src = str_replace(WP_CONTENT_URL . '/', '', $this->thumb);
+		}
+		
+		$image = $timthumb . 'src=' . $src . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
 		
 		return "<div class='uds-bb-thumb'><img src='$image' alt='' width='$width' height='$height' /></div>";
 	}
