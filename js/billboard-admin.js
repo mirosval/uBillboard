@@ -210,30 +210,6 @@ jQuery(function($){
 		});
 	});
 	
-	// tinymce
-	//tinyMCE.PluginManager.load("udsDescription", "http://meosoft/code/plugins/wp-content/plugins/uBillboard/lib/tinymce/uds-description/editor_plugin.js");
-	
-	$('.billboard-text').each(function() {
-	return;
-		tinyMCE.init({
-		    theme : 'advanced',
-		    mode: 'exact',
-		    elements : $(this).attr('id'),
-		    plugins: 'udsDescription,udsEmbed',
-		    theme_advanced_toolbar_location : 'top',
-		    theme_advanced_buttons1 : 'bold,italic,separator,'
-		    + 'justifyleft,justifycenter,justifyright,justifyfull,formatselect,'
-		    + 'bullist,numlist',
-		    theme_advanced_buttons2 : 'link,unlink,separator,'
-		    +'undo,redo,cleanup,code,separator,charmap,separator,udsDescription,udsEmbed',
-		    theme_advanced_buttons3 : '',
-		    theme_advanced_resizing : true, 
-		    theme_advanced_statusbar_location : 'bottom',
-		    width : '100%'
-		});
-		//tinyMCE.execCommand('mceRemoveControl', false, $(this).attr('id'));
-	});
-	
 	// Admin preview
 	var adminPreview = function(){
 		var originalName = $('#title').val();
@@ -294,6 +270,7 @@ jQuery(function($){
 	// Content editor
 	$('.content-editor').hide();
 	$('.uds-content-editor').live('click', function(){
+		$contentEditor = $('.content-editor', $(this).parent());
 		$dialog = $('.content-editor', $(this).parent()).clone().appendTo('body');
 		$content = $(this).parent().find('textarea');
 		
@@ -363,6 +340,7 @@ jQuery(function($){
 				if(content != '') {
 					$content.val(val + '[uds-description '+width+height+top+left+skin+']' + content + '[/uds-description] ');
 				}
+				$contentEditor.html($dialog.html());
 				$dialog.dialog('close');
 			});
 		});

@@ -123,6 +123,85 @@ class uBillboardSlide {
 	 */
 	private $slider;
 	
+	public static function upgradeFromV2($slide, $bbv2, $slider)
+	{
+		global $uds_billboard_attributes;
+		
+		// Solve transition
+		$transition = 'fade';
+		$transitions = array_keys($uds_billboard_attributes['transition']['options']);
+		foreach($transitions as $t) {
+			if(strpos(strtolower($slide['transition']), $t) !== false) {
+				$transition = $t;
+			}
+		}
+		
+		// Solve Direction
+		$direction = 'none';
+		$directions = array_keys($uds_billboard_attributes['direction']['options']);
+		foreach($directions as $d) {
+			if(strpos(strtolower($slide['transition']), $d) !== false) {
+				$direction = $d;
+			}
+		}
+		
+		// Transform legacy descriptions into uds-description format
+		$content = 'none';
+		$text = '';
+		$text_evaluation = 'html';
+
+		if($slide['layout'] !== 'none') {
+			$content = 'editor';
+			
+			$padding_correction = 20;
+			
+			if(strpos($slide['layout'], 'left') !== false) {
+				$width = round(0.3 * (int)$slider->width) - $padding_correction;
+				$height = (int)$slider->height - $padding_correction;
+				$top = 0;
+				$left = 0;
+			} elseif(strpos($slide['layout'], 'right') !== false) {
+				$width = round(0.3 * (int)$slider->width) - $padding_correction;
+				$height = (int)$slider->height - $padding_correction;
+				$top = 0;
+				$left = (int)$slider->width - $width;
+			} else { // bottom
+				$width = (int)$slider->width - $padding_correction;
+				$height = round(0.3 * (int)$slider->height) - $padding_correction;
+				$top = (int)$slider->height - $height;
+				$left = 0;
+			}
+			
+			if(strpos($slide['layout'], 'alt')) {
+				$skin = 'bright';
+			} else {
+				$skin = 'dark';
+			}
+			
+			$text = '<h2>' . stripslashes($slide['title']) . '</h2>';
+			$text .= '<p>' . stripslashes($slide['text']) . '</p>';
+			
+			$text = '[uds-description top="'.$top.'px" left="'.$left.'px" width="'.$width.'px" height="'.$height.'px" skin="'.$skin.'"]' . $text . '[/uds-description]';
+		}
+		
+		// Create slide
+		$v3slide = new uBillboardSlide(array(
+			'image' => $slide['image'],
+			'resize' => $bbv2['use-timthumb'],
+			'background' => '000000',
+			'background-transparent' => 'on',
+			'link' => $slide['link'],
+			'delay' => $slide['delay'],
+			'transition' => $transition,
+			'direction' => $direction,
+			'content' => $content,
+			'text' => $text,
+			'text-evaluation' => $text_evaluation
+		), $slider);
+		
+		return $v3slide;
+	}
+	
 	/**
 	 *	Static function to parse form arrays and transform them to
 	 *	array of slides

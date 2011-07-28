@@ -173,7 +173,11 @@ function uds_billboard_import_v2()
 	
 	$billboards = uBillboard::upgradeFromV2($v2);
 	
-	//d($billboards);
+	update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
+	
+	$message = 'uds-message='.urlencode(__('Billboards imported successfully', uds_billboard_textdomain)).'&uds-class='.urlencode('updated');
+	
+	wp_redirect('admin.php?page=uds_billboard_admin&'.$message);
 }
 
 ?>
