@@ -31,7 +31,7 @@ function uds_billboard_description($atts, $content = null)
 		}
 		
 		if(!empty($skin)) $skin = 'uds-' . $skin;
-		$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;'>$content</div>";
+		$out = "<div class='uds-bb-description $skin' style='top:$top;left:$left;width:$width;height:$height;'><div class='uds-bb-description-inside'>$content</div></div>";
 	}
 	
 	return $out;

@@ -548,33 +548,6 @@
 				visibility: 'visible'
 			});
 			
-			// Center controls
-			$('.uds-center', $bb).each(function() {
-				var widthAdjustment = $(this).outerWidth() / 2;
-				var heightAdjustment = $(this).outerHeight() / 2;
-				
-				$(this).css({
-					top: parseInt(options.height, 10) / 2 - heightAdjustment,
-					left: parseInt(options.width, 10) / 2 - widthAdjustment
-				});
-			});
-			
-			$('.uds-center-vertical', $bb).each(function() {
-				var heightAdjustment = $(this).outerHeight() / 2;
-				
-				$(this).css({
-					top: parseInt(options.height, 10) / 2 - heightAdjustment
-				});
-			});
-			
-			$('.uds-center-horizontal', $bb).each(function() {
-				var widthAdjustment = $(this).outerWidth() / 2;
-				
-				$(this).css({
-					left: parseInt(options.width, 10) / 2 - widthAdjustment
-				});
-			});
-			
 			// setup variables for shorter code
 			var $playpause = $('.uds-bb-playpause', $bb),
 				$buttonNext = $('.uds-bb-next', $bb),
@@ -767,6 +740,33 @@
 			if(options.showThumbnails === false) {
 				$thumbs.hide();
 			}
+			
+			// Center controls
+			$('.uds-center', $bb).each(function() {
+				var widthAdjustment = $(this).outerWidth() / 2;
+				var heightAdjustment = $(this).outerHeight() / 2;
+				
+				$(this).css({
+					top: parseInt(options.height, 10) / 2 - heightAdjustment,
+					left: parseInt(options.width, 10) / 2 - widthAdjustment
+				});
+			});
+			
+			$('.uds-center-vertical', $bb).each(function() {
+				var heightAdjustment = $(this).outerHeight() / 2;
+				
+				$(this).css({
+					top: parseInt(options.height, 10) / 2 - heightAdjustment
+				});
+			});
+			
+			$('.uds-center-horizontal', $bb).each(function() {
+				var widthAdjustment = $(this).outerWidth() / 2;
+				
+				$(this).css({
+					left: parseInt(options.width, 10) / 2 - widthAdjustment
+				});
+			});
 		},
 		
 		/**
