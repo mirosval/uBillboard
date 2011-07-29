@@ -453,19 +453,7 @@ class uBillboard {
 		);
 		
 		$out = "<div class='uds-bb uds-{$this->style}' id='uds-bb-$id'>";
-		$out .= "<div class='uds-bb-slides'>";
-		
-		$slides = $this->slides;
-		
-		if($this->randomize === "on") {
-			shuffle($slides);
-		}
-		
-		foreach($slides as $slide) {
-			$out .= $slide->render();
-		}
-		
-		$out .= "</div>";
+
 		$out .= "<div class='uds-bb-controls'>";
 		
 		switch($this->controlsSkin){
@@ -493,6 +481,21 @@ class uBillboard {
 		}
 			
 		$out .= "</div>";
+		
+		$out .= "<div class='uds-bb-slides'>";
+		
+		$slides = $this->slides;
+		
+		if($this->randomize === "on") {
+			shuffle($slides);
+		}
+		
+		foreach($slides as $slide) {
+			$out .= $slide->render();
+		}
+		
+		$out .= "</div>";
+		
 		$out .= "</div>";
 		
 		return $out;
@@ -534,7 +537,7 @@ class uBillboard {
 				showPause: $showPause,
 				showPaginator: $showPaginator,
 				showThumbnails: $showThumbnails,
-				showTimer: $showTimer,
+				showTimer: $showTimer
 			});
 		";
 		

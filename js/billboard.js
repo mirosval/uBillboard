@@ -160,7 +160,7 @@
 						
 						_public.play();
 					} else {
-						if(typeof $countdown !== 'undefined') {
+						if(typeof $countdown !== 'undefined' && $countdown !== null) {
 							$countdown.hide();
 						}
 					}
@@ -287,7 +287,7 @@
 					clearTimeout(timers.nextSlideAnimation);
 				}
 				
-				if(typeof $countdown !== 'undefined') {
+				if(typeof $countdown !== 'undefined' && $countdown !== null) {
 					$countdown.show();
 				}
 				
@@ -544,13 +544,7 @@
 				$controls.css({
 					width: options.width,
 					height: options.height,
-					opacity: 0,
-					visibility: 'hidden'
-				});
-				
-				// Make sure all controls are visible (to counter visibility: hidden; on $controls
-				$('*', $controls).css({
-					visibility: 'visible'
+					opacity: 0
 				});
 				
 				// setup variables for shorter code
