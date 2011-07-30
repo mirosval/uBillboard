@@ -408,6 +408,10 @@ td.shortcode {
 
 
 /* Editor */
+.content-editor {
+	position: relative;
+}
+
 .editor-area {
 	position: relative;
 }

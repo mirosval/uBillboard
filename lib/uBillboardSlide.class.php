@@ -158,7 +158,7 @@ class uBillboardSlide {
 		if($slide['layout'] !== 'none') {
 			$content = 'editor';
 			
-			$padding_correction = 20;
+			$padding_correction = 0;
 			
 			if(strpos($slide['layout'], 'left') !== false) {
 				$width = round(0.3 * (int)$slider->width) - $padding_correction;
