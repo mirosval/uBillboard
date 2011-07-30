@@ -70,6 +70,7 @@ $uds_billboard_attributes = array(
 			'randomSquares' => __('Random Squares', uds_billboard_textdomain),
 			'spiralIn' 		=> __('Spiral in', uds_billboard_textdomain),
 			'spiralOut'		=> __('Spiral Out', uds_billboard_textdomain),
+			'chess'			=> __('Chessboard', uds_billboard_textdomain),
 			//'zigzag'		=> __('Zig-zag', uds_billboard_textdomain)
 		),
 		'default' => 'none'
