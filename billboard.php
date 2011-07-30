@@ -336,6 +336,12 @@ function uds_billboard_menu()
 	add_action("admin_print_scripts-$ubillboard", 'uds_billboard_enqueue_admin_scripts');
 	add_action("admin_print_scripts-$ubillboard_add", 'uds_billboard_enqueue_admin_scripts');
 	add_action("admin_print_scripts-$ubillboard_importexport", 'uds_billboard_enqueue_admin_scripts');
+		
+	// Contextual help
+	add_contextual_help($ubillboard, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-billboards.html'));
+	add_contextual_help($ubillboard_add, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit.html'));
+	add_contextual_help($ubillboard_general, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-general.html'));
+	add_contextual_help($ubillboard_importexport, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-import.html'));
 }
 
 /**

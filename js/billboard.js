@@ -621,7 +621,7 @@
 						width: $img.attr('width') + 'px',
 						height: $img.attr('height') + 'px'
 					});
-				});
+				}).css('background-color', options.thumbnailHoverColor);
 				
 				// Thumbnails scrolling
 				var windowDim,

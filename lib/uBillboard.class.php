@@ -452,51 +452,15 @@ class uBillboard {
 			'height' => $this->height
 		);
 		
-		$out = "<div class='uds-bb uds-{$this->style}' id='uds-bb-$id'>";
-
-		$out .= "<div class='uds-bb-controls'>";
+		$slides = $this->renderSlides();
+		$controls = $this->renderControls();
 		
-		switch($this->controlsSkin){
-			case 'mini':
-				$out .= $this->paginatorMini();
-				break;
-			case 'oldskool':
-				$out .= $this->paginatorOldskool();
-				break;
-			case 'oldskool-bright':
-				$out .= $this->paginatorOldskoolBright();
-				break;
-			case 'utube':
-				$out .= $this->paginatoruTube();
-				break;
-			case 'silver':
-				$out .= $this->paginatorSilver();
-				break;
-			case 'modern':
-				$out .= $this->paginatorModern();	
-		}
-
-		if($this->showThumbnails !== 'no') {
-			$out .= $this->thumbnails($slides);
-		}
-			
-		$out .= "</div>";
-		
-		$out .= "<div class='uds-bb-slides'>";
-		
-		$slides = $this->slides;
-		
-		if($this->randomize === "on") {
-			shuffle($slides);
-		}
-		
-		foreach($slides as $slide) {
-			$out .= $slide->render();
-		}
-		
-		$out .= "</div>";
-		
-		$out .= "</div>";
+		$out = "
+		<!-- uBillboard ".UDS_BILLBOARD_VERSION." ID:$id -->
+		<div class='uds-bb uds-{$this->style}' id='uds-bb-$id'>
+			$controls
+			$slides
+		</div>";
 		
 		return $out;
 	}
@@ -527,6 +491,8 @@ class uBillboard {
 		if($this->showThumbnails == 'hover')	$showThumbnails = "'hover'";
 		if($this->showThumbnails == 'yes')		$showThumbnails = 'true';
 
+		$thumbnailsHoverColor = $this->thumbnailsHoverColor;
+
 		$scripts = "
 			$('#uds-bb-$id').uBillboard({
 				width: '{$this->width}px',
@@ -537,7 +503,8 @@ class uBillboard {
 				showPause: $showPause,
 				showPaginator: $showPaginator,
 				showThumbnails: $showThumbnails,
-				showTimer: $showTimer
+				showTimer: $showTimer,
+				thumbnailHoverColor: \"#$thumbnailsHoverColor\"
 			});
 		";
 		
@@ -632,7 +599,59 @@ class uBillboard {
         <?php
 	}
 	
+	private function renderSlides()
+	{
+		$out = "<div class='uds-bb-slides'>";
+		
+		$slides = $this->slides;
+		
+		if($this->randomize === "on") {
+			shuffle($slides);
+		}
+		
+		foreach($slides as $slide) {
+			$out .= $slide->render();
+		}
+		
+		$out .= "</div>";
+		
+		return $out;
+	}
+	
+	private function renderControls()
+	{
+		$out = "<div class='uds-bb-controls'>";
+		
+		switch($this->controlsSkin){
+			case 'mini':
+				$out .= $this->paginatorMini();
+				break;
+			case 'oldskool':
+				$out .= $this->paginatorOldskool();
+				break;
+			case 'oldskool-bright':
+				$out .= $this->paginatorOldskoolBright();
+				break;
+			case 'utube':
+				$out .= $this->paginatoruTube();
+				break;
+			case 'silver':
+				$out .= $this->paginatorSilver();
+				break;
+			case 'modern':
+				$out .= $this->paginatorModern();	
+		}
 
+		if($this->showThumbnails !== 'no') {
+			$out .= $this->thumbnails($this->slides);
+		}
+			
+		$out .= "</div>";
+		
+		return $out;
+	}
+	
+	
 	/**
 	 *	Mini paginator renderer
 	 *	
