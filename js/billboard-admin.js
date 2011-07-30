@@ -280,20 +280,28 @@ jQuery(function($){
 		
 		$editor = $('.editor-area', $dialog).css({
 			width: width + 'px',
-			height: height + 'px',
+			height: height + 5 + 'px',
 			backgroundColor: 'gray',
 			backgroundImage: image,
 			backgroundPosition: 'center center',
 			backgroundRepeat: 'no-repeat'
 		});
 		
+		$dialog.dialog({
+			width: width + 30,
+			height: height + 130,
+			modal: true
+		});
+		
 		function setDraggableAndResizable(el) {
 			$(el).draggable({
-				container: $editor
+				containment: $editor
 			});
 			
 			$(el).resizable({
-				container: $editor
+				autoHide: true,
+				containment: $editor,
+				handles: 'all'
 			});
 		}
 		
@@ -354,13 +362,7 @@ jQuery(function($){
 			
 			return false;
 		});
-		
-		$dialog.dialog({
-			width: width + 30,
-			height: height + 130,
-			modal: true
-		});
-		
+
 		return false;
 	});
 });
