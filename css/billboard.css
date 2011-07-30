@@ -65,7 +65,7 @@
 }
 
 .uds-bb-description-inside {
-	margin: 5px 10px 10px;
+	margin: 10px 20px 20px;
 	overflow: hidden;
 }
 
@@ -84,6 +84,10 @@
 	background: url(../images/skin-oldskool/bg.png);
 	color: #fafafa;
 	text-shadow: 1px 1px 1px #222;
+}
+
+.uds-bb .uds-bb-description.uds-bright {
+	text-shadow: 1px 1px 1px #fff;
 }
 
 /* Controls */
