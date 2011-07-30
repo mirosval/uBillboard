@@ -881,7 +881,7 @@
 				delay: function() {
 					var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
 					for(var i = 0; i < cols; i++) {
-						$('.uds-column-'+i, $bb).delay((600/cols) - i * (600/cols));
+						$('.uds-column-'+i, $bb).delay(600 - i * (600/cols));
 					}
 				}
 			},
@@ -899,7 +899,21 @@
 				delay: function() {
 					var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10));
 					for(var i = 0; i < rows; i++) {
-						$('.uds-row-'+i, $bb).delay((600/rows) - i * (600/rows));
+						$('.uds-row-'+i, $bb).delay(600 - i * (600/rows));
+					}
+				}
+			},
+			
+			'center': {
+				delay: function() {
+					var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10)),
+						cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+					
+					for(var x = 0; x < cols; x++) {
+						for(var y = 0; y < rows; y++) {
+							var delay = Math.sqrt(Math.pow(x - (cols / 2) + 0.5, 2) + Math.pow(y - (rows / 2) + 0.5, 2)) / Math.sqrt(Math.pow(cols / 2, 2) + Math.pow(rows / 2, 2));
+							$('.uds-square-' + (y * cols + x)).delay(700 * delay);
+						}
 					}
 				}
 			},
@@ -927,6 +941,7 @@
 						var squareId = cols * vPos + hPos;
 						
 						$('.uds-square-'+squareId).delay(1000 * (n/(cols*rows)));
+						//d('T: '+topBound+' R:'+rightBound+' B:'+bottomBound+' L:'+leftBound+' X:'+hPos+' Y:'+vPos+' Delay:'+1000 * (n/(cols*rows)));
 						
 						if(vPos == topBound && hPos < rightBound) {
 							hPos++;
@@ -936,7 +951,7 @@
 							hPos--;
 						} else {
 							vPos--;
-							if(vPos == 0) {
+							if(vPos == topBound) {
 								hPos++;
 								vPos++;
 								leftBound++;
@@ -974,7 +989,7 @@
 							hPos--;
 						} else {
 							vPos--;
-							if(vPos == 0) {
+							if(vPos == topBound) {
 								hPos++;
 								vPos++;
 								leftBound++;
@@ -1051,7 +1066,7 @@
 						});
 					} else if(this.direction === 'bottom') {
 						$next.show().css({
-							top: _private.pos(options.width),
+							top: _private.pos(options.height),
 							left: '0px'
 						});
 					} else {
