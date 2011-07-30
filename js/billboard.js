@@ -1001,6 +1001,20 @@
 						n++;
 					}
 				}
+			},
+			
+			'chess' : {
+				delay: function() {
+					var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10)),
+						cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+					
+					for(var x = 0; x < cols; x++) {
+						for(var y = 0; y < rows; y++) {
+							var delay = (y % 2 == 0 && x % 2 == 0) || (y % 2 == 1 && x % 2 == 1) ? 0 : 1;
+							$('.uds-square-' + (y * cols + x)).delay(200 * delay);
+						}
+					}
+				}
 			}
 		},
 		
