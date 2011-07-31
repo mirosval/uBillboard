@@ -72,7 +72,7 @@ $uds_billboard_general_options = array(
 			'oldskool' 			=> __('Old School uBillboard', uds_billboard_textdomain),
 			'oldskool-bright' 	=> __('Bright Old School uBillboard', uds_billboard_textdomain),
 			'utube' 			=> __('uTube', uds_billboard_textdomain),
-			'silver' 			=> __('silver', uds_billboard_textdomain),
+			'silver' 			=> __('Silver', uds_billboard_textdomain),
 			'modern'			=> __('Modern')
 		),
 		'default' => 'oldskool'
