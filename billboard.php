@@ -182,6 +182,8 @@ function uds_billboard_admin_init()
 	// Register settings
 	register_setting('uds_billboard_general_options', UDS_BILLBOARD_OPTION_GENERAL, 'uds_billboard_general_validate');
 	
+	add_thickbox();
+	
 	// Basic init
 	$dir = UDS_BILLBOARD_URL;
 	
@@ -432,7 +434,6 @@ function uds_billboard_enqueue_admin_scripts()
 {
 	$dir = UDS_BILLBOARD_URL;
 	
-	wp_enqueue_script("swfupload");
 	wp_enqueue_script("jquery-ui-core");
 	wp_enqueue_script("jquery-ui-tabs");
 	wp_enqueue_script("jquery-ui-dialog");
@@ -536,58 +537,6 @@ function uds_billboard_list()
 		if($name == '_uds_temp_billboard') continue;
 		
 		echo '<option name="'.$name.'">'.$name.'</option>';
-	}
-	
-	die();
-}
-
-add_action('wp_ajax_uds_billboard_list_images', 'uds_billboard_list_images');
-/**
- *	Function, AJAX list images, used with image selection form in uBillboard admin
- *	
- *	@return void
- */
-function uds_billboard_list_images()
-{
-	$count_array = wp_count_attachments();
-
-	$count = 0;
-	$count += isset($count_array->{'image/jpeg'}) ? $count_array->{'image/jpeg'} : 0;
-	$count += isset($count_array->{'image/png'}) ? $count_array->{'image/png'} : 0;
-	
-	echo '<a href="'.admin_url('media-new.php').'">'.__('Upload new images', uds_billboard_textdomain).'</a>';
-	
-	if($count == 0) {
-		die('<p>' . __('You have no images in your Media Library', uds_billboard_textdomain) . '</p>');
-	}
-	
-	$offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-	$numberposts = 5;
-	
-	$posts = get_posts(array('post_type' => 'attachment', 'numberposts' => $numberposts, 'offset' => $offset, 'post_status' => null, 'post_parent' => null));
-	
-	echo '<p>' . __('Click an image to add it to the Slide', uds_billboard_textdomain) . '</p>';
-	echo '<div class="uds-images-select">';
-	foreach($posts as $post) {
-		if(!wp_attachment_is_image($post->ID)) continue;
-		$metadata = wp_get_attachment_metadata($post->ID);
-		echo '<div class="uds-image-select">';
-		echo wp_get_attachment_image($post->ID, 'thumb');
-		$image = wp_get_attachment_image_src($post->ID, 'full');
-		$full = $image[0];
-		echo '<input type="hidden" class="uds-image" value="'.$full.'" />';
-		echo '<div class="meta">Filename: '.$metadata['file'].'<br />Size: '.$metadata['width'].'x'.$metadata['height'].'</div>';
-		echo '<div class="clear"></div>';
-		echo '</div>';
-	}
-	echo '</div>';
-	
-	if($count > $numberposts) {
-		echo '<div class="uds-paginate">';
-		for($i = 0; $i < $count / $numberposts; $i++) {
-			echo '<a href="">'.($i+1).'</a>';
-		}
-		echo '</div>';
 	}
 	
 	die();

@@ -776,7 +776,7 @@ class uBillboardSlide {
 		echo '<div class="'. $attrib .'-url-wrapper">';
 		echo '	<label for="billboard-'. $attrib .'-'. $unique_id .'-hidden">Image URL</label>';
 		echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $this->{$attrib} .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
-		echo '	<a class="image-upload" title="Add an Image" href="">';
+		echo '	<a class="thickbox image-upload" title="Add an Image" href="'.admin_url('media-upload.php?type=image&TB_iframe=true&width=640&height=345').'">';
 		echo '		<img alt="Add an Image" src="'. admin_url() . 'images/media-button-image.gif" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
 		echo '	</a>';
 		echo '</div>';

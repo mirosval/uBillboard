@@ -73,40 +73,19 @@ jQuery(function($){
 	function showImageAdder(offset, element) {
 		var $preview = $(element).parents('.slide').find('.image-wrapper');
 		var $image = $(element).prev();
-		var postsPerPage = 5;
 		
-		if($('#uds-dialog').length === 0) {
-			$('<div id="uds-dialog" title="'+udsAdminL10n.addAnImage+'">').appendTo('body');
-		}
-		
-		$dialog = $('#uds-dialog');
-		
-		$.get(ajaxurl, {
-			action: 'uds_billboard_list_images',
-			offset: offset
-		}, function(data) {
-			$dialog.html(data);
-			$dialog.dialog({
-				modal: true,
-				width: 450,
-				minHeight: 500
-			});
-					
-			$('.uds-image-select').click(function(){
-				var src = $(this).find('input.uds-image').val();
-				$preview.css('background-image', 'url('+src+')');
-				$image.val(src);
-				$dialog.dialog('close');
-			});
+		window.send_to_editor = function(img) {
+			tb_remove();
 			
-			$('.uds-paginate a').click(function(){
-				var page = $(this).text();
-				
-				showImageAdder(postsPerPage * (page - 1), element);
-				
-				return false;
-			});
-		});
+			if($(img).is('a')){ // work around Link URL supplied
+				var src = $(img).find('img').attr('src');
+			} else {
+				var src = $(img).attr('src');
+			}
+			
+			$preview.css('background-image', 'url('+src+')');
+			$image.val(src);
+		}
 	}
 	
 	// image upload dialog
