@@ -217,6 +217,11 @@ function uds_billboard_admin_init()
 			uds_billboard_import($_FILES['uds-billboard-import']['tmp_name']);
 		}
 	}
+	
+	// Check cache
+	if(!uds_billboard_cache_is_writable()) {
+		add_action( 'admin_notices', create_function('', 'echo \'<div id="message" class="error"><p><strong>' . __("uBillboard Cache folder is not writable!", uds_billboard_textdomain) . '</strong></p></div>\';') );
+	}
 }
 
 add_action('wp_print_scripts', 'uds_billboard_scripts');
@@ -443,7 +448,8 @@ function uds_billboard_enqueue_admin_scripts()
 		'slideDeleteConfirmation' => __('Really delete slide?', uds_billboard_textdomain),
 		'addAnImage' => __('Add an Image', uds_billboard_textdomain),
 		'slideN' => __('Slide %s', uds_billboard_textdomain),
-		'billboardPreview' => __('uBillboard Preview', uds_billboard_textdomain)
+		'billboardPreview' => __('uBillboard Preview', uds_billboard_textdomain),
+		'pageLeaveConfirmation' => __('uBillboard has unsaved changes, do you really want to leave?', uds_billboard_textdomain)
 	));
 }
 

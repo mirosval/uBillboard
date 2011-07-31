@@ -21,6 +21,32 @@ jQuery(function($){
 		$(this).parent().toggleClass('closed');
 	});
 	
+	// Observe changes and ask user if he wants to save
+	function markDirty(dirty) {
+		if(dirty) {
+			$('#billboard_update_form').addClass('dirty');
+		} else {
+			$('#billboard_update_form').removeClass('dirty');
+		}
+	}
+	
+	$('input, textarea', '#billboard_update_form').live('change', function(){
+		markDirty(true);
+	});
+	
+	// Ask user for confirmation before leaving
+	$(window).bind('beforeunload', function(e){
+		var e = e || window.event;
+		
+		if($('#billboard_update_form').is('.dirty')) {
+			var warning = udsAdminL10n.pageLeaveConfirmation;
+			e.returnValue = warning;
+			return warning;
+		}
+		
+		return null;
+	});
+	
 	// Before uBillboard submit
 	$('#billboard_update_form').submit(function(){
 		// remove all hidden fields from before checked checkboxes
@@ -110,10 +136,36 @@ jQuery(function($){
 		resetSlides();
 	});
 	
+	// Add New Slide Button
+	$('#uds-add-slide').click(function(){
+		$('.slides').append(slideClone.clone());
+		resetSlides();
+	});
+	
 	// slide Deleting
 	$('.slide .deletediv').live('click', function(){
 		$(this).parents('.slide').remove();
+		markDirty(true);
 		resetSlides();
+	});
+	
+	// Slide Collapsing
+	$('.slide .handlediv').live('click', function(){
+		$('.inside', $(this).parent()).toggle();
+	});
+	
+	// Slide Sortable
+	$('.slides').sortable({
+		axis: 'y',
+		handle: '.hndle',
+		placeholder: 'ui-state-highlight',
+		forcePlaceholderSize: true,
+		items: '>div',
+		opacity: 0.8,
+		update: function() {
+			markDirty(true);
+			resetSlides();
+		}
 	});
 	
 	// Billboard image collapsing
@@ -181,6 +233,7 @@ jQuery(function($){
 				$('.uds-billboard-form .slides').append(slide);
 			}
 			
+			markDirty(true);
 			resetSlides();
 		}
 	});
@@ -350,6 +403,7 @@ jQuery(function($){
 				}
 				$contentEditor.html($dialog.html());
 				$dialog.dialog('close');
+				markDirty(true);
 			});
 		});
 		

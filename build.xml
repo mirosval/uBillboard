@@ -114,6 +114,11 @@
 			<fileset dir="lang" />
 		</copy>
 		
+		<!-- Copy Help files -->
+		<copy todir="build/${project_name}/help">
+			<fileset dir="help" />
+		</copy>
+		
 		<!-- Copy PHP Files -->
 		<copy todir="build/${project_name}">
 			<fileset dir=".">
