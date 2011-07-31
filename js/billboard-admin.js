@@ -17,7 +17,7 @@ jQuery(function($){
 	});
 	
 	// Boxes closing
-	$('.handlediv').click(function(){
+	$('.handlediv').live('click', function(){
 		$(this).parent().toggleClass('closed');
 	});
 	
@@ -147,11 +147,6 @@ jQuery(function($){
 		$(this).parents('.slide').remove();
 		markDirty(true);
 		resetSlides();
-	});
-	
-	// Slide Collapsing
-	$('.slide .handlediv').live('click', function(){
-		$('.inside', $(this).parent()).toggle();
 	});
 	
 	// Slide Sortable
