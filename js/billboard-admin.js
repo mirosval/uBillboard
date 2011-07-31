@@ -49,6 +49,7 @@ jQuery(function($){
 	
 	// Before uBillboard submit
 	$('#billboard_update_form').submit(function(){
+		markDirty(false);
 		// remove all hidden fields from before checked checkboxes
 		$('.slides input:checked').each(function(){
 			$(this).prev().remove();
