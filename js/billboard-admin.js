@@ -91,7 +91,7 @@ jQuery(function($){
 				width: 450,
 				minHeight: 500
 			});
-			
+					
 			$('.uds-image-select').click(function(){
 				var src = $(this).find('input.uds-image').val();
 				$preview.css('background-image', 'url('+src+')');

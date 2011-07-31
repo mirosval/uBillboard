@@ -555,6 +555,8 @@ function uds_billboard_list_images()
 	$count += isset($count_array->{'image/jpeg'}) ? $count_array->{'image/jpeg'} : 0;
 	$count += isset($count_array->{'image/png'}) ? $count_array->{'image/png'} : 0;
 	
+	echo '<a href="'.admin_url('media-new.php').'">'.__('Upload new images', uds_billboard_textdomain).'</a>';
+	
 	if($count == 0) {
 		die('<p>' . __('You have no images in your Media Library', uds_billboard_textdomain) . '</p>');
 	}
@@ -650,6 +652,12 @@ function get_uds_billboard($name = 'billboard', $options = array())
 	}
 	
 	$bb = $bbs[$name];
+	
+	if(!$bb->isValid()) {
+		return __("Billboard is invalid", uds_billboard_textdomain);
+	}
+	
+	$bb = apply_filters('uds_billboard_render_before', $bb);
 	
 	if(!$bb->isValid()) {
 		return __("Billboard is invalid", uds_billboard_textdomain);
