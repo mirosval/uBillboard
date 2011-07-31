@@ -130,6 +130,7 @@
 	
 	/* Mini skin */
 	.uds-bb-paginator.mini {
+		z-index: 3;
 		background: white;
 		right: 20px;
 		bottom: 20px;
@@ -481,6 +482,7 @@
 	/* uTube Skin */
 	
 	.uds-bb-paginator.uTube {
+		z-index: 3;
 		width: 100%;
 		height: 40px;
 		background: red;
@@ -548,6 +550,7 @@
 	/* Modern Skin */
 	
 	.uds-bb-paginator.modern {
+		z-index: 3;
 		width: 100%;
 		height: 30px;
 		position: absolute;
