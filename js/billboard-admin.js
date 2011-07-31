@@ -127,7 +127,6 @@ jQuery(function($){
 		
 		$('.uds-slides-order').sortable('refresh');
 		createTabs();
-		markDirty(true);
 	}
 	
 	// Slide Cloning
@@ -146,6 +145,7 @@ jQuery(function($){
 	// slide Deleting
 	$('.slide .deletediv').live('click', function(){
 		$(this).parents('.slide').remove();
+		markDirty(true);
 		resetSlides();
 	});
 	
@@ -163,6 +163,7 @@ jQuery(function($){
 		items: '>div',
 		opacity: 0.8,
 		update: function() {
+			markDirty(true);
 			resetSlides();
 		}
 	});
@@ -232,6 +233,7 @@ jQuery(function($){
 				$('.uds-billboard-form .slides').append(slide);
 			}
 			
+			markDirty(true);
 			resetSlides();
 		}
 	});
@@ -401,6 +403,7 @@ jQuery(function($){
 				}
 				$contentEditor.html($dialog.html());
 				$dialog.dialog('close');
+				markDirty(true);
 			});
 		});
 		
