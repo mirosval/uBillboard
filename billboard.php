@@ -448,7 +448,8 @@ function uds_billboard_enqueue_admin_scripts()
 		'slideDeleteConfirmation' => __('Really delete slide?', uds_billboard_textdomain),
 		'addAnImage' => __('Add an Image', uds_billboard_textdomain),
 		'slideN' => __('Slide %s', uds_billboard_textdomain),
-		'billboardPreview' => __('uBillboard Preview', uds_billboard_textdomain)
+		'billboardPreview' => __('uBillboard Preview', uds_billboard_textdomain),
+		'pageLeaveConfirmation' => __('uBillboard has unsaved changes, do you really want to leave?', uds_billboard_textdomain)
 	));
 }
 

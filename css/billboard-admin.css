@@ -45,6 +45,10 @@
 	background-repeat: repeat;
 }
 
+.ui-state-highlight {
+	margin-bottom: 20px;
+}
+
 th.shortcode,
 td.shortcode {
 	width: 25%;

@@ -128,6 +128,7 @@ $billboard->addEmptySlide();
 							<?php endforeach; ?>
 						</div> <!-- END Slides -->
 					</div> <!-- END Normal Sortables -->
+					<input type="button" class="button secondary" id="uds-add-slide" value="<?php _e('Add New Slide', uds_billboard_textdomain) ?>" />
 				</div> <!-- END editor body -->
 			</div> <!-- END editor wrapper -->
 		</div> <!-- END metabox holder -->
