@@ -145,21 +145,11 @@
 					// load first slide
 					currentSlideId = 0;
 					var currentSlide = slides[currentSlideId],
-						css;
-					
-					if(currentSlide.bg !== '') {
-						css = {
-							backgroundColor: 'transparent',
-							backgroundImage: 'url('+currentSlide.bg+')'
-						};
-					} else {
-						css = {
-							backgroundColor: currentSlide.bgColor,
-							backgroundImage: ''
-						};
-					}
+						css = _private.getSlideBackgroundCSS(currentSlide);
 					
 					$stage.css(css).html(currentSlide.html).fadeTo(300, 1);
+					
+					_private.handleEmbeddedContent(currentSlide);
 					
 					$controls.delay(300).fadeTo(300, 1);
 					
@@ -204,18 +194,7 @@
 				}
 				
 				// Handle Embedded content
-				if(slide.transition == 'none') {
-					$stage.html(slide.html);
-					
-					// center content
-					$element = $('>*', $stage);
-	
-					$element.css({
-						position: 'absolute',
-						top: parseInt(options.height, 10) / 2 - $element.attr('height') / 2,
-						left: parseInt(options.width, 10) / 2 - $element.attr('width') / 2
-					});
-				}
+				_private.handleEmbeddedContent(slide);
 				
 				// Decide on transition
 				var transition = 'fade';
@@ -537,35 +516,14 @@
 					return;
 				}
 				
-				var css;
-				if(currentSlide.bg !== '') {
-					css = {
-						backgroundColor: 'transparent',
-						backgroundImage: 'url('+currentSlide.bg+')'
-					};
-				} else {
-					css = {
-						backgroundColor: currentSlide.bgColor,
-						backgroundImage: ''
-					};
-				}
+				var css = _private.getSlideBackgroundCSS(currentSlide);
 				
 				$stage.css(css).html(currentSlide.html);
 				
 				_private.resetAnimation();
 				
 				if(nextSlide.transition !== 'none') { // Do not create a million copies of embedded content ;)
-					if(nextSlide.bg !== '') {
-						css = {
-							backgroundColor: 'transparent',
-							backgroundImage: 'url('+nextSlide.bg+')'
-						};
-					} else {
-						css = {
-							backgroundColor: nextSlide.bgColor,
-							backgroundImage: ''
-						};
-					}
+					css = _private.getSlideBackgroundCSS(nextSlide)
 					
 					$nextInsides.css(css).html(nextSlide.html);
 				}
@@ -890,6 +848,38 @@
 				ctx.beginPath();
 				ctx.arc(50, 50, 20, - Math.PI / 2, - Math.PI / 2 + (2*Math.PI) * (progress/duration), false);
 				ctx.stroke();
+			},
+			
+			getSlideBackgroundCSS: function(slide) {
+				var css;
+				if(slide.bg !== '') {
+					css = {
+						backgroundColor: 'transparent',
+						backgroundImage: 'url('+slide.bg+')'
+					};
+				} else {
+					css = {
+						backgroundColor: slide.bgColor,
+						backgroundImage: ''
+					};
+				}
+				
+				return css;
+			},
+			
+			handleEmbeddedContent: function(slide) {
+				if(slide.transition == 'none') {
+					$stage.html(slide.html);
+					
+					// center content
+					$element = $('>*', $stage);
+	
+					$element.css({
+						position: 'absolute',
+						top: parseInt(options.height, 10) / 2 - $element.attr('height') / 2,
+						left: parseInt(options.width, 10) / 2 - $element.attr('width') / 2
+					});
+				}
 			},
 			
 			/**
