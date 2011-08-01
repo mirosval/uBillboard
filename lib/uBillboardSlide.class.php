@@ -120,6 +120,10 @@ $uds_billboard_attributes = array(
 			'10' => '10'
 		),
 		'default' => '0'
+	),
+	'dynamic-category' => array(
+		'type' => 'blog-category',
+		'label' => __('Post category', uds_billboard_textdomain)
 	)
 );
 
@@ -440,6 +444,7 @@ class uBillboardSlide {
 				<?php $this->renderAdminField('text-evaluation') ?>
 				<?php $this->renderAdminField('embed-url') ?>
 				<?php $this->renderAdminField('dynamic-offset') ?>
+				<?php $this->renderAdminField('dynamic-category') ?>
 			</div>
 			<div id="uds-slide-tab-link-<?php echo $id ?>" class="uds-slide-tab-link">
 				<?php $this->renderAdminField('link') ?>
@@ -541,16 +546,24 @@ class uBillboardSlide {
 					break;
 				case 'dynamic':
 					$query = new WP_Query(array(
-						'offset' => $this->{'dynamic-offset'}
+						'offset' => $this->{'dynamic-offset'},
+						'cat' => $this->{'dynamic-category'}
 					));
-					
+
 					if($query->have_posts()){
 						$query->the_post();
-						$text = get_the_content();
+						
+						$width = $this->slider->width / 3;
+						$height = $this->slider->height - 40;
+						
+						$text = '<div class="uds-bb-description uds-dark" style="top:20px;left:20px;width:'.$width.'px;height:'.$height.'px"><div class="uds-bb-description-inside">';
+						$text .= get_the_excerpt();
+						$text .= '</div></div>';
+						
 						if(has_post_thumbnail()) {
 							$id = get_post_thumbnail_id();
 							$image_src = wp_get_attachment_image_src($id, 'full');
-
+							
 							// change the thumbnail also
 							$this->thumb = $image_src[0];
 
@@ -596,7 +609,7 @@ class uBillboardSlide {
 		}
 		
 		$image = $timthumb . 'src=' . $src . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
-		
+
 		return "<div class='uds-bb-thumb'><img src='$image' alt='' width='$width' height='$height' /></div>";
 	}
 	
@@ -639,8 +652,11 @@ class uBillboardSlide {
 			case 'image':
 				$this->renderAdminImage($attrib);
 				break;
-			case 'color';
+			case 'color':
 				$this->renderAdminColorpicker($attrib);
+				break;
+			case 'blog-category':
+				$this->renderAdminBlogCategory($attrib);
 				break;
 			default:
 		}
@@ -785,6 +801,35 @@ class uBillboardSlide {
 		$unique_id++;
 	}
 	
+	/**
+	 *	Helper function to render admin select
+	 *	
+	 *	@return void
+	 */
+	private function renderAdminBlogCategory($attrib)
+	{
+		global $uds_billboard_attributes;
+		$attrib_full = $uds_billboard_attributes[$attrib];
+		
+		if($attrib_full['type'] != 'blog-category') return;
+	
+		$categories = get_categories();
+	
+		echo '<div class="'. $attrib .'-wrapper">';
+		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
+		echo '<select name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'">';
+		echo '<option disabled="disabled">'. $attrib_full['label'] .'</option>';
+		foreach($categories as $category){
+			$selected = '';
+			if($this->{$attrib} == $category->cat_ID){
+				$selected = 'selected="selected"';
+			}
+			echo '<option value="'. $category->cat_ID .'" '. $selected .'>'. $category->name .'</option>';
+		}
+		echo '</select>';
+		echo '</div>';
+	}
+		
 	/**
 	 *	Helper function to transform attributes from attribute-text to attributeText
 	 *	

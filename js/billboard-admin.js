@@ -319,6 +319,7 @@ jQuery(function($){
 						break;
 					case 'dynamic':
 						$('.dynamic-offset-wrapper', $tab).show();
+						$('.dynamic-category-wrapper', $tab).show();
 						break;
 					case 'none':
 					default:
