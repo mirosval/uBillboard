@@ -17,18 +17,18 @@ function uds_billboard_oembed($url, $width, $height)
 		'vimeo.com' => 'http://www.vimeo.com/api/oembed.json?'
 	);
 	
-	$url = '';
+	$oembed = '';
 	foreach($services as $pattern => $endpoint) {
 		if(strpos($url, $pattern) !== false) {
-			$url = $endpoint . 'url='.urlencode($url)."&maxwidth=$width&maxheight=$height&format=json";
+			$oembed = $endpoint . 'url='.urlencode($url)."&maxwidth=$width&maxheight=$height&format=json";
 		}	
 	}
 	
-	if(empty($url)) {
+	if(empty($oembed)) {
 		return __('Service not supported', uds_billboard_textdomain);
 	}
 
-	$response = @file_get_contents($url);
+	$response = @file_get_contents($oembed);
 	
 	if(empty($response)) {
 		return __('There was an error when loading the video', uds_billboard_textdomain);
