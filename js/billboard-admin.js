@@ -64,7 +64,10 @@ jQuery(function($){
 			},
 			show: function(event, ui){
 				var $image = $(ui.tab).parents('.slide').find('.image-wrapper');
-				$image.css('height', $image.parent().height() + 'px');
+
+				if($image.css('background-image') !== 'none') {
+					$image.css('height', $image.parents('.slide').height() + 'px');
+				}
 			}
 		});
 	}
@@ -72,11 +75,33 @@ jQuery(function($){
 	createTabs();
 	
 	function showImageAdder(offset, element) {
+		tb_show('Add Image', "media-upload.php?type=image&TB_iframe=true&width=640&height=500");
+
 		var $preview = $(element).parents('.slide').find('.image-wrapper');
 		var $image = $(element).prev();
 		
+		// Fix jQuery UI Tabs + Thickbox tabs not working after thickox close (Fuck You Thickbox :( )
+		window.tb_remove = function() {
+			jQuery("#TB_imageOff").unbind("click");
+			jQuery("#TB_closeWindowButton").unbind("click");
+			//jQuery("#TB_window").fadeOut("fast",function(){jQuery('#TB_window,#TB_overlay,#TB_HideSelect').trigger("unload").unbind().remove();});
+			jQuery("#TB_window").fadeOut("fast",function(){jQuery('#TB_window,#TB_overlay,#TB_HideSelect').unload("#TB_ajaxContent").unbind().remove();});
+			jQuery("#TB_load").remove();
+			if (typeof document.body.style.maxHeight == "undefined") {//if IE 6
+				jQuery("body","html").css({height: "auto", width: "auto"});
+				jQuery("html").css("overflow","");
+			}
+			jQuery(document).unbind('.thickbox');
+			return false;
+		}
+		
 		window.send_to_editor = function(img) {
+			// remove hash, in order to not switch to selected tab after save
+			window.location.hash = '';
+			
 			tb_remove();
+			
+			markDirty(true);
 			
 			if($(img).is('a')){ // work around Link URL supplied
 				var src = $(img).find('img').attr('src');
@@ -86,11 +111,17 @@ jQuery(function($){
 			
 			$preview.css('background-image', 'url('+src+')');
 			$image.val(src);
+			
+			$preview.css('height', $preview.parents('.slide').height() + 'px');
+			
+			$('.uds-slide-tabs').tabs('destroy');
+			createTabs();
 		}
 	}
 	
 	// image upload dialog
-	$('.image-upload').live('click', function() {
+	$('.image-upload').live('click', function(e) {
+		e.preventDefault();
 		showImageAdder(0, this);
 		
 		return false;
@@ -151,10 +182,12 @@ jQuery(function($){
 		var preview = this;
 		var totalSlides = $('.slide').length;
 		
-		$(this).css({
-			'background-image': 'url('+$input.val()+')',
-			height: $(this).parent().height() + 'px'
-		});
+		if($input.val() !== '') {
+			$(this).css({
+				'background-image': 'url('+$input.val()+')',
+				height: $(this).parent().height() + 'px'
+			});
+		}
 		
 		$input.change(function(){
 			$(preview).css({
