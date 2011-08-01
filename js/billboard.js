@@ -144,11 +144,22 @@
 				$bb.bind('udsBillboardLoadingDidComplete', function(){
 					// load first slide
 					currentSlideId = 0;
-					var currentSlide = slides[currentSlideId];
+					var currentSlide = slides[currentSlideId],
+						css;
 					
-					$stage.css({
-						backgroundImage: 'url('+currentSlide.bg+')'
-					}).html(currentSlide.html).fadeTo(300, 1);
+					if(currentSlide.bg !== '') {
+						css = {
+							backgroundColor: 'transparent',
+							backgroundImage: 'url('+currentSlide.bg+')'
+						};
+					} else {
+						css = {
+							backgroundColor: currentSlide.bgColor,
+							backgroundImage: ''
+						};
+					}
+					
+					$stage.css(css).html(currentSlide.html).fadeTo(300, 1);
 					
 					$controls.delay(300).fadeTo(300, 1);
 					
@@ -184,14 +195,17 @@
 				
 				_private.prepareForAnimation(slideId);
 				
-				// Handle Embedded content
-				if(slide.transition == 'none') {
-					$stage.html(slide.html);
-					
+				// handle no image
+				if(slide.transition == 'none' || slide.bg == '') {
 					$stage.css({
 						backgroundColor: slide.bgColor,
 						backgroundImage: 'none'
 					});
+				}
+				
+				// Handle Embedded content
+				if(slide.transition == 'none') {
+					$stage.html(slide.html);
 					
 					// center content
 					$element = $('>*', $stage);
@@ -523,17 +537,37 @@
 					return;
 				}
 				
-				$stage.css({
-					backgroundColor: 'transparent',
-					backgroundImage: 'url('+currentSlide.bg+')'
-				}).html(currentSlide.html);
+				var css;
+				if(currentSlide.bg !== '') {
+					css = {
+						backgroundColor: 'transparent',
+						backgroundImage: 'url('+currentSlide.bg+')'
+					};
+				} else {
+					css = {
+						backgroundColor: currentSlide.bgColor,
+						backgroundImage: ''
+					};
+				}
+				
+				$stage.css(css).html(currentSlide.html);
 				
 				_private.resetAnimation();
 				
 				if(nextSlide.transition !== 'none') { // Do not create a million copies of embedded content ;)
-					$nextInsides.css({
-						backgroundImage: 'url('+nextSlide.bg+')'
-					}).html(nextSlide.html);
+					if(nextSlide.bg !== '') {
+						css = {
+							backgroundColor: 'transparent',
+							backgroundImage: 'url('+nextSlide.bg+')'
+						};
+					} else {
+						css = {
+							backgroundColor: nextSlide.bgColor,
+							backgroundImage: ''
+						};
+					}
+					
+					$nextInsides.css(css).html(nextSlide.html);
 				}
 			},
 			
@@ -615,12 +649,22 @@
 				$bb.has('.uds-bb-thumbnails.right:not(.inside)').css('margin-right', $thumbs.outerWidth());
 				
 				// Precompute thumbnail dimensions
-				$thumb.each(function(){
+				$thumb.each(function(i){
 					var $img = $('img', this);
 					$img.css({
 						width: $img.attr('width') + 'px',
 						height: $img.attr('height') + 'px'
 					});
+					
+					if(slides[i].bg === '') {
+						$img.replaceWith('<div>');
+						$('div', this).css({
+							width: $img.attr('width') + 'px',
+							height: $img.attr('height') + 'px',
+							backgroundColor: slides[i].bgColor
+						});
+					}
+					
 				}).css('background-color', options.thumbnailHoverColor);
 				
 				// Thumbnails scrolling

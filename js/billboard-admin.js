@@ -107,6 +107,7 @@ jQuery(function($){
 		
 		$('.uds-slides-order').sortable('refresh');
 		createTabs();
+		contentType();
 	}
 	
 	// Slide Cloning

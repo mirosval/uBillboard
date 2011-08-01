@@ -412,6 +412,10 @@ td.shortcode {
 
 
 /* Editor */
+.text-wrapper .content-editor {
+	display: none;
+}
+
 .content-editor {
 	position: relative;
 }
