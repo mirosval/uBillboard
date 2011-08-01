@@ -99,6 +99,11 @@
 		playing,
 		
 		/**
+		 *	Bool, true if a transition is in progress
+		 */
+		transitionInProgress,
+		
+		/**
 		 *	Public methods callable from the outside. Call like this:
 		 *	$('bb-id').uBillboard('next')
 		 */
@@ -107,7 +112,7 @@
 			 *	Initializes all necessary data structures
 			 */
 			'init': function(defaults, passedOptions){
-				d('Init');
+				//d('Init');
 				$bb = $(this);
 				
 				$slides = $('.uds-bb-slides', $bb);
@@ -122,6 +127,12 @@
 				
 				// initialize timers
 				timers = {};
+				
+				// initialize playing var
+				playing = false;
+				
+				// initialize transitioning var
+				transitionInProgress = false;
 				
 				_private.initSlides();
 				_private.initAnimationMarkup();
@@ -166,14 +177,16 @@
 						}
 					}
 				});
+				
+				$bb.bind('udsBillboardTransitionDidComplete', function(){
+					transitionInProgress = false;
+				});
 			},
 			
 			/**
 			 *	Main backbone animation function. Animates slideId according to its definition
 			 */
 			'animateSlide': function(slideId) {
-				//d('Will Animate Slide: '+slideId);
-				
 				// No need to animate
 				if(slideId === currentSlideId) {
 					return;
@@ -218,6 +231,8 @@
 				
 				$next.show().css('opacity', 1);
 				
+				transitionInProgress = true;
+				
 				// Run Transition Setup function
 				if(animations[transition].setup !== null && typeof animations[transition].setup === 'function') {
 					animations[transition].setup();
@@ -233,12 +248,19 @@
 				if(animations[transition].duration !== null && typeof animations[transition].duration === 'number') {
 					duration = animations[transition].duration;
 				}
+
+				clearTimeout(timers.transitionComplete);
+				timers.transitionComplete = setTimeout(function(){
+					$bb.trigger('udsBillboardTransitionDidComplete', slideId);
+				}, duration);
 				
 				// update current slide ID
 				currentSlideId = slideId;
 				
 				// Run Countdown Animation
-				_private.animateCountdown(slides[currentSlideId].delay);
+				if(playing) {
+					_private.animateCountdown(slides[currentSlideId].delay);
+				}
 				
 				$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
 				
@@ -276,7 +298,7 @@
 			/**
 			 *	Starts Playback
 			 */
-			'play': function() {
+			'play': function() {				
 				if(typeof currentSlideId !== 'number' || currentSlideId === null) {
 					currentSlideId = 0;
 				}
@@ -300,6 +322,7 @@
 				}, slides[currentSlideId].delay);
 				
 				playing = true;
+				
 				$bb.trigger('didChangePlayingState', {playing: playing});
 			},
 			
@@ -823,8 +846,10 @@
 				$countdown.data('context', ctx);
 			},
 			
-			animateCountdown: function(duration) {			
-				if($countdown === null || typeof $countdown === 'undefined' || options.showTimer === false) {
+			animateCountdown: function(duration) {
+				if(	$countdown === null || 
+					typeof $countdown === 'undefined' || 
+					options.showTimer === false) {
 					return;
 				}
 				
@@ -1054,6 +1079,34 @@
 						}
 					}
 				}
+			},
+			
+			'zigzagHorizontal' : {
+				delay: function() {
+					var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10)),
+						cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+					
+					for(var x = 0; x < cols; x++) {
+						for(var y = 0; y < rows; y++) {
+							var delay = (y * rows + (y % 2 == 0 ? x : cols - x)) / (rows * rows + cols / 2);
+							$('.uds-square-' + (y * cols + x)).delay(700 * delay);
+						}
+					}
+				}
+			},
+			
+			'zigzagVertical' : {
+				delay: function() {
+					var rows = Math.ceil(parseInt(options.height, 10) / parseInt(options.squareSize, 10)),
+						cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
+					
+					for(var x = 0; x < cols; x++) {
+						for(var y = 0; y < rows; y++) {
+							var delay = (x * cols + (x % 2 == 0 ? y : rows - y)) / (cols * cols + rows / 2);
+							$('.uds-square-' + (y * cols + x)).delay(700 * delay);
+						}
+					}
+				}
 			}
 		},
 		
@@ -1078,7 +1131,7 @@
 			 *
 			 */
 			'fade': {
-				duration: 500,
+				duration: 1000,
 				direction: '',
 				setup: function() {
 					$squares.css({
@@ -1096,7 +1149,7 @@
 			},
 			
 			'slide': {
-				duration: 500,
+				duration: 700,
 				direction: 'right',
 				setup: function() {
 					$('.uds-bb-slides', $bb).css({
@@ -1122,6 +1175,35 @@
 							top: _private.pos(options.height),
 							left: '0px'
 						});
+					} else if(this.direction === 'top') {
+						$next.show().css({
+							top: '0px',
+							left: _private.pos(options.width)
+						});
+					} else if(this.direction === 'zigzagHorizontal') {
+						var sq = parseInt(options.squareSize, 10),
+							height = parseInt(options.height, 10);
+							
+						$squares.each(function(){
+							$(this).css({
+								opacity: 0,
+								top: parseInt($(this).css('top'), 10) - height + 'px'
+							});
+						});
+						
+						directions[this.direction].delay();
+					} else if(this.direction === 'zigzagVertical') {
+						var sq = parseInt(options.squareSize, 10),
+							width = parseInt(options.width, 10);
+							
+						$squares.each(function(){
+							$(this).css({
+								opacity: 0,
+								left: parseInt($(this).css('left'), 10) - width + 'px'
+							});
+						});
+						
+						directions[this.direction].delay();
 					} else {
 						$next.show().css({
 							top: '0px',
@@ -1131,7 +1213,7 @@
 				},
 				perform: function() {
 					var animOptions =  {
-						duration: 500,
+						duration: 700,
 						easing: 'easeInOutQuad'
 					};
 					
@@ -1156,6 +1238,33 @@
 						$next.animate({
 							top: '0px'
 						}, animOptions);
+					} else if(this.direction === 'top') {
+						$stage.animate({
+							left: _private.neg(options.width)
+						}, animOptions);
+						$next.animate({
+							left: '0px'
+						}, animOptions);
+					} else if(this.direction === 'zigzagHorizontal') {
+						var sq = parseInt(options.squareSize, 10),
+							height = parseInt(options.height, 10);
+						
+						$squares.each(function(){
+							$(this).animate({
+								opacity: 1,
+								top: parseInt($(this).css('top'), 10) + height + 'px'
+							}, animOptions);
+						});
+					} else if(this.direction === 'zigzagVertical') {
+						var sq = parseInt(options.squareSize, 10),
+							width = parseInt(options.width, 10);
+						
+						$squares.each(function(){
+							$(this).animate({
+								opacity: 1,
+								left: parseInt($(this).css('left'), 10) + width + 'px'
+							}, animOptions);
+						});
 					} else {
 						$stage.animate({
 							left: _private.neg(options.width)
@@ -1190,6 +1299,32 @@
 					} else if(this.direction === 'center') {
 						top = _private.pos(parseInt(options.height, 10) / 2);
 						left = _private.pos(parseInt(options.width, 10) / 2);
+					} else if(this.direction === 'zigzagHorizontal') {
+						var sq = parseInt(options.squareSize, 10);
+						$squares.each(function(){
+							$(this).css({
+								top: parseInt($(this).css('top'), 10) + sq / 2 + 'px',
+								left: parseInt($(this).css('left'), 10) + sq / 2 + 'px',
+								height: '0px'
+							});
+						});
+						
+						directions[this.direction].delay();
+						
+						return;
+					} else if(this.direction === 'zigzagVertical') {
+						var sq = parseInt(options.squareSize, 10);
+						$squares.each(function(){
+							$(this).css({
+								top: parseInt($(this).css('top'), 10) + sq / 2 + 'px',
+								left: parseInt($(this).css('left'), 10) + sq / 2 + 'px',
+								width: '0px'
+							});
+						});
+						
+						directions[this.direction].delay();
+						
+						return;
 					} else {
 						var sq = parseInt(options.squareSize, 10);
 						$squares.each(function(){
