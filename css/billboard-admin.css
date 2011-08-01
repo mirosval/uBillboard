@@ -458,3 +458,7 @@ td.shortcode {
 	height: 100%;
 	resize: none;
 }
+
+.content-editor-help {
+	float: right;
+}

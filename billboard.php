@@ -499,6 +499,18 @@ function uds_billboard_process_updates()
 	exit();
 }
 
+add_action('wp_ajax_uds_billboard_content_editor_help', 'uds_billboard_content_editor_help');
+/**
+ *	Function, check for POST data and update billboard accordingly
+ *	will redirect if successful
+ *	
+ *	@return void
+ */
+function uds_billboard_content_editor_help()
+{
+	die(@file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-content-editor.html'));
+}
+
 /**
  *	Function, handle uBillboard deletion and redirect
  *	

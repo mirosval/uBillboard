@@ -721,6 +721,7 @@ class uBillboardSlide {
 		echo '<option value="dark">'.__('Dark', uds_billboard_textdomain).'</option>';
 		echo '<option value="bright">'.__('Bright', uds_billboard_textdomain).'</option>';
 		echo '</select>';
+		echo '<a href="" class="content-editor-help">'.__('Help', uds_billboard_textdomain).'</a>';
 		echo '<div class="clear"></div>';
 		echo '</div>';
 		echo '<div class="editor-area">';

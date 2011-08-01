@@ -392,7 +392,23 @@ jQuery(function($){
 			
 			return false;
 		});
-
+		
+		$('.content-editor-help').live('click', function(){
+			$.get(ajaxurl, {
+				action: 'uds_billboard_content_editor_help'
+			}, function(data){
+				if($('#uds-contextual-help').length === 0) {
+					$('<div id="uds-contextual-help">').appendTo('body');
+				}
+				
+				$('#uds-contextual-help').html(data).dialog({
+					width: 800,
+					height: 600
+				});
+			});
+			return false;
+		});
+		
 		return false;
 	});
 });
