@@ -138,7 +138,8 @@
 	}
 	
 	.uds-bb-paginator.outside.mini {
-		bottom: -45px;
+		bottom: -25px;
+		right: 0px;
 	}
 	
 	.uds-bb-paginator.mini .uds-bb-button {
@@ -634,13 +635,17 @@
 		background: url(../images/bg-bright.png);
 	}
 	
+	.uds-bb-thumbnails.silver {
+		background: url(../images/bg-bright.png) #efefef;
+	}
+	
 	.uds-bb-thumbnail-container {
 		display: block;
 		position: relative;
 	}
 
 	.uds-bb-thumbnails.bottom {
-		bottom: -87px;
+		bottom: -86px;
 		width: 100%;
 		padding: 4px 0px;
 	}
@@ -682,12 +687,9 @@
 		cursor: pointer;
 		background: url(../images/bg-bright.png) #ededed;
 		padding: 4px;
-		-moz-border-radius: 2px;
-		-webkit-border-radius: 2px;
-		border-radius: 2px;
-		-moz-box-shadow: 1px 1px 1px #000;
- 		-webkit-box-shadow: 1px 1px 1px #000;
-  		box-shadow: 1px 1px 1px #000;
+		-moz-box-shadow: 1px 1px 1px #444;
+ 		-webkit-box-shadow: 1px 1px 1px #444;
+  		box-shadow: 1px 1px 1px #444;
   		line-height: 0;
 	}
 	
