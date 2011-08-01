@@ -174,6 +174,11 @@
 			'animateSlide': function(slideId) {
 				//d('Will Animate Slide: '+slideId);
 				
+				// No need to animate
+				if(slideId === currentSlideId) {
+					return;
+				}
+				
 				if(slides[slideId] === null) {
 					$.error('Slide ID ' + slideId + ' does not exist');
 					return;

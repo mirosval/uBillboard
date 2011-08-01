@@ -123,7 +123,8 @@ $uds_billboard_attributes = array(
 	),
 	'dynamic-category' => array(
 		'type' => 'blog-category',
-		'label' => __('Post category', uds_billboard_textdomain)
+		'label' => __('Post category', uds_billboard_textdomain),
+		'default' => ''
 	)
 );
 
