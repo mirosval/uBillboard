@@ -495,7 +495,7 @@ function uds_billboard_process_updates()
 		die('ERROR');
 	}
 	
-	wp_safe_redirect(admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.$billboard->name.'&'.$message));
+	wp_safe_redirect(admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.urlencode($billboard->name).'&'.$message));
 	exit();
 }
 
