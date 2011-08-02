@@ -645,7 +645,12 @@
 					$('div', $bullets).removeClass('active').eq(currentSlideId).addClass('active');
 					
 					// Thumbs
-					$thumb.removeClass('active').eq(currentSlideId).addClass('active');
+					$thumb
+						.css('background-color', '')
+						.removeClass('active')
+						.eq(currentSlideId)
+						.addClass('active')
+						.css('background-color', options.thumbnailHoverColor);
 				});
 				
 				// Thumbnails
@@ -681,7 +686,65 @@
 						});
 					}
 					
-				}).css('background-color', options.thumbnailHoverColor);
+					if($(this).is('.active')) {
+						$(this).css('background-color', options.thumbnailHoverColor);
+					}
+					
+					var	hoverColor = {
+							r: parseInt(options.thumbnailHoverColor.substr(1, 2), 16),
+							g: parseInt(options.thumbnailHoverColor.substr(3, 2), 16),
+							b: parseInt(options.thumbnailHoverColor.substr(5, 2), 16)
+						};
+					
+					$(this).hover(function(){
+						if($(this).is('.active')) {
+							$(this).css('background-color', options.thumbnailHoverColor);
+							return;
+						}
+						
+						$(this)
+							.css('background-color', 'rgb(237,237,237)')
+							.stop()
+							.animate({
+								backgroundColor: options.thumbnailHoverColor
+							}, {
+								duration: 200,
+								step: function(now, fx) {
+									var progress = (new Date().getTime() - fx.startTime) / fx.options.duration;
+									
+									var r = 255 - Math.round(((237 - hoverColor.r) * progress)),
+										g = 255 - Math.round(((237 - hoverColor.g) * progress)),
+										b = 255 - Math.round(((237 - hoverColor.b) * progress));
+									fx.elem.style.backgroundColor = 'rgb('+r+','+g+','+b+')';
+								}
+							});
+					}, function() {
+						if($(this).is('.active')) {
+							$(this).css('background-color', options.thumbnailHoverColor);
+							return;
+						}
+						
+						$(this)
+							.css('background-color', options.thumbnailHoverColor)
+							.stop()
+							.animate({
+								backgroundColor: 'rgb(237,237,237)'
+							}, {
+								duration: 200,
+								step: function(now, fx) {
+									var progress = (new Date().getTime() - fx.startTime) / fx.options.duration;
+									
+									var r = hoverColor.r + Math.round(((237 - hoverColor.r) * progress)),
+										g = hoverColor.g + Math.round(((237 - hoverColor.g) * progress)),
+										b = hoverColor.b + Math.round(((237 - hoverColor.b) * progress));
+									
+									fx.elem.style.backgroundColor = 'rgb('+r+','+g+','+b+')';
+								}
+							});
+					});
+				});
+				
+				//.css('background-color', options.thumbnailHoverColor);
 				
 				// Thumbnails scrolling
 				var windowDim,

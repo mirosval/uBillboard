@@ -696,12 +696,14 @@
 	.uds-bb-thumb {
 		margin: 5px;
 		cursor: pointer;
-		background: url(../images/bg-bright.png) #ededed;
+/* 		background-image: url(../images/bg-bright.png); */
+		background-color: #ededed;
 		padding: 4px;
 		-moz-box-shadow: 1px 1px 1px #444;
  		-webkit-box-shadow: 1px 1px 1px #444;
   		box-shadow: 1px 1px 1px #444;
   		line-height: 0;
+  		border-radius: 2px;
 	}
 	
 	.uds-bb-thumb:hover {
