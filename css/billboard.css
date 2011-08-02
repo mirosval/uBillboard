@@ -273,7 +273,8 @@
 		background-position: 0px -46px;
 	}
 	
-	.uds-bb-paginator.oldskool .uds-bb-position-indicator-bullets, .uds-bb-paginator.oldskool-bright .uds-bb-position-indicator-bullets {
+	.uds-bb-paginator.oldskool .uds-bb-position-indicator-bullets, 
+	.uds-bb-paginator.oldskool-bright .uds-bb-position-indicator-bullets {
 		background: url(../images/skin-oldskool/bg.png);
 		position: absolute;
 		bottom: 10px;
@@ -311,6 +312,10 @@
 	
 	.uds-bb-paginator.oldskool-bright .uds-bb-bullet.active {
 		background-position: 0px -10px;
+	}
+	
+	.uds-bb-paginator.oldskool .uds-bb-bullet {
+		background: url(../images/skin-oldskool/bullet.png) no-repeat;
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-bullet.active {
