@@ -600,15 +600,11 @@
 		float: left;
 	}
 	
-	.uds-bb-paginator.modern .uds-bb-position-indicator-bullets-container {
-		background: url(../images/skin-modern/bg.png) repeat-x;
-		float: right;
-		height: 30px;
-	}
-	
 	.uds-bb-paginator.modern .uds-bb-position-indicator-bullets {
 		height: 21px;
 		padding-top: 9px;
+		float: right;
+		background: url(../images/skin-modern/bg.png) repeat-x;
 	}
 	
 	.uds-bb-paginator.modern .uds-bb-bullet {
