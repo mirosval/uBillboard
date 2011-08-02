@@ -939,6 +939,15 @@
 						top: parseInt(options.height, 10) / 2 - $element.attr('height') / 2,
 						left: parseInt(options.width, 10) / 2 - $element.attr('width') / 2
 					});
+					
+					// fix youtube z-index issue
+					if($('param[name=wmode][value=opaque]', $element).length === 0) {
+						$element.prepend('<param name="wmode" value="opaque" />');
+						$('embed', $element).attr('wmode', 'opaque').css({
+							position: 'absolute',
+							zIndex: 1
+						});
+					}
 				}
 			},
 			

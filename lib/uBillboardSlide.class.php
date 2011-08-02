@@ -539,7 +539,7 @@ class uBillboardSlide {
 					$height = (int)$this->slider->height;	
 
 					$response = uds_billboard_oembed($url, $width, $height);
-					
+
 					if(is_object($response)) {
 						$text = $response->html;
 						$this->thumb = isset($response->thumbnail_url) ? $response->thumbnail_url : '';
