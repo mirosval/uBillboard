@@ -294,7 +294,11 @@ function uds_billboard_styles()
 	if(!uds_billboard_is_active()) return;
 	
 	$dir = UDS_BILLBOARD_URL;
-	wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
+	if(uds_billboard_use_compression()) {
+		wp_enqueue_style('uds-billboard', $dir.'css/billboard.min.css', false, false, 'screen');
+	} else {
+		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

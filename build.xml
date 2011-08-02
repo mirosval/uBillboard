@@ -15,8 +15,6 @@
 	<!-- Cleanup task -->
 	<target name="clean">
 		<delete dir="build" />
-		<delete file="js/${file_name}.min.js" />
-		<delete file="css/${file_name}.min.css" />
 	</target>
 	
 	<!-- Update version string in all occurrences -->
@@ -28,6 +26,8 @@
 	
 	<!-- Compress all relevant JS -->
 	<target name="minify_js" depends="clean">
+		<delete file="js/${file_name}.min.js" />
+		
 		<jscomp compilationLevel="simple" warning="default" debug="false" output="js/${file_name}.min.js">
 			<sources dir="${basedir}/js">
 				<file name="${file_name}.js"/>
@@ -37,6 +37,8 @@
 	
 	<!-- Compress all rlevant CSS -->
 	<target name="minify_css" depends="clean">
+		<delete file="css/${file_name}.min.css" />
+		
 		<java jar="/usr/local/yui/yuicompressor.jar" fork="true">  
 			<arg value="${basedir}/css/${file_name}.css" />
 			<arg value="-o" />  
