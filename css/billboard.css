@@ -69,10 +69,6 @@
 	overflow: hidden;
 }
 
-.uds-bright  .uds-bb-description.uds-transparent, .uds-dark  .uds-bb-description.uds-transparent {
-	background: none;
-}
-
 .uds-bright .uds-bb-description,
 .uds-bb .uds-bb-description.uds-bright {
 	background: url(../images/bg-bright.png);
@@ -85,6 +81,12 @@
 	color: #fafafa;
 	text-shadow: 1px 1px 1px #222;
 }
+
+.uds-bright  .uds-bb-description.uds-transparent, .uds-dark  .uds-bb-description.uds-transparent {
+	background: none;
+	color: inherit;
+}
+
 
 .uds-bb .uds-bb-description.uds-bright {
 	text-shadow: 1px 1px 1px #fff;
@@ -489,6 +491,7 @@
 		position: absolute;
 		bottom: 0px;
 		background: url(../images/skin-uTube/bg.png) repeat-x;
+		z-index: 6;
 	}
 	
 	.uds-bb-paginator.outside.uTube {
