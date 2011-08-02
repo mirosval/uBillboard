@@ -49,7 +49,21 @@ jQuery(function($){
 	
 	// Before uBillboard submit
 	$('#billboard_update_form').submit(function(){
+		// check if not saving an empty slider
+		if($('.slides .slide').length < 2) {
+			var hasImage = $('.image-url-wrapper:first>input').val() !== '';
+			var hasContent = $('.billboard-content:first').val() === 'editor' && $('.billboard-text:first').val() !== '';
+			var hasEmbeddedContent = $('.billboard-content:first').val() === 'embed' && $('.billboard-embed-url:first').val() !== '';
+			var hasBlogContent = $('.billboard-content:first').val() === 'dynamic';
+			
+			if(!hasImage && !hasContent && !hasEmbeddedContent && !hasBlogContent) {
+				alert(udsAdminL10n.saveEmptyBillboard);
+				return false;
+			}
+		}
+		
 		markDirty(false);
+		
 		// remove all hidden fields from before checked checkboxes
 		$('.slides input:checked').each(function(){
 			$(this).prev().remove();

@@ -448,7 +448,8 @@ function uds_billboard_enqueue_admin_scripts()
 		'addAnImage' => __('Add an Image', uds_billboard_textdomain),
 		'slideN' => __('Slide %s', uds_billboard_textdomain),
 		'billboardPreview' => __('uBillboard Preview', uds_billboard_textdomain),
-		'pageLeaveConfirmation' => __('uBillboard has unsaved changes, do you really want to leave?', uds_billboard_textdomain)
+		'pageLeaveConfirmation' => __('uBillboard has unsaved changes, do you really want to leave?', uds_billboard_textdomain),
+		'saveEmptyBillboard' => __('You are trying to save an empty uBillboard, please add background Image or Content', uds_billboard_textdomain)
 	));
 }
 
@@ -487,6 +488,8 @@ function uds_billboard_process_updates()
 		if(is_ajax()) {
 			die('OK');
 		}
+	} else {
+		$message = 'uds-message='.urlencode(__('Failed to update uBillboard', uds_billboard_textdomain)).'&uds-class='.urlencode('error');
 	}
 	
 	if(is_ajax()) {

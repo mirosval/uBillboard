@@ -369,7 +369,7 @@ class uBillboard {
 		}
 		
 		$this->slides = uBillboardSlide::getSlides($options, $this);
-		
+
 		if(!empty($this->slides)) {
 			foreach($this->slides as $key => $slide) {
 				if(!$slide->isValid()) {

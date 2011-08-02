@@ -290,11 +290,6 @@ class uBillboardSlide {
 			return;
 		}
 		
-		// fail if image AND text is empty
-		if(empty($options['image']) && empty($options['text'])){
-			return null;
-		}
-		
 		// fill in from attributes
 		foreach($uds_billboard_attributes as $key => $option) {
 			if(isset($options[$key])) {
@@ -411,7 +406,14 @@ class uBillboardSlide {
 	public function isValid()
 	{
 		$text = isset($this->text) ? strip_tags($this->text) : '';
-		return !empty($this->image) || !empty($text);
+		
+		$hasImage = !empty($this->image);
+
+		$hasText = $this->content == 'editor' && !empty($text);
+		$hasEmbed = $this->content == 'embed' && !empty($this->{'embed-url'});
+		$hasDynamic = $this->content == 'dynamic';
+		
+		return $hasImage || $hasText || $hasEmbed || $hasDynamic;
 	}
 	
 	/**
