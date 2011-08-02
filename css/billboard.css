@@ -489,6 +489,7 @@
 		position: absolute;
 		bottom: 0px;
 		background: url(../images/skin-uTube/bg.png) repeat-x;
+		z-index: 5;
 	}
 	
 	.uds-bb-paginator.outside.uTube {
