@@ -56,32 +56,52 @@
 	<target name="package" depends="build">
 		<!-- Create dir for compression -->
 		<mkdir dir="build/${project_name}" />
+		
+		<!-- Create dir for cache -->
+		<mkdir dir="build/${project_name}/cache" />
+		
 		<!-- Copy CSS -->
 		<copy todir="build/${project_name}/css">
 			<fileset dir="css" />
 		</copy>
+		
 		<!-- Copy JS -->
 		<copy todir="build/${project_name}/js">
 			<fileset dir="js" />
 		</copy>
+		
 		<!-- Copy Images -->
 		<copy todir="build/${project_name}/images">
 			<fileset dir="images" />
 		</copy>
-		<!-- Copy Help files -->
-		<copy todir="build/${project_name}/help">
-			<fileset dir="help" />
-		</copy>
+		
 		<!-- Copy Language files -->
 		<copy todir="build/${project_name}/lang">
 			<fileset dir="lang" />
 		</copy>
+		
+		<!-- Copy Help files -->
+		<copy todir="build/${project_name}/help">
+			<fileset dir="help" />
+		</copy>
+		
 		<!-- Copy PHP Files -->
 		<copy todir="build/${project_name}">
 			<fileset dir=".">
 				<include name="*.php" />
 			</fileset>
 		</copy>
+		
+		<!-- Copy PHP Admin Files -->
+		<copy todir="build/${project_name}/admin">
+			<fileset dir="admin" />
+		</copy>
+
+		<!-- Copy PHP Lib Files -->
+		<copy todir="build/${project_name}/lib">
+			<fileset dir="lib" />
+		</copy>
+		
 		<!-- Create Archive -->
 		<zip destfile="build/${project_name}.zip" basedir="build/${project_name}" />
 	</target>

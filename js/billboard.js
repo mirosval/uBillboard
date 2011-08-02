@@ -696,6 +696,7 @@
 							b: parseInt(options.thumbnailHoverColor.substr(5, 2), 16)
 						};
 					
+					// thumbnail hovering
 					$(this).hover(function(){
 						if($(this).is('.active')) {
 							$(this).css('background-color', options.thumbnailHoverColor);
@@ -743,8 +744,6 @@
 							});
 					});
 				});
-				
-				//.css('background-color', options.thumbnailHoverColor);
 				
 				// Thumbnails scrolling
 				var windowDim,
