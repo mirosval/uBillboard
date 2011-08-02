@@ -758,10 +758,12 @@ class uBillboard {
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator modern {$this->controlsPosition}'>";
-			$out .= "<div class='uds-bb-button uds-bb-prev'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause uds-left'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-next'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
+			$out .= "<div class='uds-bb-paginator moderncontainer'>";
+				$out .= "<div class='uds-bb-button uds-bb-prev'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
+				$out .= "<div class='uds-bb-button uds-bb-playpause uds-left'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
+				$out .= "<div class='uds-bb-button uds-bb-next'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
+				$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
+			$out .= "</div>";
 		$out .= "</div>";
 		return $out;
 	}
