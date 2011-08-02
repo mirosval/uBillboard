@@ -139,7 +139,7 @@
 				_private.initPreloader();
 				// Runs preloader, and when it finishes, it triggers the udsBillboardLoadingDidComplete Event
 				// to continue normal code flow
-				_private.preloadImages();
+				var willPreloadImages = _private.preloadImages();
 				
 				// Init pagination and playback controls
 				_private.initControls();
@@ -157,15 +157,18 @@
 					currentSlideId = 0;
 					var currentSlide = slides[currentSlideId],
 						css = _private.getSlideBackgroundCSS(currentSlide);
-					
+
 					$stage.css(css).html(currentSlide.html).fadeTo(300, 1);
 					
 					_private.handleEmbeddedContent(currentSlide);
 					
 					$controls.delay(300).fadeTo(300, 1);
 					
-					if(options.autoplay === true) {
-						d('Autoplay Initiated');
+					// should we pause on this slide
+					var pauseForVideo = options.pauseOnVideo && currentSlide.transition == 'none';
+
+					if(options.autoplay === true && !pauseForVideo) {
+						//d('Autoplay Initiated');
 						
 						// Run Countdown Animation
 						_private.animateCountdown(slides[currentSlideId].delay);
@@ -177,6 +180,11 @@
 						}
 					}
 				});
+				
+				// this call from the preloadImages() function would be too soon
+				if(willPreloadImages === false) {
+					$bb.trigger('udsBillboardLoadingDidComplete');
+				}
 				
 				$bb.bind('udsBillboardTransitionDidComplete', function(){
 					transitionInProgress = false;
@@ -257,16 +265,20 @@
 				// update current slide ID
 				currentSlideId = slideId;
 				
+				$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
+				
+				if(options.pauseOnVideo && slides[currentSlideId].transition == 'none') {
+					return;
+				}
+				
 				// Run Countdown Animation
 				if(playing) {
 					_private.animateCountdown(slides[currentSlideId].delay);
 				}
 				
-				$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
-				
 				// continue playing
 				if(options.autoplay || playing) {
-					clearTimeout(timers.nextSlideAnimation);
+					//clearTimeout(timers.nextSlideAnimation);
 					_public.play();
 				}
 			},
@@ -408,7 +420,22 @@
 			preloadImages: function() {
 				var progress = 0;
 				var totalImages = slides.length;
-				//return;
+				
+				// handle sliders with no images whatsoever
+				var hasAnyImages = false;
+				for(var i = 0; i < totalImages; i++) {
+					if(slides[i].bg !== '') {
+						hasAnyImages = true;
+					}
+				}
+				
+				if(!hasAnyImages) {
+					_private.updatePreloader(1);
+					$bb.trigger('udsBillboardLoadingDidComplete');
+					return false;
+				}
+				
+				// handle image preload
 				for(var i = 0; i < totalImages; i++) {
 					// only preload slides that actually have images
 					if(slides[i].bg === '') {
@@ -444,6 +471,8 @@
 						}
 					}).attr('src', slides[i].bg);
 				}
+				
+				return true;
 			},
 			
 			/**
@@ -642,7 +671,8 @@
 						height: $img.attr('height') + 'px'
 					});
 					
-					if(slides[i].bg === '') {
+					// TODO: Transform this condition so it checks if the image is actually present
+					if(slides[i].bg === '' && slides[i].transition !== 'none') {
 						$img.replaceWith('<div>');
 						$('div', this).css({
 							width: $img.attr('width') + 'px',

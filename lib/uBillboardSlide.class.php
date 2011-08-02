@@ -560,7 +560,9 @@ class uBillboardSlide {
 						$width = $this->slider->width / 3;
 						$height = $this->slider->height - 40;
 						
-						$text = '<div class="uds-bb-description uds-dark" style="top:20px;left:20px;width:'.$width.'px;height:'.$height.'px"><div class="uds-bb-description-inside">';
+						$skin = 'uds-' . $this->slider->style;
+						
+						$text = '<div class="uds-bb-description '.$skin.'" style="top:20px;left:20px;width:'.$width.'px;height:'.$height.'px"><div class="uds-bb-description-inside">';
 						$text .= get_the_excerpt();
 						$text .= '</div></div>';
 						
@@ -578,6 +580,9 @@ class uBillboardSlide {
 							$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $image_src[0]) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
 						}
 					}
+					
+					// clean up
+					wp_reset_query();
 					
 					break;
 				default:
@@ -612,7 +617,7 @@ class uBillboardSlide {
 			$src = str_replace(WP_CONTENT_URL . '/', '', $this->thumb);
 		}
 		
-		$image = $timthumb . 'src=' . $src . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
+		$image = esc_attr($timthumb . 'src=' . $src . '&w='.$width.'&h='.$height.'&zc=1');
 
 		return "<div class='uds-bb-thumb'><img src='$image' alt='' width='$width' height='$height' /></div>";
 	}

@@ -45,6 +45,7 @@ $billboard->addEmptySlide();
 							<?php $billboard->renderAdminOption('height'); ?>
 							<?php $billboard->renderAdminOption('randomize'); ?>
 							<?php $billboard->renderAdminOption('autoplay'); ?>
+							<?php $billboard->renderAdminOption('pause-on-video'); ?>
 							<?php $billboard->renderAdminOption('square-size'); ?>
 							<?php $billboard->renderAdminOption('style'); ?>
 							<hr />

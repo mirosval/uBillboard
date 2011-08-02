@@ -267,7 +267,7 @@ jQuery(function($){
 		$tt.stop().css({
 			display: 'block',
 			top: $(this).position().top + 30 + 'px',
-			left: $(this).position().left + 'px',
+			left: $(this).position().left - 10 + 'px',
 			opacity: 0
 		}).animate({
 			opacity: 1

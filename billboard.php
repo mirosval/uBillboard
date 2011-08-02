@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: uBillboard 3 Beta
+Plugin Name: uBillboard 3
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
-Description: <strong>uBillboard 3 Beta is not recommended for use on production servers!</strong> <br /> uBillboard is a slider plugin by uDesignStudios that allows you to create complex and eye-catching presentations for your web.
-Version: 3.0.0 Beta
-Author: uDesign
+Description: uBillboard is Premium Slider Plugin for WordPress by <a href="http://codecanyon.net/user/uDesignStudios">uDesignStudios</a> that allows you to create complex and eye-catching presentations for your web.
+Version: 3.0.0
+Author: uDesignStudios
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
 */
@@ -149,12 +149,42 @@ add_action('admin_notices', 'uds_billboard_admin_notices');
  *	
  *	@return void
  */
-function uds_billboard_admin_notices() {
+function uds_billboard_admin_notices()
+{
 	if(!empty($_REQUEST['uds-message'])) {
 		$message = $_REQUEST['uds-message'];
 		$class = $_REQUEST['uds-class'];
 		echo "<div id='message' class='$class'>$message</div>";
 	}
+}
+
+if(uds_billboard_is_plugin()) {
+	$plugin = plugin_basename( __FILE__ );
+	//add_filter( 'plugin_action_links_' . $plugin, 'uds_billboard_plugin_action_links' );
+	add_filter( 'plugin_row_meta', 'uds_billboard_plugin_row_meta', 10, 4);
+}
+/**
+ *	Function, adds links to support to the uBillboard entry on the Plugins Installed
+ *	page
+ *	
+ *	@param array $links
+ *	@return array $links
+ */
+function uds_billboard_plugin_row_meta($plugin_meta, $plugin_file, $plugin_data, $status)
+{
+	if(uds_billboard_is_plugin()) {
+		$plugin = plugin_basename( __FILE__ );
+		if($plugin == $plugin_file) {
+			$link = "<a href='http://codecanyon.net/user/uDesignStudios'>" .
+					__('Get support', uds_billboard_textdomain) .
+					'</a> <em>(' .
+					__('Use the contact form towards the bottom of the page', uds_billboard_textdomain) .
+					")</em>";
+
+			$plugin_meta[] = $link;	
+		}
+	}
+	return $plugin_meta;
 }
 
 add_action('init', 'uds_billboard_init');
@@ -165,7 +195,9 @@ add_action('init', 'uds_billboard_init');
  */
 function uds_billboard_init()
 {
-	load_plugin_textdomain(uds_billboard_textdomain, false, dirname( plugin_basename( __FILE__ ) ) . '/lang/');
+	if(uds_billboard_is_plugin()) {
+		load_plugin_textdomain(uds_billboard_textdomain, false, dirname( plugin_basename( __FILE__ ) ) . '/lang/');
+	}
 }
 
 // initialize billboard

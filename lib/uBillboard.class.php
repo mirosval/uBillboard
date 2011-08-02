@@ -30,6 +30,13 @@ $uds_billboard_general_options = array(
 		'tooltip' => __('Automatically start playing slides, makes sense to turn this off only if Show Controls is enabled.', uds_billboard_textdomain),
 		'default' => 'on'
 	),
+	'pause-on-video' => array(
+		'type' => 'checkbox',
+		'label' => __('Pause on video', uds_billboard_textdomain),
+		'unit' => '',
+		'tooltip' => __('Pause playback if slide with embedded video is encountered.', uds_billboard_textdomain),
+		'default' => 'on'
+	),
 	'randomize' => array(
 		'type' => 'checkbox',
 		'label' => __('Shuffle Slides', uds_billboard_textdomain),
@@ -473,6 +480,7 @@ class uBillboard {
 	public function renderJS($id = 0)
 	{
 		$autoplay = $this->autoplay === 'on' ? 'true' : 'false';
+		$pauseOnVideo = $this->pauseOnVideo === 'on' ? 'true' : 'false';
 		$showTimer = $this->showTimer === 'on' ? 'true' : 'false';
 		
 		$showControls = 'false';
@@ -499,6 +507,7 @@ class uBillboard {
 				height: '{$this->height}px',
 				squareSize: '{$this->squareSize}px',
 				autoplay: $autoplay,
+				pauseOnVideo: $pauseOnVideo,
 				showControls: $showControls,
 				showPause: $showPause,
 				showPaginator: $showPaginator,
