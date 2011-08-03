@@ -12,11 +12,18 @@ if(isset($billboards['_uds_temp_billboard'])) {
 	unset($billboards['_uds_temp_billboard']);
 }
 
+// add 'button' class to header add new link
+$link_class = 'add-new-h2';
+if(version_compare(get_bloginfo('version'), '3.2', '<')) {
+	$link_class .= ' button';
+}
+
 ?>
 <div class="wrap">
 	<!-- Header -->
 	<div id="icon-edit" class="icon32 icon32-posts-post"><br /></div>
-	<h2>uBillboard <a href="<?php echo admin_url('admin.php?page=uds_billboard_edit') ?>" class="add-new-h2"><?php _e('Add New', uds_billboard_textdomain) ?></a></h2>
+	<?php  ?>
+	<h2>uBillboard <a href="<?php echo admin_url('admin.php?page=uds_billboard_edit') ?>" class="<?php echo $link_class ?>"><?php _e('Add New', uds_billboard_textdomain) ?></a></h2>
 	
 	<!-- Billboards List -->
 	<?php if(!empty($billboards)): ?>

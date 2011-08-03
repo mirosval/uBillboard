@@ -707,7 +707,7 @@
 							.css('background-color', 'rgb(237,237,237)')
 							.stop()
 							.animate({
-								backgroundColor: options.thumbnailHoverColor
+								opacity: 1
 							}, {
 								duration: 200,
 								step: function(now, fx) {
@@ -729,7 +729,7 @@
 							.css('background-color', options.thumbnailHoverColor)
 							.stop()
 							.animate({
-								backgroundColor: 'rgb(237,237,237)'
+								opacity: 1
 							}, {
 								duration: 200,
 								step: function(now, fx) {
