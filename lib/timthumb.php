@@ -35,6 +35,8 @@ $allowedSites = array (
 	'vimeocdn.com'
 );
 
+date_default_timezone_set('Europe/Berlin');
+
 // STOP MODIFYING HERE!
 // --------------------
 
