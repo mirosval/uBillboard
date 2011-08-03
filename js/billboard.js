@@ -590,7 +590,7 @@
 				$controls = $('.uds-bb-controls', $bb);
 	
 				// Setup CSS
-				$controls.css({
+				$controls.show().css({
 					width: options.width,
 					height: options.height,
 					opacity: 0
