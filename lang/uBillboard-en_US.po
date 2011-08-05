@@ -37,13 +37,13 @@ msgid "Options"
 msgstr "Options"
 
 #: admin/billboard-edit.php:39
-#: admin/billboard-list.php:69
+#: admin/billboard-list.php:76
 #@ uBillboard
 msgid "Preview"
 msgstr "Preview"
 
 #: admin/billboard-edit.php:54
-#: admin/billboard-list.php:75
+#: admin/billboard-list.php:82
 #@ uBillboard
 msgid "Delete"
 msgstr "Delete"
@@ -153,7 +153,7 @@ msgid "Import/Export uBillboards"
 msgstr "Import/Export uBillboards"
 
 #: admin/billboard-import-export.php:15
-#: admin/billboard-list.php:72
+#: admin/billboard-list.php:79
 #@ uBillboard
 msgid "Export"
 msgstr "Export"
@@ -185,36 +185,36 @@ msgstr "Upload Exported uBillboard"
 msgid "<em>Note:</em> Importer will attempt to download all slide images that are not located on this host."
 msgstr "<em>Note:</em> Importer will attempt to download all slide images that are not located on this host."
 
-#: admin/billboard-list.php:27
+#: admin/billboard-list.php:34
 #@ uBillboard
 msgid "Bulk Actions"
 msgstr "Bulk Actions"
 
-#: admin/billboard-list.php:28
-#: admin/billboard-list.php:66
+#: admin/billboard-list.php:35
+#: admin/billboard-list.php:73
 #@ uBillboard
 msgid "Edit"
 msgstr "Edit"
 
-#: admin/billboard-list.php:29
+#: admin/billboard-list.php:36
 #@ uBillboard
 msgid "Trash"
 msgstr "Trash"
 
-#: admin/billboard-list.php:38
-#: admin/billboard-list.php:46
+#: admin/billboard-list.php:45
+#: admin/billboard-list.php:53
 #: lib/uBillboard.class.php:7
 #@ uBillboard
 msgid "Billboard Name"
 msgstr "Billboard Name"
 
-#: admin/billboard-list.php:39
-#: admin/billboard-list.php:47
+#: admin/billboard-list.php:46
+#: admin/billboard-list.php:54
 #@ uBillboard
 msgid "Shortcode"
 msgstr "Shortcode"
 
-#: admin/billboard-list.php:88
+#: admin/billboard-list.php:95
 #, php-format
 #@ uBillboard
 msgid "There are no uBillboards defined yet. Create your first one %1$shere%2$s!"
@@ -751,7 +751,7 @@ msgstr "You do not have any uBillboard v2 billboards present on this WordPress i
 msgid "Import from uBillboard v3 and up"
 msgstr "Import from uBillboard v3 and up"
 
-#: admin/billboard-list.php:19
+#: admin/billboard-list.php:26
 #@ uBillboard
 msgid "Add New"
 msgstr "Add New"

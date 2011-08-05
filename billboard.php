@@ -267,7 +267,7 @@ add_action('wp_print_scripts', 'uds_billboard_scripts');
 function uds_billboard_scripts()
 {
 	global $wp_version;
-	if(!uds_billboard_is_active()) return;
+	if(!uds_billboard_is_active() || is_admin()) return;
 	
 	$dir = UDS_BILLBOARD_URL;
 	
@@ -291,7 +291,7 @@ add_action('wp_print_styles', 'uds_billboard_styles');
  */
 function uds_billboard_styles()
 {
-	if(!uds_billboard_is_active()) return;
+	if(!uds_billboard_is_active() || is_admin()) return;
 	
 	$dir = UDS_BILLBOARD_URL;
 	if(uds_billboard_use_compression()) {
