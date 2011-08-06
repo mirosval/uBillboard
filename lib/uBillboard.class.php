@@ -80,7 +80,8 @@ $uds_billboard_general_options = array(
 			'oldskool-bright' 	=> __('Bright Old School uBillboard', uds_billboard_textdomain),
 			'utube' 			=> __('uTube', uds_billboard_textdomain),
 			'silver' 			=> __('Silver', uds_billboard_textdomain),
-			'modern'			=> __('Modern')
+			'modern'			=> __('Modern'),
+			'ubb-v2'			=> __('uBillboard v2')
 		),
 		'default' => 'oldskool'
 	),
@@ -649,6 +650,9 @@ class uBillboard {
 				break;
 			case 'modern':
 				$out .= $this->paginatorModern();	
+				break;
+			case 'ubb-v2':
+				$out .= $this->paginatorUbbv2();	
 		}
 
 		if($this->showThumbnails !== 'no') {
@@ -687,6 +691,23 @@ class uBillboard {
 	{
 		$out = '';
 		$out .= "<div class='uds-bb-paginator oldskool {$this->controlsPosition}'>";
+			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
+			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
+		$out .= "</div>";
+		return $out;
+	}
+	
+		/**
+	 *	Oldskool paginator renderer
+	 *	
+	 *	@return string rendered paginator
+	 */
+	private function paginatorUbbv2()
+	{
+		$out = '';
+		$out .= "<div class='uds-bb-paginator ubbv2 {$this->controlsPosition}'>";
 			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
 			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
 			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>";

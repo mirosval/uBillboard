@@ -191,9 +191,52 @@
 		margin-top: -1px;
 	}
 	
+	.uds-bb-paginator.ubbv2 .uds-bb-button   {
+		width: 50px;
+		height: 50px;
+		cursor: pointer;
+		background: url(../images/skin-ubbv2/buttons.png);
+	}
+	
+	.uds-bb-paginator.ubbv2 .uds-bb-button.uds-bb-next {
+		position: absolute;
+		right: 10px;
+		background-position: 0px 0px;
+	}
+	
+	.uds-bb-paginator.outside.ubbv2 .uds-bb-button.uds-bb-next {
+		right: -75px;
+	}
+	
+	.uds-bb-paginator.outside.ubbv2 .uds-bb-button.uds-bb-prev {
+		left: -75px;
+	}
+	
+	.uds-bb-paginator.ubbv2 .uds-bb-button.uds-bb-prev{
+		position: absolute;
+		left: 10px;
+		background-position: 0px 50px;
+	}
+	
+	
+	.uds-bb-paginator.ubbv2 .uds-bb-button.uds-bb-playpause.play  {
+		background-position: 0px 100px;
+	}
+	
+	.uds-bb-paginator.ubbv2 .uds-bb-playpause.pause  {
+		background-position: 0px 150px;
+	}
+	
+	.uds-bb-paginator.ubbv2 .uds-bb-bullet {
+		background: url(../images/skin-ubbv2/bullet.png) no-repeat;
+	}
+	
+	.uds-bb-paginator.ubbv2 .uds-bb-bullet.active {
+		background-position: 0px -10px;
+	}
 	
 	/* Oldskool uBillboard skin */
-	.uds-bb-paginator.oldskool, .uds-bb-paginator.oldskool-bright, .uds-bb-paginator.silver  {
+	.uds-bb-paginator.oldskool, .uds-bb-paginator.oldskool-bright, .uds-bb-paginator.silver, .uds-bb-paginator.ubbv2  {
 		width: 100%;
 		height: 100%;
 	}
@@ -230,7 +273,7 @@
 		background-image: url(../images/skin-oldskool-bright/buttons.png);
 	}
 	
-	.uds-bb-paginator.oldskool .uds-bb-playpause, .uds-bb-paginator.oldskool-bright .uds-bb-playpause {
+	.uds-bb-paginator.oldskool .uds-bb-playpause, .uds-bb-paginator.oldskool-bright .uds-bb-playpause, .uds-bb-paginator.ubbv2 .uds-bb-playpause {
 		position: absolute;
 	}
 	
@@ -273,7 +316,8 @@
 		background-position: 0px -46px;
 	}
 	
-	.uds-bb-paginator.oldskool .uds-bb-position-indicator-bullets, 
+	.uds-bb-paginator.oldskool .uds-bb-position-indicator-bullets,
+	.uds-bb-paginator.ubbv2 .uds-bb-position-indicator-bullets,
 	.uds-bb-paginator.oldskool-bright .uds-bb-position-indicator-bullets {
 		background: url(../images/skin-oldskool/bg.png);
 		position: absolute;
@@ -284,6 +328,7 @@
 	}
 	
 	.uds-bb-paginator.outside.oldskool .uds-bb-position-indicator-bullets,
+	.uds-bb-paginator.outside.ubbv2 .uds-bb-position-indicator-bullets,
 	.uds-bb-paginator.outside.oldskool-bright .uds-bb-position-indicator-bullets {
 		bottom: -30px;
 	}
@@ -298,7 +343,8 @@
 	.uds-bb-paginator.oldskool .uds-bb-bullet, 
 	.uds-bb-paginator.oldskool-bright .uds-bb-bullet, 
 	.uds-bb-paginator.uTube .uds-bb-bullet, 
-	.uds-bb-paginator.modern .uds-bb-bullet {
+	.uds-bb-paginator.modern .uds-bb-bullet,
+	.uds-bb-paginator.ubbv2 .uds-bb-bullet {
 		width: 10px;
 		height: 10px;
 		float: left;
