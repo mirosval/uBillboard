@@ -3,7 +3,7 @@
 Plugin Name: uBillboard 3
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
 Description: uBillboard is Premium Slider Plugin for WordPress by <a href="http://codecanyon.net/user/uDesignStudios">uDesignStudios</a> that allows you to create complex and eye-catching presentations for your web.
-Version: 3.0.0
+Version: 3.0.2
 Author: uDesignStudios
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
@@ -16,7 +16,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 ////////////////////////////////////////////////////////////////////////////////
 
 // Version
-define('UDS_BILLBOARD_VERSION', '3.0.0');
+define('UDS_BILLBOARD_VERSION', '3.0.2');
 
 // Handle theme insertion
 if(uds_billboard_is_plugin()) {
@@ -273,8 +273,8 @@ function uds_billboard_scripts()
 	
 	// We need to override jQuery on WP < 3.0 because the default there is jQuery 1.3 and we need 1.4
 	wp_deregister_script('jquery');
-	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js');
-	//wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
+	//wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js');
+	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
 	
 	if(uds_billboard_use_compression()){
 		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery'), '3.0', true);
@@ -474,9 +474,9 @@ function uds_billboard_enqueue_admin_scripts()
 	wp_enqueue_script("jquery-ui-sortable");
 	wp_enqueue_script("jquery-ui-resizable");
 	wp_enqueue_script("jquery-ui-draggable");
-	wp_enqueue_script("uds-colorpicker", $dir."js/colorpicker/jscolor.js", UDS_BILLBOARD_VERSION, false);
-	wp_enqueue_script('jquery-cookie', $dir."js/jquery_cookie.js", array('jquery'), UDS_BILLBOARD_VERSION, false);
-	wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js", array('jquery', 'jquery-cookie', 'jquery-ui-tabs'), UDS_BILLBOARD_VERSION, false);
+	wp_enqueue_script("uds-colorpicker", $dir."js/colorpicker/jscolor.js", UDS_BILLBOARD_VERSION, true);
+	wp_enqueue_script('jquery-cookie', $dir."js/jquery_cookie.js", array('jquery'), UDS_BILLBOARD_VERSION, true);
+	wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js", array('jquery', 'jquery-cookie', 'jquery-ui-tabs'), UDS_BILLBOARD_VERSION, true);
 	
 	wp_localize_script('uds-billboard', 'udsAdminL10n', array(
 		'billboardDeleteConfirmation' => __('Really delete? This is not undoable', uds_billboard_textdomain),

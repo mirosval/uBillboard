@@ -51,6 +51,7 @@ $uds_billboard_attributes = array(
 		'options' => array(
 			'random' 	=> __('Random', uds_billboard_textdomain),
 			'fade' 		=> __('Fade', uds_billboard_textdomain),
+			'crossFade'	=> __('Crossfade', uds_billboard_textdomain),
 			'slide' 	=> __('Slide', uds_billboard_textdomain),
 			'scale' 	=> __('Scale', uds_billboard_textdomain)
 		),

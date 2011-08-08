@@ -5,7 +5,7 @@
 	<!-- This is the basename of all related files (php, js, css) -->
 	<property name="file_name" value="billboard" />
 	<!-- Software version -->
-	<property name="version" value="3.0.0" />
+	<property name="version" value="3.0.2" />
 	
 	<!-- JS Compiler taskdef -->
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="/usr/local/closure/compiler.jar"/>

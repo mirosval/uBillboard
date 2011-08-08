@@ -152,38 +152,10 @@
 					}
 				});
 				
-				$bb.bind('udsBillboardLoadingDidComplete', function(){
-					// load first slide
-					currentSlideId = 0;
-					var currentSlide = slides[currentSlideId],
-						css = _private.getSlideBackgroundCSS(currentSlide);
-
-					$stage.css(css).html(currentSlide.html).fadeTo(300, 1);
-					
-					_private.handleEmbeddedContent(currentSlide);
-					
-					$controls.delay(300).fadeTo(300, 1);
-					
-					// should we pause on this slide
-					var pauseForVideo = options.pauseOnVideo && currentSlide.transition == 'none';
-
-					if(options.autoplay === true && !pauseForVideo) {
-						//d('Autoplay Initiated');
-						
-						// Run Countdown Animation
-						_private.animateCountdown(slides[currentSlideId].delay);
-						
-						_public.play();
-					} else {
-						if(typeof $countdown !== 'undefined' && $countdown !== null) {
-							$countdown.hide();
-						}
-					}
-				});
-				
 				// this call from the preloadImages() function would be too soon
 				if(willPreloadImages === false) {
 					$bb.trigger('udsBillboardLoadingDidComplete');
+					_private.loadingCompleted();
 				}
 				
 				$bb.bind('udsBillboardTransitionDidComplete', function(){
@@ -259,6 +231,16 @@
 
 				clearTimeout(timers.transitionComplete);
 				timers.transitionComplete = setTimeout(function(){
+					$stage
+						.stop()
+						.html(slide.html)
+						.css({
+							top: '0px',
+							left: '0px',
+							opacity: 1,
+							backgroundImage: 'url(' + slide.bg + ')'
+						});
+					$next.stop().hide();
 					$bb.trigger('udsBillboardTransitionDidComplete', slideId);
 				}, duration);
 				
@@ -402,7 +384,7 @@
 			
 			updatePreloader: function(progress) {
 				var $indicator = $('.uds-bb-preloader-indicator', $preloader), css;
-	
+
 				$indicator.stop().animate({
 					left: '-' + Math.round((1 - progress) * $indicator.width()) + 'px'
 				}, 200);
@@ -432,6 +414,7 @@
 				if(!hasAnyImages) {
 					_private.updatePreloader(1);
 					$bb.trigger('udsBillboardLoadingDidComplete');
+					_private.loadingCompleted();
 					return false;
 				}
 				
@@ -451,6 +434,7 @@
 						
 						if(progress == totalImages) {
 							$bb.trigger('udsBillboardLoadingDidComplete');
+							_private.loadingCompleted();
 						}
 						
 					}).error(function() {
@@ -463,6 +447,7 @@
 						
 						if(progress == totalImages) {
 							$bb.trigger('udsBillboardLoadingDidComplete');
+							_private.loadingCompleted();
 						}
 						
 						if(options.removeSlidesWithBrokenImages === true) {
@@ -473,6 +458,38 @@
 				}
 				
 				return true;
+			},
+			
+			/**
+			 *	Run after all images have been safely loaded and playback should start
+			 */
+			loadingCompleted: function() {
+				// load first slide
+				currentSlideId = 0;
+				var currentSlide = slides[currentSlideId],
+					css = _private.getSlideBackgroundCSS(currentSlide);
+
+				$stage.css(css).html(currentSlide.html).fadeTo(300, 1);
+				
+				_private.handleEmbeddedContent(currentSlide);
+				
+				$controls.delay(300).fadeTo(300, 1);
+				
+				// should we pause on this slide
+				var pauseForVideo = options.pauseOnVideo && currentSlide.transition == 'none';
+
+				if(options.autoplay === true && !pauseForVideo) {
+					//d('Autoplay Initiated');
+					
+					// Run Countdown Animation
+					_private.animateCountdown(slides[currentSlideId].delay);
+					
+					_public.play();
+				} else {
+					if(typeof $countdown !== 'undefined' && $countdown !== null) {
+						$countdown.hide();
+					}
+				}
 			},
 			
 			/**
@@ -549,7 +566,9 @@
 					}
 				}
 				
-				$stage.add($next).css({
+				$stage.css({
+					opacity: 1
+				}).add($next).css({
 					top: '0px',
 					left: '0px'
 				});
@@ -1241,6 +1260,34 @@
 				},
 				perform: function() {
 					directions[this.direction].delay();
+					$squares.animate({
+						opacity: 1
+					}, {
+						duration: 500
+					});
+				}
+			},
+			
+			/**
+			 *
+			 */
+			'crossFade': {
+				duration: 1000,
+				direction: '',
+				setup: function() {
+					$stage.css({
+						oacity: 1
+					});
+					
+					$squares.css({
+						opacity: 0
+					});
+				},
+				perform: function() {
+					directions[this.direction].delay();
+					$stage.animate({
+						opacity: 0
+					}, 500);
 					$squares.animate({
 						opacity: 1
 					}, {
