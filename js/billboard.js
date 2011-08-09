@@ -145,7 +145,7 @@
 				_private.initControls();
 				
 				// Setup Click Event handling
-				$('.uds-bb-slides').live('click', function(){
+				$('.uds-bb-slides', $bb).live('click', function(){
 					var slide = slides[currentSlideId];
 					if(typeof slide.link === 'string' && slide.link !== '' && slide.link !== '#') {
 						window.location = slide.link;
