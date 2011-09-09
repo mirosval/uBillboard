@@ -1277,10 +1277,6 @@
 				duration: 1000,
 				direction: '',
 				setup: function() {
-					$stage.css({
-						oacity: 1
-					});
-					
 					$squares.css({
 						opacity: 0
 					});
@@ -1289,7 +1285,10 @@
 					directions[this.direction].delay();
 					$stage.animate({
 						opacity: 0
-					}, 500);
+					}, {
+						duration: 1000
+					});
+					
 					$squares.animate({
 						opacity: 1
 					}, {
