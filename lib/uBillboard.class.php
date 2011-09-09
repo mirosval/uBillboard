@@ -465,7 +465,7 @@ class uBillboard {
 		
 		$out = "
 		<!-- uBillboard ".UDS_BILLBOARD_VERSION." ID:$id -->
-		<div class='uds-bb uds-{$this->style}' id='uds-bb-$id'>
+		<div class='uds-bb uds-{$this->style}' id='uds-bb-$id' style='width:{$this->width}px;height:{$this->height}px'>
 			$controls
 			$slides
 		</div>";

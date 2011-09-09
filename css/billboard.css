@@ -1,6 +1,7 @@
 /* General uBillboard */
 .uds-bb {
 	position: relative;
+	overflow: hidden;
 }
 
 .uds-bb-slides {

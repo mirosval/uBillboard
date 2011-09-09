@@ -2,7 +2,7 @@
  *	@license
  *	uBillboard - Premium Slide for WordPress
  *
- *	Version: 3.0.0
+ *	Version: 3.0.2
  *
  *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
  *	
@@ -119,6 +119,8 @@
 	
 				// Fix options
 				options = $.extend(defaults, passedOptions);
+				
+				$bb.css('overflow', 'visible');
 				
 				$bb.add($slides).css({
 					width: options.width,
