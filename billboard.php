@@ -619,7 +619,9 @@ add_action('wp_footer', 'uds_billboard_footer_scripts');
 function uds_billboard_footer_scripts()
 {
 	global $uds_billboard_footer_scripts;
-
+	
+	if(empty($uds_billboard_footer_scripts)) return;
+	
 	echo "
 	<script language='JavaScript' type='text/javascript'>
 		//<![CDATA[

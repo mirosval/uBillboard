@@ -648,7 +648,7 @@
 				
 				// Bullets
 				var bullets = "";
-				for(slide in slides) {
+				for(var i = 0; i < slides.length; i++) {
 					bullets += "<div class='uds-bb-bullet'></div>";
 				}
 				
@@ -856,7 +856,13 @@
 				if(options.showPaginator !== true && options.showPause !== true && options.showControls !== true) {
 					$controlsToHover = $controlsToHover.add($paginator);
 				}
-	
+				
+				// Handle bullets container for Silver Skin
+				var $bulletsContainer = $('.uds-bb-position-indicator-bullets-container', $bb);
+				if($bulletsContainer.length > 0 && (options.showPause === 'hover' || options.showPaginator === 'hover')) {
+					$controlsToHover = $controlsToHover.add($bulletsContainer);
+				} 
+				
 				$controlsToHover.fadeTo(0, 0);
 				$bb.hover(function(){
 					$controlsToHover.stop().fadeTo(300, 1);
@@ -881,6 +887,11 @@
 				
 				if(options.showThumbnails === false) {
 					$thumbs.hide();
+				}
+				
+				// Bullets contianer for the Silver Skin
+				if($('>*', $bulletsContainer).not(':hidden').length === 0) {
+					$bulletsContainer.hide();
 				}
 				
 				// Center controls
