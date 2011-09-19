@@ -507,7 +507,7 @@ class uBillboardSlide {
 		
 		// Image
 		if($this->resize == 'on') {
-			$timthumb = UDS_BILLBOARD_URL . 'lib/timthumb.php?';
+			$timthumb = UDS_TIMTHUMB_URL . '?';
 		
 			$width = $this->slider->width;
 			$height = $this->slider->height;
@@ -577,7 +577,7 @@ class uBillboardSlide {
 							$width = $this->slider->width;
 							$height = $this->slider->height;
 							
-							$timthumb = UDS_BILLBOARD_URL . 'lib/timthumb.php?';
+							$timthumb = UDS_TIMTHUMB_URL . '?';
 							$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $image_src[0]) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
 						}
 					}
@@ -608,7 +608,7 @@ class uBillboardSlide {
 	 */
 	public function renderThumb()
 	{
-		$timthumb = UDS_BILLBOARD_URL . 'lib/timthumb.php?';
+		$timthumb = UDS_TIMTHUMB_URL . '?';
 		
 		$width = $this->slider->thumbnailsWidth;
 		$height = $this->slider->thumbnailsHeight;

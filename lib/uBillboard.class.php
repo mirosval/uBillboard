@@ -328,7 +328,7 @@ class uBillboard {
 	 */
 	public function setUniqueName()
 	{
-		$billboards = array_keys(maybe_unserialize(get_option(UDS_BILLBOARD_OPTION)));
+		$billboards = array_keys(maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array())));
 	
 		$guess = $root = 'billboard';
 	
@@ -503,7 +503,7 @@ class uBillboard {
 		$thumbnailsHoverColor = $this->thumbnailsHoverColor;
 
 		$scripts = "
-			$('#uds-bb-$id').uBillboard({
+			$('#uds-bb-$id').show().uBillboard({
 				width: '{$this->width}px',
 				height: '{$this->height}px',
 				squareSize: '{$this->squareSize}px',

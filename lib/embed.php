@@ -27,16 +27,38 @@ function uds_billboard_oembed($url, $width, $height)
 	if(empty($oembed)) {
 		return __('Service not supported', uds_billboard_textdomain);
 	}
-
-	$response = @file_get_contents($oembed);
+	
+	if(@ini_get('allow_url_fopen')) {
+		$response = @file_get_contents($oembed);
+	} else {
+		if(!function_exists('curl_init')) {
+			return __('cURL not installed', uds_billboard_textdomain);
+		}
+		
+		$ch = curl_init();
+	
+		$response = '';
+		if($ch) {
+			curl_setopt($ch, CURLOPT_URL, $oembed);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	
+			$response = curl_exec($ch);
+			curl_close($ch);
+		}
+	}
 	
 	if(empty($response)) {
 		return __('There was an error when loading the video', uds_billboard_textdomain);
 	}
 	
-	$response = json_decode($response);
+	$out = json_decode($response);
 
-	return $response;
+	if($out === null) {
+		return $response;
+	}
+
+	return $out;
 }
 
 ?>

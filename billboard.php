@@ -22,9 +22,15 @@ define('UDS_BILLBOARD_VERSION', '3.0.2');
 if(uds_billboard_is_plugin()) {
 	define('UDS_BILLBOARD_URL', plugin_dir_url(__FILE__));
 	define('UDS_BILLBOARD_PATH', plugin_dir_path(__FILE__));
+	define('UDS_TIMTHUMB_URL',  UDS_BILLBOARD_URL . 'lib/timthumb.php');
+	define('UDS_CACHE_URL',  UDS_BILLBOARD_PATH . '/cache');
 } else {
 	define('UDS_BILLBOARD_URL', trailingslashit(get_template_directory_uri() . '/uBillboard'));
 	define('UDS_BILLBOARD_PATH', trailingslashit(get_template_directory() . '/uBillboard'));
+}
+
+if(!defined('UDS_CACHE_PATH')) {
+	define('UDS_CACHE_PATH',  UDS_BILLBOARD_PATH . '/cache');
 }
 
 // User configurable options
@@ -73,11 +79,7 @@ function uds_billboard_is_plugin()
  */
 function uds_billboard_cache_is_writable()
 {
-	if(uds_billboard_is_plugin()) {
-		return is_writable(UDS_BILLBOARD_PATH . 'cache');
-	} else {
-		return is_writable(get_template_directory() . '/cache');
-	}
+	return is_writable(UDS_CACHE_PATH);
 }
 
 /**
@@ -623,7 +625,7 @@ function uds_billboard_footer_scripts()
 	if(empty($uds_billboard_footer_scripts)) return;
 	
 	echo "
-	<script language='JavaScript' type='text/javascript'>
+	<script type='text/javascript'>
 		//<![CDATA[
 		jQuery(document).ready(function($){
 			$uds_billboard_footer_scripts
