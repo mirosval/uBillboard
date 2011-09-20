@@ -5,7 +5,7 @@
 	<!-- This is the basename of all related files (php, js, css) -->
 	<property name="file_name" value="billboard" />
 	<!-- Software version -->
-	<property name="version" value="3.0.2" />
+	<property name="version" value="3.0.3" />
 	
 	<!-- JS Compiler taskdef -->
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="/usr/local/closure/compiler.jar"/>
@@ -19,6 +19,7 @@
 	
 	<!-- Update version string in all occurrences -->
 	<target name="update_version">
+		<replaceregexp file="js/${file_name}.js" match="Version: [0-9]\.[0-9]\.[0-9]" replace="Version: ${version}" byline="true"/>
 		<replaceregexp file="${file_name}.php" match="Version: [0-9]\.[0-9]\.[0-9]" replace="Version: ${version}" byline="true"/>
 		<replaceregexp file="${file_name}.php" match="define\('UDS_BILLBOARD_VERSION', '[0-9]\.[0-9]\.[0-9]'\);" replace="define\('UDS_BILLBOARD_VERSION', '${version}'\);" byline="true"/>
 		<echo>Updated Version Strings</echo>
