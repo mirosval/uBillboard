@@ -150,8 +150,13 @@
 				$('.uds-bb-slides', $bb).live('click', function(){
 					var slide = slides[currentSlideId];
 					if(typeof slide.link === 'string' && slide.link !== '' && slide.link !== '#') {
-						window.location = slide.link;
+						if(slide.linkTarget === '_blank') {
+							window.open(slide.link, '_blank');
+						} else {
+							window.location = slide.link;
+						}
 					}
+					return false;
 				});
 				
 				// this call from the preloadImages() function would be too soon
@@ -233,6 +238,12 @@
 
 				clearTimeout(timers.transitionComplete);
 				timers.transitionComplete = setTimeout(function(){
+					// Change cursor to pointer if there is a link present
+					var cursor = 'default';
+					if(typeof slide.link === 'string' && slide.link !== '' && slide.link !== '#') {
+						cursor = 'pointer';
+					}
+					
 					$stage
 						.stop()
 						.html(slide.html)
@@ -240,7 +251,8 @@
 							top: '0px',
 							left: '0px',
 							opacity: 1,
-							backgroundImage: 'url(' + slide.bg + ')'
+							backgroundImage: 'url(' + slide.bg + ')',
+							cursor: cursor
 						});
 					$next.stop().hide();
 					$bb.trigger('udsBillboardTransitionDidComplete', slideId);
@@ -361,10 +373,11 @@
 				$('.uds-bb-slide', $bb).each(function(i, el){
 					var slide = {
 						delay: parseInt($('.uds-delay', el).remove().text(), 10),
+						linkTarget: $('.uds-link-target', el).remove().text(),
 						transition: $('.uds-transition', el).remove().text(),
 						direction: $('.uds-direction', el).remove().text(),
-						bgColor: $('.uds-background', el).remove().text(),
 						bg: $('.uds-bb-bg-image', el).remove().attr('src'),
+						bgColor: $('.uds-background', el).remove().text(),
 						link: $('.uds-bb-link', el).remove().attr('href'),
 						html: $(el).remove().html()
 					};

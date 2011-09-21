@@ -32,6 +32,11 @@ $uds_billboard_attributes = array(
 		'label' => __('Link URL', uds_billboard_textdomain),
 		'default' => ''
 	),
+	'link-target' => array(
+		'type' => 'checkbox',
+		'label' => __('Open in a new window', uds_billboard_textdomain),
+		'default' => ''
+	),
 	'delay' => array(
 		'type' => 'select',
 		'label' => __('Delay', uds_billboard_textdomain),
@@ -453,6 +458,7 @@ class uBillboardSlide {
 			</div>
 			<div id="uds-slide-tab-link-<?php echo $id ?>" class="uds-slide-tab-link">
 				<?php $this->renderAdminField('link') ?>
+				<?php $this->renderAdminField('link-target') ?>
 			</div>
 			<div id="uds-slide-tab-transition-<?php echo $id ?>" class="uds-slide-tab-transition">
 				<?php $this->renderAdminField('delay') ?>
@@ -589,9 +595,12 @@ class uBillboardSlide {
 				default:
 			}
 			
+			$target = $this->{'link-target'} == 'on' ? '_blank' : '';
+
 			$out .= "<a href='{$this->link}' class='uds-bb-link'>";
 			$out .= "<img src='$image' alt='' class='uds-bb-bg-image' />";
 			$out .= "</a>";
+			$out .= "<span style='display:none' class='uds-link-target'>$target</span>";
 			$out .= "<span style='display:none' class='uds-delay'>{$this->delay}</span>";
 			$out .= "<span style='display:none' class='uds-transition'>$transition</span>";
 			$out .= "<span style='display:none' class='uds-direction'>{$direction}</span>";

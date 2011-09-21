@@ -13,6 +13,7 @@
 function uds_billboard_oembed($url, $width, $height)
 {
 	$services = array(
+		'youtu.be' => 'http://www.youtube.com/oembed?',
 		'youtube.com' => 'http://www.youtube.com/oembed?',
 		'vimeo.com' => 'http://www.vimeo.com/api/oembed.json?'
 	);

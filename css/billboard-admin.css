@@ -278,10 +278,15 @@ td.shortcode {
 	margin-bottom: 5px;
 }
 
+.uds-billboard-form .link-wrapper {
+	margin-bottom: 10px;
+}
+
 .uds-billboard-form .resize-wrapper label,
 .uds-billboard-form .background-wrapper label,
 .uds-billboard-form .background-transparent-wrapper label,
-.uds-billboard-form .relative-paths-wrapper label {
+.uds-billboard-form .relative-paths-wrapper label,
+.uds-billboard-form .link-target-wrapper label {
 	float: left;
 }
 
@@ -298,7 +303,7 @@ td.shortcode {
 
 .uds-billboard-form input.checkbox {
 	width: auto;
-	margin: 3px 0px 10px 0px;
+	margin: 1px 0px 10px 0px;
 }
 
 .uds-billboard-form  textarea {
