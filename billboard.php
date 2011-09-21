@@ -272,10 +272,11 @@ function uds_billboard_scripts()
 	
 	$dir = UDS_BILLBOARD_URL;
 	
-	// We need to override jQuery on WP < 3.0 because the default there is jQuery 1.3 and we need 1.4
-	wp_deregister_script('jquery');
-	//wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js');
-	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
+	// We need to override jQuery on older WP
+	if(version_compare($wp_version, '3.0.0', '<')) {
+		wp_deregister_script('jquery');
+		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
+	}
 	
 	if(uds_billboard_use_compression()){
 		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery'), '3.0', true);
