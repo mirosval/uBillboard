@@ -60,31 +60,31 @@ if(version_compare(get_bloginfo('version'), '3.2', '<')) {
 				<?php foreach($billboards as $key => $billboard): ?>
 					<tr class="<?php echo $n % 2 == 0 ? 'alternate' : '' ?>">
 						<th class="check-column" scope="row">
-							<input type="checkbox" value="<?php echo $key ?>" name="billboard[]" />
+							<input type="checkbox" value="<?php echo esc_attr(stripslashes($key)) ?>" name="billboard[]" />
 						</th>
 						<td>
 							<strong>
-								<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.$key) ?>">
-									<?php echo $billboard->name ?>
+								<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.urlencode(stripslashes($key))) ?>">
+									<?php echo esc_html(stripslashes($billboard->name)) ?>
 								</a>
 							</strong>
 							<div class="row-actions">
 								<span class="edit">
-									<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.$key) ?>"><?php _e('Edit', uds_billboard_textdomain) ?></a> | 
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.urlencode(stripslashes($key))) ?>"><?php _e('Edit', uds_billboard_textdomain) ?></a> | 
 								</span>
 								<span class="preview-action">
-									<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.$key.'#preview') ?>"><?php _e('Preview', uds_billboard_textdomain) ?></a> | 
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard-edit='.urlencode(stripslashes($key)).'#preview') ?>"><?php _e('Preview', uds_billboard_textdomain) ?></a> | 
 								</span>
 								<span class="export">
-									<a href="<?php echo admin_url('admin.php?page=uds_billboard_import_export&uds-billboard-export='.$key.'&download_export='.wp_create_nonce('uds-billboard-export')) ?>"><?php _e('Export', uds_billboard_textdomain) ?></a> | 
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_import_export&uds-billboard-export='.urlencode(stripslashes($key)).'&download_export='.wp_create_nonce('uds-billboard-export')) ?>"><?php _e('Export', uds_billboard_textdomain) ?></a> | 
 								</span>
 								<span class="trash">
-									<a href="<?php echo admin_url('admin.php?page=uds_billboard_admin&uds-billboard-delete='.$key.'&uds-billboard-delete-nonce='.wp_create_nonce('uds-billboard-delete-nonce')) ?>"><?php _e('Delete', uds_billboard_textdomain) ?></a>
+									<a href="<?php echo admin_url('admin.php?page=uds_billboard_admin&uds-billboard-delete='.urlencode(stripslashes($key)).'&uds-billboard-delete-nonce='.wp_create_nonce('uds-billboard-delete-nonce')) ?>"><?php _e('Delete', uds_billboard_textdomain) ?></a>
 								</span>
 							</div>
 						</td>
 						<td class="shortcode">
-							<?php echo "[uds-billboard name=\"{$billboard->name}\"]"?>
+							<?php echo "[uds-billboard name=\"" . esc_html(stripslashes($key)) . "\"]"?>
 						</td>
 					</tr>
 					<?php $n++; ?>

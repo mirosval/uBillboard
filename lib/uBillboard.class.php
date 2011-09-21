@@ -825,6 +825,10 @@ class uBillboard {
 			return NULL;
 		}
 		
+		if($key == 'name') {
+			return sanitize_title($option);
+		}
+		
 		if(in_array($key, array_keys($uds_billboard_general_options))) {
 			if($uds_billboard_general_options[$key]['type'] == 'select') {
 				if(in_array($option, array_keys($uds_billboard_general_options[$key]['options']))) {
