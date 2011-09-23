@@ -8,12 +8,16 @@ if(! isset($ALLOWED_SITES)){
 	$ALLOWED_SITES = array (
 			'flickr.com',
 			'picasa.com',
-			'img.youtube.com',
 			'upload.wikimedia.org',
 			'photobucket.com',
 			'imgur.com',
 			'imageshack.us',
-			'tinypic.com'
+			'tinypic.com',
+			'blogger.com',
+			'wordpress.com',
+			'img.youtube.com',
+			'ytimg.com',
+			'vimeocdn.com'
 	);
 }
 
