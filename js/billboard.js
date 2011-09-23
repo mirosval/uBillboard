@@ -346,7 +346,7 @@
 					clearTimeout(timers.nextSlideAnimation);
 				}
 				
-				if(typeof $countdown !== 'undefined' || $countdown === null) {
+				if(typeof $countdown !== 'undefined' && $countdown !== null) {
 					$countdown.hide();
 				}
 			},
