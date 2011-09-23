@@ -21,7 +21,7 @@ function uds_billboard_oembed($url, $width, $height)
 	$oembed = '';
 	foreach($services as $pattern => $endpoint) {
 		if(strpos($url, $pattern) !== false) {
-			$oembed = $endpoint . 'url='.urlencode($url)."&maxwidth=$width&maxheight=$height&format=json";
+			$oembed = $endpoint . 'url='.urlencode($url)."&maxwidth=$width&maxheight=$height&format=json&wmode=opaque";
 		}	
 	}
 	
