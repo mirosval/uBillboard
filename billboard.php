@@ -104,6 +104,22 @@ function uds_billboard_is_active()
 }
 
 /**
+ *	Function, detect if uBillboard will be used on the current page.
+ *	And if the current page is the Preview.
+ *
+ *	@return bool
+ */
+function uds_billboard_is_preview()
+{
+	if(	( !isset($_GET['page']) || $_GET['page'] != 'uds_billboard_edit' ) ||
+		( !isset($_GET['action']) || $_GET['action'] != 'preview') ) {
+		return false;
+	}
+	
+	return true;
+}
+
+/**
  *	Function, gets the "use compression" option value
  *
  *	@return bool
@@ -268,7 +284,7 @@ add_action('wp_print_scripts', 'uds_billboard_scripts');
 function uds_billboard_scripts()
 {
 	global $wp_version;
-	if(!uds_billboard_is_active() || is_admin()) return;
+	if((!uds_billboard_is_active() || is_admin()) && !uds_billboard_is_preview()) return;
 	
 	$dir = UDS_BILLBOARD_URL;
 	
@@ -293,7 +309,7 @@ add_action('wp_print_styles', 'uds_billboard_styles');
  */
 function uds_billboard_styles()
 {
-	if(!uds_billboard_is_active() || is_admin()) return;
+	if((!uds_billboard_is_active() || is_admin()) && !uds_billboard_is_preview()) return;
 	
 	$dir = UDS_BILLBOARD_URL;
 	if(uds_billboard_use_compression()) {
