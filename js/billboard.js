@@ -156,7 +156,6 @@
 							window.location = slide.link;
 						}
 					}
-					return false;
 				});
 				
 				// this call from the preloadImages() function would be too soon
@@ -1038,15 +1037,25 @@
 				if(slide.transition == 'none') {
 					$stage.html(slide.html);
 					
-					// center content
-					var $element = $('>*', $stage);
-					
-					$element.css({
-						position: 'absolute',
-						top: parseInt(options.height, 10) / 2 - $element.attr('height') / 2,
-						left: parseInt(options.width, 10) / 2 - $element.attr('width') / 2,
-						margin: 'auto'
-					});
+					if(slide.embeddecContentHandled !== true) {
+						// center content
+						var $element = $('>*', $stage);
+						
+						if($element.is('object')) {
+							$element.prepend("<param name='wmode' value='opaque' />");
+							$('embed', $element).attr('wmode', 'opaque');
+						}
+						
+						$element.css({
+							position: 'absolute',
+							top: parseInt(options.height, 10) / 2 - $element.attr('height') / 2,
+							left: parseInt(options.width, 10) / 2 - $element.attr('width') / 2,
+							margin: 'auto'
+						});
+						
+						slide.html = $stage.html();
+						slide.embeddecContentHandled = true;
+					}
 				}
 			},
 			
