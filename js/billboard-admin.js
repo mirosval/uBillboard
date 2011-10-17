@@ -421,7 +421,7 @@ jQuery(function($){
 					left = ' left="'+parseInt($(this).css('left'), 10)+'px"',
 					content = $(this).find('textarea').val(),
 					skin = ' skin="'+$(this).data('skin')+'"';
-				console.log(skin);
+					
 				if(content != '') {
 					$content.val(val + '[uds-description '+width+height+top+left+skin+']' + content + '[/uds-description] ');
 				}
