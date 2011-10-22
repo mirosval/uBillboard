@@ -636,7 +636,8 @@
 					$paginator = $('.uds-bb-paginator', $bb),
 					$bullets = $('.uds-bb-position-indicator-bullets', $bb),
 					$thumbs = $('.uds-bb-thumbnails', $bb),
-					$thumb = $('.uds-bb-thumb', $thumbs);
+					$thumb = $('.uds-bb-thumb', $thumbs),
+					$container = $('.uds-bb-thumbnail-container', $thumbs);
 				
 				// Bind next/prev/playpause handlers
 				$playpause.click(_public.playpause);
@@ -695,6 +696,10 @@
 				$thumb.click(function(){
 					_public.animateSlide($(this).index());
 				});
+				
+				if($thumbs.is('.top,.bottom')) {
+					$container.css('width', '10000px');
+				}
 				
 				$bb.has('.uds-bb-thumbnails.top:not(.inside)').css('margin-top', $thumbs.outerHeight());
 				$bb.has('.uds-bb-thumbnails.bottom:not(.inside)').css('margin-bottom', $thumbs.outerHeight());
@@ -783,7 +788,6 @@
 					containerDim,
 					scrollProperty,
 					position = 0,
-					$container = $('.uds-bb-thumbnail-container', $thumbs),
 					orientation = $thumbs.is('.right,.left') ? 'vertical' : 'horizontal',
 					margin;
 				
