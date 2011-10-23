@@ -66,7 +66,18 @@ function uds_billboard_oembed($url, $width, $height)
 		return $response;
 	}
 
+	$out->html = uds_billboard_filter_wmode($out->html);
+
 	return $out;
 }
+
+function uds_billboard_filter_wmode($html) {
+	if (strpos($html, '<param name="movie"' ) !== false && strpos($html, 'value="opaque"') === false)
+		$html = str_replace( '<embed', '<param name="wmode" value="opaque"></param><embed', $html);
+	if (strpos( $html, '<embed' ) !== false && strpos( $html, 'wmode="opaque"' )=== false)
+		$html = str_replace( '<embed', '<embed wmode="opaque"', $html);
+	return $html;
+}
+
 
 ?>

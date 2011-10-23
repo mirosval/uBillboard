@@ -571,7 +571,7 @@ class uBillboardSlide {
 						
 						$text = '<div class="uds-bb-description '.$skin.'" style="top:20px;left:20px;width:'.$width.'px;height:'.$height.'px"><div class="uds-bb-description-inside">';
 						$text .= get_the_excerpt();
-						$text .= '<a href="'.get_the_permalink().'">'.__('Read More', uds_billboard_textdomain).'</a>';
+						$text .= '<a href="'.get_permalink().'">'.__('Read More', uds_billboard_textdomain).'</a>';
 						$text .= '</div></div>';
 						
 						if(has_post_thumbnail()) {
