@@ -629,6 +629,11 @@
 					opacity: 0
 				});
 				
+				// fix for IE7 controls not displaying
+				if($.browser.msie && $.browser.version < 8) {
+					$('.uds-bb-paginator').css('position', 'static');
+				}
+				
 				// setup variables for shorter code
 				var $playpause = $('.uds-bb-playpause', $bb),
 					$buttonNext = $('.uds-bb-next', $bb),
@@ -879,21 +884,12 @@
 					$controlsToHover = $controlsToHover.add($bulletsContainer);
 				} 
 				
-				if($.browser.msie && $.browser.version < 8) {
-					$controlsToHover.fadeTo(0, 0);
-					$bb.hover(function(){
-						$controlsToHover.stop().fadeTo(300, 1);
-					}, function(){
-						$controlsToHover.stop().fadeTo(300, 0);
-					});
-				} else {
-					$controlsToHover.hide();
-					$bb.hover(function(){
-						$controlsToHover.show();
-					}, function(){
-						$controlsToHover.hide();
-					});
-				}
+				$controlsToHover.fadeTo(0, 0);
+				$bb.hover(function(){
+					$controlsToHover.stop().fadeTo(300, 1);
+				}, function(){
+					$controlsToHover.stop().fadeTo(300, 0);
+				});
 				
 				// Hide controls based on the options
 				if(options.showControls === false) {
