@@ -879,12 +879,21 @@
 					$controlsToHover = $controlsToHover.add($bulletsContainer);
 				} 
 				
-				$controlsToHover.fadeTo(0, 0);
-				$bb.hover(function(){
-					$controlsToHover.stop().fadeTo(300, 1);
-				}, function(){
-					$controlsToHover.stop().fadeTo(300, 0);
-				});
+				if($.browser.msie && $.browser.version < 8) {
+					$controlsToHover.fadeTo(0, 0);
+					$bb.hover(function(){
+						$controlsToHover.stop().fadeTo(300, 1);
+					}, function(){
+						$controlsToHover.stop().fadeTo(300, 0);
+					});
+				} else {
+					$controlsToHover.hide();
+					$bb.hover(function(){
+						$controlsToHover.show();
+					}, function(){
+						$controlsToHover.hide();
+					});
+				}
 				
 				// Hide controls based on the options
 				if(options.showControls === false) {

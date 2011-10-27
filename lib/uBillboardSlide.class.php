@@ -512,7 +512,7 @@ class uBillboardSlide {
 		$this->thumb = $this->image;
 		
 		// Image
-		if($this->resize == 'on') {
+		if($this->resize == 'on' && !empty($this->image)) {
 			$timthumb = UDS_TIMTHUMB_URL . '?';
 		
 			$width = $this->slider->width;
@@ -578,14 +578,16 @@ class uBillboardSlide {
 							$id = get_post_thumbnail_id();
 							$image_src = wp_get_attachment_image_src($id, 'full');
 							
-							// change the thumbnail also
-							$this->thumb = $image_src[0];
-
-							$width = $this->slider->width;
-							$height = $this->slider->height;
+							if(!empty($image_src[0])) {
+								// change the thumbnail also
+								$this->thumb = $image_src[0];
 							
-							$timthumb = UDS_TIMTHUMB_URL . '?';
-							$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $image_src[0]) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
+								$width = $this->slider->width;
+								$height = $this->slider->height;
+							
+								$timthumb = UDS_TIMTHUMB_URL . '?';
+								$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $image_src[0]) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
+							}
 						}
 					}
 					
@@ -607,7 +609,7 @@ class uBillboardSlide {
 			$out .= "<span style='display:none' class='uds-direction'>{$direction}</span>";
 			$out .= "<span style='display:none' class='uds-background'>{$background}</span>";
 			$out .= $text;
-		$out .= "</div>\n";
+		$out .= "</div>\n\n";
 		return $out;
 	}
 	

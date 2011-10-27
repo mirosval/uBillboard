@@ -611,7 +611,7 @@ class uBillboard {
 	
 	private function renderSlides()
 	{
-		$out = "<div class='uds-bb-slides'>";
+		$out = "<div class='uds-bb-slides'>\n";
 		
 		$slides = $this->slides;
 		
@@ -659,7 +659,7 @@ class uBillboard {
 			$out .= $this->thumbnails($this->slides);
 		}
 			
-		$out .= "</div>";
+		$out .= "</div>\n";
 		
 		return $out;
 	}
@@ -807,7 +807,7 @@ class uBillboard {
 			$out .= $slide->renderThumb();
 		}
 		$out .= "</div>";
-		$out .= "</div>";
+		$out .= "</div>\n";
 		return $out;
 	}
 	
