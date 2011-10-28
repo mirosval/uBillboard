@@ -2,7 +2,7 @@
  *	@license
  *	uBillboard - Premium Slide for WordPress
  *
- *	Version: 3.0.3
+ *	Version: 3.0.4
  *
  *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
  *	
