@@ -54,6 +54,11 @@ td.shortcode {
 	width: 25%;
 }
 
+th.slide_count,
+td.slide_count {
+	width: 10%;
+}
+
 /*-------------------------------------------*/
 
 .wrap .updated.uds-warn {

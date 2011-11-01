@@ -269,6 +269,15 @@ function uds_billboard_admin_init()
 		}
 	}
 	
+	// Process Bulk Actions
+	if(!empty($_REQUEST['uds-billboard-bulk-actions']) && wp_verify_nonce($_REQUEST['uds-billboard-bulk-actions'], 'uds-billboard-bulk-actions')) {
+		if(isset($_POST['action']) && $_POST['action'] == 'export' && isset($_POST['billboards'])) {
+			uds_billboard_export($_POST['billboards']);
+		} elseif(isset($_POST['action']) && $_POST['action'] == 'delete' && isset($_POST['billboards'])) {
+			uds_billboard_delete($_POST['billboards']);
+		}
+	}
+	
 	// Check cache
 	if(!uds_billboard_cache_is_writable()) {
 		add_action( 'admin_notices', create_function('', 'echo \'<div id="message" class="error"><p><strong>' . __("uBillboard Cache folder is not writable!", uds_billboard_textdomain) . '</strong></p></div>\';') );
@@ -496,6 +505,7 @@ function uds_billboard_enqueue_admin_scripts()
 	wp_enqueue_script('uds-billboard', $dir."js/billboard-admin.js", array('jquery', 'jquery-ui-tabs'), UDS_BILLBOARD_VERSION, true);
 	
 	wp_localize_script('uds-billboard', 'udsAdminL10n', array(
+		'bulkActionsDelete' => __('Really delete all selected sliders? This is not undoable', uds_billboard_textdomain),
 		'billboardDeleteConfirmation' => __('Really delete? This is not undoable', uds_billboard_textdomain),
 		'slideDeleteConfirmation' => __('Really delete slide?', uds_billboard_textdomain),
 		'addAnImage' => __('Add an Image', uds_billboard_textdomain),
@@ -570,19 +580,33 @@ function uds_billboard_content_editor_help()
  *	
  *	@return void
  */
-function uds_billboard_delete()
+function uds_billboard_delete($billboards_to_delete = false)
 {
-	$billboard = $_REQUEST['uds-billboard-delete'];
+	if($billboards_to_delete === false) {
+		$billboards_to_delete = array($_REQUEST['uds-billboard-delete']);
+	}
 	
 	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
 	
-	$message = '';
-	if(!isset($billboards[$billboard])) {
-		$message = 'uds-message='.urlencode(sprintf(__('Billboard %s does not exist', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('error');
+	$message = 'uds-message=';
+	$has_error = false;
+	if(is_array($billboards_to_delete) && !empty($billboards_to_delete)) {
+		foreach($billboards_to_delete as $billboard) {
+			if(!isset($billboards[$billboard])) {
+				$has_error = true;
+				$message .= urlencode('<p>' . sprintf(__('Billboard %s does not exist', uds_billboard_textdomain), esc_html($billboard)) . '</p>');
+			} else {
+				unset($billboards[$billboard]);
+				update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
+				$message .= urlencode('<p>' . sprintf(__('Billboard &quot;%s&quot; has been successfully deleted', uds_billboard_textdomain), esc_html($billboard)) . '</p>');
+			}
+		}
+	}
+	
+	if($has_error) {
+		$message .= '&uds-class='.urlencode('error');
 	} else {
-		unset($billboards[$billboard]);
-		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
-		$message = 'uds-message='.urlencode(sprintf(__('Billboard &quot;%s&quot; has been successfully deleted', uds_billboard_textdomain), esc_html($billboard))).'&uds-class='.urlencode('updated');
+		$message .= '&uds-class='.urlencode('updated');
 	}
 	
 	wp_safe_redirect(admin_url('admin.php?page=uds_billboard_admin&'.$message));

@@ -18,7 +18,7 @@ function uds_billboard_import($file)
 {
 	global $uds_billboard_errors, $uds_billboard_attributes;
 	$import = @file_get_contents($file);
-	
+
 	if(empty($import)) {
 		$uds_billboard_errors[] = __('Import file is empty', uds_billboard_textdomain);
 		return;
@@ -31,12 +31,12 @@ function uds_billboard_import($file)
 		$uds_billboard_errors[] = sprintf(__('An error has occurred during XML Parsing: %s', uds_billboard_textdomain), $e->getMessage());
 		return;
 	}
-	
+
 	$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
 	
-	foreach($import->udsBillboards as $udsBillboard) {
+	foreach($import->udsBillboards->udsBillboard as $udsBillboard) {
 		$billboard = new uBillboard();
-		$billboard->importFromXML($udsBillboard->udsBillboard);
+		$billboard->importFromXML($udsBillboard);
 		$billboards[$billboard->name] = $billboard;
 	}
 	
@@ -45,7 +45,7 @@ function uds_billboard_import($file)
 		return;
 	}
 
-	if($_POST['import-attachments'] == 'on') {
+	if(isset($_POST['import-attachments']) && $_POST['import-attachments'] == 'on') {
 		foreach($billboards as $bbname => $billboard) {
 			foreach($billboard->slides as $slide) {
 				$urlinfo = parse_url($slide->image);
@@ -122,16 +122,18 @@ function uds_billboard_export($what = false)
 	$export .= ' <version>'.UDS_BILLBOARD_VERSION.'</version>' . "\n";
 	$export .= ' <udsBillboards>' . "\n";
 	
-	foreach($billboards as $name => $billboard) {
-		if($what !== false) {
-			if(is_array($what) && !in_array($name, $what)) {
-				continue;
-			} elseif($name !== $what) {
-				continue;
-			}
+	if(is_array($what)) {
+		foreach($what as $name) {
+			$billboard = $billboards[$name];
+			$export .= $billboard->export() . "\n";
 		}
-		
+	} elseif(is_string($what)) {
+		$billboard = $billboards[$name];
 		$export .= $billboard->export() . "\n";
+	} else {
+		foreach($billboards as $name => $billboard) {
+			$export .= $billboard->export() . "\n";
+		}
 	}
 	
 	$export .= ' </udsBillboards>' . "\n";

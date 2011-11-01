@@ -1,4 +1,13 @@
-jQuery(function($){	
+jQuery(function($){
+	// admin list bulk delete question
+	$('.uds-bulk-actions-form').submit(function(){
+		if($('.uds-bulk-actions').val() == 'delete') {
+			return confirm(udsAdminL10n.bulkActionsDelete);
+		} else {
+			return true;
+		}
+	});
+	
 	// admin billboard delete
 	$('#billboard_update_form .deletion').click(function(){
 		return confirm(udsAdminL10n.billboardDeleteConfirmation);
