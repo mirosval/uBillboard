@@ -744,13 +744,13 @@ class uBillboardSlide {
 		
 		$attrib_full = $uds_billboard_attributes[$attrib];
 		echo '<div class="'. $attrib .'-wrapper">';
-		echo '<input type="button" class="uds-content-editor button" value="Content Editor" />';
+		echo '<input type="button secondary" class="uds-content-editor button" value="Content Editor" />';
 		echo '<label for="billboard-'. $attrib .'">'. $attrib_full['label'] .'</label>';
 		echo '<textarea name="uds_billboard['. $attrib .'][]" class="billboard-'. $attrib .'" id="uds-text-'.$id.'">'. htmlspecialchars(stripslashes($this->{$attrib})) .'</textarea>';
 		echo '<div class="content-editor" title="'.__('Content Editor', uds_billboard_textdomain).'">';
 		echo '<div class="toolbar-buttons">';
-		echo '<span class="button add">'.__('Add new box', uds_billboard_textdomain).'</span>';
-		echo '<span class="button remove">'.__('Remove currently focused box', uds_billboard_textdomain).'</span>';
+		echo '<input type="button" class="button secondary uds-add-box" value="'.__('Add new box', uds_billboard_textdomain).'" />';
+		echo '<input type="button" class="button secondary uds-remove-box" value="'.__('Remove currently focused box', uds_billboard_textdomain).'" />';
 		echo '<label>Current Box Skin: </label>';
 		echo '<select class="box-skin">';
 		echo '<option value="" disabled="disabled"></option>';
@@ -766,7 +766,7 @@ class uBillboardSlide {
 		$uds_description_mode = 'editor';
 		echo do_shortcode(stripslashes($this->{$attrib}));
 		echo '</div>';
-		echo '<input type="button" value="Save" class="button primary save" />';
+		echo '<input type="button" class="button secondary save uds-save-content" value="Save" />';
 		echo '</div>';
 		echo '<div class="clear"></div>';
 		echo '</div>';

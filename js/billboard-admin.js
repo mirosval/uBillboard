@@ -1,4 +1,4 @@
-jQuery(function($){
+jQuery(function($){	
 	// admin billboard delete
 	$('#billboard_update_form .deletion').click(function(){
 		return confirm(udsAdminL10n.billboardDeleteConfirmation);
@@ -73,9 +73,6 @@ jQuery(function($){
 	// Slide Tabs
 	function createTabs() {
 		$('.uds-slide-tabs').tabs({
-			cookie: {
-				expire: 1
-			},
 			show: function(event, ui){
 				var $image = $(ui.tab).parents('.slide').find('.image-wrapper');
 
@@ -409,7 +406,7 @@ jQuery(function($){
 			return $editorArea;
 		}
 		
-		$('input.save', $dialog).click(function(){
+		$('.uds-save-content', $dialog).click(function(){
 			$content.val('');
 			$('.editable-box', $dialog).each(function(){
 				$(this).draggable('destroy');
@@ -431,10 +428,10 @@ jQuery(function($){
 			});
 		});
 		
-		$addButton = $('span.add', $dialog);
+		$addButton = $('.uds-add-box', $dialog).blur();
 		$addButton.click(createEditorArea);
 		
-		$removeButton = $('span.remove', $dialog);
+		$removeButton = $('.uds-remove-box', $dialog);
 		$removeButton.click(function(){
 			$('.editable-box.focused', $editor).draggable('destroy').resizable('destroy').remove();
 			
