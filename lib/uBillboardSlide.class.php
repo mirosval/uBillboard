@@ -27,6 +27,11 @@ $uds_billboard_attributes = array(
 		'label' => __('Transparent Background', uds_billboard_textdomain),
 		'default' => 'on'
 	),
+	'background-repeat' => array(
+		'type' => 'checkbox',
+		'label' => __('Tile background image', uds_billboard_textdomain),
+		'default' => 'on'
+	),
 	'link' => array(
 		'type' => 'text',
 		'label' => __('Link URL', uds_billboard_textdomain),
@@ -35,6 +40,11 @@ $uds_billboard_attributes = array(
 	'link-target' => array(
 		'type' => 'checkbox',
 		'label' => __('Open in a new window', uds_billboard_textdomain),
+		'default' => ''
+	),
+	'stop' =>  array(
+		'type' => 'checkbox',
+		'label' => __('Stop animation on this slide', uds_billboard_textdomain),
 		'default' => ''
 	),
 	'delay' => array(
@@ -447,6 +457,7 @@ class uBillboardSlide {
 				<?php $this->renderAdminField('relative-paths') ?>
 				<?php $this->renderAdminField('background') ?>
 				<?php $this->renderAdminField('background-transparent') ?>
+				<?php $this->renderAdminField('background-repeat') ?>
 			</div>
 			<div id="uds-slide-tab-content-<?php echo $id ?>" class="uds-slide-tab-content">
 				<?php $this->renderAdminField('content') ?>
@@ -464,6 +475,7 @@ class uBillboardSlide {
 				<?php $this->renderAdminField('delay') ?>
 				<?php $this->renderAdminField('transition') ?>
 				<?php $this->renderAdminField('direction') ?>
+				<?php $this->renderAdminField('stop') ?>
 				<div class="clear"></div>
 			</div>
 		</div>
@@ -506,6 +518,16 @@ class uBillboardSlide {
 		if($this->{'background-transparent'} == 'on') {
 			$background = 'transparent';
 		}
+		
+		// Background Repeat
+		$background_repeat = $this->{'background-repeat'};
+		if($background_repeat == 'on') {
+			$background_repeat = 'repeat';
+		} else {
+			$background_repeat = 'no-repeat';
+		}
+		
+		$stop = $this->stop == 'on' ? 'true': 'false';
 		
 		
 		// Thumb
@@ -608,6 +630,8 @@ class uBillboardSlide {
 			$out .= "<span style='display:none' class='uds-transition'>$transition</span>";
 			$out .= "<span style='display:none' class='uds-direction'>{$direction}</span>";
 			$out .= "<span style='display:none' class='uds-background'>{$background}</span>";
+			$out .= "<span style='display:none' class='uds-background-repeat'>{$background_repeat}</span>";
+			$out .= "<span style='display:none' class='uds-stop'>{$stop}</span>";
 			$out .= $text;
 		$out .= "</div>\n\n";
 		return $out;

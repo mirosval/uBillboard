@@ -292,7 +292,9 @@ td.slide_count {
 .uds-billboard-form .background-wrapper label,
 .uds-billboard-form .background-transparent-wrapper label,
 .uds-billboard-form .relative-paths-wrapper label,
-.uds-billboard-form .link-target-wrapper label {
+.uds-billboard-form .link-target-wrapper label,
+.uds-billboard-form .background-repeat-wrapper label,
+.uds-billboard-form .stop-wrapper label {
 	float: left;
 }
 

@@ -207,13 +207,21 @@
 				}
 	
 				if(animations[transition] === null || typeof animations[transition] !== 'object'){
-					$.error('Transition "' + transition + '" is not defined');
-					return;
+					d('Transition "' + transition + '" is not defined');
+					transition = 'fade';
 				}
 				
 				// Assign Direction
 				var defaultDirection = animations[transition].direction;
-				animations[transition].direction = slide.direction;
+				if(directions[slide.direction] === null || typeof directions[slide.direction] !== 'object') {
+					if(directions[defaultDirection] === null || typeof directions[defaultDirection] !== 'object') {
+						animations[transition].direction = 'right';
+					} else {
+						animations[transition].direction = defaultDirection;
+					}
+				} else {
+					animations[transition].direction = slide.direction;
+				}
 				
 				$next.show().css('opacity', 1);
 				
@@ -251,6 +259,7 @@
 							left: '0px',
 							opacity: 1,
 							backgroundImage: 'url(' + slide.bg + ')',
+							backgroundRepeat: slide.repeat,
 							cursor: cursor
 						});
 					$next.stop().hide();
@@ -266,13 +275,19 @@
 					return;
 				}
 				
+				if(slide.stop) {
+					playing = false;
+				}
+				
 				// Run Countdown Animation
 				if(playing) {
 					_private.animateCountdown(slides[currentSlideId].delay);
+				} else {
+					$countdown.hide();
 				}
 				
 				// continue playing
-				if(options.autoplay || playing) {
+				if((options.autoplay || playing) && !slide.stop) {
 					//clearTimeout(timers.nextSlideAnimation);
 					_public.play();
 				}
@@ -377,7 +392,9 @@
 						direction: $('.uds-direction', el).remove().text(),
 						bg: $('.uds-bb-bg-image', el).remove().attr('src'),
 						bgColor: $('.uds-background', el).remove().text(),
+						repeat: $('.uds-background-repeat', el).remove().text(),
 						link: $('.uds-bb-link', el).remove().attr('href'),
+						stop: $('.uds-stop', el).remove().text() == 'true' ? true : false,
 						html: $(el).remove().html()
 					};
 					slides.push(slide);
@@ -613,7 +630,7 @@
 				_private.resetAnimation();
 				
 				if(nextSlide.transition !== 'none') { // Do not create a million copies of embedded content ;)
-					css = _private.getSlideBackgroundCSS(nextSlide)
+					css = _private.getSlideBackgroundCSS(nextSlide);
 					
 					$nextInsides.css(css).html(nextSlide.html);
 				}
@@ -1026,15 +1043,18 @@
 			
 			getSlideBackgroundCSS: function(slide) {
 				var css;
+				//d(slide);
 				if(slide.bg !== '') {
 					css = {
-						backgroundColor: 'transparent',
-						backgroundImage: 'url('+slide.bg+')'
+						backgroundColor: slide.bgColor,
+						backgroundImage: 'url('+slide.bg+')',
+						backgroundRepeat: slide.repeat
 					};
 				} else {
 					css = {
 						backgroundColor: slide.bgColor,
-						backgroundImage: ''
+						backgroundImage: '',
+						backgroundRepeat: slide.repeat
 					};
 				}
 				
