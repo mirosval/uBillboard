@@ -828,16 +828,14 @@
 					speed = offset - windowDim / 2;
 					
 					// normalize it to 0..1
-					speed = speed / (windowDim / 2);
+					speed = (speed / (windowDim / 2)) * 5;
 					
 					if(windowDim > containerDim) {
 						return;
 					}
-					
-					if(speed < 0 && position > 0) {
-						position--;
-					} else if(speed > 0 && position < (containerDim - windowDim)) {
-						position++;
+
+					if((speed < 0 && position > 0) || (speed > 0 && position < (containerDim - windowDim))) {
+						position += speed;
 					}
 					
 					$container.css(scrollProperty, - position + 'px');
@@ -846,6 +844,7 @@
 				$thumbs.bind({
 					'mouseenter mousemove': function(e){
 						clearInterval(timers.thumbMove);
+						
 						timers.thumbMove = setInterval(function() {
 							recalculateContainerPosition(e);
 						}, 10);

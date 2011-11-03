@@ -18,13 +18,6 @@ jQuery(function($){
 		return confirm(udsAdminL10n.billboardDeleteConfirmation);
 	});
 	
-	// slides delete
-	$('.slide .deletediv').click(function(){
-		if(confirm(udsAdminL10n.slideDeleteConfirmation)) {
-			$(this).parents('.slide').remove();
-		}
-	});
-	
 	// Boxes closing
 	$('.handlediv').live('click', function(){
 		$(this).parent().toggleClass('closed');
@@ -176,9 +169,11 @@ jQuery(function($){
 	
 	// slide Deleting
 	$('.slide .deletediv').live('click', function(){
-		$(this).parents('.slide').remove();
-		markDirty(true);
-		resetSlides();
+		if(confirm(udsAdminL10n.slideDeleteConfirmation)) {
+			$(this).parents('.slide').remove();
+			markDirty(true);
+			resetSlides();
+		}
 	});
 	
 	// Slide Sortable
