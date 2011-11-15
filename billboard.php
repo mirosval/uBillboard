@@ -38,6 +38,7 @@ define('UDS_BILLBOARD_OPTION_GENERAL', 'uds-billboard-general-3');
 
 // Localization textdomain
 define('uds_billboard_textdomain', 'uBillboard');
+load_plugin_textdomain(uds_billboard_textdomain, false, dirname( plugin_basename( __FILE__ ) ) . '/lang/');
 
 require_once 'lib/compat.php';
 require_once 'lib/embed.php';
@@ -202,19 +203,6 @@ function uds_billboard_plugin_row_meta($plugin_meta, $plugin_file, $plugin_data,
 		}
 	}
 	return $plugin_meta;
-}
-
-add_action('init', 'uds_billboard_init');
-/**
- *	Function, global init hook
- *	
- *	@return void
- */
-function uds_billboard_init()
-{
-	if(uds_billboard_is_plugin()) {
-		load_plugin_textdomain(uds_billboard_textdomain, false, dirname( plugin_basename( __FILE__ ) ) . '/lang/');
-	}
 }
 
 // initialize billboard

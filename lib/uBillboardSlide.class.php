@@ -837,7 +837,7 @@ class uBillboardSlide {
 		static $unique_id = 0;
 		
 		echo '<div class="'. $attrib .'-url-wrapper">';
-		echo '	<label for="billboard-'. $attrib .'-'. $unique_id .'-hidden">Image URL</label>';
+		echo '	<label for="billboard-'. $attrib .'-'. $unique_id .'-hidden">' . __('Image URL', uds_billboard_textdomain) . '</label>';
 		echo '	<input type="text" name="uds_billboard['. $attrib .'][]" value="'. $this->{$attrib} .'" id="billboard-'. $attrib .'-'. $unique_id .'-hidden" />';
 		echo '	<a class="image-upload" title="Add an Image" href="">';
 		echo '		<img alt="Add an Image" src="'. admin_url() . 'images/media-button-image.gif" id="billboard-'. $attrib .'-'. $unique_id .'" class="billboard-'. $attrib .'" />';
