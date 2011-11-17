@@ -116,7 +116,7 @@
 				$bb = $(this);
 				
 				$slides = $('.uds-bb-slides', $bb);
-	
+								
 				// Fix options
 				options = $.extend(defaults, passedOptions);
 				
@@ -136,12 +136,19 @@
 				// initialize transitioning var
 				transitionInProgress = false;
 				
+				// check if we don't have the images already in the cache
+				var preloadRequired = _private.preloadRequired();
+				
 				_private.initSlides();
 				_private.initAnimationMarkup();
-				_private.initPreloader();
-				// Runs preloader, and when it finishes, it triggers the udsBillboardLoadingDidComplete Event
-				// to continue normal code flow
-				var willPreloadImages = _private.preloadImages();
+				
+				var willPreloadImages = preloadRequired;
+				if(preloadRequired) {
+					_private.initPreloader();
+					// Runs preloader, and when it finishes, it triggers the udsBillboardLoadingDidComplete Event
+					// to continue normal code flow
+					willPreloadImages = _private.preloadImages();
+				}
 				
 				// Init pagination and playback controls
 				_private.initControls();
@@ -401,13 +408,23 @@
 				});
 			},
 			
+			preloadRequired: function() {
+				var complete = true;
+				$('.uds-bb-bg-image', $bb).each(function(){
+					var el = $(this).get(0);
+					complete = complete && el.complete;
+				});
+				
+				return !complete;
+			},
+			
 			initPreloader: function() {
 				$bb.append('<div class="uds-bb-preloader-wrapper"><div class="uds-bb-preloader"><div class="uds-bb-preloader-indicator"></div></div></div>');
 				$preloader = $('.uds-bb-preloader-wrapper', $bb);
 				
 				var $indicator = $('.uds-bb-preloader-indicator', $preloader);
 				
-				$('.uds-bb-preloader').css({
+				$('.uds-bb-preloader', $bb).css({
 					top: parseInt(options.height, 10) / 2 - $indicator.height() / 2 + 'px',
 					left: parseInt(options.width, 10) / 2 - $indicator.width() / 2 + 'px'
 				});
