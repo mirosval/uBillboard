@@ -1005,7 +1005,7 @@
 				
 				$countdown = $('<div class="uds-bb-countdown"></div>').appendTo($controls);
 				canvas = $countdown.append('<canvas width="100" height="100">').find('canvas').get(0);
-				if(canvas.getContext) {
+				if(typeof canvas.getContext == 'function') {
 					ctx = canvas.getContext('2d');
 					
 					// setup style					
