@@ -394,10 +394,40 @@ function uds_billboard_menu()
 	add_action("admin_print_scripts-$ubillboard_importexport", 'uds_billboard_enqueue_admin_scripts');
 		
 	// Contextual help
-	add_contextual_help($ubillboard, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-billboards.html'));
-	add_contextual_help($ubillboard_add, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit.html'));
-	add_contextual_help($ubillboard_general, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-general.html'));
-	add_contextual_help($ubillboard_importexport, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-import.html'));
+	if(class_exists('WP_Screen')) {
+		WP_Screen::get($ubillboard)->add_help_tab(array(
+			'title' => __('uBillboard Help'),
+			'id' => 'uds-billboard-help',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-billboards.html'),
+			'callback' => false
+		));
+		
+		WP_Screen::get($ubillboard_add)->add_help_tab(array(
+			'title' => __('uBillboard Editing Help'),
+			'id' => 'uds-billboard-help',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit.html'),
+			'callback' => false
+		));
+		
+		WP_Screen::get($ubillboard_general)->add_help_tab(array(
+			'title' => __('uBillboard General Options Help'),
+			'id' => 'uds-billboard-help',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-general.html'),
+			'callback' => false
+		));
+		
+		WP_Screen::get($ubillboard_importexport)->add_help_tab(array(
+			'title' => __('uBillboard Import/Export Help'),
+			'id' => 'uds-billboard-help',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-import.html'),
+			'callback' => false
+		));
+	} else {
+		add_contextual_help($ubillboard, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-billboards.html'));
+		add_contextual_help($ubillboard_add, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit.html'));
+		add_contextual_help($ubillboard_general, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-general.html'));
+		add_contextual_help($ubillboard_importexport, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-import.html'));
+	}
 }
 
 /**
