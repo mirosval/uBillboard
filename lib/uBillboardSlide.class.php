@@ -540,7 +540,7 @@ class uBillboardSlide {
 			$width = $this->slider->width;
 			$height = $this->slider->height;
 		
-			$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $this->image) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
+			$image = $timthumb . 'src=' . $this->image . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
 		} else {
 			$image = $this->image;
 		}
@@ -608,7 +608,7 @@ class uBillboardSlide {
 								$height = $this->slider->height;
 							
 								$timthumb = UDS_TIMTHUMB_URL . '?';
-								$image = $timthumb . 'src=' . str_replace(WP_CONTENT_URL . '/', '', $image_src[0]) . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
+								$image = $timthumb . 'src=' . $image_src[0] . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
 							}
 						}
 					}

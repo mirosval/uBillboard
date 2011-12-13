@@ -852,6 +852,7 @@ class timthumb {
 				//allow search to continue
 			}
 		}
+
 		//Check absolute paths and then verify the real path is under doc root
 		$absolute = realpath('/' . $src);
 		if($absolute && file_exists($absolute)){ //realpath does file_exists check, so can probably skip the exists check here
@@ -880,7 +881,7 @@ class timthumb {
 			if(file_exists($base . $src)){
 				$this->debug(3, "Found file as: " . $base . $src);
 				$real = realpath($base . $src);
-				if(stripos($real, $this->docRoot) == 0){ 
+				if(stripos($real, realpath($this->docRoot)) == 0){ 
 					return $real;
 				} else {
 					$this->debug(1, "Security block: The file specified occurs outside the document root.");
