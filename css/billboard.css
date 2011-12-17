@@ -62,6 +62,7 @@
 
 /* Descriptions */
 .uds-bb-description {
+	display: none; /* Make sure description is invisible during launch */
 	position: absolute;
 }
 

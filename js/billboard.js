@@ -2,7 +2,7 @@
  *	@license
  *	uBillboard - Premium Slide for WordPress
  *
- *	Version: 3.0.4
+ *	Version: 3.0.5
  *
  *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
  *	
@@ -269,6 +269,7 @@
 							backgroundRepeat: slide.repeat,
 							cursor: cursor
 						});
+					$('.uds-bb-description', $stage).show();
 					$next.stop().hide();
 					$bb.trigger('udsBillboardTransitionDidComplete', slideId);
 				}, duration);
@@ -518,6 +519,7 @@
 					css = _private.getSlideBackgroundCSS(currentSlide);
 
 				$stage.css(css).html(currentSlide.html).fadeTo(300, 1);
+				$('.uds-bb-description', $stage).show();
 				
 				_private.handleEmbeddedContent(currentSlide);
 				
@@ -643,6 +645,7 @@
 				var css = _private.getSlideBackgroundCSS(currentSlide);
 				
 				$stage.css(css).html(currentSlide.html);
+				$('.uds-bb-description', $stage).show();
 				
 				_private.resetAnimation();
 				
@@ -650,6 +653,7 @@
 					css = _private.getSlideBackgroundCSS(nextSlide);
 					
 					$nextInsides.css(css).html(nextSlide.html);
+					$('.uds-bb-description', $nextInsides).show();
 				}
 			},
 			
