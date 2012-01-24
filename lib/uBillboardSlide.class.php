@@ -7,6 +7,11 @@ $uds_billboard_attributes = array(
 		'label' => __('Image', uds_billboard_textdomain),
 		'default' => ''
 	),
+	'image-alt' => array(
+		'type' => 'text',
+		'label' => __('Image Description (for SEO)', uds_billboard_textdomain),
+		'default' => ''
+	),
 	'resize' => array(
 		'type' => 'checkbox',
 		'label' => __('Apply Automatic resizing', uds_billboard_textdomain),
@@ -215,6 +220,7 @@ class uBillboardSlide {
 		// Create slide
 		$v3slide = new uBillboardSlide(array(
 			'image' => $slide['image'],
+			'image-alt' => '',
 			'resize' => $bbv2['use-timthumb'],
 			'background' => '000000',
 			'background-transparent' => 'on',
@@ -453,6 +459,7 @@ class uBillboardSlide {
 			</ul>
 			<div id="uds-slide-tab-background-<?php echo $id ?>" class="uds-slide-tab-background">
 				<?php $this->renderAdminField('image') ?>
+				<?php $this->renderAdminField('image-alt') ?>
 				<?php $this->renderAdminField('resize') ?>
 				<?php $this->renderAdminField('relative-paths') ?>
 				<?php $this->renderAdminField('background') ?>
@@ -491,45 +498,8 @@ class uBillboardSlide {
 	 */
 	public function render()
 	{
-		global $uds_billboard_attributes, $uds_billboard_text_evaluation;
-
-		// Transition, make nil when embedded content exists
-		$transition = $this->transition;
-		if($this->content == 'embed') {
-			$transition = 'none';
-		}
-		
-		if($transition === 'random') {
-			$transitions = array_keys($uds_billboard_attributes['transition']['options']);
-			$transitions = array_diff($transitions, array('random'));
-			$transition = $transitions[array_rand($transitions)];
-		}
-		
-		// Direction
-		$direction = $this->direction;
-		if($direction === 'random') {
-			$directions = array_keys($uds_billboard_attributes['direction']['options']);
-			$directions = array_diff($directions, array('random'));
-			$direction = $directions[array_rand($directions)];
-		}
-		
-		// Background
-		$background = '#' . $this->background;
-		if($this->{'background-transparent'} == 'on') {
-			$background = 'transparent';
-		}
-		
-		// Background Repeat
-		$background_repeat = $this->{'background-repeat'};
-		if($background_repeat == 'on') {
-			$background_repeat = 'repeat';
-		} else {
-			$background_repeat = 'no-repeat';
-		}
-		
-		$stop = $this->stop == 'on' ? 'true': 'false';
-		
-		
+		global $uds_billboard_text_evaluation;
+				
 		// Thumb
 		$this->thumb = $this->image;
 		
@@ -545,7 +515,7 @@ class uBillboardSlide {
 			$image = $this->image;
 		}
 		
-		$out = "<div class='uds-bb-slide'>";
+		$out = "\t\t\t\t<div class='uds-bb-slide'>";
 			if(empty($this->link)) {
 				$this->link = '#';
 			}
@@ -620,20 +590,73 @@ class uBillboardSlide {
 				default:
 			}
 			
-			$target = $this->{'link-target'} == 'on' ? '_blank' : '';
+			$image_alt = $this->{'image-alt'};
 
-			$out .= "<a href='{$this->link}' class='uds-bb-link'>";
-			$out .= "<img src='$image' alt='' class='uds-bb-bg-image' />";
-			$out .= "</a>";
-			$out .= "<span style='display:none' class='uds-link-target'>$target</span>";
-			$out .= "<span style='display:none' class='uds-delay'>{$this->delay}</span>";
-			$out .= "<span style='display:none' class='uds-transition'>$transition</span>";
-			$out .= "<span style='display:none' class='uds-direction'>{$direction}</span>";
-			$out .= "<span style='display:none' class='uds-background'>{$background}</span>";
-			$out .= "<span style='display:none' class='uds-background-repeat'>{$background_repeat}</span>";
-			$out .= "<span style='display:none' class='uds-stop'>{$stop}</span>";
-			$out .= $text;
-		$out .= "</div>\n\n";
+			if(!empty($text)) {
+				$text = "\n\t\t\t\t" . $text;
+			}
+
+			$out .= "
+					<a href='{$this->link}' class='uds-bb-link'>
+						<img src='$image' alt='$image_alt' class='uds-bb-bg-image' />
+					</a>$text
+				</div>\n";
+		return $out;
+	}
+	
+	public function renderJS()
+	{
+		global $uds_billboard_attributes;
+		
+		$target = $this->{'link-target'} == 'on' ? '_blank' : '';
+		$delay = (int)$this->delay;
+		
+		// Transition, make nil when embedded content exists
+		$transition = $this->transition;
+		if($this->content == 'embed') {
+			$transition = 'none';
+		}
+		
+		if($transition === 'random') {
+			$transitions = array_keys($uds_billboard_attributes['transition']['options']);
+			$transitions = array_diff($transitions, array('random'));
+			$transition = $transitions[array_rand($transitions)];
+		}
+		
+		// Direction
+		$direction = $this->direction;
+		if($direction === 'random') {
+			$directions = array_keys($uds_billboard_attributes['direction']['options']);
+			$directions = array_diff($directions, array('random'));
+			$direction = $directions[array_rand($directions)];
+		}
+		
+		// Background
+		$background = '#' . $this->background;
+		if($this->{'background-transparent'} == 'on') {
+			$background = 'transparent';
+		}
+		
+		// Background Repeat
+		$background_repeat = $this->{'background-repeat'};
+		if($background_repeat == 'on') {
+			$background_repeat = 'repeat';
+		} else {
+			$background_repeat = 'no-repeat';
+		}
+		
+		$stop = $this->stop == 'on' ? 'true': 'false';
+		
+		$out = "{
+						linkTarget: '{$target}',
+						delay: {$delay},
+						transition: '{$transition}',
+						direction: '{$direction}',
+						bgColor: '{$background}',
+						repeat: '{$background_repeat}',
+						stop: {$stop}
+					}";
+		
 		return $out;
 	}
 	
@@ -656,7 +679,9 @@ class uBillboardSlide {
 		
 		$image = esc_attr($timthumb . 'src=' . $src . '&w='.$width.'&h='.$height.'&zc=1');
 
-		return "<div class='uds-bb-thumb'><img src='$image' alt='' width='$width' height='$height' /></div>";
+		return "						<div class='uds-bb-thumb'>
+							<img src='$image' alt='' width='$width' height='$height' />
+						</div>\n";
 	}
 	
 	/**

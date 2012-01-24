@@ -195,6 +195,12 @@ class uBillboard {
 	private $slides;
 	
 	/**
+	 *	@var array 	of slides in this slider that have already been rendered
+	 *				This is used to render slide JS in the correct order
+	 */
+	private $slidesRendered;
+	
+	/**
 	 *	Helper static function to transform an oldschool
 	 *	uBillboard v2 style billboards array into v3 format
 	 *
@@ -259,6 +265,7 @@ class uBillboard {
 		}
 		
 		$this->slides = array();
+		$this->slidesRendered = array();
 	}
 	
 	/**
@@ -468,7 +475,8 @@ class uBillboard {
 		<div class='uds-bb uds-{$this->style}' id='uds-bb-$id' style='width:{$this->width}px;height:{$this->height}px'>
 			$controls
 			$slides
-		</div>";
+		</div>
+		<!-- END uBillboard ID:$id -->";
 		
 		return $out;
 	}
@@ -501,7 +509,16 @@ class uBillboard {
 		if($this->showThumbnails == 'yes')		$showThumbnails = 'true';
 
 		$thumbnailsHoverColor = $this->thumbnailsHoverColor;
-
+		
+		// Render slides' JS
+		$slides = array();
+		
+		foreach($this->slidesRendered as $key => $slide) {
+			$slides[] = $key . ': ' . $slide->renderJS();
+		}
+		
+		$slides = implode(",\n\t\t\t\t\t", $slides);
+		
 		$scripts = "
 			$('#uds-bb-$id').show().uBillboard({
 				width: '{$this->width}px',
@@ -514,7 +531,10 @@ class uBillboard {
 				showPaginator: $showPaginator,
 				showThumbnails: $showThumbnails,
 				showTimer: $showTimer,
-				thumbnailHoverColor: \"#$thumbnailsHoverColor\"
+				thumbnailHoverColor: \"#$thumbnailsHoverColor\",
+				slides: {
+					$slides
+				}
 			});
 		";
 		
@@ -621,9 +641,10 @@ class uBillboard {
 		
 		foreach($slides as $slide) {
 			$out .= $slide->render();
+			$this->slidesRendered[] = $slide;
 		}
 		
-		$out .= "</div>";
+		$out .= "\t\t\t</div>";
 		
 		return $out;
 	}
@@ -659,7 +680,7 @@ class uBillboard {
 			$out .= $this->thumbnails($this->slides);
 		}
 			
-		$out .= "</div>\n";
+		$out .= "\t\t\t</div>\n";
 		
 		return $out;
 	}
@@ -672,13 +693,14 @@ class uBillboard {
 	 */
 	private function paginatorMini()
 	{
-		$out = '';
-		$out .= "<div class='uds-bb-paginator mini {$this->controlsPosition}'>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause'>".__('Play', uds_billboard_textdomain)."</div>";
-			$out .= "<div class='uds-bb-button uds-bb-prev'>".__('Prev', uds_billboard_textdomain)."</div>";
-			$out .= "<div class='uds-bb-button uds-bb-next'>".__('Next', uds_billboard_textdomain)."</div>";
-			$out .= "<div class='uds-bb-position-indicator'></div>";
-		$out .= "</div>";
+		$out = "
+				<div class='uds-bb-paginator mini {$this->controlsPosition}'>
+					<div class='uds-bb-button uds-bb-playpause'>".__('Play', uds_billboard_textdomain)."</div>
+					<div class='uds-bb-button uds-bb-prev'>".__('Prev', uds_billboard_textdomain)."</div>
+					<div class='uds-bb-button uds-bb-next'>".__('Next', uds_billboard_textdomain)."</div>
+					<div class='uds-bb-position-indicator'></div>
+				</div>
+		";
 		return $out;
 	}
 	
@@ -689,13 +711,14 @@ class uBillboard {
 	 */
 	private function paginatorOldskool()
 	{
-		$out = '';
-		$out .= "<div class='uds-bb-paginator oldskool {$this->controlsPosition}'>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
-		$out .= "</div>";
+		$out = "
+				<div class='uds-bb-paginator oldskool {$this->controlsPosition}'>
+					<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-position-indicator-bullets'></div>
+				</div>
+		";
 		return $out;
 	}
 	
@@ -706,13 +729,14 @@ class uBillboard {
 	 */
 	private function paginatorUbbv2()
 	{
-		$out = '';
-		$out .= "<div class='uds-bb-paginator ubbv2 {$this->controlsPosition}'>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
-		$out .= "</div>";
+		$out = "
+				<div class='uds-bb-paginator ubbv2 {$this->controlsPosition}'>
+					<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-position-indicator-bullets'></div>
+				</div>
+		";
 		return $out;
 	}
 	
@@ -723,13 +747,14 @@ class uBillboard {
 	 */
 	private function paginatorOldskoolBright()
 	{
-		$out = '';
-		$out .= "<div class='uds-bb-paginator oldskool-bright {$this->controlsPosition}'>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
-		$out .= "</div>";
+		$out = "
+				<div class='uds-bb-paginator oldskool-bright {$this->controlsPosition}'>
+					<div class='uds-bb-button uds-bb-playpause uds-center'><span>".__('Play', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-position-indicator-bullets'></div>
+				</div>
+		";
 		return $out;
 	}
 	
@@ -741,15 +766,16 @@ class uBillboard {
 	
 	private function paginatorSilver()
 	{
-		$out = '';
-		$out .= "<div class='uds-bb-paginator silver {$this->controlsPosition}'>";
-		$out .= "<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
-		$out .= "<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
-		$out .= "<div class='uds-bb-position-indicator-bullets-container uds-center-horizontal'>";
-			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
-		$out .= "</div>";
-		$out .= "</div>";
+		$out = "
+				<div class='uds-bb-paginator silver {$this->controlsPosition}'>
+					<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>".__('Prev', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>".__('Next', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-position-indicator-bullets-container uds-center-horizontal'>
+						<div class='uds-bb-position-indicator-bullets'></div>
+						<div class='uds-bb-button uds-bb-playpause'><span>".__('Play', uds_billboard_textdomain)."</span></div>
+					</div>
+				</div>
+		";
 		return $out;
 	}
 	
@@ -760,13 +786,14 @@ class uBillboard {
 	 */
 	private function paginatoruTube()
 	{
-		$out = '';
-		$out .= "<div class='uds-bb-paginator uTube {$this->controlsPosition}'>";
-			$out .= "<div class='uds-bb-button uds-bb-prev'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-playpause uds-left'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-button uds-bb-next'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
-			$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
-		$out .= "</div>";
+		$out = "
+				<div class='uds-bb-paginator uTube {$this->controlsPosition}'>
+					<div class='uds-bb-button uds-bb-prev'><span>".__('Prev', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-button uds-bb-playpause uds-left'><span>".__('Play', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-button uds-bb-next'><span>".__('Next', uds_billboard_textdomain)."</span></div>
+					<div class='uds-bb-position-indicator-bullets'></div>
+				</div>
+		";
 		return $out;
 	}
 	
@@ -777,15 +804,16 @@ class uBillboard {
 	 */
 	private function paginatorModern()
 	{
-		$out = '';
-		$out .= "<div class='uds-bb-paginator modern {$this->controlsPosition}'>";
-			$out .= "<div class='uds-bb-paginator moderncontainer'>";
-				$out .= "<div class='uds-bb-button uds-bb-prev'><span>".__('Prev', uds_billboard_textdomain)."</span></div>";
-				$out .= "<div class='uds-bb-button uds-bb-playpause uds-left'><span>".__('Play', uds_billboard_textdomain)."</span></div>";
-				$out .= "<div class='uds-bb-button uds-bb-next'><span>".__('Next', uds_billboard_textdomain)."</span></div>";
-				$out .= "<div class='uds-bb-position-indicator-bullets'></div>";
-			$out .= "</div>";
-		$out .= "</div>";
+		$out = "
+				<div class='uds-bb-paginator modern {$this->controlsPosition}'>
+					<div class='uds-bb-paginator moderncontainer'>
+						<div class='uds-bb-button uds-bb-prev'><span>".__('Prev', uds_billboard_textdomain)."</span></div>
+						<div class='uds-bb-button uds-bb-playpause uds-left'><span>".__('Play', uds_billboard_textdomain)."</span></div>
+						<div class='uds-bb-button uds-bb-next'><span>".__('Next', uds_billboard_textdomain)."</span></div>
+						<div class='uds-bb-position-indicator-bullets'></div>
+					</div>
+				</div>
+		";
 		return $out;
 	}
 	
@@ -800,14 +828,14 @@ class uBillboard {
 		$inside = $this->thumbnailsInside === 'on' ? 'inside' : '';
 		$skin = $this->controlsSkin;
 		
-		$out = '';
-		$out .= "<div class='uds-bb-thumbnails $skin $position $inside'>";
-		$out .= "<div class='uds-bb-thumbnail-container'>";
+		$out = "
+				<div class='uds-bb-thumbnails $skin $position $inside'>
+					<div class='uds-bb-thumbnail-container'>\n";
 		foreach($slides as $slide) {
 			$out .= $slide->renderThumb();
 		}
-		$out .= "</div>";
-		$out .= "</div>\n";
+		$out .= "\t\t\t\t\t</div>
+				</div>\n";
 		return $out;
 	}
 	

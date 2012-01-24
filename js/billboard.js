@@ -2,7 +2,7 @@
  *	@license
  *	uBillboard - Premium Slide for WordPress
  *
- *	Version: 3.0.5
+ *	Version: 3.0.6
  *
  *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
  *	
@@ -391,20 +391,32 @@
 			 *	Also removes the markup
 			 */
 			initSlides: function() {
+				var defaultSlideOptions = {
+					delay: 5000,
+					linkTarget: '',
+					transition: 'fade',
+					direction: '',
+					bg: '',
+					bgColor: 'transparent',
+					repeat: 'no-repeat',
+					link: '',
+					stop: false,
+					html: ''
+				};
+				
 				slides = [];
 				$('.uds-bb-slide', $bb).each(function(i, el){
-					var slide = {
-						delay: parseInt($('.uds-delay', el).remove().text(), 10),
-						linkTarget: $('.uds-link-target', el).remove().text(),
-						transition: $('.uds-transition', el).remove().text(),
-						direction: $('.uds-direction', el).remove().text(),
-						bg: $('.uds-bb-bg-image', el).remove().attr('src'),
-						bgColor: $('.uds-background', el).remove().text(),
-						repeat: $('.uds-background-repeat', el).remove().text(),
-						link: $('.uds-bb-link', el).remove().attr('href'),
-						stop: $('.uds-stop', el).remove().text() == 'true' ? true : false,
-						html: $(el).remove().html()
-					};
+					//d(options.slides[i]);
+					var slide = $.extend(
+						{},
+						defaultSlideOptions, // Default slide options
+						options.slides[i], // Options passed in via the JS call
+						{ // Options parsed in from the markup
+							bg: $('.uds-bb-bg-image', el).remove().attr('src'),
+							link: $('.uds-bb-link', el).remove().attr('href'),
+							html: $(el).remove().html()
+						}
+					);
 					slides.push(slide);
 				});
 			},
