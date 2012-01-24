@@ -293,9 +293,9 @@ function uds_billboard_scripts()
 	}
 	
 	if(uds_billboard_use_compression()){
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery'), '3.0', true);
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery'), UDS_BILLBOARD_VERSION, true);
 	} else {
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery'), '3.0', true);
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery'), UDS_BILLBOARD_VERSION, true);
 	}
 }
 
@@ -311,9 +311,9 @@ function uds_billboard_styles()
 	
 	$dir = UDS_BILLBOARD_URL;
 	if(uds_billboard_use_compression()) {
-		wp_enqueue_style('uds-billboard', $dir.'css/billboard.min.css', false, false, 'screen');
+		wp_enqueue_style('uds-billboard', $dir.'css/billboard.min.css', false, UDS_BILLBOARD_VERSION, 'screen');
 	} else {
-		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, false, 'screen');
+		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, UDS_BILLBOARD_VERSION, 'screen');
 	}
 }
 
