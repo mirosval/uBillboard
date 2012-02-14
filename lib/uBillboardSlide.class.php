@@ -957,7 +957,7 @@ class uBillboardSlide {
 	
 	private function imageName()
 	{
-		$name = $this->slider->name . '-' . $this->id . '-full.';
+		$name = sanitize_title_with_dashes($this->slider->name) . '-' . $this->id . '-full.';
 		
 		if(empty($this->imageType)) {
 			if(file_exists($name . 'jpg')) {
@@ -974,7 +974,7 @@ class uBillboardSlide {
 	
 	private function thumbName()
 	{
-		$name = $this->slider->name . '-' . $this->id . '-thumb.';
+		$name = sanitize_title_with_dashes($this->slider->name) . '-' . $this->id . '-thumb.';
 		
 		if(empty($this->thumbType)) {
 			if(file_exists($name . 'jpg')) {
