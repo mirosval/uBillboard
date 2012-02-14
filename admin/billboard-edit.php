@@ -25,6 +25,7 @@ $billboard->addEmptySlide();
 	<!-- Form -->
 	<form id="billboard_update_form" method="post" action="<?php echo admin_url('admin.php?page=uds_billboard_edit&uds-billboard='.$billboard->name) ?>" class="uds-billboard-form">
 		<?php wp_nonce_field('uds-billboard-update', 'uds-billboard-update-nonce'); ?>
+		<input type="hidden" name="uds_billboard[regenerate-thumbs]" class="uds-regenerate-marker" value="0" />
 		<!-- Sidebar -->
 		<div class="metabox-holder has-right-sidebar">
 			<div class="inner-sidebar">

@@ -388,6 +388,7 @@ class uBillboard {
 
 		if(!empty($this->slides)) {
 			foreach($this->slides as $key => $slide) {
+				$slide->setId($key);
 				if(!$slide->isValid()) {
 					unset($this->slides[$key]);
 				}
@@ -450,6 +451,19 @@ class uBillboard {
 		$out .= '  </udsBillboard>' . "\n";
 		
 		return $out;
+	}
+	
+	public function createThumbs()
+	{
+		$ok = true;
+		foreach($this->slides as $slide) {
+			$result = $slide->resizeImages(true);
+			if(is_wp_error($result)) {
+				$ok = false;
+			}
+		}
+		
+		return $ok;
 	}
 	
 	/**
@@ -618,7 +632,7 @@ class uBillboard {
 	}
 	
 
-	 function renderAdminColorpicker($option, $field, $value)
+	function renderAdminColorpicker($option, $field, $value)
 	{
 		?>
         <div class="uds-billboard-<?php echo $option ?> option-container color">

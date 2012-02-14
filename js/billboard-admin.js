@@ -23,6 +23,11 @@ jQuery(function($){
 		$(this).parent().toggleClass('closed');
 	});
 	
+	// Force thumb regeneration on the next billboard save
+	function markForThumbRegeneration() {
+		$('.uds-regenerate-marker').val(1);
+	}
+	
 	// Observe changes and ask user if he wants to save
 	function markDirty(dirty) {
 		if(dirty) {
@@ -129,6 +134,7 @@ jQuery(function($){
 			
 			$('.uds-slide-tabs').tabs('destroy');
 			createTabs();
+			markForThumbRegeneration();
 		}
 	}
 	
@@ -152,6 +158,7 @@ jQuery(function($){
 		$('.uds-slides-order').sortable('refresh');
 		createTabs();
 		contentType();
+		markForThumbRegeneration();
 	}
 	
 	// Slide Cloning
@@ -208,6 +215,7 @@ jQuery(function($){
 			$(preview).css({
 				'background-image': 'url('+$input.val()+')'
 			});
+			markForThumbRegeneration();
 		});
 		
 		$(this).hover(function(e){

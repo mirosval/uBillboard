@@ -158,6 +158,8 @@ class uBillboardSlide {
 	 */
 	private $slider;
 	private $thumb;
+	private $thumbType;
+	private $imageType;
 	
 	public static function upgradeFromV2($slide, $bbv2, $slider)
 	{
@@ -508,18 +510,6 @@ class uBillboardSlide {
 		// Thumb
 		$this->thumb = $this->image;
 		
-		// Image
-		if($this->resize == 'on' && !empty($this->image)) {
-			$timthumb = UDS_TIMTHUMB_URL . '?';
-		
-			$width = $this->slider->width;
-			$height = $this->slider->height;
-		
-			$image = $timthumb . 'src=' . $this->image . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
-		} else {
-			$image = $this->image;
-		}
-		
 		$out = "\t\t\t\t<div class='uds-bb-slide'>";
 			if(empty($this->link)) {
 				$this->link = '#';
@@ -576,14 +566,7 @@ class uBillboardSlide {
 							$image_src = wp_get_attachment_image_src($id, 'full');
 							
 							if(!empty($image_src[0])) {
-								// change the thumbnail also
-								$this->thumb = $image_src[0];
-							
-								$width = $this->slider->width;
-								$height = $this->slider->height;
-							
-								$timthumb = UDS_TIMTHUMB_URL . '?';
-								$image = $timthumb . 'src=' . $image_src[0] . '&amp;w='.$width.'&amp;h='.$height.'&amp;zc=1';
+								$this->image = $this->thumb = $image_src[0];
 							}
 						}
 					}
@@ -594,6 +577,9 @@ class uBillboardSlide {
 					break;
 				default:
 			}
+			
+			// Image
+			$image = $this->image();
 			
 			$image_alt = $this->{'image-alt'};
 
@@ -674,7 +660,15 @@ class uBillboardSlide {
 	{
 		$width = $this->slider->thumbnailsWidth;
 		$height = $this->slider->thumbnailsHeight;
-		$image = esc_attr($this->createThumb($this->thumb));
+		
+		$thumb = $this->thumb();
+		
+		if(is_wp_error($thumb)) {
+			print $thumb->get_error_message();
+			$thumb = '';
+		}
+		
+		$image = esc_attr($thumb);
 
 		return "						<div class='uds-bb-thumb'>
 							<img src='$image' alt='' width='$width' height='$height' />
@@ -696,6 +690,26 @@ class uBillboardSlide {
 	public function setId($id)
 	{
 		$this->id = $id;
+	}
+	
+	public function resizeImages($force_recreate = false)
+	{
+		// populate the image and thumb fields with correct values
+		$this->render();
+		
+		// try to render the thumb
+		$image = $this->thumb(true);
+		if(is_wp_error($image)) {
+			return $image;
+		}
+		
+		// try to render the image
+		$image = $this->image(true);
+		if(is_wp_error($image)) {
+			return $image;
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -919,9 +933,60 @@ class uBillboardSlide {
 		return $string;
 	}
 	
+	private function thumb($force_recreate = false)
+	{
+		$width = $this->slider->thumbnailsWidth;
+		$height = $this->slider->thumbnailsHeight;
+		
+		$resizedImage = $this->resizeImage($this->thumb, $width, $height, true, $force_recreate);		
+		return $resizedImage;
+	}
+	
+	private function image($force_recreate = false)
+	{
+		if($this->resize == 'on' && !empty($this->image)) {
+			$width = $this->slider->width;
+			$height = $this->slider->height;
+		
+			$resizedImage = $this->resizeImage($this->image, $width, $height, false, $force_recreate);			
+			return $resizedImage;
+		} else {
+			return $this->image;
+		}
+	}
+	
+	private function imageName()
+	{
+		$name = $this->slider->name . '-' . $this->id . '-full.';
+		
+		if(empty($this->imageType)) {
+			if(file_exists($name . 'jpg')) {
+				return $name . 'jpg';
+			}
+			
+			if(file_exists($name . 'png')) {
+				return $name . 'png';
+			}
+		}
+		
+		return $name . $this->imageType;
+	}
+	
 	private function thumbName()
 	{
-		return $this->slider->name . '-' . $this->id . '.png';
+		$name = $this->slider->name . '-' . $this->id . '-thumb.';
+		
+		if(empty($this->thumbType)) {
+			if(file_exists($name . 'jpg')) {
+				return $name . 'jpg';
+			}
+			
+			if(file_exists($name . 'png')) {
+				return $name . 'png';
+			}
+		}
+		
+		return $name . $this->thumbType;
 	}
 	
 	private function thumbExists()
@@ -929,39 +994,80 @@ class uBillboardSlide {
 		return file_exists(UDS_CACHE_PATH . '/' . $this->thumbName());
 	}
 	
-	private function createThumb()
+	private function imageExists()
 	{
-		if($this->thumbExists()) {
-/* 			return UDS_CACHE_URL . '/' . $this->thumbName(); */
+		return file_exists(UDS_CACHE_PATH . '/' . $this->imageName());
+	}
+	
+	private function resizeImage($src, $new_width, $new_height, $thumb = false, $force_recreate = false)
+	{
+		if(!$force_recreate && $thumb && $this->thumbExists()) {
+			return UDS_CACHE_URL . '/' . $this->thumbName();
 		}
 		
-		$x = $this->slider->thumbnailsWidth;
-		$y = $this->slider->thumbnailsHeight;
+		if(!$force_recreate && !$thumb && $this->imageExists()) {
+			return UDS_CACHE_URL . '/' . $this->imageName();
+		}
+		
+		// check if the cache dir is writable
+		if(!is_writable(UDS_CACHE_PATH)) {
+			return new WP_Error('uds_billboard_slide', sprintf(__('Path: "%s" is not writable!',uds_billboard_textdomain), UDS_CACHE_PATH));
+		}
+		
+		// attempt to download the image original
+		if($thumb) {
+			$response = wp_remote_get($this->thumb);
+		} else {
+			$response = wp_remote_get($this->image);
+		}
+		
+		if(is_wp_error($response)) {
+			return $response;
+		}
 
-		$imagePath = UDS_CACHE_PATH . '/' . $this->thumbName();
-		
-		$src = imagecreatefromstring(file_get_contents($this->thumb));
-		if(!$src) {
-			return false;
+		// attempt to guess image type
+		$image_type = 'png';
+		if(isset($response['headers']['content-type']) && ($response['headers']['content-type'] == 'image/jpeg' || $response['headers']['content-type'] == 'image/jpg')) {
+			$image_type = 'jpg';
 		}
 		
-		$originalSize = getimagesize($this->thumb);
+		// set up image type for storage
+		if($thumb) {
+			$this->thumbType = $image_type;
+			$imagePath = UDS_CACHE_PATH . '/' . $this->thumbName();
+		} else {
+			$this->imageType = $image_type;
+			$imagePath = UDS_CACHE_PATH . '/' . $this->imageName();
+		}
 		
-		$dst = imagecreatetruecolor($x, $y);
+		$src = imagecreatefromstring($response['body']);
+				
+		if(!$src) {
+			return new WP_Error('uds_billboard_slide', __('Failed to create image. (imagecreatefromstring())',uds_billboard_textdomain));
+		}
+		
+		$dst = imagecreatetruecolor($new_width, $new_height);
+		if(!$dst) {
+			return new WP_Error('uds_billboard_slide', __('Failed to create new image context.',uds_billboard_textdomain));
+		}
+		
+		if($thumb) {
+			$originalSize = getimagesize($this->thumb);
+		} else {
+			$originalSize = getimagesize($this->image);
+		}
 		
 		// Get original width and height
-		$new_width = $this->slider->thumbnailsWidth;
-		$new_height = $this->slider->thumbnailsHeight;
 		$width = $originalSize[0];
 		$height = $originalSize[1];
 		$origin_x = 0;
 		$origin_y = 0;
 
 		// generate new w/h if not provided
-		if ($new_width && !$new_height) {
-			$new_height = floor ($height * ($new_width / $width));
-		} else if ($new_height && !$new_width) {
-			$new_width = floor ($width * ($new_height / $height));
+		if($new_width && !$new_height) {
+			$new_height = floor($height * ($new_width / $width));
+		} else if($new_height && !$new_width) {
+			$new_width = floor($width * ($new_height / $height));
 		}
 		
 		$src_x = $src_y = 0;
@@ -980,13 +1086,27 @@ class uBillboardSlide {
 		}
 
 		imagefill($dst, 0, 0, imagecolortransparent($dst));
-		imagecopyresampled($dst, $src, $origin_x, $origin_y, $src_x, $src_y, $new_width, $new_height, $src_w, $src_h);
 		
-		if(!imagepng($dst, $imagePath, 8)){
-			return false;
+		if(!imagecopyresampled($dst, $src, $origin_x, $origin_y, $src_x, $src_y, $new_width, $new_height, $src_w, $src_h)) {
+			return new WP_Error('uds_billboard_slide', __('Failed to resize image',uds_billboard_textdomain));
 		}
 		
-		return UDS_CACHE_URL . '/' . $this->thumbName();
+		if($image_type == 'jpg') {
+			if(!imagejpeg($dst, $imagePath, 70)){
+				return new WP_Error('uds_billboard_slide', __('Failed to save image',uds_billboard_textdomain));
+			}
+		} else {
+			if(!imagepng($dst, $imagePath, 7)){
+				return new WP_Error('uds_billboard_slide', __('Failed to save image',uds_billboard_textdomain));
+			}
+		}
+		
+		
+		if($thumb) {
+			return UDS_CACHE_URL . '/' . $this->thumbName();
+		} else {
+			return UDS_CACHE_URL . '/' . $this->imageName();
+		}
 	}
 }
 

@@ -3,7 +3,7 @@
 Plugin Name: uBillboard 3
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
 Description: uBillboard is Premium Slider Plugin for WordPress by <a href="http://codecanyon.net/user/uDesignStudios">uDesignStudios</a> that allows you to create complex and eye-catching presentations for your web.
-Version: 3.0.6
+Version: 3.1.0
 Author: uDesignStudios
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
@@ -16,7 +16,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 ////////////////////////////////////////////////////////////////////////////////
 
 // Version
-define('UDS_BILLBOARD_VERSION', '3.0.6');
+define('UDS_BILLBOARD_VERSION', '3.1.0');
 
 // Handle theme insertion
 if(uds_billboard_is_plugin()) {
@@ -29,11 +29,11 @@ if(uds_billboard_is_plugin()) {
 }
 
 if(!defined('UDS_CACHE_PATH')) {
-	define('UDS_CACHE_PATH',  UDS_BILLBOARD_PATH . '/cache');
+	define('UDS_CACHE_PATH',  trailingslashit(UDS_BILLBOARD_PATH) . 'cache');
 }
 
 if(!defined('UDS_CACHE_URL')) {
-	define('UDS_CACHE_URL',  UDS_BILLBOARD_URL . '/cache');
+	define('UDS_CACHE_URL',  trailingslashit(UDS_BILLBOARD_URL) . 'cache');
 }
 
 // User configurable options
@@ -559,17 +559,25 @@ function uds_billboard_process_updates()
 	$post = isset($_POST['uds_billboard']) ? $_POST['uds_billboard'] : array();
 
 	if(empty($post) || !is_admin()) return;
-
+	
 	$billboard = new uBillboard();
 	$billboard->update($post);
 
 	if($billboard->isValid()){
-	
+		$message = '';
+		if((int)$post['regenerate-thumbs'] != 0) {
+			if(!$billboard->createThumbs()) {
+				$message = 'uds-message='.urlencode(__('Failed to generate thumbnails', uds_billboard_textdomain)).'&uds-class='.urlencode('warning');
+			}
+		}
+		
 		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));	
 		$billboards[$billboard->name] = $billboard;
 	
 		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
-		$message = 'uds-message='.urlencode(__('Billboard updated successfully', uds_billboard_textdomain)).'&uds-class='.urlencode('updated');
+		if(empty($message)) {
+			$message = 'uds-message='.urlencode(__('Billboard updated successfully', uds_billboard_textdomain)).'&uds-class='.urlencode('updated');
+		}
 		
 		if(is_ajax()) {
 			die('OK');
