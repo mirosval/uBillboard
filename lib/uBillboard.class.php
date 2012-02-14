@@ -296,7 +296,8 @@ class uBillboard {
 			}
 		}
 		
-		foreach($this->slides as $slide) {
+		foreach($this->slides as $id => $slide) {
+			$slide->setId($id);
 			$slide->setSlider($this);
 		}
 	}

@@ -151,10 +151,13 @@ $uds_billboard_attributes = array(
 );
 
 class uBillboardSlide {
+
+	private $id;
 	/**
 	 *	@var $slider backlink back to the slider that contains this slide
 	 */
 	private $slider;
+	private $thumb;
 	
 	public static function upgradeFromV2($slide, $bbv2, $slider)
 	{
@@ -298,6 +301,8 @@ class uBillboardSlide {
 	public function __construct($options = false, $slider)
 	{
 		global $uds_billboard_attributes;
+		
+		$this->thumb = '';
 		
 		// fill in with defaults
 		if($options === false) {
@@ -667,17 +672,9 @@ class uBillboardSlide {
 	 */
 	public function renderThumb()
 	{
-		$timthumb = UDS_TIMTHUMB_URL . '?';
-		
 		$width = $this->slider->thumbnailsWidth;
 		$height = $this->slider->thumbnailsHeight;
-		
-		$src = $this->thumb;
-		if($this->{'relative-paths'} == 'on') {
-			$src = str_replace(WP_CONTENT_URL . '/', '', $this->thumb);
-		}
-		
-		$image = esc_attr($timthumb . 'src=' . $src . '&w='.$width.'&h='.$height.'&zc=1');
+		$image = esc_attr($this->createThumb($this->thumb));
 
 		return "						<div class='uds-bb-thumb'>
 							<img src='$image' alt='' width='$width' height='$height' />
@@ -694,6 +691,11 @@ class uBillboardSlide {
 		if(is_a($slider, 'uBillboard')) {
 			$this->slider = $slider;
 		}
+	}
+	
+	public function setId($id)
+	{
+		$this->id = $id;
 	}
 	
 	/**
@@ -915,6 +917,76 @@ class uBillboardSlide {
 		$string = lcfirst($string);
 		
 		return $string;
+	}
+	
+	private function thumbName()
+	{
+		return $this->slider->name . '-' . $this->id . '.png';
+	}
+	
+	private function thumbExists()
+	{
+		return file_exists(UDS_CACHE_PATH . '/' . $this->thumbName());
+	}
+	
+	private function createThumb()
+	{
+		if($this->thumbExists()) {
+/* 			return UDS_CACHE_URL . '/' . $this->thumbName(); */
+		}
+		
+		$x = $this->slider->thumbnailsWidth;
+		$y = $this->slider->thumbnailsHeight;
+
+		$imagePath = UDS_CACHE_PATH . '/' . $this->thumbName();
+		
+		$src = imagecreatefromstring(file_get_contents($this->thumb));
+		if(!$src) {
+			return false;
+		}
+		
+		$originalSize = getimagesize($this->thumb);
+		
+		$dst = imagecreatetruecolor($x, $y);
+		
+		// Get original width and height
+		$new_width = $this->slider->thumbnailsWidth;
+		$new_height = $this->slider->thumbnailsHeight;
+		$width = $originalSize[0];
+		$height = $originalSize[1];
+		$origin_x = 0;
+		$origin_y = 0;
+
+		// generate new w/h if not provided
+		if ($new_width && !$new_height) {
+			$new_height = floor ($height * ($new_width / $width));
+		} else if ($new_height && !$new_width) {
+			$new_width = floor ($width * ($new_height / $height));
+		}
+		
+		$src_x = $src_y = 0;
+		$src_w = $originalSize[0];
+		$src_h = $originalSize[1];
+
+		$cmp_x = $width / $new_width;
+		$cmp_y = $height / $new_height;
+
+		if ($cmp_x > $cmp_y) {
+			$src_w = round($width / $cmp_x * $cmp_y);
+			$src_x = round(($width - ($width / $cmp_x * $cmp_y)) / 2);
+		} else if($cmp_y > $cmp_x) {
+			$src_h = round($height / $cmp_y * $cmp_x);
+			$src_y = round(($height - ($height / $cmp_y * $cmp_x)) / 2);
+		}
+
+		imagefill($dst, 0, 0, imagecolortransparent($dst));
+		imagecopyresampled($dst, $src, $origin_x, $origin_y, $src_x, $src_y, $new_width, $new_height, $src_w, $src_h);
+		
+		if(!imagepng($dst, $imagePath, 8)){
+			return false;
+		}
+		
+		return UDS_CACHE_URL . '/' . $this->thumbName();
 	}
 }
 

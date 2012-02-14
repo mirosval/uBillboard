@@ -32,6 +32,10 @@ if(!defined('UDS_CACHE_PATH')) {
 	define('UDS_CACHE_PATH',  UDS_BILLBOARD_PATH . '/cache');
 }
 
+if(!defined('UDS_CACHE_URL')) {
+	define('UDS_CACHE_URL',  UDS_BILLBOARD_URL . '/cache');
+}
+
 // User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard-3');
 define('UDS_BILLBOARD_OPTION_GENERAL', 'uds-billboard-general-3');
