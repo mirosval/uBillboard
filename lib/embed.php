@@ -65,7 +65,10 @@ function uds_billboard_oembed($url, $width, $height)
 	if($out === null) {
 		return $response;
 	}
-
+	
+	// Disable Related videos display after the video has finished (youtube)
+	//$out->html = preg_replace('/src="([^"]*)"/', 'src="$1&rel=0"',$out->html);
+	
 	$out->html = uds_billboard_filter_wmode($out->html);
 
 	return $out;
