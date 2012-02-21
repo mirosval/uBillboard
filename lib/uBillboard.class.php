@@ -654,6 +654,8 @@ class uBillboard {
 			shuffle($slides);
 		}
 		
+		$this->slides = $slides;
+		
 		foreach($slides as $slide) {
 			$out .= $slide->render();
 			$this->slidesRendered[] = $slide;
