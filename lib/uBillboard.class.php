@@ -114,7 +114,7 @@ $uds_billboard_general_options = array(
 		'unit' => '',
 		'tooltip' => __('Display show pause button', uds_billboard_textdomain),
 		'options' => array(
-			'no' 	=> __("Don\'t show Play/Pause", uds_billboard_textdomain),
+			'no' 	=> __("Don't show Play/Pause", uds_billboard_textdomain),
 			'hover' => __('Show on Mouse Hover', uds_billboard_textdomain),
 			'yes' 	=> __('Show at all times', uds_billboard_textdomain)
 		),
