@@ -3,7 +3,7 @@
 Plugin Name: uBillboard 3
 Plugin URI: http://code.udesignstudios.net/plugins/uBillboard
 Description: uBillboard is Premium Slider Plugin for WordPress by <a href="http://codecanyon.net/user/uDesignStudios">uDesignStudios</a> that allows you to create complex and eye-catching presentations for your web.
-Version: 3.1.0
+Version: 3.1.1
 Author: uDesignStudios
 Author URI: http://udesignstudios.net
 Tags: billboard, slider, jquery, javascript, effects, udesign
@@ -16,7 +16,7 @@ Tags: billboard, slider, jquery, javascript, effects, udesign
 ////////////////////////////////////////////////////////////////////////////////
 
 // Version
-define('UDS_BILLBOARD_VERSION', '3.1.0');
+define('UDS_BILLBOARD_VERSION', '3.1.1');
 
 // Handle theme insertion
 if(uds_billboard_is_plugin()) {
@@ -753,5 +753,6 @@ function the_uds_billboard($name = 'billboard')
 {
 	echo get_uds_billboard($name);
 }
+
 
 ?>

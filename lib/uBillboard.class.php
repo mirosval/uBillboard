@@ -363,6 +363,11 @@ class uBillboard {
 		return false;
 	}
 	
+	public function setSlides($slides)
+	{
+		$this->slides = $slides;
+	}
+	
 	/**
 	 *	Update current uBillboard with data from the $options array
 	 *

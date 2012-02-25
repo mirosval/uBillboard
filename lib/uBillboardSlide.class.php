@@ -350,6 +350,17 @@ class uBillboardSlide {
 	}
 	
 	/**
+	 *	Generalized getter 
+	 *	
+	 *	@return mixed
+	 */
+	public function __get($key)
+	{
+		$key = $this->camelize($key);
+		return $this->{$key};
+	}
+	
+	/**
 	 *	Importer, fills current instance attributes from
 	 *	a SimpleXMLElement object
 	 *	
@@ -667,6 +678,8 @@ class uBillboardSlide {
 			print $thumb->get_error_message();
 			$thumb = '';
 		}
+		
+		$thumb = apply_filters('uds_billboard_slide_thumb', $thumb, $this);
 		
 		$image = esc_attr($thumb);
 
