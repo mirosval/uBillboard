@@ -592,6 +592,10 @@ class uBillboardSlide {
 			// Image
 			$image = $this->image();
 			
+			if(is_wp_error($image)) {
+				$image = '';
+			}
+			
 			$image_alt = $this->{'image-alt'};
 
 			if(!empty($text)) {
@@ -1064,15 +1068,10 @@ class uBillboardSlide {
 			return new WP_Error('uds_billboard_slide', __('Failed to create new image context.',uds_billboard_textdomain));
 		}
 		
-		if($thumb) {
-			$originalSize = getimagesize($this->thumb);
-		} else {
-			$originalSize = getimagesize($this->image);
-		}
-		
 		// Get original width and height
-		$width = $originalSize[0];
-		$height = $originalSize[1];
+		$width = imagesx($src);
+		$height = imagesy($src);
+		
 		$origin_x = 0;
 		$origin_y = 0;
 
