@@ -1083,8 +1083,8 @@ class uBillboardSlide {
 		}
 		
 		$src_x = $src_y = 0;
-		$src_w = $originalSize[0];
-		$src_h = $originalSize[1];
+		$src_w = imagesx($src);
+		$src_h = imagesy($src);
 
 		$cmp_x = $width / $new_width;
 		$cmp_y = $height / $new_height;
