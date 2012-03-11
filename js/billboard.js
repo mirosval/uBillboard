@@ -194,15 +194,9 @@
 				
 				var slide = slides[slideId];
 				
-				_private.prepareForAnimation(slideId);
-				
-				// handle no image
-				if(slide.transition == 'none' || slide.bg == '') {
-					$stage.css({
-						backgroundColor: slide.bgColor,
-						backgroundImage: 'none'
-					});
 				}
+				
+				_private.prepareForAnimation(slideId);
 				
 				// Handle Embedded content
 				_private.handleEmbeddedContent(slide);
@@ -260,15 +254,14 @@
 					
 					$stage
 						.stop()
-						.html(slide.html)
 						.css({
 							top: '0px',
 							left: '0px',
 							opacity: 1,
-							backgroundImage: 'url(' + slide.bg + ')',
-							backgroundRepeat: slide.repeat,
 							cursor: cursor
 						});
+					$('.uds-bb-slide', $stage).hide();
+					$('.uds-bb-slide-'+slide.id, $stage).show();
 					$('.uds-bb-description', $stage).show();
 					$next.stop().hide();
 					$bb.trigger('udsBillboardTransitionDidComplete', slideId);
@@ -412,11 +405,25 @@
 						defaultSlideOptions, // Default slide options
 						options.slides[i], // Options passed in via the JS call
 						{ // Options parsed in from the markup
+							id: i,
 							bg: $('.uds-bb-bg-image', el).remove().attr('src'),
 							link: $('.uds-bb-link', el).remove().attr('href'),
 							html: $(el).remove().html()
 						}
 					);
+					
+					$slide = $("<div class='uds-bb-slide-" + i + " uds-bb-slide'>");
+					$slide
+						.css({
+							display: 'none',
+							width: options.width,
+							height: options.height
+						})
+						.css(_private.getSlideBackgroundCSS(slide))
+						.html(slide.html);
+					
+					slide.cache = $slide;
+					
 					slides.push(slide);
 				});
 			},
@@ -487,7 +494,8 @@
 						continue;
 					}
 					
-					$('<img>').data('slideID', i)
+					$('<img>')
+					.data('slideID', i)
 					.load(function(){
 						++progress;
 						
@@ -530,7 +538,8 @@
 				var currentSlide = slides[currentSlideId],
 					css = _private.getSlideBackgroundCSS(currentSlide);
 
-				$stage.css(css).html(currentSlide.html).fadeTo(300, 1);
+				//$stage.css(css).html(currentSlide.html).fadeTo(300, 1);
+				$('.uds-bb-slide-0', $stage).show().fadeTo(300, 1);
 				$('.uds-bb-description', $stage).show();
 				
 				_private.handleEmbeddedContent(currentSlide);
@@ -595,6 +604,15 @@
 				$nextInsides = $('.uds-square-inside', $bb);
 				$controls = $('.uds-bb-controls', $bb);
 				
+				for(var i = 0; i < slides.length; i++) {
+					$stage.append(slides[i].cache.clone());
+					if(slides[i].transition != 'none') {
+						$nextInsides.append(slides[i].cache.clone());
+					}
+				}
+				
+				$('>div', $stage).add('>div', $nextInsides).hide();
+				
 				// initialize countdown
 				_private.createCountdown();
 			},
@@ -654,17 +672,15 @@
 					return;
 				}
 				
-				var css = _private.getSlideBackgroundCSS(currentSlide);
-				
-				$stage.css(css).html(currentSlide.html);
+				$('.uds-bb-slide', $stage).hide();
+				$('.uds-bb-slide-'+currentSlide.id, $stage).show();
 				$('.uds-bb-description', $stage).show();
 				
 				_private.resetAnimation();
 				
 				if(nextSlide.transition !== 'none') { // Do not create a million copies of embedded content ;)
-					css = _private.getSlideBackgroundCSS(nextSlide);
-					
-					$nextInsides.css(css).html(nextSlide.html);
+					$('.uds-bb-slide', $nextInsides).hide();
+					$('.uds-bb-slide-'+nextSlide.id, $nextInsides).show();
 					$('.uds-bb-description', $nextInsides).show();
 				}
 			},
@@ -1095,28 +1111,25 @@
 			},
 			
 			handleEmbeddedContent: function(slide) {
-				if(slide.transition == 'none') {
-					$stage.html(slide.html);
+				if(slide.transition == 'none' && slide.embeddecContentHandled !== true) {					
+					// center content
+					var $element = $('>.uds-bb-slide-'+slide.id+'>*', $stage);
 					
-					if(slide.embeddecContentHandled !== true) {
-						// center content
-						var $element = $('>*', $stage);
-						
-						if($element.is('object')) {
-							$element.prepend("<param name='wmode' value='opaque' />");
-							$('embed', $element).attr('wmode', 'opaque');
-						}
-						
-						$element.css({
-							position: 'absolute',
-							top: parseInt(options.height, 10) / 2 - $element.attr('height') / 2,
-							left: parseInt(options.width, 10) / 2 - $element.attr('width') / 2,
-							margin: 'auto'
-						});
-						
-						slide.html = $stage.html();
-						slide.embeddecContentHandled = true;
+					if($element.is('object')) {
+						$element.prepend("<param name='wmode' value='opaque' />");
+						$('embed', $element).attr('wmode', 'opaque');
 					}
+					
+					$element.css({
+						position: 'absolute',
+						top: parseInt(options.height, 10) / 2 - $element.attr('height') / 2,
+						left: parseInt(options.width, 10) / 2 - $element.attr('width') / 2,
+						margin: 'auto'
+					});
+					
+					slide.embeddecContentHandled = true;
+				}
+			},
 				}
 			},
 			
