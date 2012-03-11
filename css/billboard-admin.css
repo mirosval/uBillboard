@@ -288,7 +288,8 @@ td.slide_count {
 	margin-bottom: 5px;
 }
 
-.uds-billboard-form .link-wrapper {
+.uds-billboard-form .link-wrapper,
+.uds-billboard-form .embed-url-wrapper {
 	margin-bottom: 10px;
 }
 
@@ -298,7 +299,8 @@ td.slide_count {
 .uds-billboard-form .relative-paths-wrapper label,
 .uds-billboard-form .link-target-wrapper label,
 .uds-billboard-form .background-repeat-wrapper label,
-.uds-billboard-form .stop-wrapper label {
+.uds-billboard-form .stop-wrapper label,
+.uds-billboard-form .autoplay-video-wrapper label {
 	float: left;
 }
 

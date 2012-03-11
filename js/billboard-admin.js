@@ -270,6 +270,11 @@ jQuery(function($){
 		}
 	});
 	
+	// Thumb regeneration on change of embedded content or content editor content
+	$('.billboard-embed-url,.billboard-text').change(function(){
+		markForThumbRegeneration();
+	});
+	
 	// Tooltips
 	$('.option-container label').hover(function(){
 		$tt = $(this).parent().find('.tooltip-content');
@@ -339,6 +344,7 @@ jQuery(function($){
 						break;
 					case 'embed':
 						$('.embed-url-wrapper', $tab).show();
+						$('.autoplay-video-wrapper', $tab).show();
 						break;
 					case 'dynamic':
 						$('.dynamic-offset-wrapper', $tab).show();

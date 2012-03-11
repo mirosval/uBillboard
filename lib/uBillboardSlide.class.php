@@ -125,6 +125,16 @@ $uds_billboard_attributes = array(
 		'type' => 'text',
 		'label' => __('URL of the Embedded Content', uds_billboard_textdomain)
 	),
+	'pause-slider' => array(
+		'type' => 'checkbox',
+		'label' => __('Pause uBillboard', uds_billboard_textdomain),
+		'default' => 'on'
+	),
+	'autoplay-video' => array(
+		'type' => 'checkbox',
+		'label' => __('Automatically play video', uds_billboard_textdomain),
+		'default' => 'on'
+	),
 	'dynamic-offset' => array(
 		'type' => 'select',
 		'label' => __('Blog post offset', uds_billboard_textdomain),
@@ -489,6 +499,8 @@ class uBillboardSlide {
 				<?php $this->renderAdminField('text') ?>
 				<?php $this->renderAdminField('text-evaluation') ?>
 				<?php $this->renderAdminField('embed-url') ?>
+				<?php $this->renderAdminField('pause-slider') ?>
+				<?php $this->renderAdminField('autoplay-video') ?>
 				<?php $this->renderAdminField('dynamic-offset') ?>
 				<?php $this->renderAdminField('dynamic-category') ?>
 			</div>
@@ -652,7 +664,10 @@ class uBillboardSlide {
 		}
 		
 		$stop = $this->stop == 'on' ? 'true': 'false';
-		
+	
+		$pause_slider = $this->{'pause-slider'} == 'on' ? 'true' : 'false';
+		$autoplay_video = $this->{'autoplay-video'} == 'on' ? 'true' : 'false';
+	
 		$out = "{
 						linkTarget: '{$target}',
 						delay: {$delay},
@@ -660,7 +675,8 @@ class uBillboardSlide {
 						direction: '{$direction}',
 						bgColor: '{$background}',
 						repeat: '{$background_repeat}',
-						stop: {$stop}
+						stop: {$stop},
+						autoplayVideo: {$autoplay_video}
 					}";
 		
 		return $out;
