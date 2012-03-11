@@ -977,11 +977,11 @@ class uBillboardSlide {
 		$name = sanitize_title_with_dashes($this->slider->name) . '-' . $this->id . '-full.';
 		
 		if(empty($this->imageType)) {
-			if(file_exists($name . 'jpg')) {
+			if(file_exists(UDS_CACHE_PATH . '/' . $name . 'jpg')) {
 				return $name . 'jpg';
 			}
 			
-			if(file_exists($name . 'png')) {
+			if(file_exists(UDS_CACHE_PATH . '/' . $name . 'png')) {
 				return $name . 'png';
 			}
 		}
@@ -994,11 +994,11 @@ class uBillboardSlide {
 		$name = sanitize_title_with_dashes($this->slider->name) . '-' . $this->id . '-thumb.';
 		
 		if(empty($this->thumbType)) {
-			if(file_exists($name . 'jpg')) {
+			if(file_exists(UDS_CACHE_PATH . '/' . $name . 'jpg')) {
 				return $name . 'jpg';
 			}
 			
-			if(file_exists($name . 'png')) {
+			if(file_exists(UDS_CACHE_PATH . '/' . $name . 'png')) {
 				return $name . 'png';
 			}
 		}
