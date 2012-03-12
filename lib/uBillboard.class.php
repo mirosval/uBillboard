@@ -491,7 +491,7 @@ class uBillboard {
 		$controls = $this->renderControls();
 		
 		$out = "
-		<!-- uBillboard ".UDS_BILLBOARD_VERSION." ID:$id -->
+		<!-- uBillboard ".UDS_BILLBOARD_VERSION." ID:$id Name:{$this->name} -->
 		<div class='uds-bb uds-{$this->style}' id='uds-bb-$id' style='width:{$this->width}px;height:{$this->height}px'>
 			$controls
 			$slides
