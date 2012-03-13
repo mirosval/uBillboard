@@ -2,7 +2,7 @@
  *	@license
  *	uBillboard - Premium Slide for WordPress
  *
- *	Version: 3.1.1
+ *	Version: 3.2.0
  *
  *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
  *	
@@ -18,7 +18,7 @@
 	
 	$.extend(jQuery.easing, {
 		easeInOutQuad: function (x, t, b, c, d) {
-			if ((t/=d/2) < 1) return c/2*t*t + b;
+			if ((t/=d/2) < 1){ return c/2*t*t + b; }
 			return -c/2 * ((--t)*(t-2) - 1) + b;
 		}
 	});
@@ -79,11 +79,6 @@
 		slides,
 		
 		/**
-		 *	Object, options for the current uBillboard
-		 */
-		options,
-		
-		/**
 		 *	Array of timers needed for animation
 		 */
 		timers,
@@ -125,7 +120,7 @@
 				$bb.add($slides).css({
 					width: options.width,
 					height: options.height
-				})
+				});
 				
 				// initialize timers
 				timers = {};
@@ -195,7 +190,7 @@
 				var slide = slides[slideId];
 				
 				// Pause video if this is a video slide
-				if(slides[currentSlideId].transition == 'none') {
+				if(slides[currentSlideId].transition === 'none') {
 					_private.pauseVideo(slides[currentSlideId]);
 				}
 				
@@ -280,7 +275,7 @@
 				
 				$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
 				
-				if(options.pauseOnVideo && slides[currentSlideId].transition == 'none') {
+				if(options.pauseOnVideo && slides[currentSlideId].transition === 'none') {
 					$countdown.hide();
 					return;
 				}
@@ -497,7 +492,7 @@
 				}
 				
 				// handle image preload
-				for(var i = 0; i < totalImages; i++) {
+				for(i = 0; i < totalImages; i++) {
 					// only preload slides that actually have images
 					if(slides[i].bg === '') {
 						++progress;
@@ -511,7 +506,7 @@
 						
 						_private.updatePreloader(progress/totalImages);
 						
-						if(progress == totalImages) {
+						if(progress === totalImages) {
 							$bb.trigger('udsBillboardLoadingDidComplete');
 							_private.loadingCompleted();
 						}
@@ -524,7 +519,7 @@
 						
 						_private.updatePreloader(progress/totalImages);
 						
-						if(progress == totalImages) {
+						if(progress === totalImages) {
 							$bb.trigger('udsBillboardLoadingDidComplete');
 							_private.loadingCompleted();
 						}
@@ -557,7 +552,7 @@
 				$controls.delay(300).fadeTo(300, 1);
 				
 				// should we pause on this slide
-				var pauseForVideo = options.pauseOnVideo && currentSlide.transition == 'none';
+				var pauseForVideo = options.pauseOnVideo && currentSlide.transition === 'none';
 
 				if(options.autoplay === true && !pauseForVideo) {
 					//d('Autoplay Initiated');
@@ -618,7 +613,7 @@
 					var slide = slides[i];
 					$stage.append(slide.cache.clone());
 					
-					if(slide.transition != 'none') {
+					if(slide.transition !== 'none') {
 						$nextInsides.append(slide.cache.clone());
 					}
 				}
@@ -875,7 +870,7 @@
 					margin;
 				
 				// Calculate variables
-				if(orientation == 'vertical') {
+				if(orientation === 'vertical') {
 					windowDim = $thumbs.height();
 					margin = ($thumb.outerHeight(true) - $thumb.outerHeight()) / 2;
 					containerDim = $thumb.length * $thumb.outerHeight(true) - ($thumb.length - 1) * margin;
@@ -896,7 +891,7 @@
 				var recalculateContainerPosition = function(e){
 					// Normalize coordinates
 					var offset = 0, speed = 0;
-					if(orientation == 'vertical') {
+					if(orientation === 'vertical') {
 						offset = e.pageY - $thumbs.offset().top;
 					} else {
 						offset = e.pageX - $thumbs.offset().left;
@@ -917,7 +912,7 @@
 					}
 					
 					$container.css(scrollProperty, - position + 'px');
-				}
+				};
 				
 				$thumbs.bind({
 					'mouseenter mousemove': function(e){
@@ -970,7 +965,7 @@
 				
 				// Hide controls based on the options
 				if(options.showControls === false) {
-					$buttonNext.hide()
+					$buttonNext.hide();
 					$buttonPrev.hide();
 				}
 	
@@ -1049,7 +1044,7 @@
 				
 				$countdown = $('<div class="uds-bb-countdown"></div>').appendTo($controls);
 				canvas = $countdown.append('<canvas width="100" height="100">').find('canvas').get(0);
-				if(canvas && typeof canvas.getContext == 'function') {
+				if(canvas && typeof canvas.getContext === 'function') {
 					ctx = canvas.getContext('2d');
 					
 					// setup style					
@@ -1123,7 +1118,7 @@
 			},
 			
 			handleEmbeddedContent: function(slide) {
-				if(slide.transition == 'none' && slide.embeddecContentHandled !== true) {					
+				if(slide.transition === 'none' && slide.embeddecContentHandled !== true) {					
 					// center content
 					var $element = $('>.uds-bb-slide-'+slide.id+'>*', $stage);
 					
@@ -1148,25 +1143,25 @@
 				$iframe = $('iframe', $slide);
 		
 				for(var i = 0; i < $('iframe').length; i++) {
-					if($('iframe').eq(i).get(0) == $iframe.get(0)) {
+					if($('iframe').eq(i).get(0) === $iframe.get(0)) {
 						// YouTube
 						window.frames[i].postMessage(JSON.stringify({
-				            "event": "command",
-				            "func": 'playVideo',
-				            "args": null,
-				            "id": $iframe.attr('id')
-				        }), "*");
-				        
-				        // Vimeo
+							"event": "command",
+							"func": 'playVideo',
+							"args": null,
+							"id": $iframe.attr('id')
+						}), "*");
+
+						// Vimeo
 						window.frames[i].postMessage(JSON.stringify({
 							method: "play"
 						}), "*");
 						
 						$(window).on("message", function(event) {
 							var e = event.originalEvent;
-							if(e.origin == "http://www.youtube.com") {
+							if(e.origin === "http://www.youtube.com") {
 								var data = JSON.parse(e.data);
-								if(data.event == "onStateChange" && data.info.playerState == 0) {
+								if(data.event === "onStateChange" && data.info.playerState === 0) {
 									_public.play();
 								}
 							}
@@ -1180,7 +1175,7 @@
 				$iframe = $('iframe', $slide);
 		
 				for(var i = 0; i < $('iframe').length; i++) {
-					if($('iframe').eq(i).get(0) == $iframe.get(0)) {
+					if($('iframe').eq(i).get(0) === $iframe.get(0)) {
 						// YouTube
 						window.frames[i].postMessage(JSON.stringify({
 				            "event": "command",
@@ -1292,15 +1287,15 @@
 						$('.uds-square-'+squareId).delay(1000 * (n/(cols*rows)));
 						//d('T: '+topBound+' R:'+rightBound+' B:'+bottomBound+' L:'+leftBound+' X:'+hPos+' Y:'+vPos+' Delay:'+1000 * (n/(cols*rows)));
 						
-						if(vPos == topBound && hPos < rightBound) {
+						if(vPos === topBound && hPos < rightBound) {
 							hPos++;
-						} else if(hPos == rightBound && vPos < bottomBound) {
+						} else if(hPos === rightBound && vPos < bottomBound) {
 							vPos++;
-						} else if(vPos == bottomBound && hPos > leftBound) {
+						} else if(vPos === bottomBound && hPos > leftBound) {
 							hPos--;
 						} else {
 							vPos--;
-							if(vPos == topBound) {
+							if(vPos === topBound) {
 								hPos++;
 								vPos++;
 								leftBound++;
@@ -1330,15 +1325,15 @@
 						
 						$('.uds-square-'+squareId).delay(1000 - 1000 * (n/(cols*rows)));
 						
-						if(vPos == topBound && hPos < rightBound) {
+						if(vPos === topBound && hPos < rightBound) {
 							hPos++;
-						} else if(hPos == rightBound && vPos < bottomBound) {
+						} else if(hPos === rightBound && vPos < bottomBound) {
 							vPos++;
-						} else if(vPos == bottomBound && hPos > leftBound) {
+						} else if(vPos === bottomBound && hPos > leftBound) {
 							hPos--;
 						} else {
 							vPos--;
-							if(vPos == topBound) {
+							if(vPos === topBound) {
 								hPos++;
 								vPos++;
 								leftBound++;
@@ -1359,7 +1354,7 @@
 					
 					for(var x = 0; x < cols; x++) {
 						for(var y = 0; y < rows; y++) {
-							var delay = (y % 2 == 0 && x % 2 == 0) || (y % 2 == 1 && x % 2 == 1) ? 0 : 1;
+							var delay = (y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1) ? 0 : 1;
 							$('.uds-square-' + (y * cols + x)).delay(200 * delay);
 						}
 					}
@@ -1373,7 +1368,7 @@
 					
 					for(var x = 0; x < cols; x++) {
 						for(var y = 0; y < rows; y++) {
-							var delay = (y * rows + (y % 2 == 0 ? x : cols - x)) / (rows * rows + cols / 2);
+							var delay = (y * rows + (y % 2 === 0 ? x : cols - x)) / (rows * rows + cols / 2);
 							$('.uds-square-' + (y * cols + x)).delay(700 * delay);
 						}
 					}
@@ -1387,7 +1382,7 @@
 					
 					for(var x = 0; x < cols; x++) {
 						for(var y = 0; y < rows; y++) {
-							var delay = (x * cols + (x % 2 == 0 ? y : rows - y)) / (cols * cols + rows / 2);
+							var delay = (x * cols + (x % 2 === 0 ? y : rows - y)) / (cols * cols + rows / 2);
 							$('.uds-square-' + (y * cols + x)).delay(700 * delay);
 						}
 					}
@@ -1464,6 +1459,7 @@
 				duration: 700,
 				direction: 'right',
 				setup: function() {
+					var sq;
 					$('.uds-bb-slides', $bb).css({
 						overflow: 'hidden'
 					});
@@ -1493,8 +1489,8 @@
 							left: _private.pos(options.width)
 						});
 					} else if(this.direction === 'zigzagHorizontal') {
-						var sq = parseInt(options.squareSize, 10),
-							height = parseInt(options.height, 10);
+						sq = parseInt(options.squareSize, 10);
+						var height = parseInt(options.height, 10);
 							
 						$squares.each(function(){
 							$(this).css({
@@ -1505,8 +1501,8 @@
 						
 						directions[this.direction].delay();
 					} else if(this.direction === 'zigzagVertical') {
-						var sq = parseInt(options.squareSize, 10),
-							width = parseInt(options.width, 10);
+						sq = parseInt(options.squareSize, 10);
+						var width = parseInt(options.width, 10);
 							
 						$squares.each(function(){
 							$(this).css({
@@ -1527,7 +1523,7 @@
 					var animOptions =  {
 						duration: 700,
 						easing: 'easeInOutQuad'
-					};
+					}, sq;
 					
 					if(this.direction === 'left') {
 						$stage.animate({
@@ -1558,8 +1554,8 @@
 							left: '0px'
 						}, animOptions);
 					} else if(this.direction === 'zigzagHorizontal') {
-						var sq = parseInt(options.squareSize, 10),
-							height = parseInt(options.height, 10);
+						sq = parseInt(options.squareSize, 10);
+						var height = parseInt(options.height, 10);
 						
 						$squares.each(function(){
 							$(this).animate({
@@ -1568,8 +1564,8 @@
 							}, animOptions);
 						});
 					} else if(this.direction === 'zigzagVertical') {
-						var sq = parseInt(options.squareSize, 10),
-							width = parseInt(options.width, 10);
+						sq = parseInt(options.squareSize, 10);
+						var width = parseInt(options.width, 10);
 						
 						$squares.each(function(){
 							$(this).animate({
@@ -1595,7 +1591,7 @@
 				duration: 1100,
 				direction: '',
 				setup: function() {
-					var top, left;
+					var top, left, sq;
 					if(this.direction === 'right') {
 						top = _private.pos(parseInt(options.height, 10) / 2);
 						left = _private.pos(options.width);
@@ -1612,7 +1608,7 @@
 						top = _private.pos(parseInt(options.height, 10) / 2);
 						left = _private.pos(parseInt(options.width, 10) / 2);
 					} else if(this.direction === 'zigzagHorizontal') {
-						var sq = parseInt(options.squareSize, 10);
+						sq = parseInt(options.squareSize, 10);
 						$squares.each(function(){
 							$(this).css({
 								top: parseInt($(this).css('top'), 10) + sq / 2 + 'px',
@@ -1625,7 +1621,7 @@
 						
 						return;
 					} else if(this.direction === 'zigzagVertical') {
-						var sq = parseInt(options.squareSize, 10);
+						sq = parseInt(options.squareSize, 10);
 						$squares.each(function(){
 							$(this).css({
 								top: parseInt($(this).css('top'), 10) + sq / 2 + 'px',
@@ -1638,7 +1634,7 @@
 						
 						return;
 					} else {
-						var sq = parseInt(options.squareSize, 10);
+						sq = parseInt(options.squareSize, 10);
 						$squares.each(function(){
 							$(this).css({
 								top: parseInt($(this).css('top'), 10) + sq / 2 + 'px',
@@ -1692,12 +1688,11 @@
 			height:			'400px',
 			squareSize:		'80px',
 			autoplay:		true,
-			showControls: 	true,
-			showPause: 		true,
-			showPaginator: 	true,
-			showThumbnails: true,
-			showTimer: 		true,
-			
+			showControls:	true,
+			showPause:		true,
+			showPaginator:	true,
+			showThumbnails:	true,
+			showTimer:		true,
 			removeSlidesWithBrokenImages: true
 		};
 		
