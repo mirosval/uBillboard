@@ -61,6 +61,15 @@
 	position: absolute;
 }
 
+/* Border radius */
+.uds-bb,
+.uds-next,
+.uds-stage,
+.uds-bb-slide,
+.uds-square-insides {
+	border-radius: 0px;
+}
+
 /* Descriptions */
 .uds-bb-description {
 	display: none; /* Make sure description is invisible during launch */

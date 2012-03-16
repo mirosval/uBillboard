@@ -288,7 +288,9 @@
 				if(playing) {
 					_private.animateCountdown(slides[currentSlideId].delay);
 				} else {
-					$countdown.hide();
+					if($countdown !== null) {
+						$countdown.hide();
+					}
 				}
 				
 				// continue playing
@@ -1139,6 +1141,11 @@
 			},
 			
 			playVideo: function(slide) {
+				// Silently fail for IE < 8
+				if(typeof window.postMessage !== 'function' || typeof JSON === 'undefined') {
+					return;
+				}
+				
 				$slide = $('.uds-stage .uds-bb-slide-'+slide.id, $bb);
 				$iframe = $('iframe', $slide);
 		
@@ -1171,6 +1178,11 @@
 			},
 			
 			pauseVideo: function(slide) {
+				// Silently fail for IE < 8
+				if(typeof window.postMessage !== 'function' || typeof JSON === 'undefined') {
+					return;
+				}
+				
 				$slide = $('.uds-stage .uds-bb-slide-'+slide.id, $bb);
 				$iframe = $('iframe', $slide);
 		
