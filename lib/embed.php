@@ -71,11 +71,14 @@ function uds_billboard_oembed($url, $width, $height)
 	//$out->html = preg_replace('/src="([^"]*)"/', 'src="$1&rel=0"',$out->html);
 	
 	$out->html = uds_billboard_filter_wmode($out->html);
+	//d($out->html);
 
 	return $out;
 }
 
 function uds_billboard_filter_wmode($html) {
+	if (strpos($html, 'feature=oembed' ) !== false)
+		$html = str_replace( 'feature=oembed', 'feature=oembed&wmode=opaque', $html);
 	if (strpos($html, '<param name="movie"' ) !== false && strpos($html, 'value="opaque"') === false)
 		$html = str_replace( '<embed', '<param name="wmode" value="opaque"></param><embed', $html);
 	if (strpos( $html, '<embed' ) !== false && strpos( $html, 'wmode="opaque"' )=== false)
