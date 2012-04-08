@@ -2,6 +2,7 @@
 .uds-bb {
 	position: relative;
 	overflow: hidden;
+	margin: auto;
 }
 
 .uds-bb-slides {

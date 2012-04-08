@@ -459,8 +459,13 @@ function uds_billboard_edit()
 	if(!current_user_can('edit_pages')) {
 		wp_die(__('You do not have sufficient permissions to access this page', uds_billboard_textdomain));
 	}
-
+	global $pagelines_layout;
+	
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'preview') {
+		// Fix pagelines
+		if(class_exists('PageLinesLayout')) {
+			$pagelines_layout = new PageLinesLayout();
+		}
 		include 'admin/billboard-preview.php';
 	} else {
 		include 'admin/billboard-edit.php';
