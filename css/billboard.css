@@ -75,6 +75,7 @@
 .uds-bb-description {
 	display: none; /* Make sure description is invisible during launch */
 	position: absolute;
+	z-index: 1;
 }
 
 .uds-bb-description-inside {

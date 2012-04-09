@@ -267,6 +267,11 @@
 						_private.playVideo(slide);
 					}
 					
+					// Do Ken Burns
+					if(slide.kenBurns) {
+						_private.kenBurns(slide);
+					}
+					
 					$bb.trigger('udsBillboardTransitionDidComplete', slideId);
 				}, duration);
 				
@@ -401,6 +406,7 @@
 					link: '',
 					stop: false,
 					autoplayVideo: true,
+					kenBurns: false,
 					html: ''
 				};
 				
@@ -686,6 +692,11 @@
 				$('.uds-bb-description', $stage).show();
 				
 				_private.resetAnimation();
+				
+				// Prepare for Ken Burns
+				if(nextSlide.kenBurns) {
+					_private.prepareKenBurns(nextSlide);
+				}
 				
 				if(nextSlide.transition !== 'none') { // Do not create a million copies of embedded content ;)
 					$('.uds-bb-slide', $nextInsides).hide();
@@ -1202,6 +1213,74 @@
 						}), "*");
 					}	
 				}
+			},
+			
+			prepareKenBurns: function(slide) {
+				if(typeof slide.kenBurnsImageCache === 'undefined') {
+					var image = new Image();
+					image.src = slide.bg.replace('-full.', '-ken.');
+					$(image).addClass('uds-ken-burns');
+				
+					var $slide = $(".uds-bb-slide-" + slide.id, $bb);
+					
+					$slide.css({
+						overflow: 'hidden'
+					}).append(image);
+					
+					slide.kenBurnsImageCache = $(".uds-bb-slide-" + slide.id + " img.uds-ken-burns", $bb);
+					slide.kenBurnsImageCache.css('position', 'relative');
+				}
+				
+				slide.kenBurnsImageCache.css(_private.kenBurnsCSS());
+			},
+			
+			kenBurns: function(slide) {
+				slide.kenBurnsImageCache.stop().animate(_private.kenBurnsCSS(), {
+					duration: 5000,
+					easing: 'linear',
+					complete: function() {
+						if(slide.id === currentSlideId) {
+							_private.kenBurns(slide);
+						}
+					}
+				});
+			},
+			
+			kenBurnsCSS: function() {
+				var scale = 1.2 - (Math.random() * 0.4);
+				var css = {
+					top: ((- 0.2 + Math.random() * 0.4) * parseInt(options.height, 10)),
+					left: ((- 0.2 + Math.random() * 0.4) * parseInt(options.width, 10)),
+					width: parseInt(options.width) * scale,
+					height: parseInt(options.height) * scale
+				};
+				
+				var ratio = parseInt(options.height, 10) / parseInt(options.width, 10);
+				
+				if(css.top > 0) {
+					css.top = 0;
+				}
+				
+				if(css.left > 0) {
+					css.left = 0;
+				}
+				
+				if(css.top + css.height < parseInt(options.height, 10)) {
+					css.height = - css.top + parseInt(options.height, 10);
+					css.width = css.height / ratio;
+				}
+				
+				if(css.left + css.width < parseInt(options.width, 10)) {
+					css.width = - css.left + parseInt(options.width, 10);
+					css.height = css.width * ratio;
+				}
+				
+				css.top = Math.round(css.top) + 'px';
+				css.left = Math.round(css.left) + 'px';
+				css.width = Math.round(css.width) + 'px';
+				css.height = Math.round(css.height) + 'px';
+
+				return css;
 			},
 			
 			/**

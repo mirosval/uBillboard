@@ -28,6 +28,11 @@ jQuery(function($){
 		$('.uds-regenerate-marker').val(1);
 	}
 	
+	// If ken burns has been switched on, images should be regenerated
+	$('.slides').on('change', '.billboard-ken-burns', function() {
+		markForThumbRegeneration();
+	});
+	
 	// Observe changes and ask user if he wants to save
 	function markDirty(dirty) {
 		if(dirty) {

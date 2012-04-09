@@ -157,6 +157,11 @@ $uds_billboard_attributes = array(
 		'type' => 'blog-category',
 		'label' => __('Post category', uds_billboard_textdomain),
 		'default' => ''
+	),
+	'ken-burns' => array(
+		'type' => 'checkbox',
+		'label' => __('Ken Burns Effect', uds_billboard_textdomain),
+		'default' => ''
 	)
 );
 
@@ -484,6 +489,7 @@ class uBillboardSlide {
 				<li><a href="#uds-slide-tab-content-<?php echo $id ?>"><?php _e('Content', uds_billboard_textdomain) ?></a></li>
 				<li><a href="#uds-slide-tab-link-<?php echo $id ?>"><?php _e('Link', uds_billboard_textdomain) ?></a></li>
 				<li><a href="#uds-slide-tab-transition-<?php echo $id ?>"><?php _e('Transition', uds_billboard_textdomain) ?></a></li>
+				<li><a href="#uds-slide-tab-effects-<?php echo $id ?>"><?php _e('Effects', uds_billboard_textdomain) ?></a></li>
 			</ul>
 			<div id="uds-slide-tab-background-<?php echo $id ?>" class="uds-slide-tab-background">
 				<?php $this->renderAdminField('image') ?>
@@ -513,6 +519,10 @@ class uBillboardSlide {
 				<?php $this->renderAdminField('transition') ?>
 				<?php $this->renderAdminField('direction') ?>
 				<?php $this->renderAdminField('stop') ?>
+				<div class="clear"></div>
+			</div>
+			<div id="uds-slide-tab-effects-<?php echo $id ?>" class="uds-slide-tab-effects">
+				<?php $this->renderAdminField('ken-burns') ?>
 				<div class="clear"></div>
 			</div>
 		</div>
@@ -667,7 +677,9 @@ class uBillboardSlide {
 	
 		$pause_slider = $this->{'pause-slider'} == 'on' ? 'true' : 'false';
 		$autoplay_video = $this->{'autoplay-video'} == 'on' ? 'true' : 'false';
-	
+		
+		$ken_burns = $this->{'ken-burns'} == 'on' ? 'true' : 'false';
+		
 		$out = "{
 						linkTarget: '{$target}',
 						delay: {$delay},
@@ -676,7 +688,8 @@ class uBillboardSlide {
 						bgColor: '{$background}',
 						repeat: '{$background_repeat}',
 						stop: {$stop},
-						autoplayVideo: {$autoplay_video}
+						autoplayVideo: {$autoplay_video},
+						kenBurns: {$ken_burns}
 					}";
 		
 		return $out;
@@ -971,7 +984,7 @@ class uBillboardSlide {
 		$width = $this->slider->thumbnailsWidth;
 		$height = $this->slider->thumbnailsHeight;
 		
-		$resizedImage = $this->resizeImage($this->thumb, $width, $height, true, $force_recreate);		
+		$resizedImage = $this->resizeImage($this->thumb, $width, $height, 'thumb', $force_recreate);		
 		return $resizedImage;
 	}
 	
@@ -981,16 +994,21 @@ class uBillboardSlide {
 			$width = $this->slider->width;
 			$height = $this->slider->height;
 		
-			$resizedImage = $this->resizeImage($this->image, $width, $height, false, $force_recreate);			
+			$resizedImage = $this->resizeImage($this->image, $width, $height, 'full', $force_recreate);
+			
+			if($this->{'ken-burns'} == 'on') {
+				$this->resizeImage($this->image, $width * 1.2, $height * 1.2, 'ken', $force_recreate);
+			}
+			
 			return $resizedImage;
 		} else {
 			return $this->image;
 		}
 	}
 	
-	private function imageName()
+	private function imageName($type = 'full')
 	{
-		$name = sanitize_title_with_dashes($this->slider->name) . '-' . $this->id . '-full.';
+		$name = sanitize_title_with_dashes($this->slider->name) . '-' . $this->id . "-$type.";
 		
 		if(empty($this->imageType)) {
 			if(file_exists(UDS_CACHE_PATH . '/' . $name . 'jpg')) {
@@ -1005,9 +1023,9 @@ class uBillboardSlide {
 		return $name . $this->imageType;
 	}
 	
-	private function thumbName()
+	private function thumbName($type = 'thumb')
 	{
-		$name = sanitize_title_with_dashes($this->slider->name) . '-' . $this->id . '-thumb.';
+		$name = sanitize_title_with_dashes($this->slider->name) . '-' . $this->id . "-$type.";
 		
 		if(empty($this->thumbType)) {
 			if(file_exists(UDS_CACHE_PATH . '/' . $name . 'jpg')) {
@@ -1022,24 +1040,24 @@ class uBillboardSlide {
 		return $name . $this->thumbType;
 	}
 	
-	private function thumbExists()
+	private function thumbExists($type)
 	{
-		return file_exists(UDS_CACHE_PATH . '/' . $this->thumbName());
+		return file_exists(UDS_CACHE_PATH . '/' . $this->thumbName($type));
 	}
 	
-	private function imageExists()
+	private function imageExists($type)
 	{
-		return file_exists(UDS_CACHE_PATH . '/' . $this->imageName());
+		return file_exists(UDS_CACHE_PATH . '/' . $this->imageName($type));
 	}
 	
-	private function resizeImage($src, $new_width, $new_height, $thumb = false, $force_recreate = false)
+	private function resizeImage($src, $new_width, $new_height, $type = 'full', $force_recreate = false)
 	{
-		if(!$force_recreate && $thumb && $this->thumbExists()) {
-			return UDS_CACHE_URL . '/' . $this->thumbName();
+		if(!$force_recreate && $type == 'thumb' && $this->thumbExists($type)) {
+			return UDS_CACHE_URL . '/' . $this->thumbName($type);
 		}
 		
-		if(!$force_recreate && !$thumb && $this->imageExists()) {
-			return UDS_CACHE_URL . '/' . $this->imageName();
+		if(!$force_recreate && $type != 'thumb' && $this->imageExists($type)) {
+			return UDS_CACHE_URL . '/' . $this->imageName($type);
 		}
 		
 		// check if the cache dir is writable
@@ -1048,7 +1066,8 @@ class uBillboardSlide {
 		}
 		
 		// attempt to download the image original
-		if($thumb) {
+		if($type == 'thumb') {
+			// $this->thumb might be different from $this->image (e.g. in case of videos) so we get it separately
 			$response = wp_remote_get($this->thumb);
 		} else {
 			$response = wp_remote_get($this->image);
@@ -1065,12 +1084,12 @@ class uBillboardSlide {
 		}
 		
 		// set up image type for storage
-		if($thumb) {
+		if($type == 'thumb') {
 			$this->thumbType = $image_type;
-			$imagePath = UDS_CACHE_PATH . '/' . $this->thumbName();
+			$imagePath = UDS_CACHE_PATH . '/' . $this->thumbName($type);
 		} else {
 			$this->imageType = $image_type;
-			$imagePath = UDS_CACHE_PATH . '/' . $this->imageName();
+			$imagePath = UDS_CACHE_PATH . '/' . $this->imageName($type);
 		}
 		
 		$src = imagecreatefromstring($response['body']);
@@ -1131,9 +1150,9 @@ class uBillboardSlide {
 		
 		
 		if($thumb) {
-			return UDS_CACHE_URL . '/' . $this->thumbName();
+			return UDS_CACHE_URL . '/' . $this->thumbName($type);
 		} else {
-			return UDS_CACHE_URL . '/' . $this->imageName();
+			return UDS_CACHE_URL . '/' . $this->imageName($type);
 		}
 	}
 }
