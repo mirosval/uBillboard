@@ -98,6 +98,9 @@
 		 */
 		transitionInProgress,
 		
+		computedWidth,
+		computedHeight,
+		
 		/**
 		 *	Public methods callable from the outside. Call like this:
 		 *	$('bb-id').uBillboard('next')
@@ -118,8 +121,8 @@
 				$bb.css('overflow', 'visible');
 				
 				$bb.add($slides).css({
-					width: options.width,
-					height: options.height
+					maxWidth: options.width,
+					maxHeight: options.height
 				});
 				
 				// initialize timers
@@ -169,6 +172,48 @@
 				$bb.bind('udsBillboardTransitionDidComplete', function(){
 					transitionInProgress = false;
 				});
+				
+				var ratio = (parseInt(options.height, 10) / parseInt(options.width, 10));
+				$(window).resize(function(){
+					$bb.add($nextInsides).add($stage).add($next).css({
+						width: '100%',
+						height: '100%'
+					});
+					
+					computedWidth = $bb.width();
+					computedHeight = computedWidth * ratio;
+					$bb.add($nextInsides).add($stage).add($next).css({
+						width: computedWidth + 'px',
+						height: computedHeight + 'px'
+					});
+					
+					// Center controls
+					$('.uds-center', $bb).each(function() {
+						var widthAdjustment = $(this).outerWidth() / 2;
+						var heightAdjustment = $(this).outerHeight() / 2;
+						
+						$(this).css({
+							top: computedHeight / 2 - heightAdjustment,
+							left: computedWidth / 2 - widthAdjustment
+						});
+					});
+					
+					$('.uds-center-vertical', $bb).each(function() {
+						var heightAdjustment = $(this).outerHeight() / 2;
+						
+						$(this).css({
+							top: computedHeight / 2 - heightAdjustment
+						});
+					});
+					
+					$('.uds-center-horizontal', $bb).each(function() {
+						var widthAdjustment = $(this).outerWidth() / 2;
+						
+						$(this).css({
+							left: computedWidth / 2 - widthAdjustment
+						});
+					});
+				}).resize();
 			},
 			
 			/**
@@ -429,8 +474,10 @@
 					$slide
 						.css({
 							display: 'none',
-							width: options.width,
-							height: options.height
+							maxWidth: options.width,
+							maxHeight: options.height,
+							width: '100%',
+							height: '100%'
 						})
 						.css(_private.getSlideBackgroundCSS(slide))
 						.html(slide.html);
@@ -589,8 +636,10 @@
 				$next.hide();
 				
 				$($stage).add($next).css({
-					width: options.width,
-					height: options.height,
+					maxWidth: options.width,
+					maxHeight: options.height,
+					width: '100%',
+					height: '100%',
 					opacity: 0
 				});
 				
@@ -702,6 +751,12 @@
 					$('.uds-bb-slide', $nextInsides).hide();
 					$('.uds-bb-slide-'+nextSlide.id, $nextInsides).show();
 					$('.uds-bb-description', $nextInsides).show();
+					
+					// Remember responsive!
+					$('.uds-bb-slide-'+nextSlide.id, $nextInsides).css({
+						width: computedWidth + 'px',
+						height: computedHeight + 'px'
+					});
 				}
 			},
 			
@@ -710,8 +765,10 @@
 	
 				// Setup CSS
 				$controls.show().css({
-					width: options.width,
-					height: options.height,
+					maxWidth: options.width,
+					maxHeight: options.height,
+					width: '100%',
+					height: '100%',
 					opacity: 0
 				});
 				
@@ -900,14 +957,27 @@
 					position = windowDim / 2 - containerDim / 2;
 					$container.css(scrollProperty, position + 'px');
 				}
-	
+				
 				var recalculateContainerPosition = function(e){
+					// Calculate variables
+					if(orientation === 'vertical') {
+						windowDim = $thumbs.height();
+					} else {
+						windowDim = $thumbs.width();
+					}
+					
+					if(windowDim > containerDim) {
+						position = windowDim / 2 - containerDim / 2;
+					}
+					
 					// Normalize coordinates
 					var offset = 0, speed = 0;
-					if(orientation === 'vertical') {
-						offset = e.pageY - $thumbs.offset().top;
-					} else {
-						offset = e.pageX - $thumbs.offset().left;
+					if(e !== null && typeof e !== 'undefined') {
+						if(orientation === 'vertical') {
+							offset = e.pageY - $thumbs.offset().top;
+						} else {
+							offset = e.pageX - $thumbs.offset().left;
+						}
 					}
 					
 					// speed is the distance from the center
@@ -915,13 +985,15 @@
 					
 					// normalize it to 0..1
 					speed = (speed / (windowDim / 2)) * 5;
-					
-					if(windowDim > containerDim) {
-						return;
-					}
 
 					if((speed < 0 && position > 0) || (speed > 0 && position < (containerDim - windowDim))) {
 						position += speed;
+					}
+					
+					if((e === null || typeof e === 'undefined') && windowDim > containerDim) {
+						position = - (windowDim / 2 - containerDim / 2);
+					} else if (windowDim > containerDim) {
+						return;
 					}
 					
 					$container.css(scrollProperty, - position + 'px');
@@ -930,7 +1002,7 @@
 				$thumbs.bind({
 					'mouseenter mousemove': function(e){
 						clearInterval(timers.thumbMove);
-						
+
 						timers.thumbMove = setInterval(function() {
 							recalculateContainerPosition(e);
 						}, 10);
@@ -939,6 +1011,16 @@
 						clearInterval(timers.thumbMove);
 					}
 				});
+				
+				$(window).resize(function(e){
+					if($thumbs.length === 0) {
+						return;
+					}
+					
+					clearInterval(timers.thumbMove);
+					recalculateContainerPosition();
+				});
+				
 				
 				// Comply with options (hide/hover etc)
 				var $controlsToHover = $('');
@@ -999,33 +1081,6 @@
 				if($('>*', $bulletsContainer).not(':hidden').length === 0) {
 					$bulletsContainer.hide();
 				}
-				
-				// Center controls
-				$('.uds-center', $bb).each(function() {
-					var widthAdjustment = $(this).outerWidth() / 2;
-					var heightAdjustment = $(this).outerHeight() / 2;
-					
-					$(this).css({
-						top: parseInt(options.height, 10) / 2 - heightAdjustment,
-						left: parseInt(options.width, 10) / 2 - widthAdjustment
-					});
-				});
-				
-				$('.uds-center-vertical', $bb).each(function() {
-					var heightAdjustment = $(this).outerHeight() / 2;
-					
-					$(this).css({
-						top: parseInt(options.height, 10) / 2 - heightAdjustment
-					});
-				});
-				
-				$('.uds-center-horizontal', $bb).each(function() {
-					var widthAdjustment = $(this).outerWidth() / 2;
-					
-					$(this).css({
-						left: parseInt(options.width, 10) / 2 - widthAdjustment
-					});
-				});
 			},
 			
 			/**
@@ -1249,10 +1304,10 @@
 			kenBurnsCSS: function() {
 				var scale = 1.2 - (Math.random() * 0.4);
 				var css = {
-					top: ((- 0.2 + Math.random() * 0.4) * parseInt(options.height, 10)),
-					left: ((- 0.2 + Math.random() * 0.4) * parseInt(options.width, 10)),
-					width: parseInt(options.width) * scale,
-					height: parseInt(options.height) * scale
+					top: ((- 0.2 + Math.random() * 0.4) * computedHeight),
+					left: ((- 0.2 + Math.random() * 0.4) * computedWidth),
+					width: computedWidth * scale,
+					height: computedHeight * scale
 				};
 				
 				var ratio = parseInt(options.height, 10) / parseInt(options.width, 10);
@@ -1265,13 +1320,13 @@
 					css.left = 0;
 				}
 				
-				if(css.top + css.height < parseInt(options.height, 10)) {
-					css.height = - css.top + parseInt(options.height, 10);
+				if(css.top + css.height < computedHeight) {
+					css.height = - css.top + computedHeight;
 					css.width = css.height / ratio;
 				}
 				
-				if(css.left + css.width < parseInt(options.width, 10)) {
-					css.width = - css.left + parseInt(options.width, 10);
+				if(css.left + css.width < computedWidth) {
+					css.width = - css.left + computedWidth;
 					css.height = css.width * ratio;
 				}
 				
