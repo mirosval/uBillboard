@@ -213,6 +213,41 @@
 							left: computedWidth / 2 - widthAdjustment
 						});
 					});
+					
+					// Center video content
+					for(var i = 0; i < slides.length; i++) {
+						if(slides[i].transition !== 'none') {
+							continue;
+						}
+						
+						var $elements = $('.uds-bb-slide-' + i + '>*', $bb);
+						
+						for(var j = 0; j < $elements.length; j++) {							
+							var el = $elements.eq(j);
+							var videoRatio = $(el).attr('width') / $(el).attr('height');
+							
+							var width = $(el).attr('width'), 
+								height = $(el).attr('height');
+								
+							if($(el).attr('height') > computedHeight) {
+								height = computedHeight;
+								width = height * videoRatio;
+							} else if($(el).attr('width') > computedWidth) {
+								width = computedWidth;
+								height = width / videoRatio;
+							}
+							
+							el.css({
+								position: 'absolute',
+								top: computedHeight / 2 - height / 2,
+								left: computedWidth / 2 - width / 2,
+								width: width,
+								height: height,
+								margin: 'auto'
+							});
+						}
+					}
+					
 				}).resize();
 			},
 			
@@ -1271,6 +1306,10 @@
 			},
 			
 			prepareKenBurns: function(slide) {
+				if(slide.transition === 'none') {
+					return;
+				}
+				
 				if(typeof slide.kenBurnsImageCache === 'undefined') {
 					var image = new Image();
 					image.src = slide.bg.replace('-full.', '-ken.');
