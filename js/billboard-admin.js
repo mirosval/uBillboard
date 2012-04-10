@@ -212,7 +212,8 @@ jQuery(function($){
 		if($input.val() !== '') {
 			$(this).css({
 				'background-image': 'url('+$input.val()+')',
-				height: $(this).parent().height() + 'px'
+				'background-size': 'auto 100%',
+				height: $(this).parent().height() - 3 + 'px'
 			});
 		}
 		
@@ -234,6 +235,8 @@ jQuery(function($){
 			
 			$('#image-preview').show().css({
 				'background-image': 'url('+$input.val()+')',
+				'background-size': 'contain',
+				'background-repeat': 'no-repeat',
 				width: $('#uds-billboard-width').val()+'px',
 				height: $('#uds-billboard-height').val()+'px',
 				top: $(preview).offset().top,

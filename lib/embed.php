@@ -28,7 +28,7 @@ function uds_billboard_oembed($url, $width, $height)
 						"&width=$width" .
 						"&height=$height" .
 						"&format=json" .
-						"&api=1".
+						"&api=1" .
 						"&wmode=opaque";
 		}	
 	}

@@ -413,7 +413,7 @@
 			/**
 			 *	Starts Playback
 			 */
-			'play': function() {				
+			'play': function() {	
 				if(typeof currentSlideId !== 'number' || currentSlideId === null) {
 					currentSlideId = 0;
 				}
@@ -1252,7 +1252,7 @@
 				$iframe = $('iframe', $slide);
 		
 				for(var i = 0; i < $('iframe').length; i++) {
-					if($('iframe').eq(i).get(0) === $iframe.get(0)) {
+					if($('iframe').eq(i).get(0) === $iframe.get(0)) {						
 						// YouTube
 						window.frames[i].postMessage(JSON.stringify({
 							"event": "command",
