@@ -362,6 +362,7 @@
 				
 				if(options.pauseOnVideo && slides[currentSlideId].transition === 'none') {
 					$countdown.hide();
+					clearTimeout(timers.nextSlideAnimation);
 					return;
 				}
 				
@@ -1329,6 +1330,10 @@
 			},
 			
 			kenBurns: function(slide) {
+				if(slide.transition === 'none' || typeof slide.kenBurnsImageCache === 'undefined') {
+					return;
+				}
+				
 				slide.kenBurnsImageCache.stop().animate(_private.kenBurnsCSS(), {
 					duration: 5000,
 					easing: 'linear',
