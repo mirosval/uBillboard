@@ -20,6 +20,10 @@
 		easeInOutQuad: function (x, t, b, c, d) {
 			if ((t/=d/2) < 1){ return c/2*t*t + b; }
 			return -c/2 * ((--t)*(t-2) - 1) + b;
+		},
+		easeInOutCirc: function (x, t, b, c, d) {
+			if ((t/=d/2) < 1) return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;
+			return c/2 * (Math.sqrt(1 - (t-=2)*t) + 1) + b;
 		}
 	});
 	
@@ -488,6 +492,7 @@
 					stop: false,
 					autoplayVideo: true,
 					kenBurns: false,
+					kenBurnsSpeed: 4000,
 					html: ''
 				};
 				
@@ -641,6 +646,11 @@
 				_private.handleEmbeddedContent(currentSlide);
 				
 				$controls.delay(300).fadeTo(300, 1);
+				
+				if(currentSlide.kenBurns) {
+					_private.prepareKenBurns(currentSlide);
+					_private.kenBurns(currentSlide);
+				}
 				
 				// should we pause on this slide
 				var pauseForVideo = options.pauseOnVideo && currentSlide.transition === 'none';
@@ -1312,40 +1322,103 @@
 				}
 				
 				if(typeof slide.kenBurnsImageCache === 'undefined') {
-					var image = new Image();
-					image.src = slide.bg.replace('-full.', '-ken.');
-					$(image).addClass('uds-ken-burns');
-				
 					var $slide = $(".uds-bb-slide-" + slide.id, $bb);
+					var image = new Image();
 					
-					$slide.css({
-						overflow: 'hidden'
-					}).append(image);
+					slide.kenBurnsImage = image;
 					
-					slide.kenBurnsImageCache = $(".uds-bb-slide-" + slide.id + " img.uds-ken-burns", $bb);
-					slide.kenBurnsImageCache.css('position', 'relative');
+					var canvas = $('<canvas>').css({
+						position: 'relative',
+						width: computedWidth,
+						height: computedHeight
+					}).attr({
+						width: computedWidth,
+						height: computedHeight
+					}).appendTo($slide).get(0);
+					
+					if(typeof canvas.getContext === 'function') {
+						var ctx = canvas.getContext('2d');
+						slide.kenBurnsCanvasCache = ctx;
+						slide.kenBurnsImageCache = false;
+						
+						image.onLoad = function() {
+							ctx.clearRect(computedWidth, computedHeight);
+							ctx.drawImage(image, 0, 0);
+						};
+						image.src = slide.bg.replace('-full.', '-ken.');
+					} else {
+						$(canvas).remove();
+						slide.kenBurnsCanvasCache = false;
+						
+						image.src = slide.bg.replace('-full.', '-ken.');
+						
+						$(image).addClass('uds-ken-burns');
+					
+						$slide.css({
+							overflow: 'hidden'
+						}).append(image);
+						
+						slide.kenBurnsImageCache = $(".uds-bb-slide-" + slide.id + " img.uds-ken-burns", $bb);
+						
+						slide.kenBurnsImageCache.css({
+							'position': 'relative',
+							'display': 'block',
+							'-ms-interpolation-mode': 'bicubic'
+						});
+					}
 				}
 				
-				slide.kenBurnsImageCache.css(_private.kenBurnsCSS());
+				if(slide.kenBurnsCanvasCache) {
+					slide.kenBurnsCanvasStartingCSS = _private.kenBurnsCSS(false);
+				} else {
+					slide.kenBurnsImageCache.css(_private.kenBurnsCSS(true));
+				}
 			},
 			
 			kenBurns: function(slide) {
-				if(slide.transition === 'none' || typeof slide.kenBurnsImageCache === 'undefined') {
+				if(slide.transition === 'none' || (typeof slide.kenBurnsImageCache === 'undefined' && typeof slide.kenBurnsCanvasCache === 'undefined')) {
 					return;
 				}
 				
-				slide.kenBurnsImageCache.stop().animate(_private.kenBurnsCSS(), {
-					duration: 5000,
-					easing: 'linear',
-					complete: function() {
-						if(slide.id === currentSlideId) {
-							_private.kenBurns(slide);
+				if(slide.kenBurnsCanvasCache) {
+					clearInterval(timers.kenBurnsCanvasTimer);
+					var start = new Date();
+					var css = _private.kenBurnsCSS(false);
+					//d(slide.kenBurnsCanvasCache);
+					timers.kenBurnsCanvasTimer = setInterval(function(){
+						var now = new Date();
+						var progress = (now.getTime() - start.getTime()) / slide.kenBurnsSpeed;
+						var startCSS = slide.kenBurnsCanvasStartingCSS;
+						
+						slide.kenBurnsCanvasCache.clearRect(computedWidth, computedHeight);
+						slide.kenBurnsCanvasCache.drawImage(
+							slide.kenBurnsImage, 
+							((1 - progress) * startCSS.left   + (progress) * css.left  ),
+							((1 - progress) * startCSS.top    + (progress) * css.top   ),
+							((1 - progress) * startCSS.width  + (progress) * css.width ),
+							((1 - progress) * startCSS.height + (progress) * css.height)
+						);
+						
+						if(progress >= 1) {
+							start = new Date();
+							slide.kenBurnsCanvasStartingCSS = css;
+							css = _private.kenBurnsCSS(false);
 						}
-					}
-				});
+					}, 20);
+				} else {
+					slide.kenBurnsImageCache.eq(0).stop().animate(_private.kenBurnsCSS(true), {
+						duration: slide.kenBurnsSpeed,
+						easing: 'easeInOutQuad',
+						complete: function() {
+							if(slide.id === currentSlideId) {
+								_private.kenBurns(slide);
+							}
+						}
+					});
+				}
 			},
 			
-			kenBurnsCSS: function() {
+			kenBurnsCSS: function(withPx) {
 				var scale = 1.2 - (Math.random() * 0.4);
 				var css = {
 					top: ((- 0.2 + Math.random() * 0.4) * computedHeight),
@@ -1374,10 +1447,12 @@
 					css.height = css.width * ratio;
 				}
 				
-				css.top = Math.round(css.top) + 'px';
-				css.left = Math.round(css.left) + 'px';
-				css.width = Math.round(css.width) + 'px';
-				css.height = Math.round(css.height) + 'px';
+				if(withPx) {
+					css.top 	= css.top + 'px';
+					css.left	= css.left + 'px';
+					css.width	= css.width + 'px';
+					css.height	= css.height + 'px';
+				}
 
 				return css;
 			},
