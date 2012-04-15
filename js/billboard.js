@@ -1330,11 +1330,11 @@
 					
 					var canvas = $('<canvas>').css({
 						position: 'relative',
-						width: computedWidth,
-						height: computedHeight
+						width: computedWidth || options.width,
+						height: computedHeight || options.height
 					}).attr({
-						width: computedWidth,
-						height: computedHeight
+						width: computedWidth || options.width,
+						height: computedHeight || options.height
 					}).appendTo($slide).get(0);
 					
 					if(typeof canvas.getContext === 'function') {
@@ -1390,20 +1390,12 @@
 				if(slide.transition === 'none' || (typeof slide.kenBurnsImageCache === 'undefined' && typeof slide.kenBurnsCanvasCache === 'undefined')) {
 					return;
 				}
-				
-				if(slide.kenBurnsCanvasCache) {
-					$(slide.kenBurnsCanvasCache).css({
-						position: 'relative',
-						width: computedWidth,
-						height: computedHeight
-					}).attr({
-						width: computedWidth,
-						height: computedHeight
-					});
+
+				if(slide.kenBurnsCanvasCache) {					
 					clearInterval(timers.kenBurnsCanvasTimer);
 					var start = new Date();
 					var css = _private.kenBurnsCSS(false);
-					//d(slide.kenBurnsCanvasCache);
+
 					timers.kenBurnsCanvasTimer = setInterval(function(){
 						var now = new Date();
 						var progress = (now.getTime() - start.getTime()) / slide.kenBurnsSpeed;
