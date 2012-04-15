@@ -789,6 +789,7 @@
 				_private.resetAnimation();
 				
 				// Prepare for Ken Burns
+				clearInterval(timers.kenBurnsCanvasTimer);
 				if(nextSlide.kenBurns) {
 					_private.prepareKenBurns(nextSlide);
 				}
@@ -1342,7 +1343,7 @@
 						slide.kenBurnsImageCache = false;
 						
 						image.onLoad = function() {
-							ctx.clearRect(computedWidth, computedHeight);
+							ctx.clearRect(0, 0, computedWidth, computedHeight);
 							ctx.drawImage(image, 0, 0);
 						};
 						image.src = slide.bg.replace('-full.', '-ken.');
@@ -1369,9 +1370,19 @@
 				}
 				
 				if(slide.kenBurnsCanvasCache) {
-					slide.kenBurnsCanvasStartingCSS = _private.kenBurnsCSS(false);
+					slide.kenBurnsCanvasStartingCSS = {
+						top: 0,
+						left: 0,
+						width: computedWidth,
+						height: computedHeight
+					};
 				} else {
-					slide.kenBurnsImageCache.css(_private.kenBurnsCSS(true));
+					slide.kenBurnsImageCache.css({
+						top: 0,
+						left: 0,
+						width: computedWidth,
+						height: computedHeight
+					});
 				}
 			},
 			
@@ -1381,6 +1392,14 @@
 				}
 				
 				if(slide.kenBurnsCanvasCache) {
+					$(slide.kenBurnsCanvasCache).css({
+						position: 'relative',
+						width: computedWidth,
+						height: computedHeight
+					}).attr({
+						width: computedWidth,
+						height: computedHeight
+					});
 					clearInterval(timers.kenBurnsCanvasTimer);
 					var start = new Date();
 					var css = _private.kenBurnsCSS(false);
@@ -1390,7 +1409,7 @@
 						var progress = (now.getTime() - start.getTime()) / slide.kenBurnsSpeed;
 						var startCSS = slide.kenBurnsCanvasStartingCSS;
 						
-						slide.kenBurnsCanvasCache.clearRect(computedWidth, computedHeight);
+						slide.kenBurnsCanvasCache.clearRect(0, 0, computedWidth, computedHeight);
 						slide.kenBurnsCanvasCache.drawImage(
 							slide.kenBurnsImage, 
 							((1 - progress) * startCSS.left   + (progress) * css.left  ),
