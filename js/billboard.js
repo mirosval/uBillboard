@@ -312,12 +312,12 @@
 				
 				// Run Transition Setup function
 				if(animations[transition].setup !== null && typeof animations[transition].setup === 'function') {
-					animations[transition].setup();
+					animations[transition].setup(currentSlideId, slideId);
 				}
 				
 				// Run Transition Perform function
 				if(animations[transition].perform !== null && typeof animations[transition].perform === 'function') {
-					animations[transition].perform();
+					animations[transition].perform(currentSlideId, slideId);
 				}
 				
 				// Decide on transition duration
@@ -1488,6 +1488,10 @@
 				delay: $.noop
 			},
 			
+			'intuitive': {
+				delay: $.noop
+			},
+			
 			'left': {
 				delay: function() {
 					var cols = Math.ceil(parseInt(options.width, 10) / parseInt(options.squareSize, 10));
@@ -1734,37 +1738,48 @@
 			'slide': {
 				duration: 700,
 				direction: 'right',
-				setup: function() {
+				setup: function(currentSlideId, nextSlideId) {
 					var sq;
+					
 					$('.uds-bb-slides', $bb).css({
 						overflow: 'hidden'
 					});
+					
 					$stage.css({
 						top: '0px',
 						left: '0px'
 					});
 					
-					if(this.direction === 'left') {
+					var direction = this.direction;
+					if(direction === 'intuitive') {
+						if(currentSlideId < nextSlideId) {
+							direction = 'right';
+						} else {
+							direction = 'left';
+						}
+					}
+					
+					if(direction === 'left') {
 						$next.show().css({
 							top: '0px',
 							left: _private.neg(options.width)
 						});
-					} else if(this.direction === 'top') {
+					} else if(direction === 'top') {
 						$next.show().css({
 							top: _private.neg(options.height),
 							left: '0px'
 						});
-					} else if(this.direction === 'bottom') {
+					} else if(direction === 'bottom') {
 						$next.show().css({
 							top: _private.pos(options.height),
 							left: '0px'
 						});
-					} else if(this.direction === 'top') {
+					} else if(direction === 'top') {
 						$next.show().css({
 							top: '0px',
 							left: _private.pos(options.width)
 						});
-					} else if(this.direction === 'zigzagHorizontal') {
+					} else if(direction === 'zigzagHorizontal') {
 						sq = parseInt(options.squareSize, 10);
 						var height = parseInt(options.height, 10);
 							
@@ -1775,7 +1790,7 @@
 							});
 						});
 						
-						directions[this.direction].delay();
+						directions[direction].delay();
 					} else if(this.direction === 'zigzagVertical') {
 						sq = parseInt(options.squareSize, 10);
 						var width = parseInt(options.width, 10);
@@ -1787,7 +1802,7 @@
 							});
 						});
 						
-						directions[this.direction].delay();
+						directions[direction].delay();
 					} else {
 						$next.show().css({
 							top: '0px',
@@ -1795,41 +1810,50 @@
 						});
 					}
 				},
-				perform: function() {
+				perform: function(currentSlideId, nextSlideId) {
 					var animOptions =  {
 						duration: 700,
 						easing: 'easeInOutQuad'
 					}, sq;
 					
-					if(this.direction === 'left') {
+					var direction = this.direction;
+					if(this.direction === 'intuitive') {
+						if(currentSlideId < nextSlideId) {
+							direction = 'right';
+						} else {
+							direction = 'left';
+						}
+					}
+					
+					if(direction === 'left') {
 						$stage.animate({
 							left: _private.pos(options.width)
 						}, animOptions);
 						$next.animate({
 							left: '0px'
 						}, animOptions);
-					} else if(this.direction === 'top') {
+					} else if(direction === 'top') {
 						$stage.animate({
 							top: _private.pos(options.height)
 						}, animOptions);
 						$next.animate({
 							top: '0px'
 						}, animOptions);
-					} else if(this.direction === 'bottom') {
+					} else if(direction === 'bottom') {
 						$stage.animate({
 							top: _private.neg(options.height)
 						}, animOptions);
 						$next.animate({
 							top: '0px'
 						}, animOptions);
-					} else if(this.direction === 'top') {
+					} else if(direction === 'top') {
 						$stage.animate({
 							left: _private.neg(options.width)
 						}, animOptions);
 						$next.animate({
 							left: '0px'
 						}, animOptions);
-					} else if(this.direction === 'zigzagHorizontal') {
+					} else if(direction === 'zigzagHorizontal') {
 						sq = parseInt(options.squareSize, 10);
 						var height = parseInt(options.height, 10);
 						
@@ -1839,7 +1863,7 @@
 								top: parseInt($(this).css('top'), 10) + height + 'px'
 							}, animOptions);
 						});
-					} else if(this.direction === 'zigzagVertical') {
+					} else if(direction === 'zigzagVertical') {
 						sq = parseInt(options.squareSize, 10);
 						var width = parseInt(options.width, 10);
 						

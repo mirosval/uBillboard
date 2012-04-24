@@ -83,6 +83,7 @@ $uds_billboard_attributes = array(
 		'options' => array(
 			'none'				=> '--',
 			'random' 			=> __('Random Direction', uds_billboard_textdomain),
+			'intuitive'			=> __('Intuitive', uds_billboard_textdomain),
 			'center'			=> __('From Center', uds_billboard_textdomain),
 			'left' 				=> __('From Left', uds_billboard_textdomain),
 			'right' 			=> __('From Right', uds_billboard_textdomain),
