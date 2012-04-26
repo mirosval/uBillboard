@@ -1093,13 +1093,13 @@ class uBillboardSlide {
 			$imagePath = UDS_CACHE_PATH . '/' . $this->imageName($type);
 		}
 		
-		$src = imagecreatefromstring($response['body']);
+		$src = @imagecreatefromstring($response['body']);
 				
 		if(!$src) {
 			return new WP_Error('uds_billboard_slide', __('Failed to create image. (imagecreatefromstring())',uds_billboard_textdomain));
 		}
 		
-		$dst = imagecreatetruecolor($new_width, $new_height);
+		$dst = @imagecreatetruecolor($new_width, $new_height);
 		if(!$dst) {
 			return new WP_Error('uds_billboard_slide', __('Failed to create new image context.',uds_billboard_textdomain));
 		}

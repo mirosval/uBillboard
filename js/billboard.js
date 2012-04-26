@@ -2,7 +2,7 @@
  *	@license
  *	uBillboard - Premium Slide for WordPress
  *
- *	Version: 3.2.0
+ *	Version: 3.5.0
  *
  *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
  *	
@@ -1859,7 +1859,7 @@
 					
 					var direction = this.direction;
 					if(direction === 'intuitive') {
-						if(currentSlideId < nextSlideId) {
+						if((currentSlideId < nextSlideId || (nextSlideId === 0 && currentSlideId === slides.length - 1)) && !(nextSlideId === slides.length - 1 && currentSlideId === 0)) {
 							direction = 'right';
 						} else {
 							direction = 'left';
@@ -1925,7 +1925,7 @@
 					
 					var direction = this.direction;
 					if(this.direction === 'intuitive') {
-						if(currentSlideId < nextSlideId) {
+						if((currentSlideId < nextSlideId || (nextSlideId === 0 && currentSlideId === slides.length - 1)) && !(nextSlideId === slides.length - 1 && currentSlideId === 0)) {
 							direction = 'right';
 						} else {
 							direction = 'left';
