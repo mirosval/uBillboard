@@ -104,6 +104,7 @@
 		
 		computedWidth,
 		computedHeight,
+		touches,
 		
 		/**
 		 *	Public methods callable from the outside. Call like this:
@@ -166,6 +167,9 @@
 						}
 					}
 				});
+				
+				// Init touch support
+				_private.initTouchSupport();
 				
 				// this call from the preloadImages() function would be too soon
 				if(willPreloadImages === false) {
@@ -258,10 +262,14 @@
 			/**
 			 *	Main backbone animation function. Animates slideId according to its definition
 			 */
-			'animateSlide': function(slideId) {
+			'animateSlide': function(slideId, animate) {
 				// No need to animate
 				if(slideId === currentSlideId) {
 					return;
+				}
+				
+				if(typeof animate !== "boolean") {
+					animate = true;
 				}
 				
 				if(slides[slideId] === null) {
@@ -283,47 +291,51 @@
 				// Handle Embedded content
 				_private.handleEmbeddedContent(slide);
 				
-				// Decide on transition
-				var transition = 'fade';
-				if(slide.transition !== null && typeof slide.transition === 'string') {
-					transition = slide.transition;
-				}
-	
-				if(animations[transition] === null || typeof animations[transition] !== 'object'){
-					d('Transition "' + transition + '" is not defined');
-					transition = 'fade';
-				}
+				var duration = 0;
 				
-				// Assign Direction
-				var defaultDirection = animations[transition].direction;
-				if(directions[slide.direction] === null || typeof directions[slide.direction] !== 'object') {
-					if(directions[defaultDirection] === null || typeof directions[defaultDirection] !== 'object') {
-						animations[transition].direction = 'right';
-					} else {
-						animations[transition].direction = defaultDirection;
+				if(animate) {
+					// Decide on transition
+					var transition = 'fade';
+					if(slide.transition !== null && typeof slide.transition === 'string') {
+						transition = slide.transition;
 					}
-				} else {
-					animations[transition].direction = slide.direction;
-				}
-				
-				$next.show().css('opacity', 1);
-				
-				transitionInProgress = true;
-				
-				// Run Transition Setup function
-				if(animations[transition].setup !== null && typeof animations[transition].setup === 'function') {
-					animations[transition].setup(currentSlideId, slideId);
-				}
-				
-				// Run Transition Perform function
-				if(animations[transition].perform !== null && typeof animations[transition].perform === 'function') {
-					animations[transition].perform(currentSlideId, slideId);
-				}
-				
-				// Decide on transition duration
-				var duration = 1000;
-				if(animations[transition].duration !== null && typeof animations[transition].duration === 'number') {
-					duration = animations[transition].duration;
+		
+					if(animations[transition] === null || typeof animations[transition] !== 'object'){
+						d('Transition "' + transition + '" is not defined');
+						transition = 'fade';
+					}
+					
+					// Assign Direction
+					var defaultDirection = animations[transition].direction;
+					if(directions[slide.direction] === null || typeof directions[slide.direction] !== 'object') {
+						if(directions[defaultDirection] === null || typeof directions[defaultDirection] !== 'object') {
+							animations[transition].direction = 'right';
+						} else {
+							animations[transition].direction = defaultDirection;
+						}
+					} else {
+						animations[transition].direction = slide.direction;
+					}
+					
+					$next.show().css('opacity', 1);
+					
+					transitionInProgress = true;
+					
+					// Run Transition Setup function
+					if(animations[transition].setup !== null && typeof animations[transition].setup === 'function') {
+						animations[transition].setup(currentSlideId, slideId);
+					}
+					
+					// Run Transition Perform function
+					if(animations[transition].perform !== null && typeof animations[transition].perform === 'function') {
+						animations[transition].perform(currentSlideId, slideId);
+					}
+					
+					// Decide on transition duration
+					duration = 1000;
+					if(animations[transition].duration !== null && typeof animations[transition].duration === 'number') {
+						duration = animations[transition].duration;
+					}
 				}
 
 				clearTimeout(timers.transitionComplete);
@@ -378,7 +390,7 @@
 				if(playing) {
 					_private.animateCountdown(slides[currentSlideId].delay);
 				} else {
-					if($countdown !== null) {
+					if($countdown !== null && typeof $countdown !== "undefined") {
 						$countdown.hide();
 					}
 				}
@@ -1131,6 +1143,101 @@
 			},
 			
 			/**
+			 *	Hooks up touch events handling
+			 */
+			initTouchSupport: function() {
+				$('.uds-bb-slides').on("touchstart touchmove touchend", function(e){
+					var event = e.originalEvent;
+					
+					if(event.type === "touchstart") {
+						touches = {
+							startX: event.touches[0].clientX,
+							time: new Date().getTime(),
+							absoluteStartTime: new Date().getTime()
+						};
+						
+						$('.uds-bb-slides', $bb).css('overflow', 'hidden');
+					}
+					
+					if(event.type === "touchmove") {
+						var offset = event.touches[0].clientX - touches.startX;
+						var deltaOffset = event.touches[0].clientX - touches.currentX;
+						touches.currentX = event.touches[0].clientX;
+						var slideId;
+						var now = new Date().getTime();
+						var timeDelta = now - touches.time;
+						touches.time = now;
+						touches.speed = deltaOffset / (timeDelta / 1000);
+
+						if(offset > 0) {
+							touches.direction = -1;
+							slideId = _private.getPrevSlideId();
+						} else {
+							touches.direction = 1;
+							slideId = _private.getNextSlideId();
+						}
+						
+						touches.slideId = slideId;
+						
+						// Pause video if this is a video slide
+						if(slides[currentSlideId].transition === 'none') {
+							_private.pauseVideo(slides[currentSlideId]);
+						}
+						
+						_private.prepareForAnimation(slideId);
+						
+						// Handle Embedded content
+						_private.handleEmbeddedContent(slides[currentSlideId]);
+						
+						$stage.css('left', offset + "px");
+						if(offset > 0) {
+							touches.left = - computedWidth + offset;
+						} else {
+							touches.left = computedWidth + offset;
+						}
+						
+						$next.show().css({
+							left: touches.left + "px",
+							opacity: 1
+						});
+					}
+					
+					if(event.type === "touchend") {
+						var draggedAfterHalfWidth = Math.abs(touches.left) < (computedWidth / 2),
+							swiped = Math.abs(touches.speed) > 100,
+							clicked = (new Date().getTime() - touches.absoluteStartTime) < 150;
+						
+						$('.uds-bb-slides', $bb).css('overflow', 'visoble');
+						
+						if((draggedAfterHalfWidth || swiped) && !clicked) {
+							e.preventDefault();
+							
+							$stage.animate({
+								left: - touches.direction * computedWidth
+							}, 500);
+							
+							$next.animate({
+								left: 0
+							}, {
+								duration: 500,
+								complete: function() {
+									_public.animateSlide(touches.slideId, false);
+								}
+							});
+						} else {
+							$stage.animate({
+								left: 0
+							}, 500);
+							
+							$next.animate({
+								left: touches.direction * computedWidth
+							}, 500);
+						}
+					}
+				});
+			},
+			
+			/**
 			 *	Figures out the next slide ID
 			 */
 			getNextSlideId: function() {
@@ -1602,9 +1709,9 @@
 					var n = 0, hPos = 0, vPos = 0;
 					while(n < cols * rows){
 						var squareId = cols * vPos + hPos;
-						
+
 						$('.uds-square-'+squareId).delay(1000 - 1000 * (n/(cols*rows)));
-						
+
 						if(vPos === topBound && hPos < rightBound) {
 							hPos++;
 						} else if(hPos === rightBound && vPos < bottomBound) {
@@ -1691,7 +1798,7 @@
 			 *
 			 */
 			'fade': {
-				duration: 1000,
+				duration: 1500,
 				direction: '',
 				setup: function() {
 					$squares.css({
