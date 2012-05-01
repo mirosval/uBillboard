@@ -807,7 +807,7 @@
 					_private.prepareKenBurns(nextSlide);
 				}
 				
-				if(nextSlide.hasVideo) {
+				if(nextSlide.hasVideo || _private.isSlowBrowser()) {
 					$squares.detach();
 					$(">.uds-bb-slide", $next).remove();
 					$next.append($('>.uds-bb-slide-' + nextSlide.id, $stage).clone().show());
@@ -1065,18 +1065,22 @@
 					$container.css(scrollProperty, - position + 'px');
 				};
 				
-				$thumbs.bind({
-					'mouseenter mousemove': function(e){
-						clearInterval(timers.thumbMove);
-
-						timers.thumbMove = setInterval(function() {
-							recalculateContainerPosition(e);
-						}, 10);
-					}, 
-					'mouseleave': function(){
-						clearInterval(timers.thumbMove);
-					}
-				});
+				if(_private.isMobile()) {
+					$thumbs.css('overflow', 'scroll');
+				} else {
+					$thumbs.bind({
+						'mouseenter mousemove': function(e){
+							clearInterval(timers.thumbMove);
+	
+							timers.thumbMove = setInterval(function() {
+								recalculateContainerPosition(e);
+							}, 10);
+						}, 
+						'mouseleave': function(){
+							clearInterval(timers.thumbMove);
+						}
+					});
+				}
 				
 				$(window).resize(function(e){
 					if($thumbs.length === 0) {
@@ -1587,6 +1591,26 @@
 				return css;
 			},
 			
+			isSlowBrowser: function() {
+				return _private.isMobile();
+			},
+			
+			isMobile: function(){
+				return true;
+				var ua = navigator.userAgent;
+				var checker = {
+				  ios: $.isArray(ua.match(/(iPhone|iPod|iPad)/)),
+				  blackberry: $.isArray(ua.match(/BlackBerry/)),
+				  android: $.isArray(ua.match(/Android/))
+				};
+				
+				if(checker.ios || checker.blackberry || checker.android) {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			
 			/**
 			 *	Returns input value transformed to positive pixel value string
 			 */
@@ -1817,13 +1841,15 @@
 				duration: 1500,
 				direction: '',
 				setup: function() {
-					$squares.css({
+					var $el = _private.isSlowBrowser() ? $next : $squares;
+					$el.css({
 						opacity: 0
 					});
 				},
 				perform: function() {
+					var $el = _private.isSlowBrowser() ? $next : $squares;
 					directions[this.direction].delay();
-					$squares.animate({
+					$el.animate({
 						opacity: 1
 					}, {
 						duration: 500
@@ -1850,7 +1876,8 @@
 						duration: 1000
 					});
 					
-					$squares.animate({
+					var $el = _private.isSlowBrowser() ? $next : $squares;
+					$el.animate({
 						opacity: 1
 					}, {
 						duration: 500
