@@ -46,6 +46,7 @@
 	z-index: 1;
 	top: 0px;
 	left: 0px;
+	-webkit-transform: translateZ(0);
 }
 
 .uds-next {
@@ -53,6 +54,7 @@
 	z-index: 2;
 	top: 0px;
 	left: 0px;
+	-webkit-transform: translateZ(0);
 }
 
 .uds-square {
