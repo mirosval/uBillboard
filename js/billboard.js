@@ -224,7 +224,7 @@
 					
 					// Center video content
 					for(var i = 0; i < slides.length; i++) {
-						if(slides[i].transition !== 'none') {
+						if(!slides[i].hasVideo) {
 							continue;
 						}
 						
@@ -282,7 +282,7 @@
 				var slide = slides[slideId];
 				
 				// Pause video if this is a video slide
-				if(slides[currentSlideId].transition === 'none') {
+				if(slides[currentSlideId].hasVideo) {
 					_private.pauseVideo(slides[currentSlideId]);
 				}
 				
@@ -376,7 +376,7 @@
 				
 				$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
 				
-				if(options.pauseOnVideo && slides[currentSlideId].transition === 'none') {
+				if(options.pauseOnVideo && slides[currentSlideId].hasVideo) {
 					$countdown.hide();
 					clearTimeout(timers.nextSlideAnimation);
 					return;
@@ -396,7 +396,7 @@
 				}
 				
 				// continue playing
-				if((options.autoplay || playing) && !slide.stop) {
+				if(options.autoplay && playing && !slide.stop) {
 					//clearTimeout(timers.nextSlideAnimation);
 					_public.play();
 				}
@@ -494,6 +494,7 @@
 			initSlides: function() {
 				var defaultSlideOptions = {
 					delay: 5000,
+					hasVideo: false,
 					linkTarget: '',
 					transition: 'fade',
 					direction: '',
@@ -665,7 +666,7 @@
 				}
 				
 				// should we pause on this slide
-				var pauseForVideo = options.pauseOnVideo && currentSlide.transition === 'none';
+				var pauseForVideo = options.pauseOnVideo && currentSlide.hasVideo;
 
 				if(options.autoplay === true && !pauseForVideo) {
 					//d('Autoplay Initiated');
@@ -728,7 +729,7 @@
 					var slide = slides[i];
 					$stage.append(slide.cache.clone());
 					
-					if(slide.transition !== 'none') {
+					if(!slide.hasVideo) {
 						$nextInsides.append(slide.cache.clone());
 					}
 				}
@@ -806,7 +807,13 @@
 					_private.prepareKenBurns(nextSlide);
 				}
 				
-				if(nextSlide.transition !== 'none') { // Do not create a million copies of embedded content ;)
+				if(nextSlide.hasVideo) {
+					$squares.detach();
+					$(">.uds-bb-slide", $next).remove();
+					$next.append($('>.uds-bb-slide-' + nextSlide.id, $stage).clone().show());
+				} else { // Do not create a million copies of embedded content ;)
+					$(">.uds-bb-slide", $next).remove();
+					$next.append($squares);
 					$('.uds-bb-slide', $nextInsides).hide();
 					$('.uds-bb-slide-'+nextSlide.id, $nextInsides).show();
 					$('.uds-bb-description', $nextInsides).show();
@@ -922,7 +929,7 @@
 					});
 					
 					// TODO: Transform this condition so it checks if the image is actually present
-					if(slides[i].bg === '' && slides[i].transition !== 'none') {
+					if(slides[i].bg === '' && !slides[i].hasVideo) {
 						$img.replaceWith('<div>');
 						$('div', this).css({
 							width: $img.attr('width') + 'px',
@@ -1157,6 +1164,11 @@
 						};
 						
 						$('.uds-bb-slides', $bb).css('overflow', 'hidden');
+						clearTimeout(timers.nextSlideAnimation);
+						
+						if(typeof $countdown === "object") {
+							$countdown.hide();
+						}
 					}
 					
 					if(event.type === "touchmove") {
@@ -1180,7 +1192,7 @@
 						touches.slideId = slideId;
 						
 						// Pause video if this is a video slide
-						if(slides[currentSlideId].transition === 'none') {
+						if(slides[currentSlideId].hasVideo) {
 							_private.pauseVideo(slides[currentSlideId]);
 						}
 						
@@ -1340,7 +1352,7 @@
 			},
 			
 			handleEmbeddedContent: function(slide) {
-				if(slide.transition === 'none' && slide.embeddecContentHandled !== true) {					
+				if(slide.hasVideo && slide.embeddecContentHandled !== true) {					
 					// center content
 					var $element = $('>.uds-bb-slide-'+slide.id+'>*', $stage);
 					
@@ -1425,7 +1437,7 @@
 			},
 			
 			prepareKenBurns: function(slide) {
-				if(slide.transition === 'none') {
+				if(slide.hasVideo) {
 					return;
 				}
 				
@@ -1494,7 +1506,7 @@
 			},
 			
 			kenBurns: function(slide) {
-				if(slide.transition === 'none' || (typeof slide.kenBurnsImageCache === 'undefined' && typeof slide.kenBurnsCanvasCache === 'undefined')) {
+				if(slide.hasVideo || (typeof slide.kenBurnsImageCache === 'undefined' && typeof slide.kenBurnsCanvasCache === 'undefined')) {
 					return;
 				}
 
@@ -1596,6 +1608,10 @@
 			},
 			
 			'intuitive': {
+				delay: $.noop
+			},
+			
+			'intuitiveVertical': {
 				delay: $.noop
 			},
 			
@@ -1858,11 +1874,11 @@
 					});
 					
 					var direction = this.direction;
-					if(direction === 'intuitive') {
+					if(direction === 'intuitive' || direction === 'intuitiveVertical') {
 						if((currentSlideId < nextSlideId || (nextSlideId === 0 && currentSlideId === slides.length - 1)) && !(nextSlideId === slides.length - 1 && currentSlideId === 0)) {
-							direction = 'right';
+ 							direction = direction === 'intuitive' ? 'right' : 'top';
 						} else {
-							direction = 'left';
+							direction = direction === 'intuitive' ? 'left' : 'bottom';
 						}
 					}
 					
@@ -1924,11 +1940,11 @@
 					}, sq;
 					
 					var direction = this.direction;
-					if(this.direction === 'intuitive') {
+					if(direction === 'intuitive' || direction === 'intuitiveVertical') {
 						if((currentSlideId < nextSlideId || (nextSlideId === 0 && currentSlideId === slides.length - 1)) && !(nextSlideId === slides.length - 1 && currentSlideId === 0)) {
-							direction = 'right';
+							direction = direction === 'intuitive' ? 'right' : 'top';
 						} else {
-							direction = 'left';
+							direction = direction === 'intuitive' ? 'left' : 'bottom';
 						}
 					}
 					

@@ -84,6 +84,7 @@ $uds_billboard_attributes = array(
 			'none'				=> '--',
 			'random' 			=> __('Random Direction', uds_billboard_textdomain),
 			'intuitive'			=> __('Intuitive', uds_billboard_textdomain),
+			'intuitiveVertical'	=> __('Intuitive Vertical', uds_billboard_textdomain),
 			'center'			=> __('From Center', uds_billboard_textdomain),
 			'left' 				=> __('From Left', uds_billboard_textdomain),
 			'right' 			=> __('From Right', uds_billboard_textdomain),
@@ -637,14 +638,13 @@ class uBillboardSlide {
 	{
 		global $uds_billboard_attributes;
 		
+		$hasVideo = 'false';
+		
 		$target = $this->{'link-target'} == 'on' ? '_blank' : '';
 		$delay = (int)$this->delay;
 		
 		// Transition, make nil when embedded content exists
 		$transition = $this->transition;
-		if($this->content == 'embed') {
-			$transition = 'none';
-		}
 		
 		if($transition === 'random') {
 			$transitions = array_keys($uds_billboard_attributes['transition']['options']);
@@ -658,6 +658,15 @@ class uBillboardSlide {
 			$directions = array_keys($uds_billboard_attributes['direction']['options']);
 			$directions = array_diff($directions, array('random'));
 			$direction = $directions[array_rand($directions)];
+		}
+		
+		// Video
+		if($this->content == 'embed') {
+			$hasVideo = 'true';
+			//$transition = 'none';
+			if(!in_array($direction, array('intuitive', 'intuitiveVertical'))) {
+				$direction = 'intuitive';
+			}
 		}
 		
 		// Background
@@ -682,6 +691,7 @@ class uBillboardSlide {
 		$ken_burns = $this->{'ken-burns'} == 'on' ? 'true' : 'false';
 		
 		$out = "{
+						hasVideo: {$hasVideo},
 						linkTarget: '{$target}',
 						delay: {$delay},
 						transition: '{$transition}',
