@@ -1305,6 +1305,17 @@
 				
 				$countdown = $('<div class="uds-bb-countdown"></div>').appendTo($controls);
 				canvas = $countdown.append('<canvas width="100" height="100">').find('canvas').get(0);
+				
+				// Retina support
+				if(window.devicePixelRatio) {
+					$('canvas', $countdown).attr('width', 100 * window.devicePixelRatio);
+					$('canvas', $countdown).attr('height', 100 * window.devicePixelRatio);
+					$('canvas', $countdown).css({
+						'width': '100px',
+						'height': '100px'
+					});
+				}
+				
 				if(canvas && typeof canvas.getContext === 'function') {
 					ctx = canvas.getContext('2d');
 					
