@@ -3,7 +3,6 @@
 	position: relative;
 	overflow: hidden;
 	width: 100%;
-	-webkit-transform: translate3d(0,0,0);
 }
 
 .uds-bb-slides {
