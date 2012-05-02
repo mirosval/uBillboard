@@ -663,7 +663,7 @@
 		background-position: -63px -30px;
 	}
 	
-	.uds-bb-paginator.modern .uds-bb-playpause{
+	.uds-bb-paginator.modern .uds-bb-playpause {
 		background: url(../images/skin-modern/buttons.png);
 		background-position: -30px 0px;
 		width: 33px;
@@ -692,6 +692,28 @@
 	.uds-bb-paginator.modern .uds-bb-bullet:hover,
 	.uds-bb-paginator.modern .uds-bb-bullet.active {
 		background-position: 0px -10px;
+	}
+	
+	/* Moder Skin Retina Support */
+	@media only screen and (-webkit-min-device-pixel-ratio:0) {
+		.uds-bb-paginator.modern,
+		.uds-bb-paginator.moderncontainer,
+		.uds-bb-paginator.modern .uds-bb-position-indicator-bullets {
+			background-image: url(../images/skin-modern/retina/bg.png);
+			background-size: 1px 30px;
+		}
+		
+		.uds-bb-paginator.modern .uds-bb-prev,
+		.uds-bb-paginator.modern .uds-bb-next,
+		.uds-bb-paginator.modern .uds-bb-playpause {
+			background-image: url(../images/skin-modern/retina/buttons.png);
+			background-size: 94px 60px;
+		}
+		
+		.uds-bb-paginator.modern .uds-bb-bullet {
+			background-image: url(../images/skin-modern/retina/bullet.png);
+			background-size: 10px 20px;
+		}
 	}
 
 
