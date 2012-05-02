@@ -695,7 +695,7 @@
 	}
 	
 	/* Moder Skin Retina Support */
-	@media only screen and (-webkit-min-device-pixel-ratio:0) {
+	@media only screen and (-webkit-min-device-pixel-ratio:2) {
 		.uds-bb-paginator.modern,
 		.uds-bb-paginator.moderncontainer,
 		.uds-bb-paginator.modern .uds-bb-position-indicator-bullets {
