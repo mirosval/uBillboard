@@ -1303,18 +1303,20 @@
 					return;
 				}
 				
-				$countdown = $('<div class="uds-bb-countdown"></div>').appendTo($controls);
-				canvas = $countdown.append('<canvas width="100" height="100">').find('canvas').get(0);
+				var dimension = cssDimension = 100;
 				
 				// Retina support
 				if(window.devicePixelRatio) {
-					$('canvas', $countdown).attr('width', 100 * window.devicePixelRatio);
-					$('canvas', $countdown).attr('height', 100 * window.devicePixelRatio);
-					$('canvas', $countdown).css({
-						'width': '100px',
-						'height': '100px'
-					});
+					dimension = cssDimension * window.devicePixelRatio;
 				}
+				
+				$countdown = $('<div class="uds-bb-countdown"></div>').appendTo($controls);
+				canvas = $countdown.append('<canvas width="'+dimension+'" height="'+dimension+'">').find('canvas').get(0);
+				
+				$('canvas', $countdown).css({
+					'width': cssDimension + 'px',
+					'height': cssDimension + 'px'
+				});
 				
 				if(canvas && typeof canvas.getContext === 'function') {
 					ctx = canvas.getContext('2d');
@@ -1343,7 +1345,8 @@
 				}
 				
 				var ctx = $countdown.data('context'),
-					progress = 0;
+					progress = 0,
+					dimension = cssDimension = 100;
 				
 				if(duration !== false) {
 					var start = new Date().getTime();
@@ -1363,9 +1366,22 @@
 					clearInterval(timers.countDown);
 				}
 				
-				ctx.clearRect(0,0,100,100);
+				// Retina support
+				if(window.devicePixelRatio) {
+					dimension = cssDimension * window.devicePixelRatio;
+				}
+				
+				ctx.clearRect(0,0,dimension,dimension);
 				ctx.beginPath();
-				ctx.arc(50, 50, 20, - Math.PI / 2, - Math.PI / 2 + (2*Math.PI) * (progress/duration), false);
+				ctx.arc(
+					dimension / 2, 
+					dimension / 2, 
+					dimension / 5, 
+					- Math.PI / 2, 
+					- Math.PI / 2 + (2*Math.PI) * (progress/duration), 
+					false
+				);
+				ctx.lineWidth = 3 * dimension / cssDimension;
 				ctx.stroke();
 			},
 			
