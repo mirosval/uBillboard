@@ -3,6 +3,7 @@
 	position: relative;
 	overflow: hidden;
 	width: 100%;
+	-webkit-transform: translate3d(0,0,0);
 }
 
 .uds-bb-slides {
@@ -46,8 +47,6 @@
 	z-index: 1;
 	top: 0px;
 	left: 0px;
-	-webkit-transform: translateZ(0);
-	-webkit-backface-visibility: hidden;
 }
 
 .uds-next {
@@ -55,8 +54,6 @@
 	z-index: 2;
 	top: 0px;
 	left: 0px;
-	-webkit-transform: translateZ(0);
-	-webkit-backface-visibility: hidden;
 }
 
 .uds-square {

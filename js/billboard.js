@@ -27,6 +27,20 @@
 		}
 	});
 	
+	jQuery.fn.fastShow = function() {
+		this.each(function(){
+			this.style.display = "block";
+		});
+		return this;
+	};
+	
+	jQuery.fn.fastHide = function() {
+		this.each(function(){
+			this.style.display = "none";
+		});
+		return this;
+	};
+	
 	/**
 	 *	Main jQuery plugin definition
 	 */
@@ -317,7 +331,7 @@
 						animations[transition].direction = slide.direction;
 					}
 					
-					$next.show().css('opacity', 1);
+					$next.fastShow().css('opacity', 1);
 					
 					transitionInProgress = true;
 					
@@ -354,10 +368,10 @@
 							opacity: 1,
 							cursor: cursor
 						});
-					$('.uds-bb-slide', $stage).hide();
-					$('.uds-bb-slide-'+slide.id, $stage).show();
-					$('.uds-bb-description', $stage).show();
-					$next.stop().hide();
+					$('.uds-bb-slide', $stage).fastHide();
+					$('.uds-bb-slide-'+slide.id, $stage).fastShow();
+					$('.uds-bb-description', $stage).fastShow();
+					$next.stop().fastHide();
 					
 					if(slide.autoplayVideo && options.pauseOnVideo) {
 						_private.playVideo(slide);
@@ -377,7 +391,7 @@
 				$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
 				
 				if(options.pauseOnVideo && slides[currentSlideId].hasVideo) {
-					$countdown.hide();
+					$countdown.fastHide();
 					clearTimeout(timers.nextSlideAnimation);
 					return;
 				}
@@ -391,7 +405,7 @@
 					_private.animateCountdown(slides[currentSlideId].delay);
 				} else {
 					if($countdown !== null && typeof $countdown !== "undefined") {
-						$countdown.hide();
+						$countdown.fastHide();
 					}
 				}
 				
@@ -439,7 +453,7 @@
 				}
 				
 				if(typeof $countdown !== 'undefined' && $countdown !== null) {
-					$countdown.show();
+					$countdown.fastShow();
 				}
 				
 				if(!playing) {
@@ -470,7 +484,7 @@
 				}
 				
 				if(typeof $countdown !== 'undefined' && $countdown !== null) {
-					$countdown.hide();
+					$countdown.fastHide();
 				}
 			},
 			
@@ -653,8 +667,8 @@
 					css = _private.getSlideBackgroundCSS(currentSlide);
 
 				//$stage.css(css).html(currentSlide.html).fadeTo(300, 1);
-				$('.uds-bb-slide-0', $stage).show().fadeTo(300, 1);
-				$('.uds-bb-description', $stage).show();
+				$('.uds-bb-slide-0', $stage).fastShow().fadeTo(300, 1);
+				$('.uds-bb-description', $stage).fastShow();
 				
 				_private.handleEmbeddedContent(currentSlide);
 				
@@ -677,7 +691,7 @@
 					_public.play();
 				} else {
 					if(typeof $countdown !== 'undefined' && $countdown !== null) {
-						$countdown.hide();
+						$countdown.fastHide();
 					}
 				}
 			},
@@ -692,7 +706,7 @@
 				$stage = $('.uds-stage', $bb);
 				$next = $('.uds-next', $bb);
 	
-				$next.hide();
+				$next.fastHide();
 				
 				$($stage).add($next).css({
 					maxWidth: options.width,
@@ -734,7 +748,7 @@
 					}
 				}
 				
-				$('>div', $stage).add('>div', $nextInsides).hide();
+				$('>div', $stage).add('>div', $nextInsides).fastHide();
 				
 				// initialize countdown
 				_private.createCountdown();
@@ -795,9 +809,9 @@
 					return;
 				}
 				
-				$('.uds-bb-slide', $stage).hide();
-				$('.uds-bb-slide-'+currentSlide.id, $stage).show();
-				$('.uds-bb-description', $stage).show();
+				$('.uds-bb-slide', $stage).fastHide();
+				$('.uds-bb-slide-'+currentSlide.id, $stage).fastShow();
+				$('.uds-bb-description', $stage).fastShow();
 				
 				_private.resetAnimation();
 				
@@ -808,15 +822,19 @@
 				}
 				
 				if(nextSlide.hasVideo || _private.isSlowBrowser()) {
-					$squares.detach();
+					if($('.uds-bb-square', $next).length > 0) {
+						$squares.detach();
+					}
 					$(">.uds-bb-slide", $next).remove();
-					$next.append($('>.uds-bb-slide-' + nextSlide.id, $stage).clone().show());
+					$next.append($('>.uds-bb-slide-' + nextSlide.id, $stage).clone().css('display', 'block'));
 				} else { // Do not create a million copies of embedded content ;)
-					$(">.uds-bb-slide", $next).remove();
-					$next.append($squares);
-					$('.uds-bb-slide', $nextInsides).hide();
-					$('.uds-bb-slide-'+nextSlide.id, $nextInsides).show();
-					$('.uds-bb-description', $nextInsides).show();
+					if($('.uds-bb-square', $next).length === 0) {
+						$(">.uds-bb-slide", $next).remove();
+						$next.append($squares);
+					}
+					$('.uds-bb-slide', $nextInsides).fastHide();
+					$('.uds-bb-slide-'+nextSlide.id, $nextInsides).fastShow();
+					$('.uds-bb-description', $nextInsides).fastShow();
 					
 					// Remember responsive!
 					$('.uds-bb-slide-'+nextSlide.id, $nextInsides).css({
@@ -830,7 +848,7 @@
 				$controls = $('.uds-bb-controls', $bb);
 	
 				// Setup CSS
-				$controls.show().css({
+				$controls.fastShow().css({
 					maxWidth: options.width,
 					maxHeight: options.height,
 					width: '100%',
@@ -1130,26 +1148,26 @@
 				
 				// Hide controls based on the options
 				if(options.showControls === false) {
-					$buttonNext.hide();
-					$buttonPrev.hide();
+					$buttonNext.fastHide();
+					$buttonPrev.fastHide();
 				}
 	
 				if(options.showPause === false) {
-					$playpause.hide();
+					$playpause.fastHide();
 				}
 				
 				if(options.showPaginator === false) {
-					$bullets.hide();
-					$('.uds-bb-position-indicator', $bb).hide();
+					$bullets.fastHide();
+					$('.uds-bb-position-indicator', $bb).fastHide();
 				}
 				
 				if(options.showThumbnails === false) {
-					$thumbs.hide();
+					$thumbs.fastHide();
 				}
 				
 				// Bullets contianer for the Silver Skin
 				if($('>*', $bulletsContainer).not(':hidden').length === 0) {
-					$bulletsContainer.hide();
+					$bulletsContainer.fastHide();
 				}
 			},
 			
@@ -1157,7 +1175,7 @@
 			 *	Hooks up touch events handling
 			 */
 			initTouchSupport: function() {
-				$('.uds-bb-slides').on("touchstart touchmove touchend", function(e){
+				$('.uds-bb-slides', $bb).on("touchstart touchmove touchend", function(e){
 					var event = e.originalEvent;
 					
 					if(event.type === "touchstart") {
@@ -1171,7 +1189,7 @@
 						clearTimeout(timers.nextSlideAnimation);
 						
 						if(typeof $countdown === "object") {
-							$countdown.hide();
+							$countdown.fastHide();
 						}
 					}
 					
@@ -1184,6 +1202,11 @@
 						var timeDelta = now - touches.time;
 						touches.time = now;
 						touches.speed = deltaOffset / (timeDelta / 1000);
+						var clicked = (new Date().getTime() - touches.absoluteStartTime) < 150;
+						
+						if(!clicked) {
+							e.preventDefault();
+						}
 
 						if(offset > 0) {
 							touches.direction = -1;
@@ -1212,7 +1235,7 @@
 							touches.left = computedWidth + offset;
 						}
 						
-						$next.show().css({
+						$next.fastShow().css({
 							left: touches.left + "px",
 							opacity: 1
 						});
@@ -1829,7 +1852,7 @@
 				direction: '',
 				setup: function() {
 					// we dont want squares to interfere with the content
-					$next.hide();
+					$next.fastHide();
 				},
 				perform: $.noop()
 			},
@@ -1910,53 +1933,49 @@
 					}
 					
 					if(direction === 'left') {
-						$next.show().css({
+						$next.fastShow().css({
 							top: '0px',
-							left: _private.neg(options.width)
+							left: _private.neg(computedWidth)
 						});
 					} else if(direction === 'top') {
-						$next.show().css({
-							top: _private.neg(options.height),
+						$next.fastShow().css({
+							top: _private.neg(computedHeight),
 							left: '0px'
 						});
 					} else if(direction === 'bottom') {
-						$next.show().css({
-							top: _private.pos(options.height),
+						$next.fastShow().css({
+							top: _private.pos(computedHeight),
 							left: '0px'
 						});
 					} else if(direction === 'top') {
-						$next.show().css({
+						$next.fastShow().css({
 							top: '0px',
-							left: _private.pos(options.width)
+							left: _private.pos(computedWidth)
 						});
 					} else if(direction === 'zigzagHorizontal') {
 						sq = parseInt(options.squareSize, 10);
-						var height = parseInt(options.height, 10);
-							
 						$squares.each(function(){
 							$(this).css({
 								opacity: 0,
-								top: parseInt($(this).css('top'), 10) - height + 'px'
+								top: parseInt($(this).css('top'), 10) - computedHeight + 'px'
 							});
 						});
 						
 						directions[direction].delay();
 					} else if(this.direction === 'zigzagVertical') {
 						sq = parseInt(options.squareSize, 10);
-						var width = parseInt(options.width, 10);
-							
 						$squares.each(function(){
 							$(this).css({
 								opacity: 0,
-								left: parseInt($(this).css('left'), 10) - width + 'px'
+								left: parseInt($(this).css('left'), 10) - computedWidth + 'px'
 							});
 						});
 						
 						directions[direction].delay();
 					} else {
-						$next.show().css({
+						$next.fastShow().css({
 							top: '0px',
-							left: _private.pos(options.width)
+							left: _private.pos(computedWidth)
 						});
 					}
 				},
@@ -1977,55 +1996,53 @@
 					
 					if(direction === 'left') {
 						$stage.animate({
-							left: _private.pos(options.width)
+							left: _private.pos(computedWidth)
 						}, animOptions);
 						$next.animate({
 							left: '0px'
 						}, animOptions);
 					} else if(direction === 'top') {
 						$stage.animate({
-							top: _private.pos(options.height)
+							top: _private.pos(computedHeight)
 						}, animOptions);
 						$next.animate({
 							top: '0px'
 						}, animOptions);
 					} else if(direction === 'bottom') {
 						$stage.animate({
-							top: _private.neg(options.height)
+							top: _private.neg(computedHeight)
 						}, animOptions);
 						$next.animate({
 							top: '0px'
 						}, animOptions);
 					} else if(direction === 'top') {
 						$stage.animate({
-							left: _private.neg(options.width)
+							left: _private.neg(computedWidth)
 						}, animOptions);
 						$next.animate({
 							left: '0px'
 						}, animOptions);
 					} else if(direction === 'zigzagHorizontal') {
 						sq = parseInt(options.squareSize, 10);
-						var height = parseInt(options.height, 10);
-						
+
 						$squares.each(function(){
 							$(this).animate({
 								opacity: 1,
-								top: parseInt($(this).css('top'), 10) + height + 'px'
+								top: parseInt($(this).css('top'), 10) + computedHeight + 'px'
 							}, animOptions);
 						});
 					} else if(direction === 'zigzagVertical') {
 						sq = parseInt(options.squareSize, 10);
-						var width = parseInt(options.width, 10);
 						
 						$squares.each(function(){
 							$(this).animate({
 								opacity: 1,
-								left: parseInt($(this).css('left'), 10) + width + 'px'
+								left: parseInt($(this).css('left'), 10) + computedWidth + 'px'
 							}, animOptions);
 						});
 					} else {
 						$stage.animate({
-							left: _private.neg(options.width)
+							left: _private.neg(computedWidth)
 						}, animOptions);
 						$next.animate({
 							left: '0px'
@@ -2043,20 +2060,20 @@
 				setup: function() {
 					var top, left, sq;
 					if(this.direction === 'right') {
-						top = _private.pos(parseInt(options.height, 10) / 2);
-						left = _private.pos(options.width);
+						top = _private.pos(computedHeight / 2);
+						left = _private.pos(computedWidth);
 					} else if(this.direction === 'left') {
-						top = _private.pos(parseInt(options.height, 10) / 2);
+						top = _private.pos(computedHeight / 2);
 						left = '0px';
 					} else if(this.direction === 'top') {
 						top = '0px';
-						left = _private.pos(parseInt(options.width, 10) / 2);
+						left = _private.pos(computedWidth / 2);
 					} else if(this.direction === 'bottom') {
-						top = _private.pos(options.height);
-						left = _private.pos(parseInt(options.width, 10) / 2);
+						top = _private.pos(computedHeight);
+						left = _private.pos(computedWidth / 2);
 					} else if(this.direction === 'center') {
-						top = _private.pos(parseInt(options.height, 10) / 2);
-						left = _private.pos(parseInt(options.width, 10) / 2);
+						top = _private.pos(computedHeight / 2);
+						left = _private.pos(computedWidth / 2);
 					} else if(this.direction === 'zigzagHorizontal') {
 						sq = parseInt(options.squareSize, 10);
 						$squares.each(function(){
@@ -2111,8 +2128,8 @@
 						$next.animate({
 							top: '0px',
 							left: '0px',
-							width: options.width,
-							height: options.height
+							width: computedWidth,
+							height: computedHeight
 						}, {
 							duration: 1000,
 							easing: 'easeInOutQuad'
