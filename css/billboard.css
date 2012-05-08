@@ -794,11 +794,11 @@
 	}
 	
 	.uds-bb-thumb:hover {
-		background: #20b1be;	
+/* 		background: #20b1be;	 */
 	}
 	
 	.uds-bb-thumb.active {
-		background: #20b1be;
+/* 		background: #20b1be; */
 	}
 	
 	.uds-bb-thumb img {

@@ -956,6 +956,24 @@
 						});
 					}
 					
+					var originalBgColorString = $(this).css('background-color');
+					var originalBgColor = "";
+					
+					if(originalBgColorString.indexOf('rgb(') > -1) {
+						var matches = originalBgColorString.match(/rgb\(([0-9]{1,3}), ([0-9]{1,3}), ([0-9]{1,3})/);
+						originalBgColor = {
+							r: parseInt(matches[1], 10),
+							g: parseInt(matches[2], 10),
+							b: parseInt(matches[3], 10)
+						};
+					} else {
+						originalBgColor = {
+							r: parseInt(originalBgColorString.substr(1, 2), 16),
+							g: parseInt(originalBgColorString.substr(3, 2), 16),
+							b: parseInt(originalBgColorString.substr(5, 2), 16)
+						};
+					}
+					
 					if($(this).is('.active')) {
 						$(this).css('background-color', options.thumbnailHoverColor);
 					}
@@ -974,7 +992,7 @@
 						}
 						
 						$(this)
-							.css('background-color', 'rgb(237,237,237)')
+							.css('background-color', originalBgColorString)
 							.stop()
 							.animate({
 								opacity: 1
@@ -983,9 +1001,10 @@
 								step: function(now, fx) {
 									var progress = (new Date().getTime() - fx.startTime) / fx.options.duration;
 									
-									var r = 255 - Math.round(((237 - hoverColor.r) * progress)),
-										g = 255 - Math.round(((237 - hoverColor.g) * progress)),
-										b = 255 - Math.round(((237 - hoverColor.b) * progress));
+									var r = Math.round(originalBgColor.r * (1 - progress) + hoverColor.r * progress),
+										g = Math.round(originalBgColor.g * (1 - progress) + hoverColor.g * progress),
+										b = Math.round(originalBgColor.b * (1 - progress) + hoverColor.b * progress);
+										
 									fx.elem.style.backgroundColor = 'rgb('+r+','+g+','+b+')';
 								}
 							});
@@ -1004,10 +1023,10 @@
 								duration: 200,
 								step: function(now, fx) {
 									var progress = (new Date().getTime() - fx.startTime) / fx.options.duration;
-									
-									var r = hoverColor.r + Math.round(((237 - hoverColor.r) * progress)),
-										g = hoverColor.g + Math.round(((237 - hoverColor.g) * progress)),
-										b = hoverColor.b + Math.round(((237 - hoverColor.b) * progress));
+										
+									var r = Math.round(originalBgColor.r * progress + hoverColor.r * (1 - progress)),
+										g = Math.round(originalBgColor.g * progress + hoverColor.g * (1 - progress)),
+										b = Math.round(originalBgColor.b * progress + hoverColor.b * (1 - progress));
 									
 									fx.elem.style.backgroundColor = 'rgb('+r+','+g+','+b+')';
 								}
