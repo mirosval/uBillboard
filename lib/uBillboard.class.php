@@ -477,7 +477,7 @@ class uBillboard {
 	 *	@param int $id ID of the current uBillboard on the currently rendered page
 	 *	@return string rendered html markup
 	 */
-	public function render($id = 0)
+	public function render($id = 0, $with_js = false)
 	{
 		global $uds_bb_params; // parameters of the currently rendered billboard
 		
@@ -490,12 +490,18 @@ class uBillboard {
 		$slides = $this->renderSlides();
 		$controls = $this->renderControls();
 		
+		$js = "";
+		if($with_js) {
+			$js = $this->renderJS($id, true);
+		}
+		
 		$out = "
 		<!-- uBillboard ".UDS_BILLBOARD_VERSION." ID:$id Name:{$this->name} -->
 		<div class='uds-bb uds-{$this->style}' id='uds-bb-$id' style='width:{$this->width}px;height:{$this->height}px'>
 			$controls
 			$slides
 		</div>
+		$js
 		<!-- END uBillboard ID:$id -->";
 		
 		return $out;
@@ -506,7 +512,7 @@ class uBillboard {
 	 *	
 	 *	@return string rendered JS
 	 */
-	public function renderJS($id = 0)
+	public function renderJS($id = 0, $wrap_in_script_tag = false)
 	{
 		$autoplay = $this->autoplay === 'on' ? 'true' : 'false';
 		$pauseOnVideo = $this->pauseOnVideo === 'on' ? 'true' : 'false';
@@ -540,7 +546,7 @@ class uBillboard {
 		$slides = implode(",\n\t\t\t\t\t", $slides);
 		
 		$scripts = "
-			$('#uds-bb-$id').show().uBillboard({
+			jQuery('#uds-bb-$id').show().uBillboard({
 				width: '{$this->width}px',
 				height: '{$this->height}px',
 				squareSize: '{$this->squareSize}px',
@@ -557,6 +563,10 @@ class uBillboard {
 				}
 			});
 		";
+		
+		if($wrap_in_script_tag) {
+			$scripts = "<script type='text/javascript'>$scripts</script>";
+		}
 		
 		return $scripts;
 	}

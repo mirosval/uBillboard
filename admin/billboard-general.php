@@ -29,6 +29,15 @@
 					</label><br />
 				</td>
 			</tr>
+			<tr valign="top">
+				<th scope="row"><?php _e('AJAX Optimization', uds_billboard_textdomain) ?>:</th>
+				<td>
+					<label>
+						<input name="<?php echo UDS_BILLBOARD_OPTION_GENERAL?>[ajax_optimization]" type="checkbox" <?php if (isset($options['ajax_optimization'])) { checked(true, $options['ajax_optimization']); } ?> />
+						<?php _e('Check this if you are usng AJAX to load uBillboards, this will prevent some optimizations to page loading speed, but will allow you to load uBillboards via AJAX', uds_billboard_textdomain) ?>
+					</label><br />
+				</td>
+			</tr>
 		</table>
 		<p class="submit">
 		<input type="submit" class="button-primary" value="<?php _e('Save Changes', uds_billboard_textdomain) ?>" />

@@ -147,6 +147,17 @@ function uds_billboard_use_shortcode_optimization()
 	return $option['shortcode_optimization'];
 }
 
+/**
+ *	Function, gets the "shortcode optimization" option value
+ *
+ *	@return bool
+ */
+function uds_billboard_use_ajax_optimization()
+{
+	$option = get_option(UDS_BILLBOARD_OPTION_GENERAL, array('ajax_optimization' => true));
+	return $option['ajax_optimization'];
+}
+
 if(!function_exists('is_ajax')) {
 /**
  *	Is Ajax
@@ -293,10 +304,15 @@ function uds_billboard_scripts()
 	//wp_deregister_script('jquery');
 	//wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js');
 	
+	$in_footer = true;
+	if(uds_billboard_use_ajax_optimization()) {
+		$in_footer = false;
+	}
+	
 	if(uds_billboard_use_compression()){
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery'), UDS_BILLBOARD_VERSION, true);
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.min.js", array('jquery'), UDS_BILLBOARD_VERSION, $in_footer);
 	} else {
-		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery'), UDS_BILLBOARD_VERSION, true);
+		wp_enqueue_script("uds-billboard", $dir."js/billboard.js", array('jquery'), UDS_BILLBOARD_VERSION, $in_footer);
 	}
 }
 
@@ -674,6 +690,7 @@ function uds_billboard_general_validate($input)
 {
 	$input['compression'] = isset($input['compression']) && in_array($input['compression'], array('', 'on')) ? true : false;
 	$input['shortcode_optimization'] = isset($input['shortcode_optimization']) && in_array($input['shortcode_optimization'], array('', 'on')) ? true : false;
+	$input['ajax_optimization'] = isset($input['ajax_optimization']) && in_array($input['ajax_optimization'], array('', 'on')) ? true : false;
 
 	return $input;
 }
@@ -703,7 +720,7 @@ function uds_billboard_footer_scripts()
 			$uds_billboard_footer_scripts
 		});
 		//]]>
-	</script>";
+	</script>\n";
 }
 
 /**
@@ -737,9 +754,12 @@ function get_uds_billboard($name = 'billboard', $options = array())
 		return __("Billboard is invalid", uds_billboard_textdomain);
 	}
 	
-	$out = $bb->render($id);
-	
-	$uds_billboard_footer_scripts .= $bb->renderJS($id);
+	if(uds_billboard_use_ajax_optimization()) {
+		$out = $bb->render($id, true);
+	} else {
+		$out = $bb->render($id);
+		$uds_billboard_footer_scripts .= $bb->renderJS($id);
+	}
 	
 	$id++;
 	
