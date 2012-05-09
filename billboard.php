@@ -359,7 +359,8 @@ function uds_billboard_activation_hook()
 	if(!$option) {
 		add_option(UDS_BILLBOARD_OPTION_GENERAL, array(
 			'compression' => true,
-			'shortcode_optimization' => false
+			'shortcode_optimization' => false,
+			'ajax_optimization' => false
 		));
 	}
 }
