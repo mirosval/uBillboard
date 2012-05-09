@@ -1665,7 +1665,6 @@
 			},
 			
 			isMobile: function(){
-				return true;
 				var ua = navigator.userAgent;
 				var checker = {
 				  ios: $.isArray(ua.match(/(iPhone|iPod|iPad)/)),

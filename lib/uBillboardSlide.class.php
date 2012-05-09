@@ -995,7 +995,8 @@ class uBillboardSlide {
 		$width = $this->slider->thumbnailsWidth;
 		$height = $this->slider->thumbnailsHeight;
 		
-		$resizedImage = $this->resizeImage($this->thumb, $width, $height, 'thumb', $force_recreate);		
+		$resizedImage = $this->resizeImage($this->thumb, $width, $height, 'thumb', $force_recreate);
+		$resizedImage = $this->resizeImage($this->thumb, $width * 2, $height * 2, 'thumb-retina', $force_recreate);
 		return $resizedImage;
 	}
 	
@@ -1006,6 +1007,7 @@ class uBillboardSlide {
 			$height = $this->slider->height;
 		
 			$resizedImage = $this->resizeImage($this->image, $width, $height, 'full', $force_recreate);
+			$resizedImage = $this->resizeImage($this->image, $width * 2, $height * 2, 'full-retina', $force_recreate);
 			
 			if($this->{'ken-burns'} == 'on') {
 				$this->resizeImage($this->image, $width * 1.2, $height * 1.2, 'ken', $force_recreate);
@@ -1115,11 +1117,6 @@ class uBillboardSlide {
 			return new WP_Error('uds_billboard_slide', __('Failed to create new image context.',uds_billboard_textdomain));
 		}
 		
-		$dst_retina = @imagecreatetruecolor($new_width * 2, $new_height * 2);
-		if(!$dst_retina) {
-			return new WP_Error('uds_billboard_slide', __('Failed to create new image context.',uds_billboard_textdomain));
-		}
-		
 		// Get original width and height
 		$width = imagesx($src);
 		$height = imagesy($src);
@@ -1155,24 +1152,12 @@ class uBillboardSlide {
 			return new WP_Error('uds_billboard_slide', __('Failed to resize image',uds_billboard_textdomain));
 		}
 		
-		if(!imagecopyresampled($dst_retina, $src, $origin_x, $origin_y, $src_x, $src_y, $new_width * 2, $new_height * 2, $src_w, $src_h)) {
-			return new WP_Error('uds_billboard_slide', __('Failed to resize image',uds_billboard_textdomain));
-		}
-		
 		if($image_type == 'jpg') {
-			if(!imagejpeg($dst, str_replace('.jpg', '-retina.jpg', $imagePath), 80)){
-				return new WP_Error('uds_billboard_slide', __('Failed to save image',uds_billboard_textdomain));
-			}
-			
-			if(!imagejpeg($dst_retina, str_replace('.jpg', '-retina.jpg', $imagePath), 80)){
+			if(!imagejpeg($dst, $imagePath, 80)){
 				return new WP_Error('uds_billboard_slide', __('Failed to save image',uds_billboard_textdomain));
 			}
 		} else {
-			if(!imagepng($dst, str_replace('.png', '-retina.png', $imagePath), 8)){
-				return new WP_Error('uds_billboard_slide', __('Failed to save image',uds_billboard_textdomain));
-			}
-			
-			if(!imagepng($dst_retina, str_replace('.png', '-retina.png', $imagePath), 8)){
+			if(!imagepng($dst, $imagePath, 8)){
 				return new WP_Error('uds_billboard_slide', __('Failed to save image',uds_billboard_textdomain));
 			}
 		}
