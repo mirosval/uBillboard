@@ -1082,13 +1082,34 @@ class uBillboardSlide {
 		// attempt to download the image original
 		if($type == 'thumb') {
 			// $this->thumb might be different from $this->image (e.g. in case of videos) so we get it separately
-			$response = wp_remote_get($this->thumb);
+			$url = $this->thumb;
 		} else {
-			$response = wp_remote_get($this->image);
+			$url = $this->image;
 		}
+		
+		$response = wp_remote_get($url);
 		
 		if(is_wp_error($response)) {
 			return $response;
+		}
+		
+		// catch wp_remote_get errors
+		if($response['response']['code'] != 200) {
+			// try if file_get_contents would work...
+			$res = @file_get_contents($url);
+			
+			if($res === false) {
+				$error = sprintf(__('Failed to load original image: %s %s',uds_billboard_textdomain), $response['response']['code'], $response['response']['message']);
+				return new WP_Error('uds_billboard_slide', $error);
+			}
+			
+			// get the image type
+			$info = @getimagesize($url);
+			if(is_array($info)) {
+				$response['headers']['content-type'] = $info['mime'];
+			}
+			
+			$response['body'] = $res;
 		}
 
 		// attempt to guess image type
