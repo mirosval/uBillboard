@@ -1047,7 +1047,7 @@ class uBillboardSlide {
 		$height = $this->slider->thumbnailsHeight;
 		
 		$resizedImage = $this->resizeImage($this->thumb, $width, $height, 'thumb', $force_recreate);
-		$resizedImage = $this->resizeImage($this->thumb, $width * 2, $height * 2, 'thumb-retina', $force_recreate);
+		$resizedImageRetina = $this->resizeImage($this->thumb, $width * 2, $height * 2, 'thumb-retina', $force_recreate);
 		return $resizedImage;
 	}
 	
@@ -1131,7 +1131,7 @@ class uBillboardSlide {
 		}
 		
 		// attempt to download the image original
-		if($type == 'thumb') {
+		if($type == 'thumb' || $type == 'thumb-retina') {
 			// $this->thumb might be different from $this->image (e.g. in case of videos) so we get it separately
 			$url = $this->thumb;
 		} else {
