@@ -577,26 +577,33 @@
 		background-position: 0px 0px;
 	}
 	
-	.uds-bb-paginator.uTube .uds-bb-playpause {
-		background-position: -40px 0px;
-	}
-	
-	.uds-bb-paginator.uTube .uds-bb-playpause:hover {
-		background-position: -40px -40px;
-	}
-	
 	.uds-bb-paginator.uTube .uds-bb-prev:hover {
 		background-position: 0px -40px;
 	}
+	.uds-bb-paginator.uTube .uds-bb-playpause.play {
+		background-position: -40px 0px;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-playpause.play:hover {
+		background-position: -40px -40px;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-playpause.pause {
+		background-position: -80px 0px;
+	}
+	
+	.uds-bb-paginator.uTube .uds-bb-playpause.pause:hover {
+		background-position: -80px -40px;
+	}
 	
 	.uds-bb-paginator.uTube .uds-bb-next {
-		background-position: -80px 0px;
+		background-position: -120px 0px;
 		float: right;
 		margin-left: 20px;
 	}
 	
 	.uds-bb-paginator.uTube .uds-bb-next:hover {
-		background-position: -80px -40px;
+		background-position: -120px -40px;
 	}
 	
 	.uds-bb-paginator.uTube .uds-bb-position-indicator-bullets {
@@ -615,6 +622,27 @@
 	
 	.uds-bb-paginator.uTube .uds-bb-bullet.active {
 		background-position: 0px -20px;
+	}
+	
+	/* uTube Skin Retina Support */
+	@media only screen and (-webkit-min-device-pixel-ratio:2) {
+		.uds-bb-paginator.uTube,
+		.uds-bb-paginator.uTube .uds-bb-position-indicator-bullets {
+			background-image: url(../images/skin-uTube/bg@2x.png);
+			background-size: 3px 40px;
+		}
+		
+		.uds-bb-paginator.uTube .uds-bb-prev,
+		.uds-bb-paginator.uTube .uds-bb-next,
+		.uds-bb-paginator.uTube .uds-bb-playpause {
+			background-image: url(../images/skin-uTube/buttons@2x.png);
+			background-size: 160px 80px;
+		}
+		
+		.uds-bb-paginator.uTube .uds-bb-bullet {
+			background-image: url(../images/skin-uTube/bullet@2x.png);
+			background-size: 10px 30px;
+		}
 	}
 	
 	/* Modern Skin */

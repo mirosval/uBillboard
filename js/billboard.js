@@ -363,6 +363,7 @@
 					$stage
 						.stop()
 						.css({
+							//"-webkit-transform": "translate(0px, 0px)",
 							top: '0px',
 							left: '0px',
 							opacity: 1,
@@ -786,6 +787,7 @@
 				$stage.css({
 					opacity: 1
 				}).add($next).css({
+					//"-webkit-transform": "translate(0px, 0px)",
 					top: '0px',
 					left: '0px'
 				});
@@ -1956,7 +1958,7 @@
 			'slide': {
 				duration: 700,
 				direction: 'right',
-				setup: function(currentSlideId, nextSlideId) {
+				setup: function(currentSlideId, nextSlideId) {				
 					var sq;
 					
 					$('.uds-bb-slides', $bb).css({
