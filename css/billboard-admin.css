@@ -132,6 +132,35 @@ td.slide_count {
 	padding-left: 23px;
 }
 
+.dynamic-offset-wrapper, 
+.dynamic-category-wrapper, 
+.dynamic-title-wrapper, 
+.dynamic-content-wrapper, 
+.dynamic-link-wrapper,
+.dynamic-position-wrapper {
+	margin-bottom: 15px;
+}
+
+.dynamic-offset-wrapper label,
+.dynamic-category-wrapper label,
+.dynamic-title-wrapper label,
+.dynamic-content-wrapper label,
+.dynamic-link-wrapper label,
+.dynamic-position-wrapper label {
+	float: left;
+}
+
+.uds-billboard-form .dynamic-offset-wrapper label,
+.uds-billboard-form .dynamic-category-wrapper label,
+.uds-billboard-form .dynamic-content-wrapper label,
+.uds-billboard-form .dynamic-position-wrapper label {
+	margin-top: 5px;
+}
+
+.uds-billboard-form .dynamic-position-wrapper input {
+	width: 200px;
+}
+
 .image-url-wrapper a {
 	display: block;
 	width: 14px;

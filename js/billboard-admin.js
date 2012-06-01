@@ -357,6 +357,10 @@ jQuery(function($){
 					case 'dynamic':
 						$('.dynamic-offset-wrapper', $tab).show();
 						$('.dynamic-category-wrapper', $tab).show();
+						$('.dynamic-title-wrapper', $tab).show();
+						$('.dynamic-content-wrapper', $tab).show();
+						$('.dynamic-link-wrapper', $tab).show();
+						$('.dynamic-position-wrapper', $tab).show();
 						break;
 					case 'none':
 					default:

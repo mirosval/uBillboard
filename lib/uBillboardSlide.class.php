@@ -160,6 +160,31 @@ $uds_billboard_attributes = array(
 		'label' => __('Post category', uds_billboard_textdomain),
 		'default' => ''
 	),
+	'dynamic-title' => array(
+		'type' => 'checkbox',
+		'label' => __('Show post title', uds_billboard_textdomain),
+		'default' => 'on'
+	),
+	'dynamic-content' => array(
+		'type' => 'select',
+		'label' => __('Show', uds_billboard_textdomain),
+		'options' => array(
+			'none' => __('No Content', uds_billboard_textdomain),
+			'excerpt' => __('Post Excerpt', uds_billboard_textdomain),
+			'content' => __('Post Content', uds_billboard_textdomain)
+		),
+		'default' => 'content'
+	),
+	'dynamic-link' => array(
+		'type' => 'checkbox',
+		'label' => __('Show &quot;Read More&quot; link', uds_billboard_textdomain),
+		'default' => 'on'
+	),
+	'dynamic-position' => array(
+		'type' => 'text',
+		'label' => __('Position override', uds_billboard_textdomain),
+		'default' => ''
+	),
 	'ken-burns' => array(
 		'type' => 'checkbox',
 		'label' => __('Ken Burns Effect', uds_billboard_textdomain),
@@ -511,6 +536,10 @@ class uBillboardSlide {
 				<?php $this->renderAdminField('autoplay-video') ?>
 				<?php $this->renderAdminField('dynamic-offset') ?>
 				<?php $this->renderAdminField('dynamic-category') ?>
+				<?php $this->renderAdminField('dynamic-title') ?>
+				<?php $this->renderAdminField('dynamic-content') ?>
+				<?php $this->renderAdminField('dynamic-link') ?>
+				<?php $this->renderAdminField('dynamic-position') ?>
 			</div>
 			<div id="uds-slide-tab-link-<?php echo $id ?>" class="uds-slide-tab-link">
 				<?php $this->renderAdminField('link') ?>
@@ -591,10 +620,32 @@ class uBillboardSlide {
 						
 						$skin = 'uds-' . $this->slider->style;
 						
-						$text = '<div class="uds-bb-description '.$skin.'" style="top:20px;left:20px;width:'.$width.'px;height:'.$height.'px"><div class="uds-bb-description-inside">';
-						$text .= get_the_excerpt();
-						$text .= '<a href="'.get_permalink().'">'.__('Read More', uds_billboard_textdomain).'</a>';
+						$position = !empty($this->{'dynamic-position'}) ? esc_attr($this->{'dynamic-position'}) : '';
+						
+						$text = '<div class="uds-bb-description '.$skin.'" style="top:20px;left:20px;width:'.$width.'px;height:'.$height.'px;'.$position.'"><div class="uds-bb-description-inside">';
+						
+						if($this->{'dynamic-title'} == 'on') {
+							$text .= '<h3>' . get_the_title() . '</h3>';
+						}
+						
+						if($this->{'dynamic-content'} != 'none') {
+							if($this->{'dynamic-content'} == 'excerpt') {
+								$text .= get_the_excerpt();
+							} else {
+								$text .= get_the_content();
+							}
+						}
+						
+						if($this->{'dynamic-link'} == 'on') {
+							$text .= '<br /><a href="'.get_permalink().'">'.__('Read More', uds_billboard_textdomain).'</a>';
+						}
+						
 						$text .= '</div></div>';
+						
+						// Do not draw the box when there is no content
+						if($this->{'dynamic-title'} != 'on' && $this->{'dynamic-content'} == 'none' && $this->{'dynamic-link'} != 'on') {
+							$text = '';
+						}
 						
 						if(has_post_thumbnail()) {
 							$id = get_post_thumbnail_id();
