@@ -363,12 +363,17 @@
 					$stage
 						.stop()
 						.css({
-							//"-webkit-transform": "translate(0px, 0px)",
+							"-webkit-transition": "-webkit-transform 0s",
+							"-webkit-transform": "translate3d(0px,0px,0px)",
 							top: '0px',
 							left: '0px',
 							opacity: 1,
 							cursor: cursor
 						});
+					$next.css({
+						"-webkit-transition": "all 0s",
+						"-webkit-transform": "translate3d(0px,0px,0px)"
+					});
 					$('.uds-bb-slide', $stage).fastHide();
 					$('.uds-bb-slide-'+slide.id, $stage).fastShow();
 					$('.uds-bb-description', $stage).fastShow();
@@ -1053,7 +1058,12 @@
 					$container.css('height', containerDim + 'px');
 				} else {
 					windowDim = $thumbs.width();
-					containerDim = $thumb.length * $thumb.outerWidth(true);
+					var containerWidth = $thumb.outerWidth(true);
+					// Fix FF image loading
+					if(containerWidth === 0) {
+						containerWidth = parseInt($('img', $thumb).attr('width'), 10) + 18;
+					}
+					containerDim = $thumb.length * containerWidth;
 					scrollProperty = 'left';
 					$container.css('width', containerDim + 'px');
 				}
@@ -1200,6 +1210,8 @@
 					var event = e.originalEvent;
 					
 					if(event.type === "touchstart") {
+						$bb.css('-webkit-user-select', 'none');
+						
 						touches = {
 							startX: event.touches[0].clientX,
 							time: new Date().getTime(),
@@ -1249,7 +1261,8 @@
 						// Handle Embedded content
 						_private.handleEmbeddedContent(slides[currentSlideId]);
 						
-						$stage.css('left', offset + "px");
+						//$stage.css('left', offset + "px");
+						$stage.css('-webkit-transform', 'translate3d(' + offset + "px,0px,0px)");
 						if(offset > 0) {
 							touches.left = - computedWidth + offset;
 						} else {
@@ -1257,7 +1270,8 @@
 						}
 						
 						$next.fastShow().css({
-							left: touches.left + "px",
+							//left: touches.left + "px",
+							'-webkit-transform': 'translate3d(' + touches.left + 'px,0px,0px)',
 							opacity: 1
 						});
 					}
@@ -1267,14 +1281,26 @@
 							swiped = Math.abs(touches.speed) > 100,
 							clicked = (new Date().getTime() - touches.absoluteStartTime) < 150;
 						
-						$('.uds-bb-slides', $bb).css('overflow', 'visoble');
+						//$('.uds-bb-slides', $bb).css('overflow', 'visible');
+						
+						$stage.css({
+							left: -touches.direction * computedWidth + touches.left,
+							'-webkit-transform': 'translate3d(0px,0px,0px)'
+						});
+						
+						$next.css({
+							left: touches.left,
+							'-webkit-transform': 'translate3d(0px,0px,0px)'
+						})
 						
 						if((draggedAfterHalfWidth || swiped) && !clicked) {
 							e.preventDefault();
 							
 							$stage.animate({
 								left: - touches.direction * computedWidth
-							}, 500);
+							}, {
+								duration: 500
+							});
 							
 							$next.animate({
 								left: 0
@@ -1285,6 +1311,10 @@
 								}
 							});
 						} else {
+							if(!clicked) {
+								e.preventDefault();
+							}
+							
 							$stage.animate({
 								left: 0
 							}, 500);
@@ -1293,6 +1323,8 @@
 								left: touches.direction * computedWidth
 							}, 500);
 						}
+						
+						$bb.css('-webkit-user-select', 'auto');
 					}
 				});
 			},
