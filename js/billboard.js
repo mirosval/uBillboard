@@ -7,7 +7,9 @@
  *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
  *	
  */
-(function($) {
+;(function($) {
+	"use strict";
+	
 	function d(variable) {
 		try {
 			console.log(variable);
@@ -544,7 +546,7 @@
 						}
 					);
 					
-					$slide = $("<div class='uds-bb-slide-" + i + " uds-bb-slide'>");
+					var $slide = $("<div class='uds-bb-slide-" + i + " uds-bb-slide'>");
 					$slide
 						.css({
 							display: 'none',
@@ -940,10 +942,6 @@
 					$container.css('width', '10000px');
 				}
 				
-				$bb.has('.uds-bb-thumbnails.top:not(.inside)').css('margin-top', $thumbs.outerHeight());
-				$bb.has('.uds-bb-thumbnails.bottom:not(.inside)').css('margin-bottom', $thumbs.outerHeight());
-				$bb.has('.uds-bb-thumbnails.left:not(.inside)').css('margin-left', $thumbs.outerWidth());
-				$bb.has('.uds-bb-thumbnails.right:not(.inside)').css('margin-right', $thumbs.outerWidth());
 				
 				// Precompute thumbnail dimensions
 				$thumb.each(function(i){
@@ -1040,6 +1038,12 @@
 							});
 					});
 				});
+				
+				// uBillboard margin to accommodate thumbs
+				$bb.has('.uds-bb-thumbnails.top:not(.inside)').css('margin-top', $thumbs.outerHeight());
+				$bb.has('.uds-bb-thumbnails.bottom:not(.inside)').css('margin-bottom', $thumbs.outerHeight());
+				$bb.has('.uds-bb-thumbnails.left:not(.inside)').css('margin-left', $thumbs.outerWidth());
+				$bb.has('.uds-bb-thumbnails.right:not(.inside)').css('margin-right', $thumbs.outerWidth());
 				
 				// Thumbnails scrolling
 				var windowDim,
@@ -1356,7 +1360,10 @@
 					return;
 				}
 				
-				var dimension = cssDimension = 100;
+				var dimension = 100,
+					cssDimension = dimension,
+					canvas = null,
+					ctx = null;
 				
 				// Retina support
 				if(window.devicePixelRatio) {
@@ -1484,6 +1491,8 @@
 				if(typeof window.postMessage !== 'function' || typeof JSON === 'undefined') {
 					return;
 				}
+				
+				var $slide, $iframe;
 				
 				$slide = $('.uds-stage .uds-bb-slide-'+slide.id, $bb);
 				$iframe = $('iframe', $slide);
