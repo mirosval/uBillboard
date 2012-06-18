@@ -399,7 +399,9 @@
 				$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
 				
 				if(options.pauseOnVideo && slides[currentSlideId].hasVideo) {
-					$countdown.fastHide();
+					if($countdown !== null && typeof $countdown !== "undefined") {
+						$countdown.fastHide();
+					}
 					clearTimeout(timers.nextSlideAnimation);
 					return;
 				}
@@ -1406,7 +1408,8 @@
 				
 				var ctx = $countdown.data('context'),
 					progress = 0,
-					dimension = cssDimension = 100;
+					cssDimension = 100,
+					dimension = cssDimension;
 				
 				if(duration !== false) {
 					var start = new Date().getTime();
@@ -1530,6 +1533,8 @@
 				if(typeof window.postMessage !== 'function' || typeof JSON === 'undefined') {
 					return;
 				}
+				
+				var $slide, $iframe;
 				
 				$slide = $('.uds-stage .uds-bb-slide-'+slide.id, $bb);
 				$iframe = $('iframe', $slide);
