@@ -1052,6 +1052,10 @@
 				$bb.has('.uds-bb-thumbnails.left:not(.inside)').css('margin-left', $thumbs.outerWidth());
 				$bb.has('.uds-bb-thumbnails.right:not(.inside)').css('margin-right', $thumbs.outerWidth());
 				
+				// Thumbs Container Shadow
+				$("<div class='uds-thumbnails-shadow-left'>").appendTo($thumbs);
+				$("<div class='uds-thumbnails-shadow-right'>").appendTo($thumbs);
+				
 				// Thumbnails scrolling
 				var windowDim,
 					containerDim,

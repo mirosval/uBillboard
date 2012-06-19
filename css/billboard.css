@@ -135,6 +135,23 @@
 	z-index: 5;
 }
 
+/* Thumbnail Shadows */
+.uds-thumbnails-shadow-left,
+.uds-thumbnails-shadow-right {
+	background: url(../images/thumb-shadow-left.png) repeat-y;
+	width: 20px;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.uds-thumbnails-shadow-right {
+	background-image: url(../images/thumb-shadow-right.png);
+	left: auto;
+	right: 0px;
+}
+
 	/* Paginator */
 	.uds-bb-paginator {
 		position: absolute;
