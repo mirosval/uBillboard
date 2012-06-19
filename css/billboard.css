@@ -152,6 +152,17 @@
 	right: 0px;
 }
 
+/* uBillboard General Retina Support */
+@media only screen and (-webkit-min-device-pixel-ratio:2) {
+	.uds-thumbnails-shadow-left {
+		background-image: url(../images/thumb-shadow-left@2x.png);
+	}
+	
+	.uds-thumbnails-shadow-right {
+		background-image: url(../images/thumb-shadow-right@2x.png);
+	}
+}
+
 	/* Paginator */
 	.uds-bb-paginator {
 		position: absolute;
@@ -404,65 +415,53 @@
 	
 	/* Silver Skin */
 	
-	.uds-bb-paginator.silver.inside .uds-bb-prev {
+	.uds-bb-paginator.silver .uds-bb-prev {
 		width: 40px;
 		height: 40px;
 		position: absolute;
-		left: 0px;
-		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
+		background: url(../images/skin-silver/bg.png) repeat-x;
 		box-shadow: 0px 0px 2px #666;
-		-webkit-border-bottom-right-radius: 10px;
-		-webkit-border-top-right-radius: 10px;
+	}
+	
+	.uds-bb-paginator.silver.inside .uds-bb-prev {
+		left: 0px;
 		-moz-border-top-right-radius: 10px;
 		-moz-border-bottom-right-radius: 10px;
 		border-bottom-right-radius: 10px;
 		border-top-right-radius: 10px;
 	}
 	
-	.uds-bb-paginator.silver.inside .uds-bb-prev span {
-		background: url(../images/skin-silver/prev.png);
+	.uds-bb-paginator.silver .uds-bb-prev span {
+		background: url(../images/skin-silver/buttons.png) 0px 0px;
 		width: 40px;
 		height: 40px;
 		position: absolute;
 		left: 0px;
 	}
 	
-	.uds-bb-paginator.silver.inside .uds-bb-prev span:hover, .uds-bb-paginator.silver.outside .uds-bb-prev span:hover {
-		background: url(../images/skin-silver/prev.png) 0px 40px;
+	.uds-bb-paginator.silver .uds-bb-prev span:hover,
+	.uds-bb-paginator.silver .uds-bb-prev span:active {
+		background-position: 0px -40px;
 	}
 	
 	.uds-bb-paginator.silver.outside .uds-bb-prev {
-		width: 40px;
-		height: 40px;
-		position: absolute;
 		left: -40px;
-		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
-		box-shadow: 0px 0px 2px #666;
-		-webkit-border-bottom-left-radius: 10px;
-		-webkit-border-top-left-radius: 10px;
 		-moz-border-top-left-radius: 10px;
 		-moz-border-bottom-left-radius: 10px;
 		border-bottom-left-radius: 10px;
 		border-top-left-riadus: 10px;
 	}
 	
-	.uds-bb-paginator.silver.outside .uds-bb-prev span {
-		background: url(../images/skin-silver/prev.png);
+	.uds-bb-paginator.silver .uds-bb-next {
 		width: 40px;
 		height: 40px;
 		position: absolute;
-		left: 0px;
+		background: url(../images/skin-silver/bg.png) repeat-x;
+		box-shadow: 0px 0px 2px #666;
 	}
 	
 	.uds-bb-paginator.silver.inside .uds-bb-next {
-		width: 40px;
-		height: 40px;
-		position: absolute;
 		right: 0px;
-		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
-		box-shadow: 0px 0px 2px #666;
-		-webkit-border-bottom-left-radius: 10px;
-		-webkit-border-top-left-radius: 10px;
 		-moz-border-top-left-radius: 10px;
 		-moz-border-bottom-left-radius: 10px;
 		border-bottom-left-radius: 10px;
@@ -470,72 +469,50 @@
 	}
 	
 	.uds-bb-paginator.silver.outside .uds-bb-next {
-		width: 40px;
-		height: 40px;
-		position: absolute;
 		right: -40px;
-		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
-		box-shadow: 0px 0px 2px #666;
-		-webkit-border-bottom-right-radius: 10px;
-		-webkit-border-top-right-radius: 10px;
 		-moz-border-top-right-radius: 10px;
 		-moz-border-bottom-right-radius: 10px;
 		border-top-right-radius: 10px;
 		border-bottom-right-radius: 10px;
 	}
 	
-	.uds-bb-paginator.silver.inside .uds-bb-next span {
-		background: url(../images/skin-silver/next.png);
+	.uds-bb-paginator.silver .uds-bb-next span {
+		background: url(../images/skin-silver/buttons.png) -120px 0px;
 		width: 40px;
 		height: 40px;
 		position: absolute;
 		right: 0px;
 	}
 	
-	.uds-bb-paginator.silver.outside .uds-bb-next span {
-		background: url(../images/skin-silver/next.png);
-		width: 40px;
-		height: 40px;
-		position: absolute;
-		right: 0px;
+	.uds-bb-paginator.silver .uds-bb-next span:hover,
+	.uds-bb-paginator.silver .uds-bb-next span:active {
+		background-position: -120px -40px;
 	}
 	
-	
-	.uds-bb-paginator.silver.inside .uds-bb-next span:hover, .uds-bb-paginator.silver.outside .uds-bb-next span:hover {
-		background: url(../images/skin-silver/next.png) 0px 40px;
-	}
-	
-	.uds-bb-paginator.silver.inside .uds-bb-position-indicator-bullets-container {
+	.uds-bb-paginator.silver .uds-bb-position-indicator-bullets-container {
 		height: 22px;
 		float: left;
-		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
-		padding: 9px 10px;;
+		background: url(../images/skin-silver/bg.png) repeat-x;
+		padding: 9px 10px;
 		position: absolute;
-		bottom: 0px;
-		-webkit-border-top-right-radius: 10px;
-		-webkit-border-top-left-radius: 10px;
-		-moz-border-top-right-radius: 10px;
-		-moz-border-top-left-radius: 10px;
-		border-top-left-radius: 10px;
-		border-top-right-radius: 10px;
 		box-shadow: 0px 0px 2px #666;
 		z-index: 5;
 	}
 	
+	.uds-bb-paginator.silver.inside .uds-bb-position-indicator-bullets-container {
+		bottom: 0px;
+		-moz-border-top-right-radius: 10px;
+		-moz-border-top-left-radius: 10px;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+	}
+	
 	.uds-bb-paginator.silver.outside .uds-bb-position-indicator-bullets-container {
-		height: 22px;
-		float: left;
-		background: url(../images/skin-silver/paginator-inside.png) repeat-x;
-		padding: 9px 10px;;
-		position: absolute;
 		bottom: -40px;
-		-webkit-border-bottom-right-radius: 10px;
-		-webkit-border-bottom-left-radius: 10px;
 		-moz-border-bottom-right-radius: 10px;
 		-moz-border-bottom-left-radius: 10px;
 		border-bottom-left-radius: 10px;
 		border-bottom-right-radius: 10px;
-		box-shadow: 0px 0px 2px #666;
 	}
 	
 	.uds-bb-paginator.silver .uds-bb-position-indicator-bullets {
@@ -543,7 +520,7 @@
 	}
 	
 	.uds-bb-paginator.silver .uds-bb-bullet {
-		background: url(../images/skin-silver/bullet.png) no-repeat;
+		background: url(../images/skin-silver/bullets.png) no-repeat;
 		width: 14px;
 		height: 14px;
 		float: left;
@@ -551,22 +528,59 @@
 		cursor: pointer;
 	}
 	
-	.uds-bb-paginator.silver .uds-bb-bullet.active, .uds-bb-paginator.silver .uds-bb-bullet:hover  {
-		background: url(../images/skin-silver/bullet-active.png) no-repeat;
+	.uds-bb-paginator.silver .uds-bb-bullet:hover {
+		background-position: 0px -14px;
 	}
 	
-	.uds-bb-paginator.silver  .uds-bb-playpause {
-		background: url(../images/skin-silver/playpause.png) no-repeat;
-		width: 14px;
-		height: 14px;
+	.uds-bb-paginator.silver .uds-bb-bullet.active,
+	.uds-bb-paginator.silver .uds-bb-bullet:active {
+		background-position: 0px -28px;
+	}
+	
+	.uds-bb-paginator.silver .uds-bb-playpause {
+		background: url(../images/skin-silver/buttons.png) no-repeat;
+		width: 40px;
+		height: 40px;
 		float: left;
-		margin: 5px 0px 0px 0px;
+		margin: -9px 0px 0px 0px;
 	}
 	
-	.uds-bb-paginator.silver  .uds-bb-playpause:hover {
-		background: url(../images/skin-silver/playpause.png) 0px 14px;
+	.uds-bb-paginator.silver .uds-bb-playpause.pause {
+		background-position: -80px 0px;
 	}
 	
+	.uds-bb-paginator.silver .uds-bb-playpause.play {
+		background-position: -40px 0px;
+	}
+	
+	.uds-bb-paginator.silver .uds-bb-playpause.play:hover {
+		background-position: -40px -40px;
+	}
+	
+	.uds-bb-paginator.silver .uds-bb-playpause.pause:hover {
+		background-position: -80px -40px;
+	}
+	
+	@media only screen and (-webkit-min-device-pixel-ratio:2) {
+		.uds-bb-paginator.silver .uds-bb-prev,
+		.uds-bb-paginator.silver .uds-bb-next,
+		.uds-bb-paginator.silver .uds-bb-position-indicator-bullets-container {
+			background-image: url(../images/skin-silver/bg@2x.png);
+			background-size: 1px 40px;
+		}
+		
+		.uds-bb-paginator.silver .uds-bb-prev span,
+		.uds-bb-paginator.silver .uds-bb-next span,
+		.uds-bb-paginator.silver .uds-bb-playpause {
+			background-image: url(../images/skin-silver/buttons@2x.png);
+			background-size: 160px 80px;
+		}
+		
+		.uds-bb-paginator.silver .uds-bb-bullet {
+			background-image: url(../images/skin-silver/bullets@2x.png);
+			background-size: 14px 42px;
+		}
+	}
 	
 	/* uTube Skin */
 	
