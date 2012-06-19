@@ -953,6 +953,11 @@
 						height: $img.attr('height') + 'px'
 					});
 					
+					$(this).css({
+						width: $img.attr('width') + 'px',
+						height: $img.attr('height') + 'px'
+					});
+					
 					// TODO: Transform this condition so it checks if the image is actually present
 					if(slides[i].bg === '' && !slides[i].hasVideo) {
 						$img.replaceWith('<div>');
