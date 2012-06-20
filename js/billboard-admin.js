@@ -486,4 +486,35 @@ jQuery(function($){
 		
 		return false;
 	});
+	
+	
+	// Advanced options show/hide mechanizm
+	var advancedOptions = [
+		'div.background-repeat-wrapper',
+		'div.dynamic-position-wrapper',
+		'div.uds-billboard-pause-on-video',
+		'div.uds-billboard-square-size',
+		'div.uds-billboard-style',
+		'div.uds-billboard-controls-position',
+		'div.uds-billboard-show-pause',
+		'div.uds-billboard-show-pause + hr',
+		'div.uds-billboard-show-paginator',
+		'div.uds-billboard-show-paginator + hr',
+		'div.uds-billboard-thumbnails-width',
+		'div.uds-billboard-thumbnails-height',
+		'div.uds-billboard-thumbnails-hover-color'
+	];
+	
+	$('#uds-billboard-options-level').change(function() {
+		if($(this).is(':checked')) {
+			$.each(advancedOptions, function(i, el) { 
+				$(el).show();
+			});
+		} else {
+			$.each(advancedOptions, function(i, el) { 
+				$(el).hide();
+			});
+		}
+	}).change();
+	
 });

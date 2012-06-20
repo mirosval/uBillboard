@@ -71,7 +71,7 @@ $uds_billboard_general_options = array(
 	),
 	'controls-skin' => array(
 		'type' => 'select',
-		'label' => __('Skin', uds_billboard_textdomain),
+		'label' => __('Constrols Skin', uds_billboard_textdomain),
 		'unit' => '',
 		'tooltip' => __('How the controls should look', uds_billboard_textdomain),
 		'options' => array(
@@ -87,7 +87,7 @@ $uds_billboard_general_options = array(
 	),
 	'controls-position' => array(
 		'type' => 'select',
-		'label' => __('Position', uds_billboard_textdomain),
+		'label' => __('Controls Position', uds_billboard_textdomain),
 		'unit' => '',
 		'tooltip' => '',
 		'options' => array(
@@ -184,6 +184,13 @@ $uds_billboard_general_options = array(
 		'label' => __('Thumbnail border hover color', uds_billboard_textdomain),
 		'tooltip' => __('Border color of thumbnail on mouse over', uds_billboard_textdomain),
 		'default' => 'red'
+	),
+	'options-level' => array(
+		'type' => 'checkbox',
+		'unit' => '',
+		'label' => __('Show Advanced Options', uds_billboard_textdomain),
+		'tooltip' => __('Advanced options let you configure more stuff to further personalize your uBillboard', uds_billboard_textdomain),
+		'default' => ''
 	)
 );
 
@@ -604,7 +611,7 @@ class uBillboard {
 	{
 		?>
 		<div class="uds-billboard-<?php echo $option ?> option-container">
-			<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+			<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?>:</label>
 			<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" value="<?php echo empty($value) ? $field['default'] : $value ?>" class="text" />
 			<span class="unit"><?php echo $field['unit'] ?></span>
 			<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
@@ -618,7 +625,7 @@ class uBillboard {
 		$checked = ( $value === null ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
 		?>
 		<div class="uds-billboard-<?php echo $option ?> option-container">
-			<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+			<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?>:</label>
 			<input type="checkbox" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" <?php echo $checked ?> class="checkbox" />
 			<span class="unit"><?php echo $field['unit'] ?></span>
 			<div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
@@ -632,7 +639,7 @@ class uBillboard {
 		$checked = ( $value === null ? $field['default'] : $value ) == 'on' ? 'checked="checked"' : '';
 		?>
 		<div class="uds-billboard-<?php echo $option ?> option-container select">
-			<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+			<label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?>:</label>
 			<select id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" class="select">
 				<option value="" disabled="disabled"><?php echo $field['label'] ?></option>
 				<?php foreach($field['options'] as $key => $label): ?>
@@ -651,7 +658,7 @@ class uBillboard {
 	{
 		?>
         <div class="uds-billboard-<?php echo $option ?> option-container color">
-            <label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?></label>
+            <label for="uds-billboard-<?php echo $option ?>"><?php echo $field['label'] ?>:</label>
             #<input type="text" id="uds-billboard-<?php echo $option ?>" name="uds_billboard[<?php echo $option ?>]" value="<?php echo $value ?>" class="color" />
             <div class="tooltip-content"><?php echo $field['tooltip'] ?></div>
             <div class="clear"></div>

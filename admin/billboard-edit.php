@@ -42,6 +42,7 @@ $billboard->addEmptySlide();
 								</div>
 							</div>
 							<hr />
+							<?php $billboard->renderAdminOption('options-level'); ?>
 							<?php $billboard->renderAdminOption('width'); ?>
 							<?php $billboard->renderAdminOption('height'); ?>
 							<?php $billboard->renderAdminOption('randomize'); ?>
@@ -81,21 +82,15 @@ $billboard->addEmptySlide();
 							<br />
 							<?php $billboard->renderAdminOption('show-timer'); ?>
 							<hr />
-							<label><?php _e('Controls skin', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('controls-skin'); ?>
-							<label><?php _e('Controls Position', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('controls-position'); ?>
 							<hr />
-							<label><?php _e('Show Controls', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('show-controls'); ?>
 							<hr />
-							<label><?php _e('Show Play/Pause', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('show-pause'); ?>
 							<hr />
-							<label><?php _e('Show Paginator', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('show-paginator'); ?>
 							<hr />
-							<label><?php _e('Thumbnails', uds_billboard_textdomain) ?>:</label>
 							<?php $billboard->renderAdminOption('show-thumbnails'); ?>
 							<?php $billboard->renderAdminOption('thumbnails-position'); ?>
 							<?php $billboard->renderAdminOption('thumbnails-inside'); ?>

@@ -329,7 +329,8 @@ td.slide_count {
 .uds-billboard-form .link-target-wrapper label,
 .uds-billboard-form .background-repeat-wrapper label,
 .uds-billboard-form .stop-wrapper label,
-.uds-billboard-form .autoplay-video-wrapper label {
+.uds-billboard-form .autoplay-video-wrapper label,
+.uds-billboard-form .ken-burns-wrapper label {
 	float: left;
 }
 
@@ -373,10 +374,6 @@ td.slide_count {
 	float: left;
 	padding: 5px 0px 0px 0px;
 	width: 150px;
-}
-
-.option-container.select label {
-	display: none;
 }
 
 .option-container input.text {
