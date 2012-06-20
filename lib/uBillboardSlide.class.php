@@ -17,11 +17,6 @@ $uds_billboard_attributes = array(
 		'label' => __('Apply Automatic resizing', uds_billboard_textdomain),
 		'default' => ''
 	),
-	'relative-paths' => array(
-		'type' => 'checkbox',
-		'label' => __('Use Relative Paths', uds_billboard_textdomain),
-		'default' => 'on'
-	),
 	'background' => array(
 		'type' => 'color',
 		'label' => __('Background Color', uds_billboard_textdomain),
@@ -522,7 +517,6 @@ class uBillboardSlide {
 				<?php $this->renderAdminField('image') ?>
 				<?php $this->renderAdminField('image-alt') ?>
 				<?php $this->renderAdminField('resize') ?>
-				<?php $this->renderAdminField('relative-paths') ?>
 				<?php $this->renderAdminField('background') ?>
 				<?php $this->renderAdminField('background-transparent') ?>
 				<?php $this->renderAdminField('background-repeat') ?>
