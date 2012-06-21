@@ -42,7 +42,7 @@ jQuery(function($){
 		}
 	}
 	
-	$('input, textarea', '#billboard_update_form').live('change', function(){
+	$('input:not(#uds-billboard-options-level), textarea', '#billboard_update_form').live('change', function(){
 		markDirty(true);
 	});
 	
@@ -360,7 +360,9 @@ jQuery(function($){
 						$('.dynamic-title-wrapper', $tab).show();
 						$('.dynamic-content-wrapper', $tab).show();
 						$('.dynamic-link-wrapper', $tab).show();
-						$('.dynamic-position-wrapper', $tab).show();
+						$('.dynamic-position-wrapper', $tab).filter(function(){
+							return $("#uds-billboard-options-level").is(":checked");
+						}).show();
 						break;
 					case 'none':
 					default:
@@ -502,10 +504,11 @@ jQuery(function($){
 		'div.uds-billboard-show-paginator + hr',
 		'div.uds-billboard-thumbnails-width',
 		'div.uds-billboard-thumbnails-height',
-		'div.uds-billboard-thumbnails-hover-color'
+		'div.uds-billboard-thumbnails-hover-color',
+		'textarea.billboard-text'
 	];
 	
-	$('#uds-billboard-options-level').change(function() {
+	function showAdvancedOptions() {
 		if($(this).is(':checked')) {
 			$.each(advancedOptions, function(i, el) { 
 				$(el).show();
@@ -515,6 +518,10 @@ jQuery(function($){
 				$(el).hide();
 			});
 		}
-	}).change();
+		
+		contentType();
+	}
+	
+	$('#uds-billboard-options-level').change(showAdvancedOptions).change();
 	
 });

@@ -99,7 +99,7 @@ td.slide_count {
 }
 
 .text-wrapper {
-	margin: 0px 0px 15px;
+	margin: 15px 0px 0px;
 }
 
 .image-wrapper {
@@ -354,6 +354,7 @@ td.slide_count {
 	display: none;
 	width: 100%;
 	height: 100px;
+	margin-top: 10px;
 }
 
 .uds-billboard-form {

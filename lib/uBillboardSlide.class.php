@@ -523,8 +523,8 @@ class uBillboardSlide {
 			</div>
 			<div id="uds-slide-tab-content-<?php echo $id ?>" class="uds-slide-tab-content">
 				<?php $this->renderAdminField('content') ?>
-				<?php $this->renderAdminField('text') ?>
 				<?php $this->renderAdminField('text-evaluation') ?>
+				<?php $this->renderAdminField('text') ?>
 				<?php $this->renderAdminField('embed-url') ?>
 				<?php $this->renderAdminField('pause-slider') ?>
 				<?php $this->renderAdminField('autoplay-video') ?>
