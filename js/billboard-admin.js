@@ -29,7 +29,7 @@ jQuery(function($){
 	}
 	
 	// If ken burns has been switched on, images should be regenerated
-	$('.slides').on('change', '.billboard-ken-burns', function() {
+	$('.slides').on('change', '.billboard-ken-burns,.billboard-retina', function() {
 		markForThumbRegeneration();
 	});
 	
@@ -494,6 +494,7 @@ jQuery(function($){
 	var advancedOptions = [
 		'div.background-repeat-wrapper',
 		'div.dynamic-position-wrapper',
+		'div.retina-wrapper',
 		'div.uds-billboard-pause-on-video',
 		'div.uds-billboard-square-size',
 		'div.uds-billboard-style',

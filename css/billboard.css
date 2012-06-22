@@ -79,6 +79,7 @@
 	display: none; /* Make sure description is invisible during launch */
 	position: absolute;
 	z-index: 1;
+	border-radius: 3px;
 }
 
 .uds-bb-description-inside {
@@ -108,6 +109,30 @@
 	background: none;
 	color: inherit;
 	text-shadow: none;
+}
+
+.uds-bb-description.uds-dark h1,
+.uds-bb-description.uds-dark h2,
+.uds-bb-description.uds-dark h3,
+.uds-bb-description.uds-dark h4,
+.uds-bb-description.uds-dark h5,
+.uds-bb-description.uds-dark h6,
+.uds-bb-description.uds-dark p {
+	color: #eee;
+}
+
+.uds-bb-description.uds-bright h1,
+.uds-bb-description.uds-bright h2,
+.uds-bb-description.uds-bright h3,
+.uds-bb-description.uds-bright h4,
+.uds-bb-description.uds-bright h5,
+.uds-bb-description.uds-bright h6,
+.uds-bb-description.uds-bright p {
+	color: #333;
+}
+
+.uds-bb-description li {
+	list-style: square inside;
 }
 
 /* Controls */
@@ -449,7 +474,7 @@
 		-moz-border-top-left-radius: 10px;
 		-moz-border-bottom-left-radius: 10px;
 		border-bottom-left-radius: 10px;
-		border-top-left-riadus: 10px;
+		border-top-left-radius: 10px;
 	}
 	
 	.uds-bb-paginator.silver .uds-bb-next {

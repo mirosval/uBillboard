@@ -103,6 +103,9 @@
 			</fileset>
 		</copy>
 		
+		<!-- Make Sure Live Preview Playground is Disabled -->
+		<replaceregexp file="build/${project_name}/${file_name}.php" match="define\('UDS_BILLBOARD_PLAYGROUND', true\);" replace="define\('UDS_BILLBOARD_PLAYGROUND', false\);" byline="true"/>
+		
 		<!-- Copy PHP Admin Files -->
 		<copy todir="build/${project_name}/admin">
 			<fileset dir="admin" />

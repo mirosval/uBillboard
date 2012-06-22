@@ -32,6 +32,11 @@ $uds_billboard_attributes = array(
 		'label' => __('Tile background image', uds_billboard_textdomain),
 		'default' => 'on'
 	),
+	'retina' => array(
+		'type' => 'checkbox',
+		'label' => __('Retina Image', uds_billboard_textdomain),
+		'default' => 'off'
+	),
 	'link' => array(
 		'type' => 'text',
 		'label' => __('Link URL', uds_billboard_textdomain),
@@ -56,7 +61,10 @@ $uds_billboard_attributes = array(
 			'3000' => '3s',
 			'4000' => '4s',
 			'5000' => '5s',
+			'7000' => '7s',
 			'10000' => '10s',
+			'15000' => '15s',
+			'20000' => '20s'
 		),
 		'default' => '5000'
 	),
@@ -520,6 +528,7 @@ class uBillboardSlide {
 				<?php $this->renderAdminField('background') ?>
 				<?php $this->renderAdminField('background-transparent') ?>
 				<?php $this->renderAdminField('background-repeat') ?>
+				<?php $this->renderAdminField('retina') ?>
 			</div>
 			<div id="uds-slide-tab-content-<?php echo $id ?>" class="uds-slide-tab-content">
 				<?php $this->renderAdminField('content') ?>
@@ -728,6 +737,9 @@ class uBillboardSlide {
 			$background_repeat = 'no-repeat';
 		}
 		
+		// Retina
+		$retina = $this->retina == 'on' ? 'true' : 'false';
+		
 		$stop = $this->stop == 'on' ? 'true': 'false';
 	
 		$pause_slider = $this->{'pause-slider'} == 'on' ? 'true' : 'false';
@@ -743,6 +755,7 @@ class uBillboardSlide {
 						direction: '{$direction}',
 						bgColor: '{$background}',
 						repeat: '{$background_repeat}',
+						retina: {$retina},
 						stop: {$stop},
 						autoplayVideo: {$autoplay_video},
 						kenBurns: {$ken_burns}
@@ -1051,12 +1064,16 @@ class uBillboardSlide {
 			$width = $this->slider->width;
 			$height = $this->slider->height;
 		
+			if($this->retina == 'on') {
+				$resizedImage = $this->resizeImage($this->image, $width * 2, $height * 2, 'full-retina', $force_recreate);
+			}
 			$resizedImage = $this->resizeImage($this->image, $width, $height, 'full', $force_recreate);
-			$resizedImage = $this->resizeImage($this->image, $width * 2, $height * 2, 'full-retina', $force_recreate);
 			
 			if($this->{'ken-burns'} == 'on') {
 				$this->resizeImage($this->image, $width * 1.2, $height * 1.2, 'ken', $force_recreate);
-				$this->resizeImage($this->image, $width * 2.4, $height * 2.4, 'ken-retina', $force_recreate);
+				if($this->retina == 'on') {
+					$this->resizeImage($this->image, $width * 2.4, $height * 2.4, 'ken-retina', $force_recreate);
+				}
 			}
 			
 			return $resizedImage;
@@ -1218,18 +1235,30 @@ class uBillboardSlide {
 			return new WP_Error('uds_billboard_slide', __('Failed to resize image',uds_billboard_textdomain));
 		}
 		
+		$compression = 80;
+		
+		switch($type) {
+			case 'full': 		$compression = 90; break;
+			case 'full-retina':	$compression = 75; break;
+			case 'ken':			$compression = 85; break;
+			case 'ken-retina':	$compression = 70; break;
+			case 'thumb':		$compression = 90; break;
+			case 'thumb-retina':$compression = 80; break;
+			default: 			$compression = 80;
+		}
+		
 		if($image_type == 'jpg') {
-			if(!imagejpeg($dst, $imagePath, 80)){
+			if(!imagejpeg($dst, $imagePath, $compression)){
 				return new WP_Error('uds_billboard_slide', __('Failed to save image',uds_billboard_textdomain));
 			}
 		} else {
-			if(!imagepng($dst, $imagePath, 8)){
+			if(!imagepng($dst, $imagePath, (int)($compression / 10))){
 				return new WP_Error('uds_billboard_slide', __('Failed to save image',uds_billboard_textdomain));
 			}
 		}
 		
 		
-		if($thumb) {
+		if($type == 'thumb') {
 			return UDS_CACHE_URL . '/' . $this->thumbName($type);
 		} else {
 			return UDS_CACHE_URL . '/' . $this->imageName($type);

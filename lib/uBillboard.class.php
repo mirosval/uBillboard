@@ -408,6 +408,33 @@ class uBillboard {
 		}
 	}
 	
+	public function override($options)
+	{
+		global $uds_billboard_general_options, $uds_billboard_attributes;
+		
+		if($options['transition'] != '' && in_array($options['transition'], array_keys($uds_billboard_attributes['transition']['options']))) {
+			foreach($this->slides as $slide) {
+				$slide->transition = $options['transition'];
+			}
+		}
+		if(isset($options['transition'])) unset($options['transition']);
+		
+		if($options['direction'] != '' && in_array($options['direction'], array_keys($uds_billboard_attributes['direction']['options']))) {
+			foreach($this->slides as $slide) {
+				$slide->direction = $options['direction'];
+			}
+		}
+		if(isset($options['direction'])) unset($options['direction']);
+		
+		foreach($uds_billboard_general_options as $key => $option) {
+			$camelized = $this->camelize($key);
+			if(isset($options[$key])) {
+				$this->{$camelized} = $this->sanitizeOption($key, $options[$key]);
+				unset($options[$key]);
+			}
+		}
+	}
+	
 	/**
 	 *	Helper function, performs internal checks to determine if uBillboard
 	 *	is valid
@@ -467,6 +494,14 @@ class uBillboard {
 	
 	public function createThumbs()
 	{
+		// Erase original images
+		$dir = scandir(UDS_CACHE_PATH);
+		foreach($dir as $item) {
+			if(strpos($item, sanitize_title_with_dashes($this->name) . '-') === 0) {
+				unlink(UDS_CACHE_PATH . '/' . $item);
+			}
+		}
+		
 		$ok = true;
 		foreach($this->slides as $slide) {
 			$result = $slide->resizeImages(true);

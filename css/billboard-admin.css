@@ -132,7 +132,7 @@ td.slide_count {
 	padding-left: 23px;
 }
 
-.dynamic-offset-wrapper, 
+.dynamic-offset-wrapper,
 .dynamic-category-wrapper, 
 .dynamic-title-wrapper, 
 .dynamic-content-wrapper, 
@@ -323,6 +323,7 @@ td.slide_count {
 }
 
 .uds-billboard-form .resize-wrapper label,
+.uds-billboard-form .retina-wrapper label,
 .uds-billboard-form .background-wrapper label,
 .uds-billboard-form .background-transparent-wrapper label,
 .uds-billboard-form .relative-paths-wrapper label,

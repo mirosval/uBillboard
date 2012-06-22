@@ -36,6 +36,8 @@ if(!defined('UDS_CACHE_URL')) {
 	define('UDS_CACHE_URL',  trailingslashit(UDS_BILLBOARD_URL) . 'cache');
 }
 
+define('UDS_BILLBOARD_PLAYGROUND', true);
+
 // User configurable options
 define('UDS_BILLBOARD_OPTION', 'uds-billboard-3');
 define('UDS_BILLBOARD_OPTION_GENERAL', 'uds-billboard-general-3');
@@ -155,7 +157,7 @@ function uds_billboard_use_shortcode_optimization()
 function uds_billboard_use_ajax_optimization()
 {
 	$option = get_option(UDS_BILLBOARD_OPTION_GENERAL, array('ajax_optimization' => true));
-	return $option['ajax_optimization'];
+	return $option['ajax_optimization'] || UDS_BILLBOARD_PLAYGROUND;
 }
 
 if(!function_exists('is_ajax')) {
@@ -219,6 +221,14 @@ function uds_billboard_plugin_row_meta($plugin_meta, $plugin_file, $plugin_data,
 		}
 	}
 	return $plugin_meta;
+}
+
+add_action('init', 'uds_billboard_init');
+function uds_billboard_init()
+{
+	if(UDS_BILLBOARD_PLAYGROUND) {
+		add_filter('uds_billboard_render_before', 'uds_billboard_playground');
+	}
 }
 
 // initialize billboard
@@ -332,6 +342,26 @@ function uds_billboard_styles()
 	} else {
 		wp_enqueue_style('uds-billboard', $dir.'css/billboard.css', false, UDS_BILLBOARD_VERSION, 'screen');
 	}
+}
+
+/**
+ *	Function, allows overriding uBillboard settings via request parameters
+ *
+ *	@param uBillboard $bb
+ *
+ *	@return uBillboard $bb
+ */
+function uds_billboard_playground($bb)
+{
+	if(isset($_POST['nonce']) && wp_verify_nonce($_POST['nonce'], 'uds-billboard-playground')) {
+		$bb->override($_POST['playground']);
+	}
+	return $bb;
+}
+
+function uds_billboard_playground_nonce()
+{
+	return wp_create_nonce('uds-billboard-playground');
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -776,6 +806,5 @@ function the_uds_billboard($name = 'billboard')
 {
 	echo get_uds_billboard($name);
 }
-
 
 ?>

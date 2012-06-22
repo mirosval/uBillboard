@@ -536,13 +536,15 @@
 				slides = [];
 				$('.uds-bb-slide', $bb).each(function(i, el){
 					//d(options.slides[i]);
+					var img_src = _private.maybeUseRetina($('.uds-bb-bg-image', el).remove().attr('src'), options.slides[i]);
+					
 					var slide = $.extend(
 						{},
 						defaultSlideOptions, // Default slide options
 						options.slides[i], // Options passed in via the JS call
 						{ // Options parsed in from the markup
 							id: i,
-							bg: $('.uds-bb-bg-image', el).remove().attr('src'),
+							bg: img_src,
 							link: $('.uds-bb-link', el).remove().attr('href'),
 							html: $(el).remove().html()
 						}
@@ -957,6 +959,11 @@
 						width: $img.attr('width') + 'px',
 						height: $img.attr('height') + 'px'
 					});
+					
+					// Thumbs Retina Support
+					if(_private.shouldUseRetina()) {
+						$img.attr('src', $img.attr('src').replace('-thumb.', '-thumb-retina.'));
+					}
 					
 					// TODO: Transform this condition so it checks if the image is actually present
 					if(slides[i].bg === '' && !slides[i].hasVideo) {
@@ -1420,6 +1427,11 @@
 					cssDimension = 100,
 					dimension = cssDimension;
 				
+				if(typeof ctx === 'undefined') {
+					clearInterval(timers.countDown);
+					return;
+				}
+				
 				if(duration !== false) {
 					var start = new Date().getTime();
 					$countdown.data('start', start);
@@ -1734,6 +1746,21 @@
 				} else {
 					return false;
 				}
+			},
+			
+			shouldUseRetina: function(){
+				return typeof window.devicePixelRatio === 'number' ? window.devicePixelRatio > 1 : false;
+			},
+			
+			maybeUseRetina: function(slideUrl, options) {
+				var useRetina = typeof options.retina !== 'undefined' ? options.retina : false;
+
+				if(_private.shouldUseRetina() && useRetina) {
+					return slideUrl.replace('-full.', '-full-retina.');
+					
+				}
+				
+				return slideUrl;
 			},
 			
 			/**
