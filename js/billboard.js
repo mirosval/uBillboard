@@ -197,7 +197,7 @@
 				});
 				
 				var ratio = (parseInt(options.height, 10) / parseInt(options.width, 10));
-				$(window).resize(function(){
+				function resizeHandler(){
 					$bb.add($nextInsides).add($stage).add($next).css({
 						width: '100%',
 						height: '100%'
@@ -325,7 +325,15 @@
 						$this.css(css);
 					});
 					
-				}).resize();
+				}
+				
+				resizeHandler();
+				
+				if(_private.isMobile()) {
+					$(window).bind('orientationchange', resizeHandler);
+				} else {
+					$(window).resize(resizeHandler);
+				}
 			},
 			
 			/**
