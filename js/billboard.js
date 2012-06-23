@@ -1295,7 +1295,7 @@
 					var event = e.originalEvent;
 					
 					if(event.type === "touchstart") {
-						$bb.css('-webkit-user-select', 'none');
+						//$bb.css('-webkit-user-select', 'none');
 						
 						touches = {
 							startX: event.touches[0].clientX,
@@ -1309,6 +1309,19 @@
 						if(typeof $countdown === "object") {
 							$countdown.fastHide();
 						}
+						
+						$stage.stop().css({
+							left: -touches.direction * computedWidth + touches.left,
+							'-webkit-transform': 'translate3d(0px,0px,0px)'
+						});
+						
+						$next.stop().css({
+							left: touches.left,
+							'-webkit-transform': 'translate3d(0px,0px,0px)'
+						});
+						
+						$stage.get(0).offsetHeight;
+						$next.get(0).offsetHeight;
 					}
 					
 					if(event.type === "touchmove") {
@@ -1412,7 +1425,7 @@
 							}, 500);
 						}
 						
-						$bb.css('-webkit-user-select', 'auto');
+						//$bb.css('-webkit-user-select', 'auto');
 					}
 				});
 			},
