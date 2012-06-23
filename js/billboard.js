@@ -1473,7 +1473,8 @@
 			animateCountdown: function(duration) {
 				if(	$countdown === null || 
 					typeof $countdown === 'undefined' || 
-					options.showTimer === false) {
+					options.showTimer === false ||
+					_private.isSlowBrowser()) {
 					return;
 				}
 				
