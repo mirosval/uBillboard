@@ -1291,7 +1291,7 @@
 			 *	Hooks up touch events handling
 			 */
 			initTouchSupport: function() {
-				$('.uds-bb-slides', $bb).on("touchstart touchmove touchend", function(e){
+				$('.uds-bb-slides', $bb).on("touchstart touchmove touchend touchcancel", function(e){
 					var event = e.originalEvent;
 					
 					if(event.type === "touchstart") {
@@ -1374,7 +1374,7 @@
 						});
 					}
 					
-					if(event.type === "touchend") {
+					if(event.type === "touchend" || event.type === "touchcancel") {
 						var draggedAfterHalfWidth = Math.abs(touches.left) < (computedWidth / 2),
 							swiped = Math.abs(touches.speed) > 100,
 							clicked = (new Date().getTime() - touches.absoluteStartTime) < 150;
