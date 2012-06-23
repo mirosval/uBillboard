@@ -1384,13 +1384,13 @@
 						if((draggedAfterHalfWidth || swiped) && !clicked) {
 							e.preventDefault();
 							
-							$stage.animate({
+							$stage.stop().animate({
 								left: - touches.direction * computedWidth
 							}, {
 								duration: 500
 							});
 							
-							$next.animate({
+							$next.stop().animate({
 								left: 0
 							}, {
 								duration: 500,
@@ -1403,11 +1403,11 @@
 								e.preventDefault();
 							}
 							
-							$stage.animate({
+							$stage.stop().animate({
 								left: 0
 							}, 500);
 							
-							$next.animate({
+							$next.stop().animate({
 								left: touches.direction * computedWidth
 							}, 500);
 						}
