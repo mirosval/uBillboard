@@ -1297,6 +1297,11 @@
 					if(event.type === "touchstart") {
 						//$bb.css('-webkit-user-select', 'none');
 						
+						if(touches !== null) {
+							$('.uds-bb-slides', $bb).trigger("touchend");
+							return
+						}
+						
 						touches = {
 							startX: event.touches[0].clientX,
 							time: new Date().getTime(),
@@ -1311,12 +1316,12 @@
 						}
 						
 						$stage.stop().css({
-							left: -touches.direction * computedWidth + touches.left,
+							left: 0,
 							'-webkit-transform': 'translate3d(0px,0px,0px)'
 						});
 						
 						$next.stop().css({
-							left: touches.left,
+							left: computedWidth,
 							'-webkit-transform': 'translate3d(0px,0px,0px)'
 						});
 						
@@ -1424,6 +1429,8 @@
 								left: touches.direction * computedWidth
 							}, 500);
 						}
+						
+						touches = null;
 						
 						//$bb.css('-webkit-user-select', 'auto');
 					}
