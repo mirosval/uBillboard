@@ -304,7 +304,6 @@
 							$(elList, $this).each(function(){
 								var $t = $(this);
 								$.each(attList, function(i,el){
-									if(i == 0) { d($t.css(el)); }
 									$t.data(el, parseInt($t.css(el), 10));
 								});
 							});
@@ -783,20 +782,22 @@
 					opacity: 0
 				});
 				
-				var width = parseInt(options.width, 10);
-				var height = parseInt(options.height, 10);
-				var squareSize = parseInt(options.squareSize, 10);
-				
-				var cols = Math.ceil(width/squareSize);
-				var rows = Math.ceil(height/squareSize);
-				
-				for(var y = 0; y < rows; y++) {
-					for(var x = 0; x < cols; x++) {
-						$('<div>', {
-							'class': 'uds-square uds-column-'+x+' uds-row-'+y+' uds-square-'+(x+(cols*y))
-						}).data('position', {x:x,y:y}).append($('<div>',{
-							'class': 'uds-square-inside'
-						})).appendTo($next);
+				if(!_private.isSlowBrowser()) {
+					var width = parseInt(options.width, 10);
+					var height = parseInt(options.height, 10);
+					var squareSize = parseInt(options.squareSize, 10);
+					
+					var cols = Math.ceil(width/squareSize);
+					var rows = Math.ceil(height/squareSize);
+					
+					for(var y = 0; y < rows; y++) {
+						for(var x = 0; x < cols; x++) {
+							$('<div>', {
+								'class': 'uds-square uds-column-'+x+' uds-row-'+y+' uds-square-'+(x+(cols*y))
+							}).data('position', {x:x,y:y}).append($('<div>',{
+								'class': 'uds-square-inside'
+							})).appendTo($next);
+						}
 					}
 				}
 				
