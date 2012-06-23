@@ -1406,11 +1406,12 @@
 							$next.stop().animate({
 								left: 0
 							}, {
-								duration: 500,
-								complete: function() {
-									_public.animateSlide(touches.slideId, false);
-								}
+								duration: 500
 							});
+							
+							setTimeout(function() {
+								_public.animateSlide(touches.slideId, false);
+							}, 500);
 						} else {
 							if(!clicked) {
 								e.preventDefault();
