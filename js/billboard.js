@@ -272,6 +272,49 @@
 						}
 					}
 					
+					// Resize Description Boxes
+					$('.uds-bb-slide>.uds-bb-description').each(function(){
+						var $this = $(this),
+							posList = ['top','bottom','height','right','left','width'],
+							elList = 'h1,h2,h3,h4,h5,h6,p,div,span,ul,ol,li,a',
+							attList = ['font-size', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'],
+							css = {},
+							heightRatio = computedHeight / parseInt(options.height, 10),
+							widthRatio = computedWidth / parseInt(options.width, 10);
+							
+						if(typeof $this.data('original-position') === 'undefined') {
+							$this.data('original-position', true);
+							$.each(posList, function(i, el){
+								$this.data(el, parseInt($this.css(el), 10));
+							});
+							
+							// Font Size
+							$(elList, $this).each(function(){
+								var $t = $(this);
+								$.each(attList, function(i,el){
+									if(i == 0) { d($t.css(el)); }
+									$t.data(el, parseInt($t.css(el), 10));
+								});
+							});
+						}
+						
+						$.each(posList, function(i, el){
+							var ratio = i < 3 ? heightRatio : widthRatio,
+								value = $this.data(el);
+							css[el] = isNaN(value) ? 'auto' : value * ratio;
+						});
+						
+						$(elList, $this).each(function(){
+							var $t = $(this);
+							
+							$.each(attList, function(i,el){
+								$t.css(el, $t.data(el) * widthRatio);
+							});
+						});
+						
+						$this.css(css);
+					});
+					
 				}).resize();
 			},
 			
