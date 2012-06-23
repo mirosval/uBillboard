@@ -1369,7 +1369,10 @@
 						$next.css({
 							left: touches.left,
 							'-webkit-transform': 'translate3d(0px,0px,0px)'
-						})
+						});
+						
+						$stage.get(0).offsetHeight;
+						$next.get(0).offsetHeight;
 						
 						if((draggedAfterHalfWidth || swiped) && !clicked) {
 							e.preventDefault();
