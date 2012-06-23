@@ -272,6 +272,18 @@
 						}
 					}
 					
+					// Resize Ken Burns Canvas
+					$('.uds-bb-slide>canvas').each(function(){
+						var $this = $(this);
+						$this.css({
+							width: computedWidth,
+							height: computedHeight
+						}).attr({
+							width: computedWidth,
+							height: computedHeight
+						});
+					});
+					
 					// Resize Description Boxes
 					$('.uds-bb-slide>.uds-bb-description').each(function(){
 						var $this = $(this),
