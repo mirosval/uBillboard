@@ -1297,11 +1297,6 @@
 					if(event.type === "touchstart") {
 						//$bb.css('-webkit-user-select', 'none');
 						
-						if(touches !== null) {
-							$('.uds-bb-slides', $bb).trigger("touchend");
-							return
-						}
-						
 						touches = {
 							startX: event.touches[0].clientX,
 							time: new Date().getTime(),
@@ -1429,8 +1424,6 @@
 								left: touches.direction * computedWidth
 							}, 500);
 						}
-						
-						touches = null;
 						
 						//$bb.css('-webkit-user-select', 'auto');
 					}
