@@ -89,7 +89,7 @@
 
 .uds-bright .uds-bb-description,
 .uds-bb .uds-bb-description.uds-bright {
-	background: url(../images/bg-bright.png);
+	background: url(../images/skin-oldskool-bright/bg.png);
 	color: #222;
 }
 
@@ -179,12 +179,26 @@
 
 /* uBillboard General Retina Support */
 @media only screen and (-webkit-min-device-pixel-ratio:2) {
+	.uds-bright .uds-bb-description,
+	.uds-bb .uds-bb-description.uds-bright {
+		background-image: url(../images/skin-oldskool-bright/bg@2x.png);
+		background-size: 3px 3px;
+	}
+	
+	.uds-dark .uds-bb-description,
+	.uds-bb .uds-bb-description.uds-dark {
+		background: url(../images/skin-oldskool/bg@2x.png);
+		background-size: 3px 3px;
+	}
+	
 	.uds-thumbnails-shadow-left {
 		background-image: url(../images/thumb-shadow-left@2x.png);
+		background-size: 20px 1px;
 	}
 	
 	.uds-thumbnails-shadow-right {
 		background-image: url(../images/thumb-shadow-right@2x.png);
+		background-size: 20px 1px;
 	}
 }
 
@@ -219,37 +233,41 @@
 		
 	}
 	
-	.uds-bb-paginator.mini .uds-bb-playpause {
+	.uds-bb-paginator.mini .uds-bb-playpause,
+	.uds-bb-paginator.mini .uds-bb-playpause:hover,
+	.uds-bb-paginator.mini .uds-bb-next,
+	.uds-bb-paginator.mini .uds-bb-next:hover,
+	.uds-bb-paginator.mini .uds-bb-prev,
+	.uds-bb-paginator.mini .uds-bb-prev:hover {
+		background: url(../images/skin-mini/buttons.png) no-repeat;
 		width: 14px;
 		height: 14px;
-		background: url(../images/minimal-controls.png) no-repeat;
 		margin-right: 1px;
 	}
 	
-	.uds-bb-paginator.mini .uds-bb-playpause:hover {
-		background: url(../images/minimal-controls-hover.png) no-repeat;
+	.uds-bb-paginator.mini .uds-bb-playpause:hover,
+	.uds-bb-paginator.mini .uds-bb-next:hover,
+	.uds-bb-paginator.mini .uds-bb-prev:hover {
+		background-position: 0px -14px;
 	}
 	
 	.uds-bb-paginator.mini .uds-bb-next {
-		width: 14px;
-		height: 14px;
-		background: url(../images/minimal-controls.png) no-repeat -30px 0px;
+		background-position: -30px 0px;
 		margin-right: 3px;
 	}
 	
-	.uds-bb-paginator.mini .uds-bb-next:hover {
-		background: url(../images/minimal-controls-hover.png) no-repeat -30px 0px;
-	}
-	
 	.uds-bb-paginator.mini .uds-bb-prev {
-		width: 14px;
-		height: 14px;
-		background: url(../images/minimal-controls.png) no-repeat -15px 0px;
+		background-position: -15px 0px;
 		margin-right: 1px;
 	}
 	
+	.uds-bb-paginator.mini .uds-bb-next:hover {
+		background-position: -30px -14px;
+		margin-right: 3px;
+	}
+	
 	.uds-bb-paginator.mini .uds-bb-prev:hover {
-		background: url(../images/minimal-controls-hover.png) no-repeat -15px 0px;
+		background-position: -15px -14px;
 	}
 	
 	.uds-bb-paginator.mini .uds-bb-position-indicator {
@@ -261,11 +279,22 @@
 		margin-top: -1px;
 	}
 	
+	@media only screen and (-webkit-min-device-pixel-ratio:2) {
+		.uds-bb-paginator.mini .uds-bb-playpause,
+		.uds-bb-paginator.mini .uds-bb-next,
+		.uds-bb-paginator.mini .uds-bb-prev {
+			background-image: url(../images/skin-mini/buttons@2x.png);
+			background-size: 44px 28px;
+		}
+	}
+	
+	/* Skin uBillboard v2 */
+	
 	.uds-bb-paginator.ubbv2 .uds-bb-button   {
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		background: url(../images/skin-ubbv2/buttons.png);
+		background: url(../images/skin-ubbv2/buttons.png) no-repeat;
 	}
 	
 	.uds-bb-paginator.ubbv2 .uds-bb-button.uds-bb-next {
@@ -282,19 +311,19 @@
 		left: -75px;
 	}
 	
-	.uds-bb-paginator.ubbv2 .uds-bb-button.uds-bb-prev{
+	.uds-bb-paginator.ubbv2 .uds-bb-button.uds-bb-prev {
 		position: absolute;
 		left: 10px;
-		background-position: 0px 50px;
+		background-position: 0px -150px;
 	}
 	
 	
 	.uds-bb-paginator.ubbv2 .uds-bb-button.uds-bb-playpause.play  {
-		background-position: 0px 100px;
+		background-position: 0px -100px;
 	}
 	
 	.uds-bb-paginator.ubbv2 .uds-bb-playpause.pause  {
-		background-position: 0px 150px;
+		background-position: 0px -50px;
 	}
 	
 	.uds-bb-paginator.ubbv2 .uds-bb-bullet {
@@ -303,6 +332,18 @@
 	
 	.uds-bb-paginator.ubbv2 .uds-bb-bullet.active {
 		background-position: 0px -10px;
+	}
+	
+	@media only screen and (-webkit-min-device-pixel-ratio:2) {
+		.uds-bb-paginator.ubbv2 .uds-bb-button {
+			background-image: url(../images/skin-ubbv2/buttons@2x.png);
+			background-size: 50px 200px;
+		}
+		
+		.uds-bb-paginator.ubbv2 .uds-bb-bullet {
+			background-image: url(../images/skin-ubbv2/bullet@2x.png);
+			background-size: 10px 20px;
+		}
 	}
 	
 	/* Oldskool uBillboard skin */
@@ -321,10 +362,10 @@
 	}
 	
 	.uds-bb-paginator.oldskool-bright .uds-bb-button {
-		background: url(../images/bg-bright.png);
+		background: url(../images/skin-oldskool-bright/bg.png);
 		-webkit-box-shadow: 1px 1px 1px #666;
 		-moz-box-shadow: 1px 1px 1px #666;
-		box-shadow: 1px 1Px 1Px #666;
+		box-shadow: 1px 1px 1px #666;
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-button span, .uds-bb-paginator.oldskool-bright .uds-bb-button span {
@@ -336,11 +377,11 @@
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-button span {
-		background-image: url(../images/skin-oldskool/buttons.png);
+		background: url(../images/skin-oldskool/buttons.png) no-repeat;
 	}
 	
 	.uds-bb-paginator.oldskool-bright .uds-bb-button span {
-		background-image: url(../images/skin-oldskool-bright/buttons.png);
+		background: url(../images/skin-oldskool-bright/buttons.png) no-repeat;
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-playpause, .uds-bb-paginator.oldskool-bright .uds-bb-playpause, .uds-bb-paginator.ubbv2 .uds-bb-playpause {
@@ -404,10 +445,10 @@
 	}
 	
 	.uds-bb-paginator.oldskool-bright .uds-bb-position-indicator-bullets {
-		background: url(../images/bg-bright.png);
+		background: url(../images/skin-oldskool-bright/bg.png);
 		-webkit-box-shadow: 1px 1px 1px #666;
 		-moz-box-shadow: 1px 1px 1px #666;
-		box-shadow: 1px 1Px 1Px #666;
+		box-shadow: 1px 1px 1px #666;
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-bullet, 
@@ -420,6 +461,7 @@
 		float: left;
 		margin: 2px;
 		cursor: pointer;
+		overflow: hidden;
 	}
 	
 	.uds-bb-paginator.oldskool-bright .uds-bb-bullet {
@@ -436,6 +478,43 @@
 	
 	.uds-bb-paginator.oldskool .uds-bb-bullet.active {
 		background-position: 0px -10px;
+	}
+	
+	@media only screen and (-webkit-min-device-pixel-ratio:2) {
+		.uds-bb-paginator.oldskool .uds-bb-button span {
+			background-image: url(../images/skin-oldskool/buttons@2x.png);
+			background-size: 30px 90px;
+		}
+		
+		.uds-bb-paginator.oldskool-bright .uds-bb-button span {
+			background-image: url(../images/skin-oldskool-bright/buttons@2x.png);
+			background-size: 30px 90px;
+		}
+		
+		.uds-bb-paginator.oldskool .uds-bb-bullet,
+		.uds-bb-paginator.oldskool .uds-bb-bullet.active {
+			background-image: url(../images/skin-oldskool/bullet@2x.png);
+			background-size: 10px 20px;
+		}
+		
+		.uds-bb-paginator.oldskool-bright .uds-bb-bullet,
+		.uds-bb-paginator.oldskool-bright .uds-bb-bullet.active {
+			background-image: url(../images/skin-oldskool-bright/bullet@2x.png);
+			background-size: 10px 20px;
+		}
+		
+		.uds-bb-paginator.oldskool .uds-bb-button, 
+		.uds-bb-paginator.oldskool .uds-bb-position-indicator-bullets,
+		.uds-bb-paginator.ubbv2 .uds-bb-position-indicator-bullets {
+			background-image: url(../images/skin-oldskool/bg@2x.png);
+			background-size: 3px 3px;
+		}
+		
+		.uds-bb-paginator.oldskool-bright .uds-bb-button,
+		.uds-bb-paginator.oldskool-bright .uds-bb-position-indicator-bullets {
+			background-image: url(../images/skin-oldskool-bright/bg@2x.png);
+			background-size: 3px 3px;
+		}
 	}
 	
 	/* Silver Skin */
@@ -784,19 +863,19 @@
 		.uds-bb-paginator.modern,
 		.uds-bb-paginator.moderncontainer,
 		.uds-bb-paginator.modern .uds-bb-position-indicator-bullets {
-			background-image: url(../images/skin-modern/retina/bg.png);
+			background-image: url(../images/skin-modern/bg@2x.png);
 			background-size: 1px 30px;
 		}
 		
 		.uds-bb-paginator.modern .uds-bb-prev,
 		.uds-bb-paginator.modern .uds-bb-next,
 		.uds-bb-paginator.modern .uds-bb-playpause {
-			background-image: url(../images/skin-modern/retina/buttons.png);
+			background-image: url(../images/skin-modern/buttons@2x.png);
 			background-size: 94px 60px;
 		}
 		
 		.uds-bb-paginator.modern .uds-bb-bullet {
-			background-image: url(../images/skin-modern/retina/bullet.png);
+			background-image: url(../images/skin-modern/bullet@2x.png);
 			background-size: 10px 20px;
 		}
 	}
@@ -814,11 +893,11 @@
 	}
 	
 	.uds-bb-thumbnails.oldskool-bright {
-		background: url(../images/bg-bright.png);
+		background: url(../images/skin-oldskool-bright/bg.png);
 	}
 	
 	.uds-bb-thumbnails.silver {
-		background: url(../images/bg-bright.png);
+		background: url(../images/skin-oldskool-bright/bg.png);
 	}
 	
 	.uds-bb-thumbnail-container {
@@ -867,7 +946,6 @@
 	.uds-bb-thumb {
 		margin: 5px;
 		cursor: pointer;
-/* 		background-image: url(../images/bg-bright.png); */
 		background-color: #ededed;
 		padding: 4px;
 		-moz-box-shadow: 1px 1px 1px #444;
