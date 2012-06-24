@@ -8,7 +8,7 @@
  *	
  */
 ;(function($) {
-	
+	"use strict";
 	function d(variable) {
 		try {
 			console.log(variable);
@@ -341,7 +341,7 @@
 					return;
 				}
 				
-				d('Animating Slide: ' + slideId);
+				//d('Animating Slide: ' + slideId);
 				
 				if(typeof animate !== "boolean") {
 					animate = true;
@@ -1296,7 +1296,7 @@
 			initTouchSupport: function() {
 				$('.uds-bb-slides', $bb).on("touchstart touchmove touchend touchcancel", function(e){
 					if(transitionInProgress) {
-						d('Transition In progress, terminating Touch event');
+						//d('Transition In progress, terminating Touch event');
 						return;
 					}
 					
@@ -1390,7 +1390,7 @@
 					}
 					
 					if(event.type === "touchend" || event.type === "touchcancel") {
-						d("TouchEnd");
+						//d("TouchEnd");
 						var draggedAfterHalfWidth = Math.abs(touches.left) < (computedWidth / 2),
 							swiped = Math.abs(touches.speed) > 100,
 							clicked = (new Date().getTime() - touches.absoluteStartTime) < 150;
@@ -1418,8 +1418,6 @@
 							
 							e.preventDefault();
 						} else {
-							d("_ Dragged: " + draggedAfterHalfWidth + " Swiped: " + swiped + " clicked: " + clicked);
-							
 							$stage.css({
 								'-webkit-transform': 'translate3d(0px,0px,0px)'
 							});
