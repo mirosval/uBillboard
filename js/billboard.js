@@ -1424,6 +1424,7 @@
 							
 							e.preventDefault();
 						} else {
+							d("_ Dragged: " + draggedAfterHalfWidth + " Swiped: " + swiped + " clicked: " + clicked);
 							if(!clicked) {
 								e.preventDefault();
 							}
