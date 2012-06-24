@@ -1399,7 +1399,7 @@
 						$next.get(0).offsetHeight;
 						
 						if((draggedAfterHalfWidth || swiped) && !clicked) {
-							d("Dragged: " + draggedAfterHalfWidth + " Swiped: " + swiped + " clicked: " + clicked);
+							
 							
 							$stage.stop().animate({
 								left: - touches.direction * computedWidth
@@ -1412,7 +1412,7 @@
 							}, {
 								duration: 500
 							});
-							
+							d("Dragged: " + draggedAfterHalfWidth + " Swiped: " + swiped + " clicked: " + clicked);
 							setTimeout(function() {
 								d('Animating to Slide: ' + touches.slideId);
 								_public.animateSlide(touches.slideId, false);
