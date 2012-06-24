@@ -1366,6 +1366,9 @@
 						// Handle Embedded content
 						_private.handleEmbeddedContent(slides[currentSlideId]);
 						
+						$stage.add($next).css('-webkit-transition', 'none');
+						_private.forceReflow();
+						
 						//$stage.css('left', offset + "px");
 						$stage.css('-webkit-transform', 'translate3d(' + offset + "px,0px,0px)");
 						if(offset > 0) {
@@ -1389,60 +1392,37 @@
 							swiped = Math.abs(touches.speed) > 100,
 							clicked = (new Date().getTime() - touches.absoluteStartTime) < 150;
 						
-						//$('.uds-bb-slides', $bb).css('overflow', 'visible');
-						
-						$stage.css({
-							left: -touches.direction * computedWidth + touches.left,
-							'-webkit-transform': 'translate3d(0px,0px,0px)'
+						$stage.add($next).css({
+							left:0,
+							'-webkit-transition': '-webkit-transform 300ms linear'
 						});
-						
-						$next.css({
-							left: touches.left,
-							'-webkit-transform': 'translate3d(0px,0px,0px)'
-						});
-						
 						_private.forceReflow();
 						
 						if((draggedAfterHalfWidth || swiped) && !clicked) {
-							$stage.stop().animate({
-								left: - touches.direction * computedWidth
-							}, {
-								duration: 500
+							$stage.css({
+								'-webkit-transform': 'translate3d(' + (- touches.direction * computedWidth) + 'px,0px,0px)'
 							});
 							
-							$next.stop().animate({
-								left: 0
-							}, {
-								duration: 500
+							$next.fastShow().css({
+								'-webkit-transform': 'translate3d(0px,0px,0px)'
 							});
-							d("Dragged: " + draggedAfterHalfWidth + " Swiped: " + swiped + " clicked: " + clicked);
-
-							d('Animating to Slide: ' + touches.slideId);
-							_public.animateSlide(touches.slideId, false);
+							
+							_private.forceReflow();
+							
+							$stage.one('webkitTransitionEnd', function(){
+								_public.animateSlide(touches.slideId, false);
+							});
 							
 							e.preventDefault();
 						} else {
 							d("_ Dragged: " + draggedAfterHalfWidth + " Swiped: " + swiped + " clicked: " + clicked);
 							
-							/*
-$stage.stop().animate({
-								left: 0
-							}, 500);
-							
-							$next.stop().animate({
-								left: touches.direction * computedWidth
-							}, 500);
-*/							
-							$stage.add($next).css('-webkit-transform-duration: 500ms');
-							
 							$stage.css({
-								left: 0,
 								'-webkit-transform': 'translate3d(0px,0px,0px)'
 							});
 							
-							$next.css({
-								left: computedWidth,
-								'-webkit-transform': 'translate3d(0px,0px,0px)'
+							$next.fastShow().css({
+								'-webkit-transform': 'translate3d('+touches.direction * computedWidth+'px,0px,0px)'
 							});
 							
 							_private.forceReflow();
