@@ -1404,8 +1404,6 @@
 						_private.forceReflow();
 						
 						if((draggedAfterHalfWidth || swiped) && !clicked) {
-							
-							
 							$stage.stop().animate({
 								left: - touches.direction * computedWidth
 							}, {
@@ -1425,17 +1423,31 @@
 							e.preventDefault();
 						} else {
 							d("_ Dragged: " + draggedAfterHalfWidth + " Swiped: " + swiped + " clicked: " + clicked);
-							if(!clicked) {
-								e.preventDefault();
-							}
 							
-							$stage.stop().animate({
+							/*
+$stage.stop().animate({
 								left: 0
 							}, 500);
 							
 							$next.stop().animate({
 								left: touches.direction * computedWidth
 							}, 500);
+*/							
+							$stage.add($next).css('-webkit-transform-duration: 500ms');
+							
+							$stage.css({
+								left: -touches.direction * computedWidth + touches.left,
+								'-webkit-transform': 'translate3d(0px,0px,0px)'
+							});
+							
+							$next.css({
+								left: touches.left,
+								'-webkit-transform': 'translate3d(0px,0px,0px)'
+							});
+							
+							if(!clicked) {
+								e.preventDefault();
+							}
 						}
 						
 						//$bb.css('-webkit-user-select', 'auto');
