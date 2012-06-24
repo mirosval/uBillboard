@@ -341,6 +341,8 @@
 					return;
 				}
 				
+				d('Animating Slide: ' + slideId);
+				
 				if(typeof animate !== "boolean") {
 					animate = true;
 				}
@@ -433,6 +435,9 @@
 						"-webkit-transition": "all 0s",
 						"-webkit-transform": "translate3d(0px,0px,0px)"
 					});
+					
+					$next.add($stage).css('offsetHeight');
+					
 					$('.uds-bb-slide', $stage).fastHide();
 					$('.uds-bb-slide-'+slide.id, $stage).fastShow();
 					$('.uds-bb-description', $stage).fastShow();
