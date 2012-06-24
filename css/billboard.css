@@ -43,6 +43,7 @@
 }
 
 .uds-stage {
+	-webkit-backface-visibility: hidden;
 	position: absolute;
 	z-index: 1;
 	top: 0px;
@@ -50,6 +51,7 @@
 }
 
 .uds-next {
+	-webkit-backface-visibility: hidden;
 	position: absolute;
 	z-index: 2;
 	top: 0px;
