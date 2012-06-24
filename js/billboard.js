@@ -1422,7 +1422,7 @@
 							});
 							
 							$next.fastShow().css({
-								'-webkit-transform': 'translate3d('+touches.direction * computedWidth+'px,0px,0px)'
+								'-webkit-transform': 'translate3d(' + (touches.direction * computedWidth) + 'px,0px,0px)'
 							});
 							
 							_private.forceReflow();
