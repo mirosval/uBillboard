@@ -1372,9 +1372,13 @@
 							'-webkit-transform': 'translate3d(' + touches.left + 'px,0px,0px)',
 							opacity: 1
 						});
+						
+						$stage.get(0).offsetHeight;
+						$next.get(0).offsetHeight;
 					}
 					
 					if(event.type === "touchend" || event.type === "touchcancel") {
+						d("TouchEnd");
 						var draggedAfterHalfWidth = Math.abs(touches.left) < (computedWidth / 2),
 							swiped = Math.abs(touches.speed) > 100,
 							clicked = (new Date().getTime() - touches.absoluteStartTime) < 150;
