@@ -452,9 +452,51 @@ function uds_billboard_menu()
 		));
 		
 		WP_Screen::get($ubillboard_add)->add_help_tab(array(
-			'title' => __('uBillboard Editing Help'),
-			'id' => 'uds-billboard-help',
-			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit.html'),
+			'title' => __('Editing General Options'),
+			'id' => 'uds-billboard-help-options',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit-options.html'),
+			'callback' => false
+		));
+		
+		WP_Screen::get($ubillboard_add)->add_help_tab(array(
+			'title' => __('Editing Controls'),
+			'id' => 'uds-billboard-help-controls',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit-controls.html'),
+			'callback' => false
+		));
+		
+		WP_Screen::get($ubillboard_add)->add_help_tab(array(
+			'title' => __('Editing Slides - Background'),
+			'id' => 'uds-billboard-help-slide-background',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit-slide-bg.html'),
+			'callback' => false
+		));
+		
+		WP_Screen::get($ubillboard_add)->add_help_tab(array(
+			'title' => __('Editing Slides - Content'),
+			'id' => 'uds-billboard-help-slide-content',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit-slide-content.html'),
+			'callback' => false
+		));
+		
+		WP_Screen::get($ubillboard_add)->add_help_tab(array(
+			'title' => __('Editing Slides - Link'),
+			'id' => 'uds-billboard-help-slide-link',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit-slide-link.html'),
+			'callback' => false
+		));
+		
+		WP_Screen::get($ubillboard_add)->add_help_tab(array(
+			'title' => __('Editing Slides - Transition'),
+			'id' => 'uds-billboard-help-slide-transition',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit-slide-transition.html'),
+			'callback' => false
+		));
+		
+		WP_Screen::get($ubillboard_add)->add_help_tab(array(
+			'title' => __('Editing Slides - Effects'),
+			'id' => 'uds-billboard-help-slide-effects',
+			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit-slide-effects.html'),
 			'callback' => false
 		));
 		
@@ -471,11 +513,6 @@ function uds_billboard_menu()
 			'content' => @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-import.html'),
 			'callback' => false
 		));
-	} else {
-		add_contextual_help($ubillboard, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-billboards.html'));
-		add_contextual_help($ubillboard_add, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-edit.html'));
-		add_contextual_help($ubillboard_general, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-general.html'));
-		add_contextual_help($ubillboard_importexport, @file_get_contents(UDS_BILLBOARD_PATH . '/help/contextual-import.html'));
 	}
 }
 
