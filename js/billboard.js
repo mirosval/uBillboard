@@ -1318,6 +1318,9 @@
 							$countdown.fastHide();
 						}
 						
+						$stage.add($next).css('-webkit-transition', 'none');
+						_private.forceReflow();
+						
 						$stage.stop().css({
 							left: 0,
 							'-webkit-transform': 'translate3d(0px,0px,0px)'
