@@ -1410,6 +1410,7 @@
 							});
 							
 							setTimeout(function() {
+								d('Animating to Slide: ' + touches.slideId);
 								_public.animateSlide(touches.slideId, false);
 							}, 500);
 						} else {
