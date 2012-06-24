@@ -1436,14 +1436,16 @@ $stage.stop().animate({
 							$stage.add($next).css('-webkit-transform-duration: 500ms');
 							
 							$stage.css({
-								left: -touches.direction * computedWidth + touches.left,
+								left: 0,
 								'-webkit-transform': 'translate3d(0px,0px,0px)'
 							});
 							
 							$next.css({
-								left: touches.left,
+								left: computedWidth,
 								'-webkit-transform': 'translate3d(0px,0px,0px)'
 							});
+							
+							_private.forceReflow();
 							
 							if(!clicked) {
 								e.preventDefault();
