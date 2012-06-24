@@ -1399,7 +1399,7 @@
 						$next.get(0).offsetHeight;
 						
 						if((draggedAfterHalfWidth || swiped) && !clicked) {
-							e.preventDefault();
+							d("Dragged: " + draggedAfterHalfWidth + " Swiped: " + swiped + " clicked: " + clicked);
 							
 							$stage.stop().animate({
 								left: - touches.direction * computedWidth
@@ -1417,6 +1417,8 @@
 								d('Animating to Slide: ' + touches.slideId);
 								_public.animateSlide(touches.slideId, false);
 							}, 500);
+							
+							e.preventDefault();
 						} else {
 							if(!clicked) {
 								e.preventDefault();
