@@ -1413,10 +1413,10 @@
 								duration: 500
 							});
 							d("Dragged: " + draggedAfterHalfWidth + " Swiped: " + swiped + " clicked: " + clicked);
-							setTimeout(function() {
+							//setTimeout(function() {
 								d('Animating to Slide: ' + touches.slideId);
 								_public.animateSlide(touches.slideId, false);
-							}, 500);
+							//}, 500);
 							
 							e.preventDefault();
 						} else {
