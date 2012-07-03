@@ -603,7 +603,7 @@ function uds_billboard_import_export()
 function uds_billboard_enqueue_admin_styles()
 {
 	$dir = UDS_BILLBOARD_URL;
-	wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+	wp_enqueue_style('jquery-style', $dir.'css/jquery-ui-1.8.21.css');
 	wp_enqueue_style('uds-billboard', $dir.'css/billboard-admin.css', false, false, 'screen');
 }
 
