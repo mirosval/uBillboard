@@ -206,6 +206,14 @@
 						height: computedHeight + 'px'
 					});
 					
+					// Center Preloader
+					var $indicator = $('.uds-bb-preloader-indicator', $bb);
+				
+					$('.uds-bb-preloader', $bb).css({
+						top: parseInt(computedHeight, 10) / 2 - $indicator.height() / 2 + 'px',
+						left: parseInt(computedWidth, 10) / 2 - $indicator.width() / 2 + 'px'
+					});
+					
 					// Center controls
 					$('.uds-center', $bb).each(function() {
 						var widthAdjustment = $(this).outerWidth() / 2;
@@ -649,14 +657,14 @@
 				var $indicator = $('.uds-bb-preloader-indicator', $preloader);
 				
 				$('.uds-bb-preloader', $bb).css({
-					top: parseInt(options.height, 10) / 2 - $indicator.height() / 2 + 'px',
-					left: parseInt(options.width, 10) / 2 - $indicator.width() / 2 + 'px'
+					top: parseInt(computedHeight, 10) / 2 - $indicator.height() / 2 + 'px',
+					left: parseInt(computedWidth, 10) / 2 - $indicator.width() / 2 + 'px'
 				});
 			},
 			
 			updatePreloader: function(progress) {
 				var $indicator = $('.uds-bb-preloader-indicator', $preloader), css;
-
+					
 				$indicator.stop().animate({
 					left: '-' + Math.round((1 - progress) * $indicator.width()) + 'px'
 				}, 200);
