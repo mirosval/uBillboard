@@ -181,6 +181,13 @@
 	right: 0px;
 }
 
+.mini .uds-thumbnails-shadow-left,
+.mini .uds-thumbnails-shadow-right,
+.silver .uds-thumbnails-shadow-left,
+.silver .uds-thumbnails-shadow-right {
+	display: none;
+}
+
 /* uBillboard General Retina Support */
 @media only screen and (-webkit-min-device-pixel-ratio:2) {
 	.uds-bright .uds-bb-description,
