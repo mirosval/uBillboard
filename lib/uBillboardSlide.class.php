@@ -600,7 +600,7 @@ class uBillboardSlide {
 					$height = (int)$this->slider->height;	
 						
 					$autoplay = false;
-					if($this->{'autoplay-video'} == 'on') {
+					if($this->id == 0 && $this->{'autoplay-video'} == 'on') {
 						$autoplay = true;
 					}
 					

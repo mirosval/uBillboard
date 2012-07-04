@@ -29,6 +29,7 @@ function uds_billboard_oembed($url, $width, $height, $autoplay)
 						"&height=$height" .
 						"&format=json" .
 						"&enablejsapi=1" .
+						"&api=1".
 						"&wmode=opaque";
 			if($autoplay) {
 				$oembed .= "&autoplay=1";

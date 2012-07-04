@@ -1669,15 +1669,15 @@
 					if($('iframe').eq(i).get(0) === $iframe.get(0)) {
 						// YouTube
 						window.frames[i].postMessage(JSON.stringify({
-				            "event": "command",
-				            "func": 'pauseVideo',
-				            "args": null,
-				            "id": $iframe.attr('id')
-				        }), "*");
-				        
-				        // Vimeo
+							"event": "command",
+							"func": 'pauseVideo',
+							"args": null,
+							"id": $iframe.attr('id')
+						}), "*");
+
+						// Vimeo
 						window.frames[i].postMessage(JSON.stringify({
-							"method": "pause"
+							method: "pause"
 						}), "*");
 					}	
 				}
