@@ -178,7 +178,7 @@
 						if(slide.linkTarget === '_blank') {
 							window.open(slide.link, '_blank');
 						} else {
-							window.location = slide.link;
+							window.location.href = slide.link;
 						}
 					}
 				});
@@ -766,13 +766,17 @@
 				// should we pause on this slide
 				var pauseForVideo = options.pauseOnVideo && currentSlide.hasVideo;
 
-				if(options.autoplay === true && !pauseForVideo) {
-					//d('Autoplay Initiated');
-					
-					// Run Countdown Animation
-					_private.animateCountdown(slides[currentSlideId].delay);
-					
-					_public.play();
+				if(options.autoplay === true) {
+					if(pauseForVideo) {
+						if(currentSlide.autoplayVideo) {
+							_private.playVideo(currentSlide);
+						}
+					} else {
+						// Run Countdown Animation
+						_private.animateCountdown(slides[currentSlideId].delay);
+						
+						_public.play();
+					}
 				} else {
 					if(typeof $countdown !== 'undefined' && $countdown !== null) {
 						$countdown.fastHide();
@@ -1615,13 +1619,15 @@
 					return;
 				}
 				
+				
+				
 				var $slide, $iframe;
 				
 				$slide = $('.uds-stage .uds-bb-slide-'+slide.id, $bb);
 				$iframe = $('iframe', $slide);
 		
 				for(var i = 0; i < $('iframe').length; i++) {
-					if($('iframe').eq(i).get(0) === $iframe.get(0)) {						
+					if($('iframe').eq(i).get(0) === $iframe.get(0)) {
 						// YouTube
 						window.frames[i].postMessage(JSON.stringify({
 							"event": "command",

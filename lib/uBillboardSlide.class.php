@@ -598,8 +598,13 @@ class uBillboardSlide {
 					
 					$width = (int)$this->slider->width;
 					$height = (int)$this->slider->height;	
-
-					$response = uds_billboard_oembed($url, $width, $height);
+						
+					$autoplay = false;
+					if($this->id == 0 && $this->{'autoplay-video'} == 'on') {
+						$autoplay = true;
+					}
+					
+					$response = uds_billboard_oembed($url, $width, $height, $autoplay);
 
 					if(is_object($response)) {
 						$text = $response->html;

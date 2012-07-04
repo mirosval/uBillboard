@@ -10,7 +10,7 @@
  *	
  *	@return string error or the embed code
  */
-function uds_billboard_oembed($url, $width, $height)
+function uds_billboard_oembed($url, $width, $height, $autoplay)
 {
 	$services = array(
 		'youtu.be' => 'http://www.youtube.com/oembed?',
@@ -30,6 +30,9 @@ function uds_billboard_oembed($url, $width, $height)
 						"&format=json" .
 						"&enablejsapi=1" .
 						"&wmode=opaque";
+			if($autoplay) {
+				$oembed .= "&autoplay=1";
+			}
 		}	
 	}
 	
@@ -70,15 +73,20 @@ function uds_billboard_oembed($url, $width, $height)
 	// Disable Related videos display after the video has finished (youtube)
 	//$out->html = preg_replace('/src="([^"]*)"/', 'src="$1&rel=0"',$out->html);
 	
-	$out->html = uds_billboard_filter_wmode($out->html);
-	//d($out->html);
+	$out->html = uds_billboard_filter_wmode($out->html, $autoplay);
 
 	return $out;
 }
 
-function uds_billboard_filter_wmode($html) {
+function uds_billboard_filter_wmode($html, $autoplay) {
+	if($autoplay) {
+		$autoplay = "&autoplay=1";
+	} else {
+		$autoplay = "";
+	}
+	
 	if (strpos($html, 'feature=oembed' ) !== false)
-		$html = str_replace( 'feature=oembed', 'feature=oembed&wmode=opaque', $html);
+		$html = str_replace( 'feature=oembed', 'feature=oembed&wmode=opaque' . $autoplay , $html);
 	if (strpos($html, '<param name="movie"' ) !== false && strpos($html, 'value="opaque"') === false)
 		$html = str_replace( '<embed', '<param name="wmode" value="opaque"></param><embed', $html);
 	if (strpos( $html, '<embed' ) !== false && strpos( $html, 'wmode="opaque"' )=== false)
