@@ -14,7 +14,8 @@
 }
 
 .uds-bb-slide {
-	background-size: 100% 100%;
+	background-size: contain;
+	background-position: center center;
 }
 
 .uds-bb-preloader-wrapper {

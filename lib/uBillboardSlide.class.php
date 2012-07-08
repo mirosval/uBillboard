@@ -30,7 +30,16 @@ $uds_billboard_attributes = array(
 	'background-repeat' => array(
 		'type' => 'checkbox',
 		'label' => __('Tile background image', uds_billboard_textdomain),
-		'default' => 'on'
+		'default' => ''
+	),
+	'background-scaling' => array(
+		'type' => 'select',
+		'label' => __('Background Image Scaling', uds_billboard_textdomain),
+		'options' => array(
+			'fill' => 'Fill',
+			'fit' => 'Fit'
+		),
+		'default' => 'fill'
 	),
 	'retina' => array(
 		'type' => 'checkbox',
@@ -528,6 +537,7 @@ class uBillboardSlide {
 				<?php $this->renderAdminField('background') ?>
 				<?php $this->renderAdminField('background-transparent') ?>
 				<?php $this->renderAdminField('background-repeat') ?>
+				<?php $this->renderAdminField('background-scaling') ?>
 				<?php $this->renderAdminField('retina') ?>
 			</div>
 			<div id="uds-slide-tab-content-<?php echo $id ?>" class="uds-slide-tab-content">
@@ -1200,11 +1210,6 @@ class uBillboardSlide {
 			return new WP_Error('uds_billboard_slide', __('Failed to create image. (imagecreatefromstring())',uds_billboard_textdomain));
 		}
 		
-		$dst = @imagecreatetruecolor($new_width, $new_height);
-		if(!$dst) {
-			return new WP_Error('uds_billboard_slide', __('Failed to create new image context.',uds_billboard_textdomain));
-		}
-		
 		// Get original width and height
 		$width = imagesx($src);
 		$height = imagesy($src);
@@ -1212,31 +1217,65 @@ class uBillboardSlide {
 		$origin_x = 0;
 		$origin_y = 0;
 
-		// generate new w/h if not provided
-		if($new_width && !$new_height) {
-			$new_height = floor($height * ($new_width / $width));
-		} else if($new_height && !$new_width) {
-			$new_width = floor($width * ($new_height / $height));
+		if($this->{'background-scaling'} == 'fit') {
+			$src_x = 0;
+			$src_y = 0;
+			$src_w = $width;
+			$src_h = $height;
+			
+			if($new_width > $new_height) {
+				$dst_w = ($width * $new_height) / $height;
+				$dst_h = $new_height;
+				$dst_x = 0;
+				$dst_y = 0;
+			} else {
+				$dst_w = $new_width;
+				$dst_h = ($height * $new_width) / $width;
+				$dst_x = 0;
+				$dst_y = 0;
+			}
+		} else {
+			// generate new w/h if not provided
+			if($new_width && !$new_height) {
+				$new_height = floor($height * ($new_width / $width));
+			} else if($new_height && !$new_width) {
+				$new_width = floor($width * ($new_height / $height));
+			}
+			
+			$src_x = $src_y = 0;
+			$src_w = imagesx($src);
+			$src_h = imagesy($src);
+	
+			$cmp_x = $width / $new_width;
+			$cmp_y = $height / $new_height;
+	
+			if ($cmp_x > $cmp_y) {
+				$src_w = round($width / $cmp_x * $cmp_y);
+				$src_x = round(($width - ($width / $cmp_x * $cmp_y)) / 2);
+			} else if($cmp_y > $cmp_x) {
+				$src_h = round($height / $cmp_y * $cmp_x);
+				$src_y = round(($height - ($height / $cmp_y * $cmp_x)) / 2);
+			}
+			
+			$dst_x = $origin_x;
+			$dst_y = $origin_y;
+			
+			$dst_w = $new_width;
+			$dst_h = $new_height;
 		}
 		
-		$src_x = $src_y = 0;
-		$src_w = imagesx($src);
-		$src_h = imagesy($src);
-
-		$cmp_x = $width / $new_width;
-		$cmp_y = $height / $new_height;
-
-		if ($cmp_x > $cmp_y) {
-			$src_w = round($width / $cmp_x * $cmp_y);
-			$src_x = round(($width - ($width / $cmp_x * $cmp_y)) / 2);
-		} else if($cmp_y > $cmp_x) {
-			$src_h = round($height / $cmp_y * $cmp_x);
-			$src_y = round(($height - ($height / $cmp_y * $cmp_x)) / 2);
+		//d("SRC: X:$src_x Y:$src_y W:$src_w H:$src_h");
+		//d("DST: X:$dst_x Y:$dst_y W:$dst_w H:$dst_h");
+		
+		$dst = @imagecreatetruecolor($dst_w, $dst_h);
+		if(!$dst) {
+			return new WP_Error('uds_billboard_slide', __('Failed to create new image context.',uds_billboard_textdomain));
 		}
-
+		
 		imagefill($dst, 0, 0, imagecolortransparent($dst));
 		
-		if(!imagecopyresampled($dst, $src, $origin_x, $origin_y, $src_x, $src_y, $new_width, $new_height, $src_w, $src_h)) {
+		
+		if(!imagecopyresampled($dst, $src, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h)) {
 			return new WP_Error('uds_billboard_slide', __('Failed to resize image',uds_billboard_textdomain));
 		}
 		

@@ -329,10 +329,19 @@ td.slide_count {
 .uds-billboard-form .relative-paths-wrapper label,
 .uds-billboard-form .link-target-wrapper label,
 .uds-billboard-form .background-repeat-wrapper label,
+.uds-billboard-form .background-scaling-wrapper label,
 .uds-billboard-form .stop-wrapper label,
 .uds-billboard-form .autoplay-video-wrapper label,
 .uds-billboard-form .ken-burns-wrapper label {
 	float: left;
+}
+
+.uds-billboard-form .background-scaling-wrapper label {
+	padding-top: 5px;
+}
+
+.uds-billboard-form .background-scaling-wrapper {
+	margin-bottom: 10px;
 }
 
 .uds-billboard-form .text-wrapper label {
