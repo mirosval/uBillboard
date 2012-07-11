@@ -362,6 +362,7 @@
 	.uds-bb-paginator.oldskool, .uds-bb-paginator.oldskool-bright, .uds-bb-paginator.silver, .uds-bb-paginator.ubbv2  {
 		width: 100%;
 		height: 100%;
+		z-index: 5;
 	}
 	
 	.uds-bb-paginator.oldskool .uds-bb-button, .uds-bb-paginator.oldskool-bright .uds-bb-button  {
@@ -800,6 +801,7 @@
 		position: absolute;
 		bottom: 0px;
 		background: url(../images/skin-modern/bg.png) repeat-x;
+		z-index: 5;
 	}
 	
 	.uds-bb-paginator.moderncontainer {

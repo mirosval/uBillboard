@@ -1259,9 +1259,10 @@
 					$controlsToHover = $controlsToHover.add($thumbs);
 				}
 				
-				// handle paginator background hiding
-				if(options.showPaginator !== true && options.showPause !== true && options.showControls !== true) {
-					$controlsToHover = $controlsToHover.add($paginator);
+				// handle paginator background hiding	
+				if(	(options.showPaginator === 'hover' || options.showPause === 'hover' || options.showControls === 'hover') &&
+					(options.showPaginator !== true && options.showPause !== true && options.showControls !== true)) {
+					$controlsToHover = $paginator;
 				}
 				
 				// Handle bullets container for Silver Skin
@@ -1270,9 +1271,15 @@
 					$controlsToHover = $controlsToHover.add($bulletsContainer);
 				} 
 				
+				if(options.showPaginator === false && options.showPause === false && options.showControls === false) {
+					$paginator.fadeTo(0, 0);
+				}
+				
 				$controlsToHover.fadeTo(0, 0);
 				$bb.hover(function(){
-					$controlsToHover.stop().fadeTo(300, 1);
+					if(options.showPaginator !== false || options.showPause !== false || options.showControls !== false) {
+						$controlsToHover.stop().fadeTo(300, 1);
+					}
 				}, function(){
 					$controlsToHover.stop().fadeTo(300, 0);
 				});
