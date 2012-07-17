@@ -124,7 +124,8 @@ $uds_billboard_attributes = array(
 	),
 	'text' => array(
 		'type' => 'textarea',
-		'label' => __('Text', uds_billboard_textdomain)
+		'label' => __('Text', uds_billboard_textdomain),
+		'default' => ''
 	),
 	'text-evaluation' => array(
 		'type' => 'select',
@@ -137,7 +138,8 @@ $uds_billboard_attributes = array(
 	),
 	'embed-url' => array(
 		'type' => 'text',
-		'label' => __('URL of the Embedded Content', uds_billboard_textdomain)
+		'label' => __('URL of the Embedded Content', uds_billboard_textdomain),
+		'default' => ''
 	),
 	'pause-slider' => array(
 		'type' => 'checkbox',
@@ -317,7 +319,8 @@ class uBillboardSlide {
 			foreach($uds_billboard_attributes as $key => $option) {
 				// if attribute is in form
 				if(!isset($options[$key][$n])) {
-					break;
+					$attributes[$key] = $option['default'];
+					continue;
 				}
 				
 				// add it to the array

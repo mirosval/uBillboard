@@ -316,7 +316,7 @@ function uds_billboard_scripts()
 	$dir = UDS_BILLBOARD_URL;
 	
 	//wp_deregister_script('jquery');
-	//wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js');
+	//wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js');
 	
 	$in_footer = true;
 	if(uds_billboard_use_ajax_optimization()) {
@@ -855,5 +855,37 @@ function the_uds_billboard($name = 'billboard')
 {
 	echo get_uds_billboard($name);
 }
+
+/*
+
+add_filter('uds_billboard_render_before', 'uds_demo_filter');
+function uds_demo_filter($bb)
+{
+	if($bb->name !== 'billboard') return $bb;
+	
+	$query = new WP_Query('post_type=post');
+
+	if($query->have_posts()){
+		$query->the_post();
+
+		$matches = array();
+		if(preg_match("/http:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9-]*" . "/", get_the_content(), $matches)) {
+			$slide = new uBillboardSlide(array(
+				'content' => 'embed',
+				'embed-url' => $matches[0]
+			), $bb);
+			
+			$slides = $bb->slides;
+			array_unshift($slides, $slide);
+			$bb->setSlides($slides);
+		}
+	}
+	
+	// clean up
+	wp_reset_query();
+	return $bb;
+}
+
+*/
 
 ?>
