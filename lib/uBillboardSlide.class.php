@@ -216,6 +216,11 @@ class uBillboardSlide {
 	private $thumb;
 	private $thumbType;
 	private $imageType;
+	// used to prevent image urls being changed when dynamic content is used
+	private $populateDynamicContent;
+	// stores the url of the current slide image, this should be different than current image
+	// when dynamic blog post is updated
+	private $originalImageUrl;
 	
 	public static function upgradeFromV2($slide, $bbv2, $slider)
 	{
@@ -362,6 +367,8 @@ class uBillboardSlide {
 		global $uds_billboard_attributes;
 		
 		$this->thumb = '';
+		$this->populateDynamicContent = true;
+		$this->originalImageUrl = '';
 		
 		// fill in with defaults
 		if($options === false) {
@@ -404,6 +411,8 @@ class uBillboardSlide {
 				$this->{$key} = $option['default'];
 			}
 		}
+		
+		$this->populateDynamicContent = true;
 	}
 	
 	/**
@@ -672,8 +681,12 @@ class uBillboardSlide {
 							$id = get_post_thumbnail_id();
 							$image_src = wp_get_attachment_image_src($id, 'full');
 							
-							if(!empty($image_src[0])) {
+							if(!empty($image_src[0]) && $this->populateDynamicContent) {
 								$this->image = $this->thumb = $image_src[0];
+								if($this->originalImageUrl != $image_src[0]) {
+									$this->thumb(true);
+									$this->image(true);
+								}
 							}
 						}
 					}
@@ -827,6 +840,7 @@ class uBillboardSlide {
 	
 	public function resizeImages($force_recreate = false)
 	{
+		$this->populateDynamicContent = false;
 		// populate the image and thumb fields with correct values
 		$this->render();
 		
@@ -1304,6 +1318,7 @@ class uBillboardSlide {
 			}
 		}
 		
+		$this->originalImageUrl = $url;
 		
 		if($type == 'thumb') {
 			return UDS_CACHE_URL . '/' . $this->thumbName($type);
