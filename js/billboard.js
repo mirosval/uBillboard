@@ -1771,7 +1771,11 @@
 					clearInterval(timers.kenBurnsCanvasTimer);
 					var start = new Date();
 					var css = _private.kenBurnsCSS(false);
-
+					
+					// Reset the image dimensions and position
+					slide.kenBurnsCanvasCache.clearRect(0, 0, computedWidth, computedHeight);
+					slide.kenBurnsCanvasCache.drawImage(slide.kenBurnsImage, 0, 0, computedWidth, computedHeight);
+					
 					timers.kenBurnsCanvasTimer = setInterval(function(){
 						var now = new Date();
 						var progress = (now.getTime() - start.getTime()) / slide.kenBurnsSpeed;
@@ -1789,32 +1793,59 @@
 						if(progress >= 1) {
 							start = new Date();
 							slide.kenBurnsCanvasStartingCSS = css;
-							css = _private.kenBurnsCSS(false);
+							css = _private.kenBurnsCSS(false, css);
 						}
 					}, 20);
-				} else {					
-					slide.kenBurnsImageCache.eq(0).stop().animate(_private.kenBurnsCSS(true), {
+				} else {
+					var css = _private.kenBurnsCSS(true);
+					slide.kenBurnsImageCache.eq(0).stop().animate(css, {
 						duration: slide.kenBurnsSpeed,
 						easing: 'easeInOutQuad',
 						complete: function() {
 							if(slide.id === currentSlideId) {
-								_private.kenBurns(slide);
+								_private.kenBurns(slide, css);
 							}
 						}
 					});
 				}
 			},
 			
-			kenBurnsCSS: function(withPx) {
-				var scale = 1.2 - (Math.random() * 0.4);
-				var css = {
-					top: ((- 0.2 + Math.random() * 0.4) * computedHeight),
-					left: ((- 0.2 + Math.random() * 0.4) * computedWidth),
-					width: computedWidth * scale,
-					height: computedHeight * scale
+			kenBurnsCSS: function(withPx, startingCSS) {
+				var rand, scale, css, ratio;
+				
+				if(typeof startingCSS == 'undefined') {
+					startingCSS = {
+						top: 0,
+						left: 0,
+						width: computedWidth,
+						height: computedHeight
+					};
+				}
+				
+				function distance() {
+					var distance = 0;
+					distance += Math.abs(rand.scale - 1);
+					distance += Math.abs(rand.top);
+					distance += Math.abs(rand.left);
+					return distance;
+				}
+				
+				do {
+					rand = {
+						scale: 1.2 - (Math.random() * 0.4),
+						top: (- 0.2 + Math.random() * 0.4),
+						left: (- 0.2 + Math.random() * 0.4)
+					};
+				} while(distance() < 0.2);
+				
+				css = {
+					top: (rand.top * computedHeight),
+					left: (rand.left * computedWidth),
+					width: computedWidth * rand.scale,
+					height: computedHeight * rand.scale
 				};
 				
-				var ratio = parseInt(options.height, 10) / parseInt(options.width, 10);
+				ratio = parseInt(options.height, 10) / parseInt(options.width, 10);
 				
 				if(css.top > 0) {
 					css.top = 0;
@@ -2132,7 +2163,8 @@
 				duration: 1000,
 				direction: '',
 				setup: function() {
-					$squares.css({
+					var $el = _private.isSlowBrowser() ? $next : $squares;
+					$el.css({
 						opacity: 0
 					});
 				},
