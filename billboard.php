@@ -28,11 +28,22 @@ if(uds_billboard_is_plugin()) {
 }
 
 if(!defined('UDS_CACHE_PATH')) {
-	define('UDS_CACHE_PATH',  trailingslashit(UDS_BILLBOARD_PATH) . 'cache');
+	if(is_multisite()) {
+		define('UDS_CACHE_PATH',  BLOGUPLOADDIR. 'ubillboard_cache');
+		if(!is_dir(UDS_CACHE_PATH)) {
+			@mkdir(UDS_CACHE_PATH, 0777, true);
+		}
+	} else {
+		define('UDS_CACHE_PATH',  trailingslashit(UDS_BILLBOARD_PATH) . 'cache');
+	}
 }
 
 if(!defined('UDS_CACHE_URL')) {
-	define('UDS_CACHE_URL',  trailingslashit(UDS_BILLBOARD_URL) . 'cache');
+	if(is_multisite()) {
+		define('UDS_CACHE_URL',  BLOGUPLOADDIR . 'ubillboard_cache');
+	} else {
+		define('UDS_CACHE_URL',  trailingslashit(UDS_BILLBOARD_URL) . 'cache');
+	}
 }
 
 define('UDS_BILLBOARD_PLAYGROUND', true);
@@ -298,7 +309,8 @@ function uds_billboard_admin_init()
 	
 	// Check cache
 	if(!uds_billboard_cache_is_writable()) {
-		add_action( 'admin_notices', create_function('', 'echo \'<div id="message" class="error"><p><strong>' . __("uBillboard Cache folder is not writable!", uds_billboard_textdomain) . '</strong></p></div>\';') );
+		$message = sprintf(__("uBillboard Cache folder is not writable! Path: %s", uds_billboard_textdomain), UDS_CACHE_URL);
+		add_action( 'admin_notices', create_function('', 'echo \'<div id="message" class="error"><p><strong>' . $message . '</strong></p></div>\';') );
 	}
 }
 
@@ -417,6 +429,7 @@ function uds_billboard_uninstall_hook()
 ////////////////////////////////////////////////////////////////////////////////
 
 add_action('admin_menu', 'uds_billboard_menu');
+add_action('network_admin_menu', 'uds_billboard_menu');
 /**
  *	Function, set up admin menu
  *	
