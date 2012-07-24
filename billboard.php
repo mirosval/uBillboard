@@ -685,7 +685,7 @@ function uds_billboard_process_updates()
 		$billboards = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));	
 		$billboards[$billboard->name] = $billboard;
 	
-		update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
+		update_option(UDS_BILLBOARD_OPTION, $billboards);
 		if(empty($message)) {
 			$message = 'uds-message='.urlencode(__('Billboard updated successfully', uds_billboard_textdomain)).'&uds-class='.urlencode('updated');
 		}
@@ -739,7 +739,7 @@ function uds_billboard_delete($billboards_to_delete = false)
 				$message .= urlencode('<p>' . sprintf(__('Billboard %s does not exist', uds_billboard_textdomain), esc_html($billboard)) . '</p>');
 			} else {
 				unset($billboards[$billboard]);
-				update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
+				update_option(UDS_BILLBOARD_OPTION, $billboards);
 				$message .= urlencode('<p>' . sprintf(__('Billboard &quot;%s&quot; has been successfully deleted', uds_billboard_textdomain), esc_html($billboard)) . '</p>');
 			}
 		}

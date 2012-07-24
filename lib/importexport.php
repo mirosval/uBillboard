@@ -95,7 +95,7 @@ function uds_billboard_import($file)
 		}
 	}
 	
-	update_option(UDS_BILLBOARD_OPTION, maybe_serialize($billboards));
+	update_option(UDS_BILLBOARD_OPTION, $billboards);
 	
 	if(empty($uds_billboards_errors))
 		wp_redirect('admin.php?page=uds_billboard_admin');
