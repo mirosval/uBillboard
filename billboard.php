@@ -642,7 +642,7 @@ function uds_billboard_enqueue_admin_scripts()
 		'bulkActionsDelete' => __('Really delete all selected sliders? This is not undoable', uds_billboard_textdomain),
 		'billboardDeleteConfirmation' => __('Really delete? This is not undoable', uds_billboard_textdomain),
 		'slideDeleteConfirmation' => __('Really delete slide?', uds_billboard_textdomain),
-		'addAnImage' => __('Add an Image', uds_billboard_textdomain),
+		'addAnImage' => __('Add Image', uds_billboard_textdomain),
 		'slideN' => __('Slide %s', uds_billboard_textdomain),
 		'billboardPreview' => __('uBillboard Preview', uds_billboard_textdomain),
 		'pageLeaveConfirmation' => __('uBillboard has unsaved changes, do you really want to leave?', uds_billboard_textdomain),

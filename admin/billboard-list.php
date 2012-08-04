@@ -56,7 +56,7 @@ if(version_compare(get_bloginfo('version'), '3.2', '<')) {
 				<tfoot>
 					<tr>
 						<th id="cb" class="manage-column column-cb check-column" scope="col"><input type="checkbox" /></th>
-						<th id="title"><?php _e('Billboard Name', uds_billboard_textdomain) ?> </th>
+						<th id="title"><?php _e('Billboard Name', uds_billboard_textdomain) ?></th>
 						<th class="slide_count"><?php _e('Slides', uds_billboard_textdomain) ?></th>
 						<th class="shortcode"><?php _e('Shortcode', uds_billboard_textdomain) ?></th>
 					</tr>

@@ -98,7 +98,7 @@ jQuery(function($){
 	createTabs();
 	
 	function showImageAdder(offset, element) {
-		tb_show('Add Image', "media-upload.php?type=image&TB_iframe=true&width=640&height=500");
+		tb_show(udsAdminL10n.addAnImage, "media-upload.php?type=image&TB_iframe=true&width=640&height=500");
 
 		var $preview = $(element).parents('.slide').find('.image-wrapper');
 		var $image = $(element).prev();

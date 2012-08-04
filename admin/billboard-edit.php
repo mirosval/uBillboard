@@ -113,9 +113,9 @@ $billboard->addEmptySlide();
 						<div class="slides">
 							<?php foreach($billboard->slides as $key => $item): ?>
 								<div class="postbox slide" id="uds-slide-<?php echo $key ?>">
-									<div class="handlediv" title="Click to toggle"><br /></div>
-									<div class="deletediv" title="Click to delete slide"><br /></div>
-									<div class="adddiv" title="Click to add slide"><br /></div>
+									<div class="handlediv" title="<?php _e('Click to toggle', uds_billboard_textdomain) ?>"><br /></div>
+									<div class="deletediv" title="<?php _e('Click to delete slide', uds_billboard_textdomain) ?>"><br /></div>
+									<div class="adddiv" title="<?php _e('Click to add slide', uds_billboard_textdomain) ?>"><br /></div>
 									<h3 class="hndle"><span><?php echo sprintf(__("Slide %u", uds_billboard_textdomain), $key + 1); ?></span></h3>
 									<div class="inside">
 										<?php $item->renderAdmin() ?>

@@ -38,7 +38,7 @@
 				<?php _e('Import attachments', uds_billboard_textdomain) ?>: <input type="checkbox" name="import-attachments" id="uds-billboard-import-attachments" />
 			</label><br />
 			<input type="file" name="uds-billboard-import" value="<?php esc_attr_e('Upload Exported uBillboard', uds_billboard_textdomain) ?>" />
-			<input type="submit" name="" value="Import" class="button secondary" />
+			<input type="submit" name="" value="<?php esc_attr_e('Import', uds_billboard_textdomain) ?>" class="button secondary" />
 		</form>
 	</div>
 	<p><?php _e('<em>Note:</em> Importer will attempt to download all slide images that are not located on this host.', uds_billboard_textdomain) ?></p>
