@@ -199,13 +199,13 @@ class uBillboard {
 	/**
 	 *	@var array of slides in this slider
 	 */
-	private $slides;
+	public $slides;
 	
 	/**
 	 *	@var array 	of slides in this slider that have already been rendered
 	 *				This is used to render slide JS in the correct order
 	 */
-	private $slidesRendered;
+	public $slidesRendered;
 	
 	/**
 	 *	Helper static function to transform an oldschool

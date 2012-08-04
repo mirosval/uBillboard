@@ -241,8 +241,39 @@ function uds_billboard_plugin_row_meta($plugin_meta, $plugin_file, $plugin_data,
 add_action('init', 'uds_billboard_init');
 function uds_billboard_init()
 {
+	global $wpdb;
 	if(UDS_BILLBOARD_PLAYGROUND) {
 		add_filter('uds_billboard_render_before', 'uds_billboard_playground');
+	}
+	
+	// check if update for public properties is required
+	$row = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", UDS_BILLBOARD_OPTION ) );
+	if(!$row || !$row->option_value) {
+		return;
+	}
+	
+	$option = $row->option_value;
+
+	if(strpos($option, 'a:') > 0) {
+		$option = maybe_unserialize($option);
+	}
+	
+	if(strpos($option, 'a:') > 0) {
+		return;
+	}
+
+	if(strpos($option, chr(0)) > -1) {
+		$patterns = array(
+			"/([0-9]*):\"\\x00uBillboard\\x00([^\"]*)\"/",
+			"/([0-9]*):\"\\x00uBillboardSlide\\x00([^\"]*)\"/"
+		);
+		
+		$option = preg_replace_callback($patterns, create_function('$matches', 'return strlen($matches[2]) . \':"\' . $matches[2] . \'"\';'), $option);
+		
+		$option = maybe_unserialize($option);
+		if($option) {
+			update_option(UDS_BILLBOARD_OPTION, $option);
+		}
 	}
 }
 

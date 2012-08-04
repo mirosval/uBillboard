@@ -208,19 +208,19 @@ $uds_billboard_attributes = array(
 
 class uBillboardSlide {
 
-	private $id;
+	public $id;
 	/**
 	 *	@var $slider backlink back to the slider that contains this slide
 	 */
-	private $slider;
-	private $thumb;
-	private $thumbType;
-	private $imageType;
+	public $slider;
+	public $thumb;
+	public $thumbType;
+	public $imageType;
 	// used to prevent image urls being changed when dynamic content is used
-	private $populateDynamicContent;
+	public $populateDynamicContent;
 	// stores the url of the current slide image, this should be different than current image
 	// when dynamic blog post is updated
-	private $originalImageUrl;
+	public $originalImageUrl;
 	
 	public static function upgradeFromV2($slide, $bbv2, $slider)
 	{
