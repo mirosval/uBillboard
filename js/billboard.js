@@ -157,6 +157,9 @@
 				// initialize transitioning var
 				transitionInProgress = false;
 				
+				// we'll start from the beginning
+				currentSlideId = 0;
+				
 				// check if we don't have the images already in the cache
 				var preloadRequired = _private.preloadRequired();
 				
@@ -175,16 +178,8 @@
 				_private.initControls();
 				
 				// Setup Click Event handling
-				$('.uds-bb-slides', $bb).live('click', function(){
-					var slide = slides[currentSlideId];
-					if(typeof slide.link === 'string' && slide.link !== '' && slide.link !== '#') {
-						if(slide.linkTarget === '_blank') {
-							window.open(slide.link, '_blank');
-						} else {
-							window.location.href = slide.link;
-						}
-					}
-				});
+				$bb.on('click', _private.handleBillboardClicks);
+				_private.setCursor();
 				
 				// Init touch support
 				_private.initTouchSupport();
@@ -426,12 +421,6 @@
 
 				clearTimeout(timers.transitionComplete);
 				timers.transitionComplete = setTimeout(function(){
-					// Change cursor to pointer if there is a link present
-					var cursor = 'default';
-					if(typeof slide.link === 'string' && slide.link !== '' && slide.link !== '#') {
-						cursor = 'pointer';
-					}
-					
 					$stage
 						.stop()
 						.css({
@@ -439,8 +428,7 @@
 							"-webkit-transform": "translate3d(0px,0px,0px)",
 							top: '0px',
 							left: '0px',
-							opacity: 1,
-							cursor: cursor
+							opacity: 1
 						});
 					$next.css({
 						"-webkit-transition": "all 0s",
@@ -485,6 +473,9 @@
 					playing = false;
 				}
 				
+				// update cursor
+				_private.setCursor();
+				
 				// Run Countdown Animation
 				if(playing) {
 					_private.animateCountdown(slides[currentSlideId].delay);
@@ -504,7 +495,11 @@
 			/**
 			 *	Animates the next slide in
 			 */
-			'next': function() {
+			'next': function(e) {
+				if(typeof e !== 'undefined') {
+					e.stopPropagation();
+				}
+				
 				var nextSlideId = _private.getNextSlideId();
 				_public.animateSlide(nextSlideId);
 			},
@@ -512,7 +507,11 @@
 			/**
 			 *	Animates the previous slide in
 			 */
-			'prev': function() {
+			'prev': function(e) {
+				if(typeof e !== 'undefined') {
+					e.stopPropagation();
+				}
+				
 				var prevSlideId = _private.getPrevSlideId();
 				_public.animateSlide(prevSlideId);
 			},
@@ -520,7 +519,11 @@
 			/**
 			 *	Animates a random slide
 			 */
-			'random': function() {
+			'random': function(e) {
+				if(typeof e !== 'undefined') {
+					e.stopPropagation();
+				}
+				
 				var slideId = Math.floor(Math.random() * slides.length + 1);
 				_public.animateSlide(slideId);
 			},
@@ -528,7 +531,11 @@
 			/**
 			 *	Starts Playback
 			 */
-			'play': function() {	
+			'play': function(e) {
+				if(typeof e !== 'undefined') {
+					e.stopPropagation();
+				}
+				
 				if(typeof currentSlideId !== 'number' || currentSlideId === null) {
 					currentSlideId = 0;
 				}
@@ -559,7 +566,11 @@
 			/**
 			 *	Pauses Playback
 			 */
-			'pause': function() {
+			'pause': function(e) {
+				if(typeof e !== 'undefined') {
+					e.stopPropagation();
+				}
+				
 				playing = false;
 				$bb.trigger('didChangePlayingState', {playing: playing});
 				
@@ -573,11 +584,11 @@
 				}
 			},
 			
-			'playpause': function() {
+			'playpause': function(e) {
 				if(playing) {
-					_public.pause();
+					_public.pause(e);
 				} else {
-					_public.play();
+					_public.play(e);
 				}
 			}
 		},
@@ -938,6 +949,17 @@
 				}
 			},
 			
+			handleBillboardClicks: function(e) {
+				var slide = slides[currentSlideId];
+				if(typeof slide.link === 'string' && slide.link !== '' && slide.link !== '#') {
+					if(slide.linkTarget === '_blank') {
+						window.open(slide.link, '_blank');
+					} else {
+						window.location.href = slide.link;
+					}
+				}
+			},
+			
 			initControls: function() {
 				$controls = $('.uds-bb-controls', $bb);
 	
@@ -993,7 +1015,11 @@
 				
 				$bullets.append(bullets).find('div:first').addClass('active');
 				
-				$('div', $bullets).click(function(){
+				$('div', $bullets).click(function(e){
+					if(typeof e !== 'undefined') {
+						e.stopPropagation();
+					}
+					
 					_public.animateSlide($(this).index());
 				});
 				
@@ -1019,7 +1045,11 @@
 				$thumb.removeClass('active').eq(0).addClass('active');
 				
 				// Thumbnail Click Handler
-				$thumb.click(function(){
+				$thumb.click(function(e){
+					if(typeof e !== 'undefined') {
+						e.stopPropagation();
+					}
+					
 					_public.animateSlide($(this).index());
 				});
 				
@@ -1462,6 +1492,17 @@
 			
 			forceReflow: function() {
 				$next.add($stage).css('offsetTop');
+			},
+			
+			setCursor: function(){
+				var cursor = 'default',
+					slide = slides[currentSlideId];
+
+				if(typeof slide.link === 'string' && slide.link !== '' && slide.link !== '#') {
+					cursor = 'pointer';
+				}
+				
+				$stage.add('.uds-bb-paginator', $bb).css('cursor', cursor);
 			},
 			
 			/**
