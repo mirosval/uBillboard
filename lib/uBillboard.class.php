@@ -182,8 +182,15 @@ $uds_billboard_general_options = array(
 		'type' => 'color',
 		'unit' => '',
 		'label' => __('Thumbnail border hover color', uds_billboard_textdomain),
-		'tooltip' => __('Border color of thumbnail on mouse over', uds_billboard_textdomain),
-		'default' => 'red'
+		'tooltip' => __('Border color of thumbnail on mouse over, ignored when you select Thumbnail border transparent', uds_billboard_textdomain),
+		'default' => ''
+	),
+	'thumbnails-hover-color-transparent' => array(
+		'type' => 'checkbox',
+		'unit' => '',
+		'label' => __('Thumbnail border transparent', uds_billboard_textdomain),
+		'tooltip' => __('If you chack this the color specified above will be ignored', uds_billboard_textdomain),
+		'default' => ''
 	),
 	'options-level' => array(
 		'type' => 'checkbox',
@@ -577,6 +584,7 @@ class uBillboard {
 		if($this->showThumbnails == 'yes')		$showThumbnails = 'true';
 
 		$thumbnailsHoverColor = $this->thumbnailsHoverColor;
+		$thumbnailsHoverColorTransparent = $this->thumbnailsHoverColorTransparent === 'on' ? 'true' : 'false';
 		
 		// Render slides' JS
 		$slides = array();
@@ -600,6 +608,7 @@ class uBillboard {
 				showThumbnails: $showThumbnails,
 				showTimer: $showTimer,
 				thumbnailHoverColor: \"#$thumbnailsHoverColor\",
+				thumbnailHoverColorTransparent: $thumbnailsHoverColorTransparent,
 				slides: {
 					$slides
 				}

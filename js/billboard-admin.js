@@ -506,6 +506,7 @@ jQuery(function($){
 		'div.uds-billboard-thumbnails-width',
 		'div.uds-billboard-thumbnails-height',
 		'div.uds-billboard-thumbnails-hover-color',
+		'div.uds-billboard-thumbnails-hover-color-transparent',
 		'textarea.billboard-text'
 	];
 	

@@ -1037,6 +1037,10 @@
 						.eq(currentSlideId)
 						.addClass('active')
 						.css('background-color', options.thumbnailHoverColor);
+					
+					if(options.thumbnailHoverColorTransparent === true) {
+						$thumb.css('background-color', 'transparent');
+					}
 				});
 				
 				// Thumbnails
@@ -1084,6 +1088,11 @@
 							height: $img.attr('height') + 'px',
 							backgroundColor: slides[i].bgColor
 						});
+					}
+					
+					if(options.thumbnailHoverColorTransparent === true) {
+						$(this).css('background-color', 'transparent');
+						return;
 					}
 					
 					var originalBgColorString = $(this).css('background-color');
