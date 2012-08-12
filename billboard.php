@@ -40,7 +40,7 @@ if(!defined('UDS_CACHE_PATH')) {
 
 if(!defined('UDS_CACHE_URL')) {
 	if(is_multisite()) {
-		define('UDS_CACHE_URL',  BLOGUPLOADDIR . 'ubillboard_cache');
+		define('UDS_CACHE_URL', str_replace(WP_CONTENT_DIR, WP_CONTENT_URL, BLOGUPLOADDIR) . 'ubillboard_cache');
 	} else {
 		define('UDS_CACHE_URL',  trailingslashit(UDS_BILLBOARD_URL) . 'cache');
 	}
@@ -861,6 +861,8 @@ function get_uds_billboard($name = 'billboard', $options = array())
 	static $id = 0;
 	
 	$bbs = maybe_unserialize(get_option(UDS_BILLBOARD_OPTION, array()));
+	
+	$name = sanitize_title($name);
 	
 	if(!isset($bbs[$name])) {
 		return sprintf(__("Billboard named &quot;%s&quot; does not exist", uds_billboard_textdomain), $name);
