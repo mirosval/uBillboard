@@ -1,3 +1,4 @@
+
 /* General uBillboard */
 .uds-bb {
 	position: relative;
@@ -17,6 +18,7 @@
 	background-size: contain;
 	background-position: center center;
 }
+
 
 .uds-bb-preloader-wrapper {
 	position: absolute;
@@ -961,6 +963,7 @@
 		margin: 5px;
 		cursor: pointer;
 		background-color: #ededed;
+/* 		background-color: red; */
 		padding: 4px;
 		-moz-box-shadow: 1px 1px 1px #444;
  		-webkit-box-shadow: 1px 1px 1px #444;

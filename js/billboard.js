@@ -2,7 +2,7 @@
  *	@license
  *	uBillboard - Premium Slide for WordPress
  *
- *	Version: 3.5.1
+ *	Version: 3.5.2
  *
  *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
  *	
@@ -165,7 +165,7 @@
 				
 				_private.initSlides();
 				_private.initAnimationMarkup();
-				
+
 				var willPreloadImages = preloadRequired;
 				if(preloadRequired) {
 					_private.initPreloader();
@@ -373,7 +373,7 @@
 				_private.handleEmbeddedContent(slide);
 				
 				var duration = 0;
-				
+
 				if(animate) {
 					// Decide on transition
 					var transition = 'fade';
