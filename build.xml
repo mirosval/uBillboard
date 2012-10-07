@@ -17,6 +17,7 @@
 	<!-- Cleanup task -->
 	<target name="clean">
 		<delete dir="build" />
+		<delete dir="htmlpreview/uBillboard" />
 	</target>
 	
 	<!-- Update version string in all occurrences -->
@@ -174,5 +175,31 @@
 		
 		<!-- Create Archive -->
 		<zip destfile="build/${project_name}.zip" basedir="build/${project_name}" />
+	</target>
+
+	<!-- Update HTML version preview -->
+	<target name="package_html" depends="build">
+		<!-- Copy CSS -->
+		<copy todir="htmlpreview/${project_name}/css">
+			<fileset dir="css">
+				<include name="${file_name}.css" />
+				<include name="${file_name}.min.css" />
+			</fileset>
+		</copy>
+		
+		<!-- Copy JS -->
+		<copy todir="htmlpreview/${project_name}/js">
+			<fileset dir="js">
+				<include name="${file_name}.js" />
+				<include name="${file_name}.min.js" />
+			</fileset>
+		</copy>
+		
+		<!-- Copy Images -->
+		<copy todir="htmlpreview/${project_name}/images">
+			<fileset dir="images">
+				<exclude name="admin/" />
+			</fileset>
+		</copy>
 	</target>
 </project> 

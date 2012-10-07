@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+	<title>uBillboard JS</title>
+
+	<link rel="stylesheet" type="text/css" href="uBillboard/css/billboard.min.css">
+
+	<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="uBillboard/js/billboard.min.js"></script>
+</head>
+<body>
+	<!-- uBillboard 3.5.2 ID:0 Name:billboard -->
+		<div class='uds-bb uds-dark' id='uds-bb-0'>
+			<div class='uds-bb-controls'>
+				<div class='uds-bb-paginator oldskool inside'>
+					<div class='uds-bb-button uds-bb-playpause uds-center'><span>Play</span></div>
+					<div class='uds-bb-button uds-bb-prev uds-center-vertical'><span>Prev</span></div>
+					<div class='uds-bb-button uds-bb-next uds-center-vertical'><span>Next</span></div>
+					<div class='uds-bb-position-indicator-bullets'></div>
+				</div>
+		
+				<div class='uds-bb-thumbnails oldskool bottom '>
+					<div class='uds-bb-thumbnail-container'>
+						<div class='uds-bb-thumb'>
+							<img src='http://meosoft/code/plugins/wp-content/plugins/uBillboard/cache/billboard-0-thumb.jpg' alt='' width='80' height='60' />
+						</div>
+						<div class='uds-bb-thumb'>
+							<img src='http://meosoft/code/plugins/wp-content/plugins/uBillboard/cache/billboard-1-thumb.jpg' alt='' width='80' height='60' />
+						</div>
+						<div class='uds-bb-thumb'>
+							<img src='http://meosoft/code/plugins/wp-content/plugins/uBillboard/cache/billboard-2-thumb.jpg' alt='' width='80' height='60' />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class='uds-bb-slides'>
+				<div class='uds-bb-slide'>
+					<a href='#a' class='uds-bb-link'>
+						<img src='http://meosoft/code/plugins/wp-content/plugins/uBillboard/cache/billboard-0-full.jpg' alt='' class='uds-bb-bg-image' />
+					</a>
+				</div>
+				<div class='uds-bb-slide'>
+					<a href='#' class='uds-bb-link'>
+						<img src='http://meosoft/code/plugins/wp-content/plugins/uBillboard/cache/billboard-1-full.jpg' alt='' class='uds-bb-bg-image' />
+					</a>
+				</div>
+				<div class='uds-bb-slide'>
+					<a href='#' class='uds-bb-link'>
+						<img src='http://meosoft/code/plugins/wp-content/plugins/uBillboard/cache/billboard-2-full.jpg' alt='' class='uds-bb-bg-image' />
+					</a>
+				</div>
+			</div>
+		</div>
+		<script type='text/javascript'>
+			jQuery('#uds-bb-0').show().uBillboard({
+				width: '940px',
+				height: '380px',
+				squareSize: '100px',
+				autoplay: true,
+				pauseOnVideo: true,
+				showControls: true,
+				showPause: true,
+				showPaginator: true,
+				showThumbnails: true,
+				showTimer: true,
+				thumbnailHoverColor: "#FFFFFF",
+				thumbnailHoverColorTransparent: false,
+				slides: {
+					0: {
+						hasVideo: false,
+						linkTarget: '',
+						delay: 5000,
+						transition: 'cube',
+						direction: 'intuitive',
+						bgColor: 'transparent',
+						repeat: 'no-repeat',
+						retina: true,
+						stop: false,
+						autoplayVideo: true,
+						kenBurns: false
+					},
+					1: {
+						hasVideo: false,
+						linkTarget: '',
+						delay: 5000,
+						transition: 'cube',
+						direction: 'intuitive',
+						bgColor: 'transparent',
+						repeat: 'no-repeat',
+						retina: true,
+						stop: false,
+						autoplayVideo: true,
+						kenBurns: false
+					},
+					2: {
+						hasVideo: false,
+						linkTarget: '',
+						delay: 5000,
+						transition: 'cube',
+						direction: 'intuitive',
+						bgColor: 'transparent',
+						repeat: 'no-repeat',
+						retina: false,
+						stop: false,
+						autoplayVideo: true,
+						kenBurns: false
+					}
+				}
+			});
+		</script>
+		<!-- END uBillboard ID:0 -->
+</body>
+</html>

@@ -460,7 +460,7 @@
 				currentSlideId = slideId;
 				
 				$bb.trigger('udsBillboardSlideDidChange', currentSlideId);
-				
+
 				if(options.pauseOnVideo && slides[currentSlideId].hasVideo) {
 					if($countdown !== null && typeof $countdown !== "undefined") {
 						$countdown.fastHide();
@@ -486,7 +486,7 @@
 				}
 				
 				// continue playing
-				if(options.autoplay && playing && !slide.stop) {
+				if(playing && !slide.stop) {
 					//clearTimeout(timers.nextSlideAnimation);
 					_public.play();
 				}
