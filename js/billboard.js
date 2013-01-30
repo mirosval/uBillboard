@@ -616,12 +616,12 @@
 					autoplayVideo: true,
 					kenBurns: false,
 					kenBurnsSpeed: 4000,
+					retina: false,
 					html: ''
 				};
 				
 				slides = [];
 				$('.uds-bb-slide', $bb).each(function(i, el){
-					//d(options.slides[i]);
 					var img_src = _private.maybeUseRetina($('.uds-bb-bg-image', el).remove().attr('src'), options.slides[i]);
 					
 					var slide = $.extend(
@@ -973,7 +973,7 @@
 				});
 				
 				// fix for IE7 controls not displaying
-				if($.browser.msie && $.browser.version < 8) {
+				if(_private.getIEVersion() > -1 && _private.getIEVersion() < 8) {
 					$('.uds-bb-paginator').css('position', 'static');
 				}
 				
@@ -1925,8 +1925,22 @@
 				return css;
 			},
 			
+			getIEVersion: function() {
+				var rv = -1; // Return value assumes failure.
+				if (navigator.appName == 'Microsoft Internet Explorer')
+				{
+					var ua = navigator.userAgent;
+					var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+					if (re.exec(ua) != null) {
+						rv = parseFloat( RegExp.$1 );
+					}
+			   }
+
+			   return rv;
+			},
+
 			isSlowBrowser: function() {
-				return _private.isMobile() || ($.browser.msie && $.browser.version < 9);
+				return _private.isMobile() || (_private.getIEVersion() > -1 && _private.getIEVersion() < 9);
 			},
 			
 			isMobile: function(){

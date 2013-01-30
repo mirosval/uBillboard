@@ -358,8 +358,8 @@ function uds_billboard_scripts()
 	
 	$dir = UDS_BILLBOARD_URL;
 	
-	//wp_deregister_script('jquery');
-	//wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js');
+	// wp_deregister_script('jquery');
+	// wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.js');
 	
 	$in_footer = true;
 	if(uds_billboard_use_ajax_optimization()) {
