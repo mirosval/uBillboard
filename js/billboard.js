@@ -2,7 +2,7 @@
  *	@license
  *	uBillboard - Premium Slide for WordPress
  *
- *	Version: 3.5.2
+ *	Version: 3.5.3
  *
  *	Copyright: uDesignStudios (Miroslav Zoricak, Jan Keselak) 2011
  *	
@@ -1685,27 +1685,45 @@
 				
 				$slide = $('.uds-stage .uds-bb-slide-'+slide.id, $bb);
 				$iframe = $('iframe', $slide);
-		
+				
+				$(window).off("message");
+
 				for(var i = 0; i < $('iframe').length; i++) {
 					if($('iframe').eq(i).get(0) === $iframe.get(0)) {
+						var url = $iframe.get(0).getAttribute('src').split('?')[0];
+						if (url.substr(0, 2) === '//') {
+				            url = window.location.protocol + url;
+				        }
+
 						// YouTube
 						window.frames[i].postMessage(JSON.stringify({
 							"event": "command",
 							"func": 'playVideo',
 							"args": null,
 							"id": $iframe.attr('id')
-						}), "*");
-
+						}), url);
+						
 						// Vimeo
 						window.frames[i].postMessage(JSON.stringify({
 							method: "play"
-						}), "*");
+						}), url);
 						
+						var frameId = i;
 						$(window).on("message", function(event) {
 							var e = event.originalEvent;
-							if(e.origin === "http://www.youtube.com") {
+							if(e.origin === "http://www.youtube.com") { // Youtube
 								var data = JSON.parse(e.data);
 								if(data.event === "onStateChange" && data.info.playerState === 0) {
+									_public.play();
+								}
+							} else { // Vimeo
+								var data = JSON.parse(e.data);
+								if(typeof data.event !== 'undefined' && data.event === "ready") {
+									window.frames[frameId].postMessage(JSON.stringify({
+										method: "addEventListener",
+										value: "finish"
+									}), url);
+								} else if(typeof data.event !== 'undefined' && data.event === "finish") {
 									_public.play();
 								}
 							}
