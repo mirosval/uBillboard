@@ -128,7 +128,7 @@ function uds_billboard_export($what = false)
 			$export .= $billboard->export() . "\n";
 		}
 	} elseif(is_string($what)) {
-		$billboard = $billboards[$name];
+		$billboard = $billboards[$what];
 		$export .= $billboard->export() . "\n";
 	} else {
 		foreach($billboards as $name => $billboard) {
