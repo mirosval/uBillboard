@@ -8,15 +8,21 @@ Should be fairly straightforward, you can either copy the whole directory into `
 
 1. Install closure compiler:
 
-    brew install closure-compiler
+```bash
+brew install closure-compiler
+```
 
 2. Install YUI Compressor
 
-    brew install yuicompressor
+```bash
+brew install yuicompressor
+```
 
 3. Package uBillboard
 
-    ant package
+```bash
+ant package
+```
 
 ## Contributions
 
