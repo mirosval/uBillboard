@@ -8,9 +8,7 @@
 	<property name="version" value="3.5.3" />
 	
 	<!-- JS Compiler taskdef -->
-	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="/usr/local/closure/compiler.jar" />
-	<!-- Define the task -->
-	<taskdef name="jshint" classname="com.philmander.ant.jshint.JsHintAntTask" classpath="/usr/local/jshint/ant-jshint-R0.1.jar" />
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="/usr/local/opt/closure-compiler/libexec/build/compiler.jar" />
 
 	<!-- Tasks: -->
 	
@@ -28,14 +26,6 @@
 		<echo>Updated Version Strings</echo>
 	</target>
 	
-	<!-- Check JS -->
-	<target name="hint_js">
-		<!-- Lint the code -->
-		<jshint dir="${basedir}/js" options="curly=true,eqeqeq=true,latedef=true,jquery=true,smarttabs=true,loopfunc=true">
-			<include name="${file_name}.js" />
-		</jshint>
-	</target>
-	
 	<!-- Compress all relevant JS -->
 	<target name="minify_js" depends="clean">
 		<delete file="js/${file_name}.min.js" />
@@ -51,11 +41,11 @@
 	<target name="minify_css" depends="clean">
 		<delete file="css/${file_name}.min.css" />
 		
-		<java jar="/usr/local/yui/yuicompressor.jar" fork="true">  
+		<exec executable="yuicompressor">
 			<arg value="${basedir}/css/${file_name}.css" />
 			<arg value="-o" />  
 			<arg value="${basedir}/css/${file_name}.min.css" />
-		</java>
+		</exec>
 		<echo>Compressing ${file_name}.css</echo>
 	</target>
 	
